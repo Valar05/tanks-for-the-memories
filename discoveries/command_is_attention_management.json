@@ -1,0 +1,35 @@
+{
+  "id": "command_is_attention_management",
+  "title": "Command is attention management",
+  "discovery": "The real scarce resource is not ammunition or armor; it is the commander\u2019s attention budget across contacts, reports, navigation, and crew management.",
+  "evidence": [
+    "source_library/13_sixteen-line-message-format.md:15-17 - structured reporting imposes order on communication.",
+    "source_library/03_cross-channel-attack-ch9.md:16-21 - late/scattered reports and supply shortfalls delay command understanding.",
+    "source_library/33_fm-17-30-tank-platoon.md:15-17 - platoon movement and command responsibilities are core.",
+    "source_library/34_fm-17-33-the-tank-battalion-light-and-medium.md:15-17 - battalion-level role sets make command broader than gunnery."
+  ],
+  "why": "This is the design pivot that can change the UI: the player should be forced to choose what to monitor and what to trust.",
+  "variable": {
+    "name": "attention_budget",
+    "definition": "How many simultaneous contacts, reports, and tasks the commander can process well.",
+    "range": "0-100",
+    "related": [
+      "contact_load",
+      "decision_quality"
+    ]
+  },
+  "mechanic": "Attention allocation across contacts, reports, and orders.",
+  "pressure": "Too many simultaneous inputs should create command paralysis or simplification errors.",
+  "confidence": 0.93,
+  "sources": [
+    "source_library/13_sixteen-line-message-format.md",
+    "source_library/03_cross-channel-attack-ch9.md",
+    "source_library/33_fm-17-30-tank-platoon.md",
+    "source_library/34_fm-17-33-the-tank-battalion-light-and-medium.md"
+  ],
+  "tags": [
+    "command",
+    "attention",
+    "mechanic"
+  ]
+}

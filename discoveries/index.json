@@ -1,0 +1,240 @@
+{
+  "generated_at": "2026-06-21",
+  "discoveries": [
+    {
+      "id": "bocage_is_information_compression",
+      "title": "Bocage turns terrain into information compression",
+      "file_md": "discoveries/bocage_is_information_compression.md",
+      "file_json": "discoveries/bocage_is_information_compression.json",
+      "variable": "route_dependency",
+      "tags": [
+        "terrain",
+        "pressure",
+        "mechanic"
+      ],
+      "confidence": 0.93
+    },
+    {
+      "id": "capture_is_branch_not_end",
+      "title": "Capture is a branch, not an end",
+      "file_md": "discoveries/capture_is_branch_not_end.md",
+      "file_json": "discoveries/capture_is_branch_not_end.json",
+      "variable": "captivity_stress",
+      "tags": [
+        "pow",
+        "branch",
+        "memory"
+      ],
+      "confidence": 0.88
+    },
+    {
+      "id": "chaplaincy_turns_grief_into_process",
+      "title": "Chaplaincy turns grief into process",
+      "file_md": "discoveries/chaplaincy_turns_grief_into_process.md",
+      "file_json": "discoveries/chaplaincy_turns_grief_into_process.json",
+      "variable": "grief_load",
+      "tags": [
+        "chaplaincy",
+        "grief",
+        "memory"
+      ],
+      "confidence": 0.84
+    },
+    {
+      "id": "command_is_attention_management",
+      "title": "Command is attention management",
+      "file_md": "discoveries/command_is_attention_management.md",
+      "file_json": "discoveries/command_is_attention_management.json",
+      "variable": "attention_budget",
+      "tags": [
+        "command",
+        "attention",
+        "mechanic"
+      ],
+      "confidence": 0.93
+    },
+    {
+      "id": "fatigue_degrades_orders_before_firepower",
+      "title": "Fatigue degrades orders before firepower",
+      "file_md": "discoveries/fatigue_degrades_orders_before_firepower.md",
+      "file_json": "discoveries/fatigue_degrades_orders_before_firepower.json",
+      "variable": "fatigue",
+      "tags": [
+        "fatigue",
+        "command",
+        "pressure"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "friendly_fire_is_visibility_and_identifier_failure",
+      "title": "Friendly fire is a visibility and identifier failure",
+      "file_md": "discoveries/friendly_fire_is_visibility_and_identifier_failure.md",
+      "file_json": "discoveries/friendly_fire_is_visibility_and_identifier_failure.json",
+      "variable": "identity_confidence",
+      "tags": [
+        "friendly-fire",
+        "visibility",
+        "coalition"
+      ],
+      "confidence": 0.91
+    },
+    {
+      "id": "hq_picture_stale_by_default",
+      "title": "HQ picture is stale by default",
+      "file_md": "discoveries/hq_picture_stale_by_default.md",
+      "file_json": "discoveries/hq_picture_stale_by_default.json",
+      "variable": "hq_picture_freshness",
+      "tags": [
+        "pressure",
+        "command",
+        "information"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "mail_is_morale_infrastructure",
+      "title": "Mail is morale infrastructure",
+      "file_md": "discoveries/mail_is_morale_infrastructure.md",
+      "file_json": "discoveries/mail_is_morale_infrastructure.json",
+      "variable": "mail_latency",
+      "tags": [
+        "morale",
+        "mail",
+        "memory"
+      ],
+      "confidence": 0.87
+    },
+    {
+      "id": "medical_care_is_queue_management",
+      "title": "Medical care is queue management",
+      "file_md": "discoveries/medical_care_is_queue_management.md",
+      "file_json": "discoveries/medical_care_is_queue_management.json",
+      "variable": "evacuation_delay",
+      "tags": [
+        "medical",
+        "queue",
+        "pressure"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "occupation_is_second_game_mode",
+      "title": "Occupation is a second game mode",
+      "file_md": "discoveries/occupation_is_second_game_mode.md",
+      "file_json": "discoveries/occupation_is_second_game_mode.json",
+      "variable": "occupation_load",
+      "tags": [
+        "occupation",
+        "bureaucracy",
+        "civilian"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "id": "radio_latency_message_shape",
+      "title": "Radio latency and message shape are a mechanic",
+      "file_md": "discoveries/radio_latency_message_shape.md",
+      "file_json": "discoveries/radio_latency_message_shape.json",
+      "variable": "report_latency",
+      "tags": [
+        "pressure",
+        "mechanic",
+        "command"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "rear_area_is_a_playable_network",
+      "title": "The rear area is a playable network",
+      "file_md": "discoveries/rear_area_is_a_playable_network.md",
+      "file_json": "discoveries/rear_area_is_a_playable_network.json",
+      "variable": "rear_area_throughput",
+      "tags": [
+        "rear-area",
+        "network",
+        "pressure",
+        "logistics"
+      ],
+      "confidence": 0.96
+    },
+    {
+      "id": "replacement_crews_reduce_trust_before_capacity",
+      "title": "Replacement crews reduce trust before they add capacity",
+      "file_md": "discoveries/replacement_crews_reduce_trust_before_capacity.md",
+      "file_json": "discoveries/replacement_crews_reduce_trust_before_capacity.json",
+      "variable": "replacement_familiarity",
+      "tags": [
+        "replacement",
+        "trust",
+        "crew"
+      ],
+      "confidence": 0.92
+    },
+    {
+      "id": "route_control_and_security_are_supply_gameplay",
+      "title": "Route control and security are supply gameplay",
+      "file_md": "discoveries/route_control_and_security_are_supply_gameplay.md",
+      "file_json": "discoveries/route_control_and_security_are_supply_gameplay.json",
+      "variable": "route_control",
+      "tags": [
+        "security",
+        "logistics",
+        "pressure"
+      ],
+      "confidence": 0.89
+    },
+    {
+      "id": "sanitation_is_hidden_attrition",
+      "title": "Sanitation is hidden attrition",
+      "file_md": "discoveries/sanitation_is_hidden_attrition.md",
+      "file_json": "discoveries/sanitation_is_hidden_attrition.json",
+      "variable": "sanitation_state",
+      "tags": [
+        "sanitation",
+        "attrition",
+        "daily-life"
+      ],
+      "confidence": 0.88
+    },
+    {
+      "id": "training_is_role_learning_not_vehicle_learning",
+      "title": "Training is role learning, not vehicle learning",
+      "file_md": "discoveries/training_is_role_learning_not_vehicle_learning.md",
+      "file_json": "discoveries/training_is_role_learning_not_vehicle_learning.json",
+      "variable": "commander_training_level",
+      "tags": [
+        "training",
+        "doctrine",
+        "command"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "id": "vehicle_damage_is_state_machine",
+      "title": "Vehicle damage is a state machine",
+      "file_md": "discoveries/vehicle_damage_is_state_machine.md",
+      "file_json": "discoveries/vehicle_damage_is_state_machine.json",
+      "variable": "immobility_state",
+      "tags": [
+        "vehicles",
+        "maintenance",
+        "pressure"
+      ],
+      "confidence": 0.95
+    },
+    {
+      "id": "visibility_is_stateful",
+      "title": "Visibility is stateful, not a static stat",
+      "file_md": "discoveries/visibility_is_stateful.md",
+      "file_json": "discoveries/visibility_is_stateful.json",
+      "variable": "visibility_arc",
+      "tags": [
+        "visibility",
+        "mechanic",
+        "terrain"
+      ],
+      "confidence": 0.88
+    }
+  ]
+}

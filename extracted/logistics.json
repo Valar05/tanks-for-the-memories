@@ -1,0 +1,22 @@
+{
+  "facts": [
+    {
+      "fact": "Army Service Forces managed food, fuel, ammunition, transport, medical care, and repair.",
+      "source": "42_army_service_forces.md",
+      "confidence": 0.88,
+      "note": "The combat unit depends on a broader sustainment machine."
+    },
+    {
+      "fact": "Ordnance handled a massive procurement and maintenance burden.",
+      "source": "49_united_states_army_ordnance_corps.md",
+      "confidence": 0.84,
+      "note": "Vehicle readiness is a logistics outcome."
+    },
+    {
+      "fact": "The official Army history series includes logistics and technical-service volumes.",
+      "source": "52_united_states_army_in_world_war_ii.md",
+      "confidence": 0.86,
+      "note": "Provides a route into deeper sustainment history."
+    }
+  ]
+}

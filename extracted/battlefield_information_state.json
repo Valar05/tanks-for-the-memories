@@ -1,0 +1,12 @@
+{
+  "state_axes": [
+    "known",
+    "unknown",
+    "delayed",
+    "contradicted",
+    "inferred"
+  ],
+  "notes": [
+    "Expanded to cover logistics, civilians, and daily life as well as combat."
+  ]
+}

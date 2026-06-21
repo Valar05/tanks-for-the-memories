@@ -1,0 +1,16 @@
+{
+  "facts": [
+    {
+      "fact": "Field hygiene includes water, waste disposal, and insect-borne disease control.",
+      "source": "56_field_hygiene_and_sanitation.md",
+      "confidence": 0.86,
+      "note": "Health is a logistics system."
+    },
+    {
+      "fact": "Poor hygiene and sanitation create non-combat casualties.",
+      "source": "56_field_hygiene_and_sanitation.md",
+      "confidence": 0.86,
+      "note": "Disease can be a hidden attrition stream."
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "vis1",
+      "state": "buttoned up",
+      "source": [
+        "M4 Sherman",
+        "Omaha Beachhead"
+      ],
+      "confidence": 0.9,
+      "extraction_note": "Safer but narrower vision; commander depends more on radio and internal reports."
+    },
+    {
+      "id": "vis2",
+      "state": "hatch open",
+      "source": [
+        "M4 Sherman",
+        "The D-Day Story"
+      ],
+      "confidence": 0.88,
+      "extraction_note": "Better outside awareness but increased exposure and vulnerability."
+    },
+    {
+      "id": "vis3",
+      "state": "gunner scope",
+      "source": [
+        "M4 Sherman",
+        "Battle of Villers-Bocage"
+      ],
+      "confidence": 0.87,
+      "extraction_note": "Very narrow, weapon-focused view that can miss flank danger."
+    },
+    {
+      "id": "vis4",
+      "state": "hedgerow occlusion",
+      "source": [
+        "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg",
+        "Battle of Villers-Bocage"
+      ],
+      "confidence": 0.96,
+      "extraction_note": "Hedgerows hide enemy positions and block artillery observation."
+    },
+    {
+      "id": "vis5",
+      "state": "coastal current and smoke",
+      "source": [
+        "Omaha Beachhead"
+      ],
+      "confidence": 0.94,
+      "extraction_note": "Smoke, dust, and current distort landings and visual reference on the beach."
+    }
+  ]
+}

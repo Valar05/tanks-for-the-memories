@@ -1,0 +1,28 @@
+{
+  "card_id": "sherman_crew_roles",
+  "summary": "Sherman crew roles should be distinct and interdependent: commander, gunner, loader, driver, and assistant driver/bow gunner.",
+  "source_basis": [
+    "M4 Sherman",
+    "Bomb (tank)",
+    "M3 Stuart"
+  ],
+  "simulation_implications": [
+    "Role familiarity changes firing speed, spotting quality, and recovery from surprise.",
+    "Replacement personnel should degrade coordination until learned."
+  ],
+  "game_implications": [
+    "Crew management becomes a strategic resource, not background dressing.",
+    "Loss of a role should visibly alter capability and report quality."
+  ],
+  "variables": [
+    "replacement_familiarity",
+    "crew_confidence",
+    "fatigue"
+  ],
+  "confidence": 0.9,
+  "citations": [
+    "source_library/11_m4-sherman.md",
+    "source_library/19_bomb-tank.md",
+    "source_library/31_m3-stuart.md"
+  ]
+}

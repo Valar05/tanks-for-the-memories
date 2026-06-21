@@ -1,0 +1,28 @@
+{
+  "card_id": "combat_fatigue",
+  "summary": "Combat fatigue appears as attention loss, hesitation, and narrowing willingness to act after sustained pressure.",
+  "source_basis": [
+    "Combat stress reaction",
+    "D-Day: The Battle for Normandy",
+    "Omaha Beachhead"
+  ],
+  "simulation_implications": [
+    "Fatigue should slow orders, reduce report quality, and lower crew confidence.",
+    "Replacement personnel should partially reset fatigue but not erase stress history."
+  ],
+  "game_implications": [
+    "Long engagements should create wear, not just ammunition expenditure.",
+    "Rest, hold, and withdrawal should have real value."
+  ],
+  "variables": [
+    "fatigue",
+    "crew_confidence",
+    "trust_in_commander"
+  ],
+  "confidence": 0.88,
+  "citations": [
+    "source_library/42_combat-stress-reaction.md",
+    "source_library/18_dday-battle-for-normandy.md",
+    "source_library/01_omaha-beachhead.md"
+  ]
+}

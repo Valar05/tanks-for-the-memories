@@ -1,0 +1,54 @@
+{
+  "query_id": "route_control_and_security",
+  "question": "How should route control and rear-area security behave?",
+  "short_answer": "Roads, convoys, prisoners, and checkpoints should be managed by military police or equivalent security forces because traffic and detention are battlefield problems, not background props.",
+  "evidence_summary": [
+    "U.S. military police handled route reconnaissance, security, and POWs in theater.",
+    "German Feldgendarmerie performed road traffic control and checkpoint work.",
+    "Prisoner-handling sources show detention is an administrative and security load."
+  ],
+  "structured_data": {
+    "tasks": [
+      "traffic control",
+      "escort",
+      "checkpoints",
+      "prisoner movement",
+      "route reconnaissance"
+    ],
+    "risks": [
+      "traffic jam",
+      "escape",
+      "delayed supply",
+      "discipline issues"
+    ],
+    "state_changes": [
+      "road opened",
+      "road blocked",
+      "convoy delayed"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "route_control",
+      "effect": "reduces convoy disorder and ambush risk."
+    },
+    {
+      "variable": "detention_load",
+      "effect": "adds guards and paperwork burden."
+    },
+    {
+      "variable": "traffic_delay",
+      "effect": "slows supply and medical evacuation."
+    }
+  ],
+  "game_implications": [
+    "Rear-area friction should be playable, not abstracted away.",
+    "A blocked road can matter as much as an enemy tank."
+  ],
+  "confidence": 0.83,
+  "sources": [
+    "54_military_police_corps_united_states.md",
+    "61_feldgendarmerie.md",
+    "59_prisoner_of_war_camp.md"
+  ]
+}

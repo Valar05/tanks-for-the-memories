@@ -1,0 +1,16 @@
+{
+  "facts": [
+    {
+      "fact": "Chaplains provide religious services, counseling, and moral support.",
+      "source": "55_chaplain_corps_united_states_army.md",
+      "confidence": 0.8,
+      "note": "Grief needs an institutional outlet."
+    },
+    {
+      "fact": "Military burial and loss are part of unit memory and morale.",
+      "source": "55_chaplain_corps_united_states_army.md",
+      "confidence": 0.8,
+      "note": "Loss should leave a trace in the simulation ledger."
+    }
+  ]
+}

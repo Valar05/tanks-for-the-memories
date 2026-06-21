@@ -1,0 +1,33 @@
+{
+  "id": "vehicle_damage_is_state_machine",
+  "title": "Vehicle damage is a state machine",
+  "discovery": "A disabled tank is not dead. It may be stuck, immobile, recoverable, repairable, cannibalized, or abandoned, and each state has different consequences.",
+  "evidence": [
+    "source_library/48_vehicle_recovery.md:15-17 - recovery splits into self-recovery, like-recovery, and dedicated recovery.",
+    "source_library/49_united_states_army_ordnance_corps.md:15-17 - ordnance and maintenance depth determine whether vehicles return to service.",
+    "source_library/42_army_service_forces.md:15-17 - supply and repair infrastructure sit behind the front line."
+  ],
+  "why": "This changes combat outcome modeling from hit points to lifecycle management and battlefield salvage.",
+  "variable": {
+    "name": "immobility_state",
+    "definition": "Current operational state of the vehicle.",
+    "range": "0-5",
+    "related": [
+      "recovery_delay",
+      "repair_queue"
+    ]
+  },
+  "mechanic": "Vehicle state transitions with towing, repair, and abandonment outcomes.",
+  "pressure": "Mobility loss becomes a logistics event, not an immediate delete.",
+  "confidence": 0.95,
+  "sources": [
+    "source_library/48_vehicle_recovery.md",
+    "source_library/49_united_states_army_ordnance_corps.md",
+    "source_library/42_army_service_forces.md"
+  ],
+  "tags": [
+    "vehicles",
+    "maintenance",
+    "pressure"
+  ]
+}

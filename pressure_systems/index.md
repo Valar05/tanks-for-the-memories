@@ -1,0 +1,48 @@
+# Pressure Systems
+
+This directory groups the highest-leverage historical-to-simulation discoveries.
+
+- `radio_latency_message_shape`: Radio latency and message shape are a mechanic
+  - variable: `report_latency`
+  - confidence: 0.96
+  - file: `discoveries/radio_latency_message_shape.md`
+- `hq_picture_stale_by_default`: HQ picture is stale by default
+  - variable: `hq_picture_freshness`
+  - confidence: 0.95
+  - file: `discoveries/hq_picture_stale_by_default.md`
+- `fatigue_degrades_orders_before_firepower`: Fatigue degrades orders before firepower
+  - variable: `fatigue`
+  - confidence: 0.94
+  - file: `discoveries/fatigue_degrades_orders_before_firepower.md`
+- `friendly_fire_is_visibility_and_identifier_failure`: Friendly fire is a visibility and identifier failure
+  - variable: `identity_confidence`
+  - confidence: 0.91
+  - file: `discoveries/friendly_fire_is_visibility_and_identifier_failure.md`
+- `mail_is_morale_infrastructure`: Mail is morale infrastructure
+  - variable: `mail_latency`
+  - confidence: 0.87
+  - file: `discoveries/mail_is_morale_infrastructure.md`
+- `occupation_is_second_game_mode`: Occupation is a second game mode
+  - variable: `occupation_load`
+  - confidence: 0.9
+  - file: `discoveries/occupation_is_second_game_mode.md`
+- `medical_care_is_queue_management`: Medical care is queue management
+  - variable: `evacuation_delay`
+  - confidence: 0.9
+  - file: `discoveries/medical_care_is_queue_management.md`
+- `sanitation_is_hidden_attrition`: Sanitation is hidden attrition
+  - variable: `sanitation_state`
+  - confidence: 0.88
+  - file: `discoveries/sanitation_is_hidden_attrition.md`
+- `route_control_and_security_are_supply_gameplay`: Route control and security are supply gameplay
+  - variable: `route_control`
+  - confidence: 0.89
+  - file: `discoveries/route_control_and_security_are_supply_gameplay.md`
+- `chaplaincy_turns_grief_into_process`: Chaplaincy turns grief into process
+  - variable: `grief_load`
+  - confidence: 0.84
+  - file: `discoveries/chaplaincy_turns_grief_into_process.md`
+- `rear_area_is_a_playable_network`: The rear area is a playable network
+  - variable: `rear_area_throughput`
+  - confidence: 0.96
+  - file: `discoveries/rear_area_is_a_playable_network.md`

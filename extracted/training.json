@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "tr1",
+      "topic": "young American tank commander training",
+      "source": [
+        "FM 17-30 Tank Platoon",
+        "FM 17-33 The Tank Battalion, Light and Medium",
+        "M4 Sherman",
+        "Jacob L. Devers"
+      ],
+      "confidence": 0.9,
+      "extraction_note": "Training centers on platoon movement, gunnery, target recognition, map use, and command under combined arms."
+    },
+    {
+      "id": "tr2",
+      "topic": "crew drill and gunnery",
+      "source": [
+        "FM 17-12 Tank Gunnery",
+        "M3 Stuart"
+      ],
+      "confidence": 0.87,
+      "extraction_note": "Gunnery training is explicit and specialized; crew coordination is a drilled skill, not an improvisation."
+    },
+    {
+      "id": "tr3",
+      "topic": "buttoned and unbuttoned observation",
+      "source": [
+        "M4 Sherman",
+        "Omaha Beachhead"
+      ],
+      "confidence": 0.9,
+      "extraction_note": "Visibility and risk trade off between hatch-open awareness and buttoned safety."
+    },
+    {
+      "id": "tr4",
+      "topic": "map reading and report discipline",
+      "source": [
+        "16-line message format",
+        "Cross-Channel Attack, Chapter IX"
+      ],
+      "confidence": 0.89,
+      "extraction_note": "The commander needs both terrain interpretation and a precise way to move information upward."
+    }
+  ]
+}

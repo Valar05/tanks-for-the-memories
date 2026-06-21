@@ -1,0 +1,51 @@
+{
+  "query_id": "chaplain_and_grief",
+  "question": "How should chaplaincy and grief be modeled?",
+  "short_answer": "Chaplains should provide a structured grief and morale outlet after losses, because death in unit life needs ritual, counsel, and social processing.",
+  "evidence_summary": [
+    "Army chaplains provided religious services, counseling, and moral support.",
+    "The Four Chaplains example shows sacrificial memory can become part of the unit story.",
+    "Loss is a morale event as much as a casualty event."
+  ],
+  "structured_data": {
+    "support_actions": [
+      "funeral",
+      "counseling",
+      "prayer",
+      "memorial",
+      "conversation"
+    ],
+    "effects": [
+      "grief reduction",
+      "cohesion recovery",
+      "memory reinforcement"
+    ],
+    "failure_modes": [
+      "suppressed grief",
+      "detachment",
+      "shame"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "grief_load",
+      "effect": "rises after deaths and suppresses performance until processed."
+    },
+    {
+      "variable": "moral_support",
+      "effect": "reduces emotional damage after losses."
+    },
+    {
+      "variable": "loss_memory",
+      "effect": "preserves named dead in the unit record."
+    }
+  ],
+  "game_implications": [
+    "Funerals and memorials should be a real part of the campaign ledger.",
+    "The player should feel the cost of command socially, not only numerically."
+  ],
+  "confidence": 0.8,
+  "sources": [
+    "55_chaplain_corps_united_states_army.md"
+  ]
+}

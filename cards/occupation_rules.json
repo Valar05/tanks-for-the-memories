@@ -1,0 +1,29 @@
+{
+  "card_id": "occupation_rules",
+  "summary": "Occupation produces governance tasks: control, patrols, civilians, and paperwork.",
+  "source_basis": [
+    "44_military_government.md",
+    "45_military_occupation.md",
+    "51_office_of_military_government_united_states.md"
+  ],
+  "simulation_implications": [
+    "Control needs a rule system after combat ends.",
+    "Administrative burden should outlast the firefight."
+  ],
+  "game_implications": [
+    "Winning a fight should open a different game mode.",
+    "The player should need authority, not just firepower."
+  ],
+  "variables": [
+    "occupation_load",
+    "curfew_pressure",
+    "civilian_trust",
+    "administrative_backlog"
+  ],
+  "confidence": 0.81,
+  "citations": [
+    "44_military_government.md",
+    "45_military_occupation.md",
+    "51_office_of_military_government_united_states.md"
+  ]
+}

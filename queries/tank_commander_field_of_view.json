@@ -1,0 +1,50 @@
+{
+  "query_id": "tank_commander_field_of_view",
+  "question": "What does the tank commander actually see?",
+  "short_answer": "A commander sees a narrow, conditional slice of the battlefield that changes with hatch state, terrain, smoke, and whether the crew has produced a reliable report network.",
+  "evidence_summary": [
+    "M4 Sherman and the D-Day sources show the buttoned-up vs hatch-open tradeoff.",
+    "Carentan and Villers-Bocage show hedgerows and causeways constricting direct observation.",
+    "Radio and report sources show that some of the commander’s real vision comes from other people’s reports."
+  ],
+  "structured_data": {
+    "view_sources": [
+      "direct sight",
+      "scope",
+      "radio report",
+      "map/report board"
+    ],
+    "vision_constraints": [
+      "buttoned-up narrowness",
+      "smoke",
+      "hedgerows",
+      "terrain masking"
+    ],
+    "best_use": "move between direct observation and report-based certainty"
+  },
+  "simulation_variables": [
+    {
+      "variable": "visibility_arc",
+      "effect": "sets direct visual range."
+    },
+    {
+      "variable": "buttoned_visibility_penalty",
+      "effect": "cuts awareness when protected."
+    },
+    {
+      "variable": "report_accuracy",
+      "effect": "supplements what the commander cannot physically see."
+    }
+  ],
+  "game_implications": [
+    "The commander should feel blind in exactly the situations where the map says the enemy exists but cannot be directly seen.",
+    "Player choices should trade safety, spotting, and speed."
+  ],
+  "confidence": 0.93,
+  "sources": [
+    "source_library/11_m4-sherman.md",
+    "source_library/01_omaha-beachhead.md",
+    "source_library/04_utah-beach-to-cherbourg-carentan.md",
+    "source_library/14_radiotelephony-procedure.md"
+  ]
+}

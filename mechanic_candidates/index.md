@@ -1,0 +1,44 @@
+# Mechanic Candidates
+
+This directory groups the highest-leverage historical-to-simulation discoveries.
+
+- `radio_latency_message_shape`: Radio latency and message shape are a mechanic
+  - variable: `report_latency`
+  - confidence: 0.96
+  - file: `discoveries/radio_latency_message_shape.md`
+- `visibility_is_stateful`: Visibility is stateful, not a static stat
+  - variable: `visibility_arc`
+  - confidence: 0.88
+  - file: `discoveries/visibility_is_stateful.md`
+- `bocage_is_information_compression`: Bocage turns terrain into information compression
+  - variable: `route_dependency`
+  - confidence: 0.93
+  - file: `discoveries/bocage_is_information_compression.md`
+- `vehicle_damage_is_state_machine`: Vehicle damage is a state machine
+  - variable: `immobility_state`
+  - confidence: 0.95
+  - file: `discoveries/vehicle_damage_is_state_machine.md`
+- `medical_care_is_queue_management`: Medical care is queue management
+  - variable: `evacuation_delay`
+  - confidence: 0.9
+  - file: `discoveries/medical_care_is_queue_management.md`
+- `capture_is_branch_not_end`: Capture is a branch, not an end
+  - variable: `captivity_stress`
+  - confidence: 0.88
+  - file: `discoveries/capture_is_branch_not_end.md`
+- `route_control_and_security_are_supply_gameplay`: Route control and security are supply gameplay
+  - variable: `route_control`
+  - confidence: 0.89
+  - file: `discoveries/route_control_and_security_are_supply_gameplay.md`
+- `command_is_attention_management`: Command is attention management
+  - variable: `attention_budget`
+  - confidence: 0.93
+  - file: `discoveries/command_is_attention_management.md`
+- `training_is_role_learning_not_vehicle_learning`: Training is role learning, not vehicle learning
+  - variable: `commander_training_level`
+  - confidence: 0.94
+  - file: `discoveries/training_is_role_learning_not_vehicle_learning.md`
+- `rear_area_is_a_playable_network`: The rear area is a playable network
+  - variable: `rear_area_throughput`
+  - confidence: 0.96
+  - file: `discoveries/rear_area_is_a_playable_network.md`

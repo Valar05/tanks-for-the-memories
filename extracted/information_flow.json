@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "inf1",
+      "pattern": "radios lost on beach",
+      "source": [
+        "Omaha Beachhead"
+      ],
+      "confidence": 0.97,
+      "extraction_note": "Communication chain breaks at the shore, leaving local commanders blind beyond immediate sight."
+    },
+    {
+      "id": "inf2",
+      "pattern": "late and scattered German reports",
+      "source": [
+        "Cross-Channel Attack, Chapter IX"
+      ],
+      "confidence": 0.94,
+      "extraction_note": "Enemy HQ picture lags behind the battlefield reality."
+    },
+    {
+      "id": "inf3",
+      "pattern": "no communications with artillery",
+      "source": [
+        "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg"
+      ],
+      "confidence": 0.96,
+      "extraction_note": "Artillery support cannot be synchronized without a functional report channel."
+    },
+    {
+      "id": "inf4",
+      "pattern": "radio message structure",
+      "source": [
+        "16-line message format",
+        "FM 24-5 Basic Field Manual, Signal Communication"
+      ],
+      "confidence": 0.91,
+      "extraction_note": "Formal message layout reduces ambiguity but adds time and procedural load."
+    },
+    {
+      "id": "inf5",
+      "pattern": "operational report to after-action report",
+      "source": [
+        "HQ 8 Cdn Inf Bde, Operation Windsor"
+      ],
+      "confidence": 0.86,
+      "extraction_note": "Staff reports turn action into memory and lessons."
+    }
+  ]
+}

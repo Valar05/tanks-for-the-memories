@@ -1,0 +1,30 @@
+{
+  "card_id": "logistics",
+  "summary": "War is sustained by fuel, ammo, transport, depot depth, and maintenance capacity.",
+  "source_basis": [
+    "42_army_service_forces.md",
+    "49_united_states_army_ordnance_corps.md",
+    "48_vehicle_recovery.md"
+  ],
+  "simulation_implications": [
+    "Supply is a pressure meter feeding combat readiness.",
+    "Repair capacity determines how long a unit can keep fighting."
+  ],
+  "game_implications": [
+    "Shortages should change tactics and available orders.",
+    "Disabled vehicles should become recoverable assets sometimes, not always losses."
+  ],
+  "variables": [
+    "fuel_reserve",
+    "ammo_reserve",
+    "maintenance_backlog",
+    "spare_parts_level",
+    "transport_capacity"
+  ],
+  "confidence": 0.88,
+  "citations": [
+    "42_army_service_forces.md",
+    "49_united_states_army_ordnance_corps.md",
+    "48_vehicle_recovery.md"
+  ]
+}

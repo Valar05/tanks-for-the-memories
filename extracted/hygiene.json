@@ -1,0 +1,16 @@
+{
+  "facts": [
+    {
+      "fact": "Hygiene in the field was often poor and contributed to illness.",
+      "source": "43_united_states_army_during_world_war_ii.md",
+      "confidence": 0.86,
+      "note": "Health is a readiness system."
+    },
+    {
+      "fact": "Trench foot, washing, and clean clothing mattered in Europe.",
+      "source": "43_united_states_army_during_world_war_ii.md",
+      "confidence": 0.86,
+      "note": "Weather and hygiene interact."
+    }
+  ]
+}

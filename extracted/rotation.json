@@ -1,0 +1,16 @@
+{
+  "facts": [
+    {
+      "fact": "Replacement rules often required replacements before rotations.",
+      "source": "41_united_states_army_air_forces.md",
+      "confidence": 0.84,
+      "note": "Units can\u2019t be evacuated into vacancy."
+    },
+    {
+      "fact": "Army Ground Forces managed training and replacement flow at scale.",
+      "source": "50_army_ground_forces.md",
+      "confidence": 0.83,
+      "note": "Replacement quality is a pipeline issue."
+    }
+  ]
+}

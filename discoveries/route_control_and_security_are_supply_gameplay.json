@@ -1,0 +1,33 @@
+{
+  "id": "route_control_and_security_are_supply_gameplay",
+  "title": "Route control and security are supply gameplay",
+  "discovery": "Road control, checkpoints, prisoner movement, and convoy security are core logistics problems, not background patrol tasks.",
+  "evidence": [
+    "source_library/54_military_police_corps_united_states.md:15-17 - military police handle traffic control, POWs, route security, and rear-area order.",
+    "source_library/61_feldgendarmerie.md:15-17 - Feldgendarmerie handles road traffic control and checkpoint security.",
+    "source_library/59_prisoner_of_war_camp.md:15-17 - detention and guard duty consume resources."
+  ],
+  "why": "If the road is blocked, the tank unit is not just late; it is starved, stalled, or forced to reroute.",
+  "variable": {
+    "name": "route_control",
+    "definition": "How effectively roads, convoys, and checkpoints are managed.",
+    "range": "0-100",
+    "related": [
+      "traffic_delay",
+      "detention_load"
+    ]
+  },
+  "mechanic": "Convoy, checkpoint, and prisoner-escort management.",
+  "pressure": "Security friction directly slows supply, evacuation, and tempo.",
+  "confidence": 0.89,
+  "sources": [
+    "source_library/54_military_police_corps_united_states.md",
+    "source_library/61_feldgendarmerie.md",
+    "source_library/59_prisoner_of_war_camp.md"
+  ],
+  "tags": [
+    "security",
+    "logistics",
+    "pressure"
+  ]
+}

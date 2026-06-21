@@ -1,0 +1,19 @@
+{
+  "lessons": [
+    {
+      "lesson": "Repair, recovery, and supply are decisive in sustained action.",
+      "source": "42_army_service_forces.md",
+      "confidence": 0.88
+    },
+    {
+      "lesson": "Mail, rest, and rotation preserve morale.",
+      "source": "46_military_mail.md",
+      "confidence": 0.78
+    },
+    {
+      "lesson": "Civilian administration becomes part of the battlefield once territory changes hands.",
+      "source": "44_military_government.md",
+      "confidence": 0.82
+    }
+  ]
+}

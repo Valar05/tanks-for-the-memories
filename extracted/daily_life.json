@@ -1,0 +1,22 @@
+{
+  "facts": [
+    {
+      "fact": "Soldiers alternated between waiting, marching, digging, sleeping, and short bursts of action.",
+      "source": "43_united_states_army_during_world_war_ii.md",
+      "confidence": 0.86,
+      "note": "Daily routine is a pressure system, not downtime."
+    },
+    {
+      "fact": "Rations were repetitive even when calories were adequate.",
+      "source": "43_united_states_army_during_world_war_ii.md",
+      "confidence": 0.86,
+      "note": "Variety and morale matter in addition to fuel value."
+    },
+    {
+      "fact": "Letters from home mattered because military mail was a morale channel.",
+      "source": "46_military_mail.md",
+      "confidence": 0.78,
+      "note": "Home contact changes emotional state and persistence."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "facts": [
+    {
+      "fact": "Military government governs occupied territory as temporary hostile control.",
+      "source": "44_military_government.md",
+      "confidence": 0.82,
+      "note": "Civilian contact becomes a rule-set."
+    },
+    {
+      "fact": "Occupation is defined by de facto submission to the hostile army.",
+      "source": "45_military_occupation.md",
+      "confidence": 0.83,
+      "note": "Authority is situational, not abstract."
+    },
+    {
+      "fact": "Operation Astonia destroyed much of Le Havre and harmed civilians.",
+      "source": "53_operation_astonia.md",
+      "confidence": 0.8,
+      "note": "Civilian damage can become part of the operational ledger."
+    }
+  ]
+}

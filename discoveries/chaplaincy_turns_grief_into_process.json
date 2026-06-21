@@ -1,0 +1,33 @@
+{
+  "id": "chaplaincy_turns_grief_into_process",
+  "title": "Chaplaincy turns grief into process",
+  "discovery": "Loss needs ritual, counseling, and memorialization; otherwise grief stays unprocessed and leaks into cohesion and command burden.",
+  "evidence": [
+    "source_library/55_chaplain_corps_united_states_army.md:15-17 - chaplains provide moral support, grief response, and funerals.",
+    "source_library/19_bomb-tank.md:15-17 - replacement personnel turn the tank into a memory vessel.",
+    "source_library/40_combat-stress-reaction.md:15-17 - stress reaction affects unit cohesion."
+  ],
+  "why": "The simulation should store named losses and social consequences, not just casualty counts.",
+  "variable": {
+    "name": "grief_load",
+    "definition": "Accumulated emotional burden from losses and funerals.",
+    "range": "0-100",
+    "related": [
+      "moral_support",
+      "loss_memory"
+    ]
+  },
+  "mechanic": "Memorial, counseling, and grief-recovery loop.",
+  "pressure": "Unprocessed loss makes later decisions worse.",
+  "confidence": 0.84,
+  "sources": [
+    "source_library/55_chaplain_corps_united_states_army.md",
+    "source_library/19_bomb-tank.md",
+    "source_library/40_combat-stress-reaction.md"
+  ],
+  "tags": [
+    "chaplaincy",
+    "grief",
+    "memory"
+  ]
+}

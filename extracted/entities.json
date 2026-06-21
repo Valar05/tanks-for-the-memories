@@ -1,0 +1,92 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "e1",
+      "type": "person",
+      "name": "Omar Bradley",
+      "source": [
+        "Cross-Channel Attack, Chapter IX"
+      ],
+      "confidence": 0.95,
+      "extraction_note": "First Army commander shaping the Omaha lodgment and the gap-closing priority."
+    },
+    {
+      "id": "e2",
+      "type": "person",
+      "name": "Stanisław Maczek",
+      "source": [
+        "Stanisław Maczek",
+        "1st Armoured Division (Poland)"
+      ],
+      "confidence": 0.9,
+      "extraction_note": "Polish armored commander tied to Falaise closure and coalition command pressure."
+    },
+    {
+      "id": "e3",
+      "type": "unit",
+      "name": "1st Infantry Division",
+      "source": [
+        "Cross-Channel Attack, Chapter IX",
+        "Omaha Beach"
+      ],
+      "confidence": 0.94,
+      "extraction_note": "American division that had to advance with limited transport and tank support."
+    },
+    {
+      "id": "e4",
+      "type": "vehicle",
+      "name": "M4 Sherman",
+      "source": [
+        "M4 Sherman",
+        "Bomb (tank)"
+      ],
+      "confidence": 0.93,
+      "extraction_note": "Primary American medium tank baseline and crew-memory vessel in the Canadian example."
+    },
+    {
+      "id": "e5",
+      "type": "location",
+      "name": "Omaha Beach",
+      "source": [
+        "Omaha Beachhead",
+        "Omaha Beach"
+      ],
+      "confidence": 0.97,
+      "extraction_note": "Beach sector where radios were lost, landings misaligned, and command fragmentation was immediate."
+    },
+    {
+      "id": "e6",
+      "type": "doctrine",
+      "name": "FM 17-30 Tank Platoon",
+      "source": [
+        "FM 17-30 Tank Platoon",
+        "M3 Stuart"
+      ],
+      "confidence": 0.82,
+      "extraction_note": "Tank platoon manual recovered through citation trail; anchors platoon command training."
+    },
+    {
+      "id": "e7",
+      "type": "radio_phrase",
+      "name": "16-line message format",
+      "source": [
+        "16-line message format",
+        "FM 24-5 Basic Field Manual, Signal Communication"
+      ],
+      "confidence": 0.9,
+      "extraction_note": "Message structure source for report flow and radio discipline."
+    },
+    {
+      "id": "e8",
+      "type": "simulation_variable",
+      "name": "report_delay",
+      "source": [
+        "Cross-Channel Attack, Chapter IX",
+        "16-line message format"
+      ],
+      "confidence": 0.9,
+      "extraction_note": "Derived from late/scattered reports and message relay latency."
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "query_id": "medical_evacuation_flow",
+  "question": "How should casualty evacuation work in a WWII life simulation?",
+  "short_answer": "A casualty should move through point-of-wounding care, stabilization, field hospital treatment, and evacuation-hospital capacity, with delays and triage decisions at every step.",
+  "evidence_summary": [
+    "Combat medic sources show the first response happens immediately at the point of injury.",
+    "Field hospital sources show treatment capacity is temporary and mobile.",
+    "Evacuation hospital sources show rear medical care is a finite queue with staffing limits."
+  ],
+  "structured_data": {
+    "stages": [
+      "wound",
+      "stabilize",
+      "move",
+      "triage",
+      "treat",
+      "evacuate"
+    ],
+    "bottlenecks": [
+      "medics",
+      "litter bearers",
+      "vehicles",
+      "bed space",
+      "surgical time"
+    ],
+    "outcomes": [
+      "return to duty",
+      "long recovery",
+      "death",
+      "missing"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "evacuation_delay",
+      "effect": "increases mortality and recovery time."
+    },
+    {
+      "variable": "triage_capacity",
+      "effect": "sets how many wounded can be processed quickly."
+    },
+    {
+      "variable": "wound_stabilization_time",
+      "effect": "controls survival before transport."
+    },
+    {
+      "variable": "medical_load",
+      "effect": "reduces flexibility in the unit rear."
+    }
+  ],
+  "game_implications": [
+    "The player should care about where the wounded go, not only who is hit.",
+    "A medic can be as strategically important as an extra gun."
+  ],
+  "confidence": 0.82,
+  "sources": [
+    "57_combat_medic.md",
+    "58_field_hospital.md",
+    "63_95th_Evacuation_Hospital.md"
+  ]
+}

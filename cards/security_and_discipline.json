@@ -1,0 +1,27 @@
+{
+  "card_id": "security_and_discipline",
+  "summary": "Military police and equivalent security forces keep routes, prisoners, and rear areas functioning.",
+  "source_basis": [
+    "54_military_police_corps_united_states.md",
+    "61_feldgendarmerie.md"
+  ],
+  "simulation_implications": [
+    "Route control and prisoner handling affect tempo and order.",
+    "The rear area should have security friction."
+  ],
+  "game_implications": [
+    "Convoys and prisoner columns should need management.",
+    "Road control should be an explicit command choice."
+  ],
+  "variables": [
+    "route_control",
+    "detention_load",
+    "traffic_delay",
+    "discipline_pressure"
+  ],
+  "confidence": 0.83,
+  "citations": [
+    "54_military_police_corps_united_states.md",
+    "61_feldgendarmerie.md"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "card_id": "reconnaissance",
+  "summary": "Reconnaissance in Normandy is about narrowing uncertainty before the tank commits to a lane, not about free-roaming scouting fantasy.",
+  "source_basis": [
+    "M3 Stuart",
+    "Operation Cobra",
+    "Omaha Beachhead"
+  ],
+  "simulation_implications": [
+    "Recon should improve report_accuracy and reduce ambush risk.",
+    "A failed recon should still be useful because it narrows the search space."
+  ],
+  "game_implications": [
+    "Scouting commands should be meaningful pre-commitment actions.",
+    "The wingman scout role should generate partial but actionable reports."
+  ],
+  "variables": [
+    "report_accuracy",
+    "report_delay",
+    "commander_training_level"
+  ],
+  "confidence": 0.9,
+  "citations": [
+    "source_library/31_m3-stuart.md",
+    "source_library/08_operation-cobra.md",
+    "source_library/01_omaha-beachhead.md"
+  ]
+}

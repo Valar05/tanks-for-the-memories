@@ -1,0 +1,51 @@
+{
+  "query_id": "mail_and_home",
+  "question": "How should mail and home contact affect the simulation?",
+  "short_answer": "Letters and packages should be treated as morale infrastructure: they reduce isolation, preserve memory, and shape whether soldiers feel forgotten.",
+  "evidence_summary": [
+    "Military mail provides the actual channel for home contact.",
+    "Censorship changes what can be said and what is delayed.",
+    "Daily life sources tie mail to routine and morale."
+  ],
+  "structured_data": {
+    "channels": [
+      "letters",
+      "packages",
+      "censored postcards"
+    ],
+    "effects": [
+      "morale rise",
+      "rumor spread",
+      "home attachment",
+      "memory reinforcement"
+    ],
+    "risks": [
+      "delay",
+      "loss",
+      "censorship"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "mail_latency",
+      "effect": "changes morale when messages are late."
+    },
+    {
+      "variable": "mail_censorship",
+      "effect": "limits information and adds uncertainty."
+    },
+    {
+      "variable": "home_attachment",
+      "effect": "raises emotional sensitivity to mail."
+    }
+  ],
+  "game_implications": [
+    "Mail should be an event, not a background detail.",
+    "A lost letter can matter almost as much as a lost shell in the ledger."
+  ],
+  "confidence": 0.78,
+  "sources": [
+    "46_military_mail.md",
+    "43_united_states_army_during_world_war_ii.md"
+  ]
+}

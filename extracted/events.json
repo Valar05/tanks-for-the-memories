@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "v1",
+      "name": "D-Day beach landings",
+      "when": "1944-06-06",
+      "source": [
+        "Omaha Beachhead",
+        "Cross-Channel Attack, Chapter VIII"
+      ],
+      "confidence": 0.98,
+      "extraction_note": "Initial landings created the first information-pressure shock: mislandings, lost radios, and uncertain beachhead status."
+    },
+    {
+      "id": "v2",
+      "name": "Operation Cobra breakout",
+      "when": "1944-07-25",
+      "source": [
+        "Operation Cobra"
+      ],
+      "confidence": 0.92,
+      "extraction_note": "Weather delay and rhino modifications turned bocage attrition into maneuver warfare."
+    },
+    {
+      "id": "v3",
+      "name": "Operation Totalize",
+      "when": "1944-08-08",
+      "source": [
+        "Operation Totalize"
+      ],
+      "confidence": 0.9,
+      "extraction_note": "Night offensive with friendly-fire risk and armored pressure on Falaise approaches."
+    },
+    {
+      "id": "v4",
+      "name": "Carentan causeway attack",
+      "when": "1944-06-10",
+      "source": [
+        "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg"
+      ],
+      "confidence": 0.95,
+      "extraction_note": "Command transmission failure and hedgerow/causeway terrain made the attack depend on artillery and local improvisation."
+    },
+    {
+      "id": "v5",
+      "name": "Operation Windsor",
+      "when": "1944-07",
+      "source": [
+        "HQ 8 Cdn Inf Bde, Operation Windsor"
+      ],
+      "confidence": 0.86,
+      "extraction_note": "Operational report source useful for staff-paper language and after-action extraction."
+    }
+  ]
+}

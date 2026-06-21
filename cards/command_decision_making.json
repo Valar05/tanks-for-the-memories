@@ -1,0 +1,29 @@
+{
+  "card_id": "command_decision_making",
+  "summary": "Command decision-making in Normandy is an exercise in choosing with an incomplete picture under pressure.",
+  "source_basis": [
+    "Cross-Channel Attack, Chapter VIII",
+    "Cross-Channel Attack, Chapter IX",
+    "Operation Totalize"
+  ],
+  "simulation_implications": [
+    "Decision quality should degrade with fatigue and bad information.",
+    "Good commanders should learn to wait for confirmation when the terrain allows it."
+  ],
+  "game_implications": [
+    "The player should sometimes need to hold or reverse instead of forcing the advance.",
+    "Orders should create consequences even when they are cautious."
+  ],
+  "variables": [
+    "commander_training_level",
+    "fatigue",
+    "report_accuracy",
+    "report_delay"
+  ],
+  "confidence": 0.92,
+  "citations": [
+    "source_library/02_cross-channel-attack-ch8.md",
+    "source_library/03_cross-channel-attack-ch9.md",
+    "source_library/09_operation-totalize.md"
+  ]
+}

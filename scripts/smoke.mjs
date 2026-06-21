@@ -15,35 +15,45 @@ const requiredFiles = [
 
 const failures = [];
 for (const file of requiredFiles) {
-  if (!existsSync(file)) failures.push(`missing ${file}`);
+  if (!existsSync(file)) {
+    failures.push('missing ' + file);
+  }
 }
 
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
+if (packageJson.name !== 'tftm') {
+  failures.push('package name should be tftm');
+}
 for (const scriptName of ['build', 'dev', 'smoke', 'bootstrap']) {
-  if (!packageJson.scripts?.[scriptName]) {
-    failures.push(`missing npm script ${scriptName}`);
+  if (!packageJson.scripts || !packageJson.scripts[scriptName]) {
+    failures.push('missing npm script ' + scriptName);
   }
 }
 
 const main = readFileSync('src/main.ts', 'utf8');
 const requiredSnippets = [
-  'SpeechRecognition',
-  'commandQueue',
-  'Commander Camera',
-  'Drone Camera',
-  'Low-confidence speech is ignored silently.',
-  'GridHelper',
-  'TankAgent',
-  'driver advance',
-  'wingman attack'
+  'Information -> Order -> Consequence -> Memory',
+  'attack contact',
+  'hatch open',
+  'button up',
+  'gunner scope',
+  'report',
+  'Information Ledger',
+  'After-action report',
+  'hidden enemy',
+  'No live AI or LLM calls are used at runtime.'
 ];
 for (const snippet of requiredSnippets) {
-  if (!main.includes(snippet)) failures.push(`missing source marker ${snippet}`);
+  if (!main.includes(snippet)) {
+    failures.push('missing source marker ' + snippet);
+  }
 }
 
 if (failures.length > 0) {
   console.error('Smoke check failed:');
-  for (const failure of failures) console.error(`- ${failure}`);
+  for (const failure of failures) {
+    console.error('- ' + failure);
+  }
   process.exit(1);
 }
 

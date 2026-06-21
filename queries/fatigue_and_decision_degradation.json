@@ -1,0 +1,49 @@
+{
+  "query_id": "fatigue_and_decision_degradation",
+  "question": "How does fatigue degrade decisions in WWII life simulation?",
+  "short_answer": "Fatigue should slowly erode reaction time, memory, and judgment until the commander becomes more conservative, slower, and more error-prone.",
+  "evidence_summary": [
+    "Combat stress reaction explicitly reduces fighting efficiency, reaction speed, and prioritization.",
+    "Rotation policy exists because exhaustion accumulates rather than resetting itself.",
+    "Combat stress and morale are linked to unit cohesion."
+  ],
+  "structured_data": {
+    "degradations": [
+      "slower reaction",
+      "indecision",
+      "forgetfulness",
+      "narrow focus"
+    ],
+    "mitigations": [
+      "rest",
+      "rotation",
+      "mail",
+      "cohesion"
+    ],
+    "state_change": "fatigue should shift decision quality over time"
+  },
+  "simulation_variables": [
+    {
+      "variable": "fatigue",
+      "effect": "lowers alertness and throughput."
+    },
+    {
+      "variable": "trust_in_reports",
+      "effect": "declines when the crew is exhausted."
+    },
+    {
+      "variable": "crew_confidence",
+      "effect": "becomes brittle under repeated stress."
+    }
+  ],
+  "game_implications": [
+    "The player should feel fatigue as a system, not a vignette.",
+    "The same order should produce worse execution when the crew is worn down."
+  ],
+  "confidence": 0.85,
+  "sources": [
+    "40_combat_stress_reaction.md",
+    "41_united_states_army_air_forces.md",
+    "50_army_ground_forces.md"
+  ]
+}

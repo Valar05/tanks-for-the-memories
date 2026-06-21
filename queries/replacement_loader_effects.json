@@ -1,0 +1,48 @@
+{
+  "query_id": "replacement_loader_effects",
+  "question": "What do replacement personnel do to a Sherman crew?",
+  "short_answer": "They restore function but lower familiarity, slow coordination, and often carry the memory of who was lost before them.",
+  "evidence_summary": [
+    "Bomb shows a wounded commander replaced in a preserved tank history.",
+    "Polish and Canadian sources show replacements under the pressure of continuing operations.",
+    "Combat stress sources show why new crew members do not inherit full confidence immediately."
+  ],
+  "structured_data": {
+    "replacement_costs": [
+      "lower trust",
+      "slower drill",
+      "more radio mistakes",
+      "more hesitation"
+    ],
+    "replacement_benefits": [
+      "restore full crew count",
+      "reduce single-role bottlenecks",
+      "permit continued operations"
+    ],
+    "memory_effect": "the vehicle remembers the losses even when the roster changes"
+  },
+  "simulation_variables": [
+    {
+      "variable": "replacement_familiarity",
+      "effect": "controls how fast the new loader or commander settles in."
+    },
+    {
+      "variable": "crew_confidence",
+      "effect": "drops after a replacement until the crew re-stabilizes."
+    },
+    {
+      "variable": "trust_in_commander",
+      "effect": "can be shaken if replacements are handled badly."
+    }
+  ],
+  "game_implications": [
+    "Replacement should be a morale event, not only a health refill.",
+    "The player should have to re-earn crew rhythm after losses."
+  ],
+  "confidence": 0.9,
+  "sources": [
+    "source_library/19_bomb-tank.md",
+    "source_library/17_first-polish-armoured-division.md",
+    "source_library/42_combat-stress-reaction.md"
+  ]
+}

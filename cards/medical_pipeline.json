@@ -1,0 +1,29 @@
+{
+  "card_id": "medical_pipeline",
+  "summary": "Casualty care is a pipeline from point-of-wounding, to stabilization, to field hospital, to evacuation hospital.",
+  "source_basis": [
+    "57_combat_medic.md",
+    "58_field_hospital.md",
+    "63_95th_evacuation_hospital.md"
+  ],
+  "simulation_implications": [
+    "Injury should trigger staged treatment and queueing.",
+    "Medical capacity should limit how many casualties can be stabilized quickly."
+  ],
+  "game_implications": [
+    "A wounded crew member should create an operational crisis, not just a death flag.",
+    "Medics and hospitals should be visible assets."
+  ],
+  "variables": [
+    "evacuation_delay",
+    "triage_capacity",
+    "wound_stabilization_time",
+    "medical_load"
+  ],
+  "confidence": 0.82,
+  "citations": [
+    "57_combat_medic.md",
+    "58_field_hospital.md",
+    "63_95th_evacuation_hospital.md"
+  ]
+}

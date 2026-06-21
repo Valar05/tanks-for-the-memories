@@ -1,0 +1,72 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "veh1",
+      "name": "M4 Sherman",
+      "source": [
+        "M4 Sherman",
+        "Bomb (tank)"
+      ],
+      "confidence": 0.95,
+      "extraction_note": "American medium tank baseline; reliable, versatile, and doctrine-centered on combined arms."
+    },
+    {
+      "id": "veh2",
+      "name": "Sherman DD",
+      "source": [
+        "Omaha Beachhead"
+      ],
+      "confidence": 0.92,
+      "extraction_note": "Amphibious Sherman variant; rough seas and launch decisions determine whether it reaches the beach."
+    },
+    {
+      "id": "veh3",
+      "name": "Panther tank",
+      "source": [
+        "Panther tank",
+        "Operation Cobra"
+      ],
+      "confidence": 0.88,
+      "extraction_note": "Long-range threat vehicle with reliability issues and strong open-country performance."
+    },
+    {
+      "id": "veh4",
+      "name": "Panzer IV",
+      "source": [
+        "Panzer IV",
+        "Operation Cobra"
+      ],
+      "confidence": 0.86,
+      "extraction_note": "Common German medium tank baseline in Normandy and breakout actions."
+    },
+    {
+      "id": "veh5",
+      "name": "M3 half-track",
+      "source": [
+        "M3 half-track"
+      ],
+      "confidence": 0.86,
+      "extraction_note": "Armored infantry transport with open-top vulnerability and strong mobility."
+    },
+    {
+      "id": "veh6",
+      "name": "M36 tank destroyer",
+      "source": [
+        "M36 tank destroyer"
+      ],
+      "confidence": 0.84,
+      "extraction_note": "Open-topped 90mm anti-armor vehicle tied to evolving tank-destroyer doctrine."
+    },
+    {
+      "id": "veh7",
+      "name": "Cromwell tank",
+      "source": [
+        "Cromwell tank",
+        "Battle of Villers-Bocage"
+      ],
+      "confidence": 0.83,
+      "extraction_note": "British cruiser tank with speed and low profile but weaker frontal gun utility against heavy armor."
+    }
+  ]
+}

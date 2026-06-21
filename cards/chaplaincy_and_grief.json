@@ -1,0 +1,25 @@
+{
+  "card_id": "chaplaincy_and_grief",
+  "summary": "Chaplains and religious support are part of grief handling and unit morale maintenance.",
+  "source_basis": [
+    "55_chaplain_corps_united_states_army.md"
+  ],
+  "simulation_implications": [
+    "Loss should have social processing, not just numeric attrition.",
+    "Counseling and ritual can stabilize the unit after casualties."
+  ],
+  "game_implications": [
+    "Funerals, prayers, and counseling can be meaningful events.",
+    "A chaplain should change morale state, not just flavor text."
+  ],
+  "variables": [
+    "grief_load",
+    "moral_support",
+    "unit_cohesion",
+    "loss_memory"
+  ],
+  "confidence": 0.8,
+  "citations": [
+    "55_chaplain_corps_united_states_army.md"
+  ]
+}

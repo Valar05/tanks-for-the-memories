@@ -1,0 +1,57 @@
+{
+  "query_id": "replacement_and_rotation",
+  "question": "How should replacement and rotation work in the simulation?",
+  "short_answer": "Replacement and rotation should be slow, imperfect, and morale-sensitive: fresh people bring capacity but lower cohesion, while exhausted veterans need relief before they collapse.",
+  "evidence_summary": [
+    "AAF policy shows the Army tied rotation to replacement availability.",
+    "Army Ground Forces controlled the training pipeline and replacement flow.",
+    "Combat fatigue sources show that exhaustion is operational, not cosmetic."
+  ],
+  "structured_data": {
+    "system_behaviors": [
+      "arrive inexperienced",
+      "learn unit habits",
+      "relieve fatigue",
+      "reduce cohesion temporarily"
+    ],
+    "risks": [
+      "miscommunication",
+      "hesitation",
+      "trust drop",
+      "slower reaction"
+    ],
+    "benefits": [
+      "fresh energy",
+      "restored stamina",
+      "new skills"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "replacement_familiarity",
+      "effect": "raises performance when the crew has learned each other."
+    },
+    {
+      "variable": "crew_confidence",
+      "effect": "falls after losses and rises after shared success."
+    },
+    {
+      "variable": "rotation_interval",
+      "effect": "controls how long exhaustion can accumulate."
+    },
+    {
+      "variable": "fatigue",
+      "effect": "lowers reaction speed and judgment."
+    }
+  ],
+  "game_implications": [
+    "Replacement should be a real tradeoff, not a free reset.",
+    "Relief should preserve power but cost continuity."
+  ],
+  "confidence": 0.84,
+  "sources": [
+    "41_united_states_army_air_forces.md",
+    "50_army_ground_forces.md",
+    "40_combat_stress_reaction.md"
+  ]
+}

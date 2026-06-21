@@ -1,362 +1,66 @@
 import * as THREE from 'three';
 import './styles.css';
 
-type TankRole = 'player' | 'ally' | 'enemy';
-type TankState = 'Idle' | 'Moving' | 'Attacking' | 'Holding';
-type CameraMode = 'commander' | 'drone';
+type ViewMode = 'hatch' | 'buttoned' | 'scope' | 'map';
+type Phase = 'live' | 'failure' | 'victory';
+type UnitRole = 'player' | 'wingman' | 'enemy';
+type UnitIntent = 'idle' | 'advance' | 'reverse' | 'hold' | 'scout-left' | 'scout-right' | 'attack' | 'disabled';
+type CommandKind = 'report' | 'scout left' | 'scout right' | 'advance' | 'halt' | 'reverse' | 'hold' | 'attack contact' | 'hatch open' | 'button up' | 'gunner scope' | 'map';
+type ReportType = 'sighting' | 'contact' | 'status' | 'order' | 'after-action';
 
 type Command = {
   raw: string;
-  role: TankRole;
-  action: 'advance' | 'halt' | 'reverse' | 'scan' | 'fire' | 'follow' | 'attack' | 'hold';
+  kind: CommandKind;
+  target: 'platoon' | 'wingman';
 };
 
-type TankAgent = {
-  role: TankRole;
-  mesh: THREE.Mesh;
+type Report = {
+  id: string;
+  type: ReportType;
+  source: string;
+  subject: string;
+  approxPosition: {
+    label: string;
+    x: number;
+    z: number;
+    radius: number;
+  };
+  confidence: number;
+  createdAt: number;
+  expiryAt: number;
+  truth: 'confirmed' | 'partial' | 'unconfirmed' | 'stale';
+};
+
+type Unit = {
+  role: UnitRole;
+  group: THREE.Group;
+  body: THREE.Mesh;
+  turret: THREE.Mesh;
+  barrel: THREE.Mesh;
   label: HTMLSpanElement;
-  state: TankState;
+  intent: UnitIntent;
   speed: number;
-  target?: THREE.Vector3;
   heading: number;
+  destination: THREE.Vector3 | null;
+  holdTimer: number;
+  scoutSide: 'left' | 'right' | null;
+  attackTarget: THREE.Vector3 | null;
 };
 
-const root = document.querySelector<HTMLDivElement>('#app');
-if (!root) throw new Error('Missing app root');
-
-const app = document.createElement('div');
-app.className = 'shell';
-app.innerHTML = `
-  <section class="hud">
-    <header class="titlebar">
-      <div>
-        <p class="eyebrow">Voice-command-first prototype</p>
-        <h1>Tanks For The Memories</h1>
-      </div>
-      <div class="badges">
-        <span class="badge" data-camera-badge>Commander Camera</span>
-        <span class="badge ghost" data-speech-badge>Speech idle</span>
-      </div>
-    </header>
-    <div class="panels">
-      <article class="panel">
-        <h2>Orders</h2>
-        <p>Say commands such as <code>driver advance</code>, <code>gunner scan</code>, or <code>wingman attack</code>.</p>
-        <p>C switches commander camera. V switches drone camera.</p>
-      </article>
-      <article class="panel">
-        <h2>Command Log</h2>
-        <div class="log" data-log></div>
-      </article>
-    </div>
-  </section>
-  <div class="controls">
-    <button data-listen>Start voice input</button>
-    <button data-reset>Reset positions</button>
-  </div>
-  <div class="help">
-    <span>Command queue feeds tank state machines.</span>
-    <span>Low-confidence speech is ignored silently.</span>
-  </div>
-`;
-
-root.appendChild(app);
-
-const logEl = app.querySelector<HTMLDivElement>('[data-log]')!;
-const listenButton = app.querySelector<HTMLButtonElement>('[data-listen]')!;
-const resetButton = app.querySelector<HTMLButtonElement>('[data-reset]')!;
-const cameraBadge = app.querySelector<HTMLSpanElement>('[data-camera-badge]')!;
-const speechBadge = app.querySelector<HTMLSpanElement>('[data-speech-badge]')!;
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color('#0d1624');
-scene.fog = new THREE.Fog('#0d1624', 30, 120);
-
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.domElement.className = 'viewport';
-document.body.appendChild(renderer.domElement);
-
-const commanderCamera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 500);
-const droneCamera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 500);
-let cameraMode: CameraMode = 'commander';
-let activeCamera = commanderCamera;
-
-const ambient = new THREE.AmbientLight('#9eb4d8', 1.1);
-scene.add(ambient);
-
-const sun = new THREE.DirectionalLight('#fff1c7', 2.3);
-sun.position.set(-10, 18, 8);
-scene.add(sun);
-
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(220, 220, 10, 10),
-  new THREE.MeshStandardMaterial({ color: '#40533a', roughness: 1 })
-);
-ground.rotation.x = -Math.PI / 2;
-scene.add(ground);
-
-const grid = new THREE.GridHelper(220, 44, '#74947d', '#2b3829');
-scene.add(grid);
-
-const road = new THREE.Mesh(
-  new THREE.PlaneGeometry(36, 220),
-  new THREE.MeshStandardMaterial({ color: '#3a424c', roughness: 1 })
-);
-road.rotation.x = -Math.PI / 2;
-road.position.y = 0.02;
-scene.add(road);
-
-const tanks = new Map<TankRole, TankAgent>();
-
-function createTank(role: TankRole, color: number, position: THREE.Vector3): TankAgent {
-  const body = new THREE.Mesh(
-    new THREE.BoxGeometry(3, 1.5, 4),
-    new THREE.MeshStandardMaterial({ color })
-  );
-  body.position.copy(position);
-  body.position.y = 0.75;
-  scene.add(body);
-
-  const label = document.createElement('span');
-  label.className = `tank-label ${role}`;
-  label.textContent = role.toUpperCase();
-  document.body.appendChild(label);
-
-  const tank: TankAgent = {
-    role,
-    mesh: body,
-    label,
-    state: 'Idle',
-    speed: role === 'enemy' ? 8 : 6,
-    heading: 0
-  };
-  tanks.set(role, tank);
-  return tank;
-}
-
-const playerTank = createTank('player', 0x4cc3ff, new THREE.Vector3(-10, 0, 0));
-const allyTank = createTank('ally', 0x8df27b, new THREE.Vector3(-18, 0, 6));
-const enemyTank = createTank('enemy', 0xff6b6b, new THREE.Vector3(18, 0, -8));
-
-const commandQueue: Command[] = [];
-const commandLog: string[] = [];
-
-function appendLog(message: string) {
-  commandLog.unshift(message);
-  while (commandLog.length > 8) commandLog.pop();
-  logEl.innerHTML = commandLog.map((entry) => `<div class="log-line">${escapeHtml(entry)}</div>`).join('');
-}
-
-function escapeHtml(text: string) {
-  return text.replace(/[&<>"']/g, (char) => {
-    const map: Record<string, string> = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    };
-    return map[char] ?? char;
-  });
-}
-
-function acknowledge(action: Command['action']) {
-  const table: Record<Command['action'], string> = {
-    advance: 'Moving.',
-    reverse: 'Moving.',
-    halt: 'Holding.',
-    hold: 'Holding.',
-    scan: 'Target acquired.',
-    fire: 'Engaging.',
-    follow: 'Moving.',
-    attack: 'Engaging.'
-  };
-  return table[action];
-}
-
-function parseCommand(raw: string): Command | null {
-  const text = raw.trim().toLowerCase();
-  const role = text.includes('wingman') ? 'ally' : text.includes('enemy') ? 'enemy' : 'player';
-
-  const matches: Array<[RegExp, Command['action']]> = [
-    [/\badvance\b/, 'advance'],
-    [/\breverse\b/, 'reverse'],
-    [/\bhalt\b/, 'halt'],
-    [/\bhold\b/, 'hold'],
-    [/\bscan\b/, 'scan'],
-    [/\bfire\b/, 'fire'],
-    [/\bfollow\b/, 'follow'],
-    [/\battack\b/, 'attack']
-  ];
-
-  for (const [pattern, action] of matches) {
-    if (pattern.test(text)) {
-      return { raw, role, action };
-    }
-  }
-  return null;
-}
-
-function queueCommand(raw: string) {
-  const command = parseCommand(raw);
-  if (!command) return;
-  commandQueue.push(command);
-  appendLog(`> ${command.raw}`);
-}
-
-function applyCommand(command: Command) {
-  const tank = tanks.get(command.role);
-  if (!tank) return;
-
-  switch (command.action) {
-    case 'advance':
-      tank.state = 'Moving';
-      tank.target = tank.mesh.position.clone().add(new THREE.Vector3(0, 0, -20));
-      tank.heading = Math.PI;
-      break;
-    case 'reverse':
-      tank.state = 'Moving';
-      tank.target = tank.mesh.position.clone().add(new THREE.Vector3(0, 0, 16));
-      tank.heading = 0;
-      break;
-    case 'halt':
-    case 'hold':
-      tank.state = 'Holding';
-      tank.target = undefined;
-      break;
-    case 'scan':
-      tank.state = 'Attacking';
-      tank.target = enemyTank.mesh.position.clone();
-      break;
-    case 'fire':
-    case 'attack':
-      tank.state = 'Attacking';
-      tank.target = enemyTank.mesh.position.clone();
-      enemyTank.mesh.scale.setScalar(0.9);
-      break;
-    case 'follow':
-      tank.state = 'Moving';
-      tank.target = playerTank.mesh.position.clone().add(new THREE.Vector3(-6, 0, 6));
-      break;
-  }
-
-  appendLog(`${tank.role.toUpperCase()}: ${command.raw}`);
-  appendLog(`ACK: ${acknowledge(command.action)}`);
-}
-
-function updateTank(tank: TankAgent, delta: number) {
-  if (tank.role === 'enemy') {
-    const target = playerTank.mesh.position.clone();
-    target.y = tank.mesh.position.y;
-    const dir = target.sub(tank.mesh.position);
-    const distance = dir.length();
-    if (distance > 18) {
-      tank.state = 'Moving';
-      dir.normalize();
-      tank.mesh.position.addScaledVector(dir, tank.speed * 0.6 * delta);
-      tank.heading = Math.atan2(dir.x, dir.z);
-    } else {
-      tank.state = 'Attacking';
-      tank.heading += delta * 0.6;
-    }
-    return;
-  }
-
-  if (tank.state === 'Holding') return;
-
-  if (tank.target) {
-    const target = tank.target.clone();
-    target.y = tank.mesh.position.y;
-    const deltaVec = target.sub(tank.mesh.position);
-    const distance = deltaVec.length();
-    if (distance < 0.35) {
-      tank.state = tank.state === 'Attacking' ? 'Attacking' : 'Idle';
-      tank.target = undefined;
-      return;
-    }
-
-    deltaVec.normalize();
-    tank.mesh.position.addScaledVector(deltaVec, tank.speed * delta * 0.65);
-    tank.heading = Math.atan2(deltaVec.x, deltaVec.z);
-  }
-}
-
-function updateLabels() {
-  const camera = activeCamera;
-  for (const tank of tanks.values()) {
-    const pos = tank.mesh.position.clone().project(camera);
-    const x = (pos.x * 0.5 + 0.5) * window.innerWidth;
-    const y = (-pos.y * 0.5 + 0.5) * window.innerHeight;
-    tank.label.style.transform = `translate(${x}px, ${y}px)`;
-    tank.label.style.opacity = pos.z < 1 ? '1' : '0';
-    tank.label.textContent = `${tank.role.toUpperCase()} · ${tank.state}`;
-  }
-}
-
-function updateCameras(delta: number) {
-  const playerPos = playerTank.mesh.position.clone();
-  commanderCamera.position.lerp(
-    new THREE.Vector3(playerPos.x - 18, 14, playerPos.z + 22),
-    0.08
-  );
-  commanderCamera.lookAt(playerPos.x, playerPos.y + 1, playerPos.z);
-
-  const droneTarget = new THREE.Vector3(playerPos.x, 28, playerPos.z + 0.01);
-  droneCamera.position.lerp(droneTarget, 0.1 + delta * 0.01);
-  droneCamera.lookAt(playerPos.x, 0, playerPos.z);
-}
-
-function tick(time: number) {
-  const delta = Math.min(0.033, (time - lastTime) / 1000 || 0.016);
-  lastTime = time;
-
-  while (commandQueue.length > 0) {
-    const command = commandQueue.shift()!;
-    applyCommand(command);
-  }
-
-  updateTank(playerTank, delta);
-  updateTank(allyTank, delta);
-  updateTank(enemyTank, delta);
-  updateCameras(delta);
-  updateLabels();
-
-  for (const tank of tanks.values()) {
-    tank.mesh.rotation.y = tank.heading;
-  }
-
-  renderer.render(scene, activeCamera);
-  requestAnimationFrame(tick);
-}
-
-function resetPositions() {
-  playerTank.mesh.position.set(-10, 0.75, 0);
-  allyTank.mesh.position.set(-18, 0.75, 6);
-  enemyTank.mesh.position.set(18, 0.75, -8);
-  playerTank.state = 'Idle';
-  allyTank.state = 'Idle';
-  enemyTank.state = 'Idle';
-  playerTank.target = undefined;
-  allyTank.target = undefined;
-  enemyTank.target = undefined;
-  enemyTank.mesh.scale.setScalar(1);
-  appendLog('Positions reset.');
-}
-
-function setCameraMode(mode: CameraMode) {
-  cameraMode = mode;
-  activeCamera = mode === 'commander' ? commanderCamera : droneCamera;
-  cameraBadge.textContent = mode === 'commander' ? 'Commander Camera' : 'Drone Camera';
-}
-
-window.addEventListener('keydown', (event) => {
-  if (event.code === 'KeyC') setCameraMode('commander');
-  if (event.code === 'KeyV') setCameraMode('drone');
-});
-
-resetButton.addEventListener('click', resetPositions);
+type Checkpoint = {
+  player: THREE.Vector3;
+  wingman: THREE.Vector3;
+  reports: Report[];
+  log: string[];
+  phase: Phase;
+  viewMode: ViewMode;
+  enemyKnown: boolean;
+  enemyRevealed: boolean;
+  enemyDestroyed: boolean;
+  ambushTriggered: boolean;
+  attackTimer: number;
+  lastLesson: string;
+};
 
 type SpeechRecognitionLike = {
   continuous: boolean;
@@ -366,103 +70,1391 @@ type SpeechRecognitionLike = {
   stop(): void;
   onstart: null | (() => void);
   onend: null | (() => void);
-  onerror: null | ((event: Event) => void);
-  onresult: null | ((event: SpeechRecognitionEvent) => void);
+  onerror: null | (() => void);
+  onresult: null | ((event: any) => void);
 };
 
-type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
-
-const SpeechRecognitionAPI = (
-  window as Window & {
-    SpeechRecognition?: SpeechRecognitionConstructor;
-    webkitSpeechRecognition?: SpeechRecognitionConstructor;
-  }
-).SpeechRecognition ?? (window as Window & { webkitSpeechRecognition?: SpeechRecognitionConstructor }).webkitSpeechRecognition;
-
 let recognition: SpeechRecognitionLike | null = null;
-let listening = false;
 
-function updateSpeechBadge(text: string) {
-  speechBadge.textContent = text;
+const root = document.querySelector<HTMLDivElement>('#app');
+if (!root) {
+  throw new Error('Missing #app root');
 }
 
-function startVoiceInput() {
-  if (!SpeechRecognitionAPI) {
-    updateSpeechBadge('Speech unavailable');
-    listenButton.disabled = true;
+const shell = document.createElement('div');
+shell.className = 'shell';
+shell.innerHTML = [
+  '<div class="world-shell">',
+  '  <div class="status-strip">',
+  '    <div class="chip" data-view-chip></div>',
+  '    <div class="chip muted" data-threat-chip></div>',
+  '    <div class="chip muted" data-morale-chip></div>',
+  '  </div>',
+  '  <div class="layout">',
+  '    <section class="panel command-panel">',
+  '      <p class="eyebrow">WW2 tank-command information simulation</p>',
+  '      <h1>Tanks For The Memories</h1>',
+  '      <p class="lede">Information → Order → Consequence → Memory</p>',
+  '      <form class="command-form" data-command-form>',
+  '        <input data-command-input type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type: scout right" />',
+  '        <button type="submit">Send order</button>',
+  '        <button type="button" data-voice-button>Voice</button>',
+  '      </form>',
+  '      <div class="quick-commands" data-quick-commands></div>',
+  '      <div class="legend">Typed commands are primary. Voice uses the same parser later.</div>',
+  '      <div class="radio-log" data-radio-log></div>',
+  '    </section>',
+  '    <section class="panel ledger-panel">',
+  '      <header class="panel-head">',
+  '        <h2>Information Ledger</h2>',
+  '        <span class="panel-subtitle" data-ledger-summary></span>',
+  '      </header>',
+  '      <div class="ledger-list" data-ledger-list></div>',
+  '    </section>',
+  '    <section class="panel map-panel">',
+  '      <header class="panel-head">',
+  '        <h2>Map / Report View</h2>',
+  '        <span class="panel-subtitle">Uncertainty stays visible.</span>',
+  '      </header>',
+  '      <div class="map-card" data-map-card>',
+  '        <div class="map-grid" data-map-grid></div>',
+  '        <div class="map-caption" data-map-caption></div>',
+  '      </div>',
+  '    </section>',
+  '  </div>',
+  '  <div class="after-action hidden" data-aar></div>',
+  '  <div class="vignette" data-vignette></div>',
+  '</div>'
+].join('\n');
+root.appendChild(shell);
+
+type StatusRefs = {
+  viewChip: HTMLDivElement;
+  threatChip: HTMLDivElement;
+  moraleChip: HTMLDivElement;
+  commandForm: HTMLFormElement;
+  commandInput: HTMLInputElement;
+  voiceButton: HTMLButtonElement;
+  quickCommands: HTMLDivElement;
+  radioLog: HTMLDivElement;
+  ledgerList: HTMLDivElement;
+  ledgerSummary: HTMLSpanElement;
+  mapCard: HTMLDivElement;
+  mapGrid: HTMLDivElement;
+  mapCaption: HTMLDivElement;
+  aar: HTMLDivElement;
+  vignette: HTMLDivElement;
+};
+
+const refs = {
+  viewChip: shell.querySelector<HTMLDivElement>('[data-view-chip]')!,
+  threatChip: shell.querySelector<HTMLDivElement>('[data-threat-chip]')!,
+  moraleChip: shell.querySelector<HTMLDivElement>('[data-morale-chip]')!,
+  commandForm: shell.querySelector<HTMLFormElement>('[data-command-form]')!,
+  commandInput: shell.querySelector<HTMLInputElement>('[data-command-input]')!,
+  voiceButton: shell.querySelector<HTMLButtonElement>('[data-voice-button]')!,
+  quickCommands: shell.querySelector<HTMLDivElement>('[data-quick-commands]')!,
+  radioLog: shell.querySelector<HTMLDivElement>('[data-radio-log]')!,
+  ledgerList: shell.querySelector<HTMLDivElement>('[data-ledger-list]')!,
+  ledgerSummary: shell.querySelector<HTMLSpanElement>('[data-ledger-summary]')!,
+  mapCard: shell.querySelector<HTMLDivElement>('[data-map-card]')!,
+  mapGrid: shell.querySelector<HTMLDivElement>('[data-map-grid]')!,
+  mapCaption: shell.querySelector<HTMLDivElement>('[data-map-caption]')!,
+  aar: shell.querySelector<HTMLDivElement>('[data-aar]')!,
+  vignette: shell.querySelector<HTMLDivElement>('[data-vignette]')!
+};
+
+const quickOrderKinds: Array<{ label: string; command: string }> = [
+  { label: 'Report', command: 'report' },
+  { label: 'Scout left', command: 'scout left' },
+  { label: 'Scout right', command: 'scout right' },
+  { label: 'Advance', command: 'advance' },
+  { label: 'Halt', command: 'halt' },
+  { label: 'Reverse', command: 'reverse' },
+  { label: 'Hold', command: 'hold' },
+  { label: 'Attack contact', command: 'attack contact' },
+  { label: 'Hatch open', command: 'hatch open' },
+  { label: 'Button up', command: 'button up' },
+  { label: 'Gunner scope', command: 'gunner scope' },
+  { label: 'Map', command: 'map' }
+];
+
+for (const item of quickOrderKinds) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.textContent = item.label;
+  button.addEventListener('click', () => {
+    refs.commandInput.value = item.command;
+    submitCommand(item.command);
+  });
+  refs.quickCommands.appendChild(button);
+}
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#1a1f16');
+scene.fog = new THREE.Fog('#1a1f16', 24, 120);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.domElement.className = 'viewport';
+document.body.appendChild(renderer.domElement);
+
+const cameras = {
+  hatch: new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 250),
+  buttoned: new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 250),
+  scope: new THREE.PerspectiveCamera(24, window.innerWidth / window.innerHeight, 0.1, 250),
+  map: new THREE.OrthographicCamera(-34, 34, 20, -20, 0.1, 250)
+};
+
+let activeCamera = cameras.hatch;
+let viewMode: ViewMode = 'hatch';
+let phase: Phase = 'live';
+let gameTime = 0;
+let nextReportId = 1;
+let attackTimer = 0;
+let ambushTriggered = false;
+let enemyKnown = false;
+let enemyRevealed = false;
+let enemyDestroyed = false;
+let currentLesson = '';
+const commandQueue: Command[] = [];
+const logLines: string[] = [];
+const reports: Report[] = [];
+let checkpoint: Checkpoint | null = null;
+
+const terrain = new THREE.Group();
+scene.add(terrain);
+
+const ambient = new THREE.AmbientLight('#dbe7d3', 1.2);
+scene.add(ambient);
+
+const sun = new THREE.DirectionalLight('#fff2c9', 2.4);
+sun.position.set(-12, 24, 10);
+scene.add(sun);
+
+const fill = new THREE.DirectionalLight('#7ea0c6', 0.9);
+fill.position.set(12, 10, -14);
+scene.add(fill);
+
+const road = new THREE.Mesh(
+  new THREE.PlaneGeometry(140, 10),
+  new THREE.MeshStandardMaterial({ color: '#594b37', roughness: 1 })
+);
+road.rotation.x = -Math.PI / 2;
+road.position.set(12, 0.03, 0);
+terrain.add(road);
+
+const mud = new THREE.Mesh(
+  new THREE.PlaneGeometry(140, 24),
+  new THREE.MeshStandardMaterial({ color: '#3d3529', roughness: 1 })
+);
+mud.rotation.x = -Math.PI / 2;
+mud.position.set(12, 0.02, 0);
+terrain.add(mud);
+
+const leftHedge = createHedge(-2, -8, 74, 3);
+const rightHedge = createHedge(-2, 8, 74, 3);
+terrain.add(leftHedge);
+terrain.add(rightHedge);
+
+const laneBreak = createBocageGap(28, 0, 8);
+terrain.add(laneBreak);
+
+const farmhouse = createFarmhouse(39, -10);
+terrain.add(farmhouse);
+
+const church = createChurch(48, 10);
+terrain.add(church);
+
+const player = createUnit('player', 0x6ec4ff, -14, 0);
+const wingman = createUnit('wingman', 0x9de26e, -20, 5.5);
+const enemy = createEnemyGun(34, 7);
+
+const enemyLabel = document.createElement('span');
+enemyLabel.className = 'unit-label enemy';
+enemyLabel.textContent = 'AT GUN';
+document.body.appendChild(enemyLabel);
+
+const initialCheckpoint: Checkpoint = {
+  player: player.group.position.clone(),
+  wingman: wingman.group.position.clone(),
+  reports: [],
+  log: [],
+  phase: 'live',
+  viewMode: 'hatch',
+  enemyKnown: false,
+  enemyRevealed: false,
+  enemyDestroyed: false,
+  ambushTriggered: false,
+  attackTimer: 0,
+  lastLesson: ''
+};
+checkpoint = cloneCheckpoint(initialCheckpoint);
+
+captureCheckpoint();
+updateViewMode('hatch', false);
+logEvent('HQ', 'Mission start. Current slice: one Normandy bocage lane.');
+logEvent('HQ', 'You command the platoon by report, order, consequence, and memory.');
+logEvent('HQ', 'Information -> Order -> Consequence -> Memory');
+logEvent('HQ', 'The hidden enemy remains concealed behind the bocage.');
+logEvent('HQ', 'No live AI or LLM calls are used at runtime.');
+renderHud();
+
+window.addEventListener('resize', onResize);
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' && document.activeElement === refs.commandInput) {
+    event.preventDefault();
+    submitCommand(refs.commandInput.value);
+  }
+});
+
+refs.commandForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  submitCommand(refs.commandInput.value);
+});
+
+refs.voiceButton.addEventListener('click', () => {
+  toggleVoiceInput();
+});
+
+refs.commandInput.addEventListener('input', () => {
+  refs.commandInput.setAttribute('aria-label', 'Order command');
+});
+
+function createHedge(x: number, z: number, length: number, thickness: number) {
+  const hedge = new THREE.Mesh(
+    new THREE.BoxGeometry(length, 4.2, thickness),
+    new THREE.MeshStandardMaterial({ color: '#3e5a30', roughness: 1 })
+  );
+  hedge.position.set(x + length / 2, 2.1, z);
+  return hedge;
+}
+
+function createBocageGap(x: number, z: number, size: number) {
+  const gap = new THREE.Mesh(
+    new THREE.BoxGeometry(size, 0.1, size),
+    new THREE.MeshStandardMaterial({ color: '#5a4a39', roughness: 1 })
+  );
+  gap.position.set(x, 0.01, z);
+  return gap;
+}
+
+function createFarmhouse(x: number, z: number) {
+  const house = new THREE.Group();
+  const base = new THREE.Mesh(
+    new THREE.BoxGeometry(10, 6, 8),
+    new THREE.MeshStandardMaterial({ color: '#cdb48b', roughness: 0.9 })
+  );
+  base.position.set(x, 3, z);
+  house.add(base);
+
+  const roof = new THREE.Mesh(
+    new THREE.ConeGeometry(6.8, 4, 4),
+    new THREE.MeshStandardMaterial({ color: '#7b392f', roughness: 1 })
+  );
+  roof.position.set(x, 8, z);
+  roof.rotation.y = Math.PI / 4;
+  house.add(roof);
+
+  const barn = new THREE.Mesh(
+    new THREE.BoxGeometry(6, 4, 6),
+    new THREE.MeshStandardMaterial({ color: '#a66a4d', roughness: 1 })
+  );
+  barn.position.set(x - 8, 2, z + 6);
+  house.add(barn);
+
+  return house;
+}
+
+function createChurch(x: number, z: number) {
+  const churchRoot = new THREE.Group();
+  const nave = new THREE.Mesh(
+    new THREE.BoxGeometry(8, 5, 12),
+    new THREE.MeshStandardMaterial({ color: '#d9d4c4', roughness: 0.95 })
+  );
+  nave.position.set(x, 2.5, z);
+  churchRoot.add(nave);
+
+  const tower = new THREE.Mesh(
+    new THREE.BoxGeometry(5, 13, 5),
+    new THREE.MeshStandardMaterial({ color: '#c4bea8', roughness: 0.9 })
+  );
+  tower.position.set(x + 5, 6.5, z - 3);
+  churchRoot.add(tower);
+
+  const spire = new THREE.Mesh(
+    new THREE.ConeGeometry(2.5, 5, 4),
+    new THREE.MeshStandardMaterial({ color: '#6c3a2f', roughness: 0.9 })
+  );
+  spire.position.set(x + 5, 14.5, z - 3);
+  churchRoot.add(spire);
+
+  return churchRoot;
+}
+
+function createUnit(role: UnitRole, color: number, x: number, z: number): Unit {
+  const group = new THREE.Group();
+  group.position.set(x, 0.7, z);
+  scene.add(group);
+
+  const body = new THREE.Mesh(
+    new THREE.BoxGeometry(4.3, 1.4, 6.2),
+    new THREE.MeshStandardMaterial({ color, roughness: 0.85 })
+  );
+  body.position.y = 0.7;
+  group.add(body);
+
+  const turret = new THREE.Mesh(
+    new THREE.BoxGeometry(2.5, 1.2, 2.2),
+    new THREE.MeshStandardMaterial({ color: lighten(color, 0.12), roughness: 0.8 })
+  );
+  turret.position.set(0.1, 1.65, -0.2);
+  group.add(turret);
+
+  const barrel = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.16, 0.16, 4.2, 10),
+    new THREE.MeshStandardMaterial({ color: '#171717', roughness: 0.7 })
+  );
+  barrel.rotation.z = Math.PI / 2;
+  barrel.position.set(1.4, 1.75, -0.2);
+  group.add(barrel);
+
+  const trackMaterial = new THREE.MeshStandardMaterial({ color: '#202020', roughness: 1 });
+  const leftTrack = new THREE.Mesh(new THREE.BoxGeometry(4.7, 0.5, 0.7), trackMaterial);
+  leftTrack.position.set(0, 0.15, -2.7);
+  group.add(leftTrack);
+  const rightTrack = new THREE.Mesh(new THREE.BoxGeometry(4.7, 0.5, 0.7), trackMaterial);
+  rightTrack.position.set(0, 0.15, 2.7);
+  group.add(rightTrack);
+
+  const label = document.createElement('span');
+  label.className = 'unit-label ' + role;
+  label.textContent = role.toUpperCase();
+  document.body.appendChild(label);
+
+  return {
+    role,
+    group,
+    body,
+    turret,
+    barrel,
+    label,
+    intent: 'idle',
+    speed: role === 'enemy' ? 0 : 5.2,
+    heading: 0,
+    destination: null,
+    holdTimer: 0,
+    scoutSide: null,
+    attackTarget: null
+  };
+}
+
+function createEnemyGun(x: number, z: number) {
+  const group = new THREE.Group();
+  group.position.set(x, 0.35, z);
+  scene.add(group);
+
+  const shield = new THREE.Mesh(
+    new THREE.BoxGeometry(3.4, 1.6, 1.1),
+    new THREE.MeshStandardMaterial({ color: '#4a4d4f', roughness: 1 })
+  );
+  shield.position.y = 0.8;
+  group.add(shield);
+
+  const barrel = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.14, 0.14, 5, 12),
+    new THREE.MeshStandardMaterial({ color: '#202020', roughness: 0.7 })
+  );
+  barrel.rotation.z = Math.PI / 2;
+  barrel.position.set(1.8, 1.15, 0);
+  group.add(barrel);
+
+  const base = new THREE.Mesh(
+    new THREE.BoxGeometry(2.4, 0.5, 1.8),
+    new THREE.MeshStandardMaterial({ color: '#2a241c', roughness: 1 })
+  );
+  base.position.set(0, 0.25, 0);
+  group.add(base);
+
+  group.visible = false;
+  return group;
+}
+
+function lighten(color: number, amount: number) {
+  const c = new THREE.Color(color);
+  c.offsetHSL(0, 0, amount);
+  return c.getHex();
+}
+
+function cloneCheckpoint(source: Checkpoint): Checkpoint {
+  return {
+    player: source.player.clone(),
+    wingman: source.wingman.clone(),
+    reports: source.reports.map(cloneReport),
+    log: [...source.log],
+    phase: source.phase,
+    viewMode: source.viewMode,
+    enemyKnown: source.enemyKnown,
+    enemyRevealed: source.enemyRevealed,
+    enemyDestroyed: source.enemyDestroyed,
+    ambushTriggered: source.ambushTriggered,
+    attackTimer: source.attackTimer,
+    lastLesson: source.lastLesson
+  };
+}
+
+function cloneReport(report: Report): Report {
+  return {
+    id: report.id,
+    type: report.type,
+    source: report.source,
+    subject: report.subject,
+    approxPosition: {
+      label: report.approxPosition.label,
+      x: report.approxPosition.x,
+      z: report.approxPosition.z,
+      radius: report.approxPosition.radius
+    },
+    confidence: report.confidence,
+    createdAt: report.createdAt,
+    expiryAt: report.expiryAt,
+    truth: report.truth
+  };
+}
+
+function captureCheckpoint() {
+  checkpoint = {
+    player: player.group.position.clone(),
+    wingman: wingman.group.position.clone(),
+    reports: reports.map(cloneReport),
+    log: [...logLines],
+    phase,
+    viewMode,
+    enemyKnown,
+    enemyRevealed,
+    enemyDestroyed,
+    ambushTriggered,
+    attackTimer,
+    lastLesson: currentLesson
+  };
+}
+
+function restoreCheckpoint() {
+  if (!checkpoint) {
+    return;
+  }
+  player.group.position.copy(checkpoint.player);
+  wingman.group.position.copy(checkpoint.wingman);
+  reports.length = 0;
+  reports.push(...checkpoint.reports.map(cloneReport));
+  logLines.length = 0;
+  logLines.push(...checkpoint.log);
+  phase = checkpoint.phase;
+  viewMode = checkpoint.viewMode;
+  enemyKnown = checkpoint.enemyKnown;
+  enemyRevealed = checkpoint.enemyRevealed;
+  enemyDestroyed = checkpoint.enemyDestroyed;
+  ambushTriggered = checkpoint.ambushTriggered;
+  attackTimer = checkpoint.attackTimer;
+  currentLesson = checkpoint.lastLesson;
+  player.intent = 'idle';
+  wingman.intent = 'idle';
+  player.destination = null;
+  wingman.destination = null;
+  player.attackTarget = null;
+  wingman.attackTarget = null;
+  enemy.visible = enemyRevealed && !enemyDestroyed;
+  enemy.scale.setScalar(1);
+  updateViewMode(viewMode, false);
+  refs.aar.classList.add('hidden');
+  refs.aar.innerHTML = '';
+  appendStatus('Checkpoint restored.');
+  renderHud();
+}
+
+function logEvent(source: string, message: string) {
+  const line = '[' + source + '] ' + message;
+  logLines.unshift(line);
+  while (logLines.length > 10) {
+    logLines.pop();
+  }
+}
+
+function appendStatus(message: string) {
+  currentLesson = message;
+}
+
+function addReport(input: Omit<Report, 'id' | 'truth'> & { truth?: Report['truth'] }) {
+  const report: Report = {
+    id: 'R' + String(nextReportId++).padStart(3, '0'),
+    type: input.type,
+    source: input.source,
+    subject: input.subject,
+    approxPosition: {
+      label: input.approxPosition.label,
+      x: input.approxPosition.x,
+      z: input.approxPosition.z,
+      radius: input.approxPosition.radius
+    },
+    confidence: clamp(input.confidence, 0, 1),
+    createdAt: gameTime,
+    expiryAt: gameTime + 75,
+    truth: input.truth || 'unconfirmed'
+  };
+  reports.unshift(report);
+  if (reports.length > 8) {
+    reports.length = 8;
+  }
+  return report;
+}
+
+function updateReportTruth(report: Report): Report['truth'] {
+  const age = gameTime - report.createdAt;
+  if (age > 75) {
+    return 'stale';
+  }
+  if (report.confidence >= 0.8) {
+    return 'confirmed';
+  }
+  if (report.confidence >= 0.45) {
+    return 'partial';
+  }
+  return 'unconfirmed';
+}
+
+function activeReports() {
+  return reports.filter((report) => report.expiryAt > gameTime);
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function formatSeconds(seconds: number) {
+  return Math.max(0, Math.ceil(seconds)).toString() + 's';
+}
+
+function describeConfidence(confidence: number) {
+  if (confidence >= 0.85) return 'high';
+  if (confidence >= 0.55) return 'moderate';
+  return 'low';
+}
+
+function statusTextForView(mode: ViewMode) {
+  if (mode === 'hatch') return 'Hatch open';
+  if (mode === 'buttoned') return 'Buttoned up';
+  if (mode === 'scope') return 'Gunner scope';
+  return 'Map / report';
+}
+
+function updateViewMode(mode: ViewMode, record: boolean = true) {
+  viewMode = mode;
+  if (record) {
+    addReport({
+      type: 'status',
+      source: 'Commander Sherman',
+      subject: 'Changed viewpoint to ' + statusTextForView(mode),
+      approxPosition: {
+        label: 'player tank',
+        x: player.group.position.x,
+        z: player.group.position.z,
+        radius: 3
+      },
+      confidence: mode === 'map' ? 1 : mode === 'scope' ? 0.65 : 0.72,
+      truth: 'confirmed'
+    });
+  }
+  refs.viewChip.textContent = statusTextForView(mode);
+  refs.viewChip.className = 'chip' + (mode === 'map' ? ' chip-map' : mode === 'scope' ? ' chip-scope' : mode === 'buttoned' ? ' chip-buttoned' : ' chip-hatch');
+  refs.vignette.dataset.mode = mode;
+  if (mode === 'hatch') {
+    shell.dataset.view = 'hatch';
+    activeCamera = cameras.hatch;
+  } else if (mode === 'buttoned') {
+    shell.dataset.view = 'buttoned';
+    activeCamera = cameras.buttoned;
+  } else if (mode === 'scope') {
+    shell.dataset.view = 'scope';
+    activeCamera = cameras.scope;
+  } else {
+    shell.dataset.view = 'map';
+    activeCamera = cameras.map;
+  }
+}
+
+function submitCommand(raw: string) {
+  const command = parseCommand(raw);
+  refs.commandInput.value = '';
+  if (!command || phase !== 'live') {
+    return;
+  }
+  commandQueue.push(command);
+  logEvent('ORDER', command.raw);
+  renderHud();
+}
+
+function parseCommand(raw: string): Command | null {
+  const text = raw.trim().toLowerCase().replace(/\s+/g, ' ');
+  if (!text) return null;
+  const wingman = text.includes('wingman');
+  const pairs: Array<[CommandKind, string]> = [
+    ['attack contact', 'attack contact'],
+    ['gunner scope', 'gunner scope'],
+    ['button up', 'button up'],
+    ['hatch open', 'hatch open'],
+    ['scout left', 'scout left'],
+    ['scout right', 'scout right'],
+    ['advance', 'advance'],
+    ['reverse', 'reverse'],
+    ['halt', 'halt'],
+    ['hold', 'hold'],
+    ['report', 'report'],
+    ['map', 'map']
+  ];
+  for (const [kind, phrase] of pairs) {
+    if (text.includes(phrase)) {
+      return { raw: text, kind, target: wingman ? 'wingman' : 'platoon' };
+    }
+  }
+  return null;
+}
+
+function processOrders() {
+  while (commandQueue.length > 0) {
+    const command = commandQueue.shift()!;
+    if (command.kind === 'report') {
+      issueReport(command.target);
+    } else if (command.kind === 'scout left') {
+      orderScout('left');
+    } else if (command.kind === 'scout right') {
+      orderScout('right');
+    } else if (command.kind === 'advance') {
+      setPlatoonIntent('advance');
+    } else if (command.kind === 'halt' || command.kind === 'hold') {
+      setPlatoonIntent('hold');
+    } else if (command.kind === 'reverse') {
+      setPlatoonIntent('reverse');
+    } else if (command.kind === 'attack contact') {
+      engageKnownContact();
+    } else if (command.kind === 'hatch open') {
+      updateViewMode('hatch');
+    } else if (command.kind === 'button up') {
+      updateViewMode('buttoned');
+    } else if (command.kind === 'gunner scope') {
+      updateViewMode('scope');
+    } else if (command.kind === 'map') {
+      updateViewMode('map');
+    }
+    logEvent('ACK', acknowledge(command));
+  }
+}
+
+function acknowledge(command: Command) {
+  if (command.kind === 'attack contact') {
+    return enemyKnown ? 'Fire mission accepted.' : 'No confirmed contact to engage.';
+  }
+  if (command.kind === 'scout left' || command.kind === 'scout right') {
+    return 'Wingman moving to scout.';
+  }
+  if (command.kind === 'report') {
+    return 'Situation report generated.';
+  }
+  if (command.kind === 'map') {
+    return 'Map view updated.';
+  }
+  if (command.kind === 'hatch open' || command.kind === 'button up' || command.kind === 'gunner scope') {
+    return 'Viewpoint changed.';
+  }
+  if (command.kind === 'advance') return 'Platoon advancing.';
+  if (command.kind === 'reverse') return 'Platoon reversing.';
+  return 'Holding position.';
+}
+
+function issueReport(target: 'platoon' | 'wingman') {
+  const activeEnemyReports = activeReports().filter((report) => report.subject.toLowerCase().includes('enemy') || report.subject.toLowerCase().includes('gun'));
+  if (activeEnemyReports.length > 0) {
+    const report = activeEnemyReports[0];
+    addReport({
+      type: 'status',
+      source: target === 'wingman' ? 'Wingman Sherman' : 'Commander Sherman',
+      subject: 'Current picture: hostile contact still at ' + report.approxPosition.label,
+      approxPosition: {
+        label: report.approxPosition.label,
+        x: report.approxPosition.x,
+        z: report.approxPosition.z,
+        radius: report.approxPosition.radius
+      },
+      confidence: Math.max(0.5, report.confidence - 0.1),
+      truth: report.truth === 'confirmed' ? 'confirmed' : 'partial'
+    });
+    logEvent('INFO', 'Report updated from current contact picture.');
+    enemyKnown = true;
+    return;
+  }
+
+  addReport({
+    type: 'status',
+    source: target === 'wingman' ? 'Wingman Sherman' : 'Commander Sherman',
+    subject: 'No fresh contact; lane remains uncertain beyond the hedge',
+    approxPosition: {
+      label: 'road center',
+      x: player.group.position.x + 6,
+      z: player.group.position.z,
+      radius: 12
+    },
+    confidence: 0.34,
+    truth: 'unconfirmed'
+  });
+  logEvent('INFO', 'Situation report filed with uncertainty preserved.');
+}
+
+function orderScout(side: 'left' | 'right') {
+  if (wingman.intent === 'disabled') {
+    return;
+  }
+  wingman.intent = side === 'left' ? 'scout-left' : 'scout-right';
+  wingman.scoutSide = side;
+  wingman.destination = new THREE.Vector3(player.group.position.x + 8, 0.7, side === 'left' ? -12 : 12);
+  wingman.holdTimer = 0;
+  logEvent('WINGMAN', 'Moving to scout ' + side + '.');
+}
+
+function setPlatoonIntent(intent: UnitIntent) {
+  player.intent = intent;
+  wingman.intent = intent === 'hold' ? 'hold' : intent;
+  if (intent === 'advance') {
+    player.destination = new THREE.Vector3(player.group.position.x + 18, 0.7, player.group.position.z);
+    wingman.destination = new THREE.Vector3(wingman.group.position.x + 14, 0.7, wingman.group.position.z);
+    logEvent('PLATOON', 'Advance along the lane.');
+  } else if (intent === 'reverse') {
+    player.destination = new THREE.Vector3(player.group.position.x - 12, 0.7, player.group.position.z);
+    wingman.destination = new THREE.Vector3(wingman.group.position.x - 12, 0.7, wingman.group.position.z);
+    logEvent('PLATOON', 'Reverse.');
+  } else if (intent === 'hold') {
+    player.destination = null;
+    wingman.destination = null;
+    logEvent('PLATOON', 'Hold position.');
+  }
+}
+
+function engageKnownContact() {
+  const contact = chooseContactReport();
+  if (!contact || enemyDestroyed) {
+    logEvent('FIRE', 'No confirmed target.');
+    return;
+  }
+  enemyKnown = true;
+  attackTimer = 1.25;
+  player.intent = 'attack';
+  wingman.intent = 'attack';
+  player.attackTarget = new THREE.Vector3(contact.approxPosition.x, 0.7, contact.approxPosition.z);
+  wingman.attackTarget = new THREE.Vector3(contact.approxPosition.x, 0.7, contact.approxPosition.z);
+  logEvent('FIRE', 'Engaging ' + contact.approxPosition.label + '.');
+}
+
+function chooseContactReport() {
+  const active = activeReports().filter((report) => report.subject.toLowerCase().includes('contact') || report.subject.toLowerCase().includes('gun') || report.subject.toLowerCase().includes('enemy'));
+  if (active.length > 0) {
+    return active[0];
+  }
+  return null;
+}
+
+function triggerAmbush() {
+  if (ambushTriggered || enemyDestroyed) {
+    return;
+  }
+  ambushTriggered = true;
+  enemy.visible = true;
+  enemyRevealed = true;
+  addReport({
+    type: 'contact',
+    source: 'Enemy AT gun',
+    subject: 'Ambush from right hedgerow near the farmhouse',
+    approxPosition: {
+      label: 'right hedgerow, 34m ahead',
+      x: 34,
+      z: 7,
+      radius: 6
+    },
+    confidence: 0.98,
+    truth: 'confirmed'
+  });
+  logEvent('ENEMY', 'Ambush. The hidden AT gun fired first.');
+  currentLesson = 'Missing information: you advanced without a contact report or scout pass.';
+  failMission('Ambushed in the bocage lane. You needed a scout report before advancing.');
+}
+
+function failMission(message: string) {
+  if (phase !== 'live') return;
+  phase = 'failure';
+  player.intent = 'hold';
+  wingman.intent = 'hold';
+  player.destination = null;
+  wingman.destination = null;
+  player.attackTarget = null;
+  wingman.attackTarget = null;
+  const report = [
+    '<h3>After-action report</h3>',
+    '<p>' + escapeHtml(message) + '</p>',
+    '<p><strong>What was missing:</strong> ' + escapeHtml(currentLesson || 'A scout report on the hidden enemy.') + '</p>',
+    '<p><strong>Restart:</strong> return to the checkpoint and try the lane again.</p>',
+    '<button type="button" data-restart-button>Restart checkpoint</button>'
+  ].join('');
+  refs.aar.innerHTML = report;
+  refs.aar.classList.remove('hidden');
+  const restart = refs.aar.querySelector<HTMLButtonElement>('[data-restart-button]');
+  if (restart) {
+    restart.addEventListener('click', () => {
+      restartFromCheckpoint();
+    });
+  }
+  logEvent('HQ', 'After-action report issued.');
+  renderHud();
+}
+
+function restartFromCheckpoint() {
+  if (!checkpoint) return;
+  phase = 'live';
+  player.group.position.copy(checkpoint.player);
+  wingman.group.position.copy(checkpoint.wingman);
+  reports.length = 0;
+  reports.push(...checkpoint.reports.map(cloneReport));
+  logLines.length = 0;
+  logLines.push(...checkpoint.log);
+  viewMode = checkpoint.viewMode;
+  enemyKnown = checkpoint.enemyKnown;
+  enemyRevealed = checkpoint.enemyRevealed;
+  enemyDestroyed = checkpoint.enemyDestroyed;
+  ambushTriggered = checkpoint.ambushTriggered;
+  attackTimer = checkpoint.attackTimer;
+  currentLesson = checkpoint.lastLesson;
+  player.intent = 'idle';
+  wingman.intent = 'idle';
+  player.destination = null;
+  wingman.destination = null;
+  player.attackTarget = null;
+  wingman.attackTarget = null;
+  enemy.visible = enemyRevealed && !enemyDestroyed;
+  enemy.scale.setScalar(1);
+  refs.aar.classList.add('hidden');
+  refs.aar.innerHTML = '';
+  updateViewMode(viewMode, false);
+  logEvent('HQ', 'Checkpoint restored.');
+  renderHud();
+}
+
+function winMission(message: string) {
+  if (phase !== 'live') return;
+  phase = 'victory';
+  const report = [
+    '<h3>Mission complete</h3>',
+    '<p>' + escapeHtml(message) + '</p>',
+    '<p><strong>Memory:</strong> scouting produced the report that let the platoon act safely.</p>',
+    '<button type="button" data-restart-button>Run checkpoint again</button>'
+  ].join('');
+  refs.aar.innerHTML = report;
+  refs.aar.classList.remove('hidden');
+  const restart = refs.aar.querySelector<HTMLButtonElement>('[data-restart-button]');
+  if (restart) {
+    restart.addEventListener('click', () => restartFromCheckpoint());
+  }
+  logEvent('HQ', 'Victory. Lane secure.');
+  renderHud();
+}
+
+function observeEnemy(observer: Unit) {
+  if (enemyDestroyed) return null;
+  const observerPos = observer.group.position.clone();
+  const enemyPos = new THREE.Vector3(enemy.position.x, 0.7, enemy.position.z);
+  const distance = observerPos.distanceTo(enemyPos);
+  const forwardBias = enemyPos.x >= observerPos.x ? 1 : 0;
+  const maxRange = viewMode === 'hatch' ? 78 : viewMode === 'buttoned' ? 48 : viewMode === 'scope' ? 68 : 0;
+  const arcCheck = viewMode === 'scope' ? Math.abs(enemyPos.z - observerPos.z) < 10 : true;
+  const scoutBonus = observer.intent === 'scout-left' || observer.intent === 'scout-right' ? 1 : 0;
+  if (viewMode === 'map') return null;
+  if (distance > maxRange) return null;
+  if (!arcCheck) return null;
+  if (blockedByHedgerow(observerPos, enemyPos) && scoutBonus === 0) {
+    return null;
+  }
+  const confidence = clamp((0.45 + (maxRange - distance) / maxRange * 0.4 + scoutBonus * 0.2 + forwardBias * 0.1) * viewConfidenceMultiplier(), 0.25, 0.98);
+  return {
+    label: 'right hedgerow, about ' + Math.round(distance * 2.2) + 'm ahead',
+    x: enemyPos.x,
+    z: enemyPos.z,
+    radius: confidence >= 0.8 ? 5 : 10,
+    confidence
+  };
+}
+
+function blockedByHedgerow(start: THREE.Vector3, end: THREE.Vector3) {
+  const blockers = [
+    { minX: -2, maxX: 18, minZ: -9.5, maxZ: -5.0 },
+    { minX: -2, maxX: 18, minZ: 5.0, maxZ: 9.5 },
+    { minX: 20, maxX: 31, minZ: -9.5, maxZ: -5.0 },
+    { minX: 20, maxX: 31, minZ: 5.0, maxZ: 9.5 }
+  ];
+  for (const blocker of blockers) {
+    if (segmentIntersectsRect(start, end, blocker)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function segmentIntersectsRect(start: THREE.Vector3, end: THREE.Vector3, rect: { minX: number; maxX: number; minZ: number; maxZ: number; }) {
+  for (let i = 0; i <= 12; i++) {
+    const t = i / 12;
+    const x = start.x + (end.x - start.x) * t;
+    const z = start.z + (end.z - start.z) * t;
+    if (x >= rect.minX && x <= rect.maxX && z >= rect.minZ && z <= rect.maxZ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function viewConfidenceMultiplier() {
+  if (viewMode === 'hatch') return 1.1;
+  if (viewMode === 'buttoned') return 0.75;
+  if (viewMode === 'scope') return 1.2;
+  return 1;
+}
+
+function updateUnit(unit: Unit, delta: number) {
+  if (unit.intent === 'disabled') return;
+  if (unit.intent === 'hold') {
+    unit.holdTimer = Math.max(0, unit.holdTimer - delta);
+    return;
+  }
+
+  if (unit.intent === 'advance') {
+    unit.heading = 0;
+    unit.group.position.x += unit.speed * delta;
+    if (unit.role === 'wingman') {
+      unit.group.position.z += Math.sin(gameTime * 0.6) * 0.01;
+    }
+    return;
+  }
+
+  if (unit.intent === 'reverse') {
+    unit.heading = Math.PI;
+    unit.group.position.x -= unit.speed * 0.85 * delta;
+    return;
+  }
+
+  if (unit.intent === 'scout-left' || unit.intent === 'scout-right') {
+    const destination = unit.destination;
+    if (destination) {
+      moveTowards(unit, destination, delta, 5.4);
+      if (unit.group.position.distanceTo(destination) < 0.4) {
+        if (!enemyDestroyed) {
+          const observed = observeEnemy(unit);
+          if (observed) {
+            const report = addReport({
+              type: 'contact',
+              source: 'Wingman Sherman',
+              subject: unit.scoutSide === 'right' ? 'AT gun behind the right hedgerow' : 'Possible hostile contact beyond the bocage',
+              approxPosition: {
+                label: observed.label,
+                x: observed.x,
+                z: observed.z,
+                radius: observed.radius
+              },
+              confidence: observed.confidence,
+              truth: observed.confidence > 0.8 ? 'confirmed' : 'partial'
+            });
+            enemyKnown = true;
+            if (observed.confidence > 0.8) {
+              enemyRevealed = true;
+              enemy.visible = true;
+            }
+            logEvent('WINGMAN', 'Contact report filed: ' + report.subject + '.');
+          } else {
+            addReport({
+              type: 'sighting',
+              source: 'Wingman Sherman',
+              subject: 'No clear target from the scout lane; hedge line remains uncertain',
+              approxPosition: {
+                label: unit.scoutSide === 'right' ? 'right hedge' : 'left hedge',
+                x: unit.group.position.x,
+                z: unit.group.position.z,
+                radius: 11
+              },
+              confidence: 0.42,
+              truth: 'partial'
+            });
+            logEvent('WINGMAN', 'Scout pass returned an uncertain picture.');
+          }
+        }
+        unit.intent = 'hold';
+        unit.destination = null;
+        unit.scoutSide = null;
+      }
+    }
+    return;
+  }
+
+  if (unit.intent === 'attack') {
+    if (unit.attackTarget) {
+      moveTowardAim(unit, unit.attackTarget, delta, 0);
+    }
+  }
+}
+
+function moveTowards(unit: Unit, destination: THREE.Vector3, delta: number, speed: number) {
+  const target = destination.clone();
+  target.y = unit.group.position.y;
+  const deltaVec = target.sub(unit.group.position);
+  const distance = deltaVec.length();
+  if (distance < 0.12) {
+    unit.group.position.copy(target);
+    return;
+  }
+  deltaVec.normalize();
+  unit.heading = Math.atan2(deltaVec.z, deltaVec.x) - Math.PI / 2;
+  unit.group.position.addScaledVector(deltaVec, speed * delta);
+}
+
+function moveTowardAim(unit: Unit, aim: THREE.Vector3, delta: number, speed: number) {
+  const target = aim.clone();
+  target.y = unit.group.position.y;
+  const deltaVec = target.sub(unit.group.position);
+  const distance = deltaVec.length();
+  if (distance > 0.1) {
+    deltaVec.normalize();
+    unit.heading = Math.atan2(deltaVec.z, deltaVec.x) - Math.PI / 2;
+    unit.group.position.addScaledVector(deltaVec, speed * delta);
+  }
+}
+
+function handleAmbushLogic() {
+  if (phase !== 'live' || enemyDestroyed) return;
+  const triggerLine = 11.5;
+  if (!ambushTriggered && player.group.position.x > triggerLine) {
+    const knownContact = activeReports().some((report) => report.subject.toLowerCase().includes('contact') || report.subject.toLowerCase().includes('gun') || report.subject.toLowerCase().includes('enemy'));
+    if (!knownContact) {
+      triggerAmbush();
+    }
+  }
+}
+
+function handleVictoryLogic() {
+  if (phase !== 'live' || enemyDestroyed === false) return;
+  if (player.group.position.x > 42) {
+    winMission('The lane is open. Your platoon reached the farmhouse line with the contact neutralized.');
+  }
+}
+
+function handleAttackResolution(delta: number) {
+  if (attackTimer <= 0) return;
+  attackTimer = Math.max(0, attackTimer - delta);
+  if (attackTimer === 0 && !enemyDestroyed) {
+    const hitChance = viewMode === 'hatch' ? 0.88 : viewMode === 'buttoned' ? 0.72 : viewMode === 'scope' ? 0.94 : 0.76;
+    if (hitChance > 0.8 || enemyKnown) {
+      enemyDestroyed = true;
+      enemy.visible = false;
+      enemyRevealed = true;
+      addReport({
+        type: 'after-action',
+        source: 'Platoon',
+        subject: 'Enemy AT gun silenced',
+        approxPosition: {
+          label: 'right hedgerow, 34m ahead',
+          x: 34,
+          z: 7,
+          radius: 5
+        },
+        confidence: 1,
+        truth: 'confirmed'
+      });
+      logEvent('PLATOON', 'Target neutralized.');
+    }
+  }
+}
+
+function updateCameras() {
+  const playerPos = player.group.position.clone();
+  const enemyPos = new THREE.Vector3(34, 2.2, 7);
+
+  cameras.hatch.position.lerp(new THREE.Vector3(playerPos.x - 9, 5.2, playerPos.z + 7.5), 0.14);
+  cameras.hatch.lookAt(playerPos.x + 12, 1.2, playerPos.z);
+
+  cameras.buttoned.position.lerp(new THREE.Vector3(playerPos.x - 5.3, 2.1, playerPos.z + 3.8), 0.16);
+  cameras.buttoned.lookAt(playerPos.x + 10, 1.1, playerPos.z);
+
+  const aim = enemyKnown ? enemyPos : new THREE.Vector3(playerPos.x + 24, 1.0, playerPos.z);
+  cameras.scope.position.lerp(new THREE.Vector3(playerPos.x - 2.2, 1.8, playerPos.z + 1.8), 0.2);
+  cameras.scope.lookAt(aim.x, aim.y, aim.z);
+
+  cameras.map.position.set(18, 48, 0.01);
+  cameras.map.lookAt(18, 0, 0);
+
+  if (viewMode === 'scope') {
+    cameras.scope.fov = 18;
+    cameras.scope.updateProjectionMatrix();
+  } else if (viewMode === 'buttoned') {
+    cameras.buttoned.fov = 34;
+    cameras.buttoned.updateProjectionMatrix();
+  }
+
+  player.body.rotation.y = player.heading;
+  player.turret.rotation.y = player.heading * 0.92;
+  player.barrel.rotation.y = player.heading * 0.92;
+  wingman.body.rotation.y = wingman.heading;
+  wingman.turret.rotation.y = wingman.heading * 0.92;
+  wingman.barrel.rotation.y = wingman.heading * 0.92;
+
+  if (enemyRevealed && !enemyDestroyed) {
+    enemy.rotation.y = Math.PI;
+  }
+
+  updateLabel(player, playerPos, activeCamera);
+  updateLabel(wingman, wingman.group.position.clone(), activeCamera);
+  updateEnemyLabel();
+}
+
+function updateLabel(unit: Unit, position: THREE.Vector3, camera: THREE.Camera) {
+  const projected = position.clone().project(camera);
+  const visible = projected.z > -1 && projected.z < 1;
+  unit.label.style.opacity = visible ? '1' : '0';
+  const x = (projected.x * 0.5 + 0.5) * window.innerWidth;
+  const y = (-projected.y * 0.5 + 0.5) * window.innerHeight;
+  unit.label.style.transform = 'translate(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px)';
+  if (phase === 'live' && unit.role !== 'enemy') {
+    unit.label.textContent = unit.role.toUpperCase() + ' · ' + unit.intent.toUpperCase();
+  }
+}
+
+function updateEnemyLabel() {
+  const enemyPos = new THREE.Vector3(enemy.position.x, 2.2, enemy.position.z);
+  const projected = enemyPos.clone().project(activeCamera);
+  const visible = projected.z > -1 && projected.z < 1;
+  enemyLabel.style.opacity = enemyRevealed && !enemyDestroyed && visible ? '1' : '0';
+  const x = (projected.x * 0.5 + 0.5) * window.innerWidth;
+  const y = (-projected.y * 0.5 + 0.5) * window.innerHeight;
+  enemyLabel.style.transform = 'translate(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px)';
+}
+
+function renderHud() {
+  refs.moraleChip.textContent = phase === 'live' ? 'Checkpoint ready' : phase === 'failure' ? 'Failure' : 'Victory';
+  refs.threatChip.textContent = enemyDestroyed ? 'Enemy silenced' : enemyKnown ? 'Contact known' : 'Enemy hidden';
+  refs.ledgerSummary.textContent = activeReports().length + ' active report' + (activeReports().length === 1 ? '' : 's');
+  refs.radioLog.innerHTML = logLines.map(function (entry) {
+    return '<div class="radio-entry">' + escapeHtml(entry) + '</div>';
+  }).join('');
+  refs.ledgerList.innerHTML = renderReports();
+  refs.mapGrid.innerHTML = renderMap();
+  refs.mapCaption.textContent = viewMode === 'map' ? 'Map view shows report quality, not omniscience.' : 'Use map/report view for uncertainty, confidence, and timing.';
+  if (phase === 'live') {
+    refs.aar.classList.add('hidden');
+  }
+  updateVignette();
+  refreshMissionState();
+}
+
+function renderReports() {
+  const list = reports.slice().sort(function (a, b) { return b.createdAt - a.createdAt; });
+  if (list.length === 0) {
+    return '<div class="empty-state">No reports yet. A scout pass or situation report will create the first entry.</div>';
+  }
+  return list.map(function (report) {
+    const truth = updateReportTruth(report);
+    const stale = report.expiryAt <= gameTime;
+    const bars = Math.max(1, Math.round(report.confidence * 5));
+    let confidenceBars = '';
+    for (let i = 0; i < 5; i++) {
+      confidenceBars += '<span class="bar ' + (i < bars ? 'filled' : 'empty') + '"></span>';
+    }
+    return [
+      '<article class="report-card ' + truth + (stale ? ' stale' : '') + '">',
+      '  <div class="report-topline">',
+      '    <strong>' + escapeHtml(report.type.toUpperCase()) + '</strong>',
+      '    <span>' + escapeHtml(report.source) + '</span>',
+      '  </div>',
+      '  <p class="report-subject">' + escapeHtml(report.subject) + '</p>',
+      '  <div class="report-meta">',
+      '    <span>' + escapeHtml(report.approxPosition.label) + '</span>',
+      '    <span>confidence ' + describeConfidence(report.confidence) + '</span>',
+      '    <span>' + formatSeconds(report.expiryAt - gameTime) + ' live</span>',
+      '  </div>',
+      '  <div class="confidence-strip" aria-hidden="true">' + confidenceBars + '</div>',
+      '</article>'
+    ].join('');
+  }).join('');
+}
+
+function renderMap() {
+  const playerPos = player.group.position;
+  const wingmanPos = wingman.group.position;
+  const active = activeReports();
+  const items = [
+    mapNode('player', 'Player Sherman', playerPos.x, playerPos.z, 0.1),
+    mapNode('wingman', 'Wingman Sherman', wingmanPos.x, wingmanPos.z, 0.1)
+  ];
+
+  if (enemyDestroyed) {
+    items.push('<div class="map-ghost map-ghost-destroyed" style="left:' + toMapX(34) + '%;top:' + toMapZ(7) + '%"></div>');
+  } else if (enemyRevealed || active.some((report) => report.subject.toLowerCase().includes('gun') || report.subject.toLowerCase().includes('enemy') || report.subject.toLowerCase().includes('contact'))) {
+    const report = active[0];
+    const radius = report ? report.approxPosition.radius : 7;
+    const conf = report ? report.confidence : 0.55;
+    items.push('<div class="map-uncertainty" style="left:' + toMapX(34) + '%;top:' + toMapZ(7) + '%;width:' + radius * 2.1 + 'vmin;height:' + radius * 2.1 + 'vmin;opacity:' + conf + '"></div>');
+    if (report && report.confidence > 0.75) {
+      items.push('<div class="map-contact known" style="left:' + toMapX(34) + '%;top:' + toMapZ(7) + '%"></div>');
+    }
+  }
+
+  items.push('<div class="map-landmark farmhouse" style="left:' + toMapX(39) + '%;top:' + toMapZ(-10) + '%"></div>');
+  items.push('<div class="map-landmark church" style="left:' + toMapX(48) + '%;top:' + toMapZ(10) + '%"></div>');
+  items.push('<div class="map-lane"></div>');
+  return items.join('');
+}
+
+function mapNode(kind: string, label: string, x: number, z: number, opacity: number) {
+  return '<div class="map-unit ' + kind + '" style="left:' + toMapX(x) + '%;top:' + toMapZ(z) + '%;opacity:' + opacity + '"><span>' + escapeHtml(label) + '</span></div>';
+}
+
+function toMapX(x: number) {
+  return ((x + 18) / 72) * 100;
+}
+
+function toMapZ(z: number) {
+  return ((z + 18) / 36) * 100;
+}
+
+function updateVignette() {
+  refs.vignette.dataset.mode = viewMode;
+  refs.vignette.dataset.phase = phase;
+}
+
+function onResize() {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  cameras.hatch.aspect = window.innerWidth / window.innerHeight;
+  cameras.buttoned.aspect = window.innerWidth / window.innerHeight;
+  cameras.scope.aspect = window.innerWidth / window.innerHeight;
+  cameras.hatch.updateProjectionMatrix();
+  cameras.buttoned.updateProjectionMatrix();
+  cameras.scope.updateProjectionMatrix();
+}
+
+function tick(now: number) {
+  const delta = Math.min(0.05, (now - lastTick) / 1000 || 0.016);
+  lastTick = now;
+  if (phase === 'live') {
+    gameTime += delta;
+    processOrders();
+    updateUnit(player, delta);
+    updateUnit(wingman, delta);
+    handleAmbushLogic();
+    handleAttackResolution(delta);
+    handleVictoryLogic();
+    updateCommandersAwareness();
+  }
+  updateCameras();
+  renderer.render(scene, activeCamera);
+  renderHud();
+  requestAnimationFrame(tick);
+}
+
+function updateCommandersAwareness() {
+  if (phase !== 'live' || viewMode === 'map') return;
+  const playerObservation = observeEnemy(player);
+  if (playerObservation && !enemyKnown) {
+    enemyKnown = true;
+    addReport({
+      type: 'contact',
+      source: 'Commander Sherman',
+      subject: 'Sighted hostile AT gun through the hedge line',
+      approxPosition: {
+        label: playerObservation.label,
+        x: playerObservation.x,
+        z: playerObservation.z,
+        radius: playerObservation.radius
+      },
+      confidence: playerObservation.confidence,
+      truth: playerObservation.confidence > 0.8 ? 'confirmed' : 'partial'
+    });
+    logEvent('COMMANDER', 'Direct sighting confirmed.');
+  }
+}
+
+function escapeHtml(text: string) {
+  return text.replace(/[&<>'"]/g, function (char) {
+    const map: Record<string, string> = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    };
+    return map[char] || char;
+  });
+}
+
+let lastTick = 0;
+
+function toggleVoiceInput() {
+  const speechWindow = window as Window & {
+    SpeechRecognition?: new () => SpeechRecognitionLike;
+    webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+  };
+  const SpeechRecognitionCtor = speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition;
+  if (!SpeechRecognitionCtor) {
+    refs.voiceButton.textContent = 'Speech unavailable';
+    refs.voiceButton.disabled = true;
     return;
   }
 
   if (recognition) {
     recognition.stop();
-  }
-
-  recognition = new SpeechRecognitionAPI();
-  recognition.continuous = true;
-  recognition.interimResults = false;
-  recognition.lang = 'en-US';
-
-  recognition.onstart = () => {
-    listening = true;
-    listenButton.textContent = 'Stop voice input';
-    updateSpeechBadge('Speech listening');
-  };
-
-  recognition.onend = () => {
-    listening = false;
-    listenButton.textContent = 'Start voice input';
-    updateSpeechBadge('Speech idle');
-  };
-
-  recognition.onerror = () => {
-    // Ignore speech errors silently, matching the prompt.
-  };
-
-  recognition.onresult = (event) => {
-    for (let index = event.resultIndex; index < event.results.length; index += 1) {
-      const result = event.results[index];
-      if (!result.isFinal) continue;
-      const transcript = result[0]?.transcript ?? '';
-      const confidence = result[0]?.confidence ?? 0;
-      if (confidence < 0.55) continue;
-      queueCommand(transcript);
-    }
-  };
-
-  recognition.start();
-}
-
-listenButton.addEventListener('click', () => {
-  if (!recognition) {
-    startVoiceInput();
+    recognition = null;
+    refs.voiceButton.textContent = 'Voice';
     return;
   }
 
-  if (listening) {
-    recognition.stop();
-  } else {
-    recognition.start();
+  recognition = new SpeechRecognitionCtor();
+  recognition.continuous = true;
+  recognition.interimResults = false;
+  recognition.lang = 'en-US';
+  recognition.onstart = () => {
+    refs.voiceButton.textContent = 'Stop voice';
+  };
+  recognition.onend = () => {
+    refs.voiceButton.textContent = 'Voice';
+    recognition = null;
+  };
+  recognition.onerror = () => {
+  };
+  recognition.onresult = (event: any) => {
+    const transcript = event.results[event.results.length - 1][0].transcript;
+    submitCommand(transcript);
+  };
+  recognition.start();
+}
+
+function maybeRevealEnemy() {
+  const visibleNow = enemyKnown || enemyRevealed;
+  enemy.visible = visibleNow && !enemyDestroyed;
+}
+
+function syncEnemyMesh() {
+  maybeRevealEnemy();
+  enemy.position.set(34, 0.35, 7);
+  enemy.scale.setScalar(enemyDestroyed ? 0.1 : 1);
+  if (enemyDestroyed) {
+    enemy.rotation.y = Math.PI * 0.35;
   }
-});
-
-function createStartupHints() {
-  appendLog('Ready for voice orders.');
-  appendLog('Commands: driver advance, gunner scan, wingman attack.');
-  appendLog('Camera: C commander, V drone.');
 }
 
-function resize() {
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  commanderCamera.aspect = window.innerWidth / window.innerHeight;
-  commanderCamera.updateProjectionMatrix();
-  droneCamera.aspect = window.innerWidth / window.innerHeight;
-  droneCamera.updateProjectionMatrix();
+function refreshMissionState() {
+  refs.commandInput.placeholder = phase === 'live' ? 'type: scout right' : 'checkpoint complete';
+  syncEnemyMesh();
 }
 
-window.addEventListener('resize', resize);
-
-let lastTime = performance.now();
-setCameraMode('commander');
-createStartupHints();
-resize();
+captureCheckpoint();
+updateViewMode('hatch', false);
+refreshMissionState();
 requestAnimationFrame(tick);

@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "bocage_is_information_compression",
+      "title": "Bocage turns terrain into information compression",
+      "variable": "route_dependency",
+      "confidence": 0.93,
+      "file": "discoveries/bocage_is_information_compression.md"
+    },
+    {
+      "id": "replacement_crews_reduce_trust_before_capacity",
+      "title": "Replacement crews reduce trust before they add capacity",
+      "variable": "replacement_familiarity",
+      "confidence": 0.92,
+      "file": "discoveries/replacement_crews_reduce_trust_before_capacity.md"
+    },
+    {
+      "id": "friendly_fire_is_visibility_and_identifier_failure",
+      "title": "Friendly fire is a visibility and identifier failure",
+      "variable": "identity_confidence",
+      "confidence": 0.91,
+      "file": "discoveries/friendly_fire_is_visibility_and_identifier_failure.md"
+    },
+    {
+      "id": "vehicle_damage_is_state_machine",
+      "title": "Vehicle damage is a state machine",
+      "variable": "immobility_state",
+      "confidence": 0.95,
+      "file": "discoveries/vehicle_damage_is_state_machine.md"
+    },
+    {
+      "id": "capture_is_branch_not_end",
+      "title": "Capture is a branch, not an end",
+      "variable": "captivity_stress",
+      "confidence": 0.88,
+      "file": "discoveries/capture_is_branch_not_end.md"
+    },
+    {
+      "id": "sanitation_is_hidden_attrition",
+      "title": "Sanitation is hidden attrition",
+      "variable": "sanitation_state",
+      "confidence": 0.88,
+      "file": "discoveries/sanitation_is_hidden_attrition.md"
+    },
+    {
+      "id": "chaplaincy_turns_grief_into_process",
+      "title": "Chaplaincy turns grief into process",
+      "variable": "grief_load",
+      "confidence": 0.84,
+      "file": "discoveries/chaplaincy_turns_grief_into_process.md"
+    },
+    {
+      "id": "rear_area_is_a_playable_network",
+      "title": "The rear area is a playable network",
+      "variable": "rear_area_throughput",
+      "confidence": 0.96,
+      "file": "discoveries/rear_area_is_a_playable_network.md"
+    }
+  ]
+}

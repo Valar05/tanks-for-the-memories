@@ -1,0 +1,1474 @@
+{
+  "generated_at": "2026-06-21",
+  "nodes": [
+    {
+      "id": "person_marshall",
+      "type": "person",
+      "label": "George C. Marshall"
+    },
+    {
+      "id": "person_devers",
+      "type": "person",
+      "label": "Jacob L. Devers"
+    },
+    {
+      "id": "person_somervell",
+      "type": "person",
+      "label": "Brehon B. Somervell"
+    },
+    {
+      "id": "person_lutes",
+      "type": "person",
+      "label": "LeRoy Lutes"
+    },
+    {
+      "id": "person_stacey",
+      "type": "person",
+      "label": "C. P. Stacey"
+    },
+    {
+      "id": "person_pool",
+      "type": "person",
+      "label": "Lafayette G. Pool"
+    },
+    {
+      "id": "person_leach",
+      "type": "person",
+      "label": "Jimmie Leach"
+    },
+    {
+      "id": "unit_asf",
+      "type": "unit",
+      "label": "Army Service Forces"
+    },
+    {
+      "id": "unit_agf",
+      "type": "unit",
+      "label": "Army Ground Forces"
+    },
+    {
+      "id": "unit_omgus",
+      "type": "unit",
+      "label": "Office of Military Government, United States"
+    },
+    {
+      "id": "unit_761",
+      "type": "unit",
+      "label": "761st Tank Battalion"
+    },
+    {
+      "id": "unit_3arm",
+      "type": "unit",
+      "label": "3rd Armored Division"
+    },
+    {
+      "id": "unit_4arm",
+      "type": "unit",
+      "label": "4th Armored Division"
+    },
+    {
+      "id": "unit_usaf",
+      "type": "unit",
+      "label": "United States Army Air Forces"
+    },
+    {
+      "id": "battle_overlord",
+      "type": "battle",
+      "label": "Operation Overlord"
+    },
+    {
+      "id": "battle_cobra",
+      "type": "battle",
+      "label": "Operation Cobra"
+    },
+    {
+      "id": "battle_totalize",
+      "type": "battle",
+      "label": "Operation Totalize"
+    },
+    {
+      "id": "battle_astonia",
+      "type": "battle",
+      "label": "Operation Astonia"
+    },
+    {
+      "id": "battle_carentan",
+      "type": "battle",
+      "label": "Carentan"
+    },
+    {
+      "id": "battle_omaha",
+      "type": "battle",
+      "label": "Omaha Beach"
+    },
+    {
+      "id": "battle_villers",
+      "type": "battle",
+      "label": "Battle of Villers-Bocage"
+    },
+    {
+      "id": "location_normandy",
+      "type": "location",
+      "label": "Normandy"
+    },
+    {
+      "id": "location_caen",
+      "type": "location",
+      "label": "Caen"
+    },
+    {
+      "id": "location_le_havre",
+      "type": "location",
+      "label": "Le Havre"
+    },
+    {
+      "id": "location_omaha",
+      "type": "location",
+      "label": "Omaha Beach"
+    },
+    {
+      "id": "location_carentan",
+      "type": "location",
+      "label": "Carentan"
+    },
+    {
+      "id": "location_bocage",
+      "type": "location",
+      "label": "Bocage"
+    },
+    {
+      "id": "doctrine_fm1730",
+      "type": "doctrine",
+      "label": "FM 17-30"
+    },
+    {
+      "id": "doctrine_fm1733",
+      "type": "doctrine",
+      "label": "FM 17-33"
+    },
+    {
+      "id": "doctrine_fm2419",
+      "type": "doctrine",
+      "label": "FM 24-19"
+    },
+    {
+      "id": "report_information_state",
+      "type": "report",
+      "label": "Information State Report"
+    },
+    {
+      "id": "report_after_action",
+      "type": "report",
+      "label": "After Action Lessons"
+    },
+    {
+      "id": "report_crew_memory",
+      "type": "report",
+      "label": "Crew Memory Report"
+    },
+    {
+      "id": "topic_daily_life",
+      "type": "training_topic",
+      "label": "Daily Life"
+    },
+    {
+      "id": "topic_logistics",
+      "type": "training_topic",
+      "label": "Logistics"
+    },
+    {
+      "id": "topic_occupation",
+      "type": "training_topic",
+      "label": "Occupation"
+    },
+    {
+      "id": "topic_maintenance",
+      "type": "training_topic",
+      "label": "Maintenance"
+    },
+    {
+      "id": "topic_mail",
+      "type": "training_topic",
+      "label": "Military Mail"
+    },
+    {
+      "id": "topic_hygiene",
+      "type": "training_topic",
+      "label": "Hygiene"
+    },
+    {
+      "id": "topic_morale",
+      "type": "training_topic",
+      "label": "Morale"
+    },
+    {
+      "id": "topic_rotation",
+      "type": "training_topic",
+      "label": "Rotation"
+    },
+    {
+      "id": "topic_fatigue",
+      "type": "training_topic",
+      "label": "Fatigue"
+    },
+    {
+      "id": "var_sleep_debt",
+      "type": "simulation_variable",
+      "label": "sleep_debt"
+    },
+    {
+      "id": "var_hunger",
+      "type": "simulation_variable",
+      "label": "hunger"
+    },
+    {
+      "id": "var_mail_latency",
+      "type": "simulation_variable",
+      "label": "mail_latency"
+    },
+    {
+      "id": "var_fuel_reserve",
+      "type": "simulation_variable",
+      "label": "fuel_reserve"
+    },
+    {
+      "id": "var_repair_queue",
+      "type": "simulation_variable",
+      "label": "repair_queue"
+    },
+    {
+      "id": "var_civilian_contact",
+      "type": "simulation_variable",
+      "label": "civilian_contact"
+    },
+    {
+      "id": "var_occupation_rules",
+      "type": "simulation_variable",
+      "label": "occupation_rules"
+    },
+    {
+      "id": "var_fatigue",
+      "type": "simulation_variable",
+      "label": "fatigue"
+    },
+    {
+      "id": "var_commander_training_level",
+      "type": "simulation_variable",
+      "label": "commander_training_level"
+    },
+    {
+      "id": "var_report_accuracy",
+      "type": "simulation_variable",
+      "label": "report_accuracy"
+    },
+    {
+      "id": "vehicle_sherman",
+      "type": "vehicle",
+      "label": "M4 Sherman"
+    },
+    {
+      "id": "vehicle_panther",
+      "type": "vehicle",
+      "label": "Panther"
+    },
+    {
+      "id": "vehicle_panzer_iv",
+      "type": "vehicle",
+      "label": "Panzer IV"
+    },
+    {
+      "id": "vehicle_stug",
+      "type": "vehicle",
+      "label": "StuG III"
+    },
+    {
+      "id": "vehicle_m3_halftrack",
+      "type": "vehicle",
+      "label": "M3 Half-track"
+    },
+    {
+      "id": "terrain_bocage",
+      "type": "terrain_feature",
+      "label": "Bocage"
+    },
+    {
+      "id": "terrain_hedgerow",
+      "type": "terrain_feature",
+      "label": "Hedgerow"
+    },
+    {
+      "id": "terrain_road",
+      "type": "terrain_feature",
+      "label": "Road"
+    },
+    {
+      "id": "terrain_village",
+      "type": "terrain_feature",
+      "label": "Village"
+    },
+    {
+      "id": "topic_training",
+      "type": "training_topic",
+      "label": "Training"
+    },
+    {
+      "id": "src_01_omaha_beachhead",
+      "type": "report",
+      "label": "Omaha Beachhead",
+      "source_file": "source_library/01_omaha-beachhead.md",
+      "author": "Historical Division, War Department",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_02_cross_channel_attack_ch8",
+      "type": "report",
+      "label": "Cross-Channel Attack, Chapter VIII: The Sixth of June",
+      "source_file": "source_library/02_cross-channel-attack-ch8.md",
+      "author": "Gordon A. Harrison",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_03_cross_channel_attack_ch9",
+      "type": "report",
+      "label": "Cross-Channel Attack, Chapter IX: The V Corps Lodgment",
+      "source_file": "source_library/03_cross-channel-attack-ch9.md",
+      "author": "Gordon A. Harrison",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_04_utah_beach_to_cherbourg_carentan",
+      "type": "report",
+      "label": "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg",
+      "source_file": "source_library/04_utah-beach-to-cherbourg-carentan.md",
+      "author": "Historical Division, War Department",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_05_victory_campaign",
+      "type": "report",
+      "label": "Official History of the Canadian Army in the Second World War, Vol III: The Victory Campaign",
+      "source_file": "source_library/05_victory-campaign.md",
+      "author": "Stacey, C.P.",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_06_normandy_landings",
+      "type": "report",
+      "label": "Normandy landings",
+      "source_file": "source_library/06_normandy-landings.md",
+      "author": "Wikipedia contributors",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_07_omaha_beach_wiki",
+      "type": "report",
+      "label": "Omaha Beach",
+      "source_file": "source_library/07_omaha-beach-wiki.md",
+      "author": "Wikipedia contributors",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_08_operation_cobra",
+      "type": "report",
+      "label": "Operation Cobra",
+      "source_file": "source_library/08_operation-cobra.md",
+      "author": "Wikipedia contributors",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_09_operation_totalize",
+      "type": "report",
+      "label": "Operation Totalize",
+      "source_file": "source_library/09_operation-totalize.md",
+      "author": "Wikipedia contributors",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_10_battle_villers_bocage",
+      "type": "report",
+      "label": "Battle of Villers-Bocage",
+      "source_file": "source_library/10_battle-villers-bocage.md",
+      "author": "Wikipedia contributors",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_11_m4_sherman",
+      "type": "report",
+      "label": "M4 Sherman",
+      "source_file": "source_library/11_m4-sherman.md",
+      "author": "Wikipedia contributors",
+      "category": "Vehicle Data"
+    },
+    {
+      "id": "src_12_tank_destroyer_battalion",
+      "type": "report",
+      "label": "Tank destroyer battalion (United States)",
+      "source_file": "source_library/12_tank-destroyer-battalion.md",
+      "author": "Wikipedia contributors",
+      "category": "Doctrine"
+    },
+    {
+      "id": "src_13_sixteen_line_message_format",
+      "type": "report",
+      "label": "16-line message format",
+      "source_file": "source_library/13_sixteen-line-message-format.md",
+      "author": "Wikipedia contributors",
+      "category": "Radio Corpus"
+    },
+    {
+      "id": "src_14_radiotelephony_procedure",
+      "type": "report",
+      "label": "Radiotelephony procedure",
+      "source_file": "source_library/14_radiotelephony-procedure.md",
+      "author": "Wikipedia contributors",
+      "category": "Radio Corpus"
+    },
+    {
+      "id": "src_15_allied_military_phonetic_spelling_alphabets",
+      "type": "report",
+      "label": "Allied military phonetic spelling alphabets",
+      "source_file": "source_library/15_allied-military-phonetic-spelling-alphabets.md",
+      "author": "Wikipedia contributors",
+      "category": "Radio Corpus"
+    },
+    {
+      "id": "src_16_stanislaw_maczek",
+      "type": "report",
+      "label": "Stanis\u0142aw Maczek",
+      "source_file": "source_library/16_stanislaw-maczek.md",
+      "author": "Wikipedia contributors",
+      "category": "Crew Reality"
+    },
+    {
+      "id": "src_17_first_polish_armoured_division",
+      "type": "report",
+      "label": "1st Armoured Division (Poland)",
+      "source_file": "source_library/17_first-polish-armoured-division.md",
+      "author": "Wikipedia contributors",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_18_dday_battle_for_normandy",
+      "type": "report",
+      "label": "D-Day: The Battle for Normandy",
+      "source_file": "source_library/18_dday-battle-for-normandy.md",
+      "author": "Wikipedia contributors",
+      "category": "Crew Reality"
+    },
+    {
+      "id": "src_19_bomb_tank",
+      "type": "report",
+      "label": "Bomb (tank)",
+      "source_file": "source_library/19_bomb-tank.md",
+      "author": "Wikipedia contributors",
+      "category": "Crew Reality"
+    },
+    {
+      "id": "src_20_heinrich_severloh",
+      "type": "report",
+      "label": "Heinrich Severloh",
+      "source_file": "source_library/20_heinrich-severloh.md",
+      "author": "Wikipedia contributors",
+      "category": "Crew Reality"
+    },
+    {
+      "id": "src_21_tank_museum",
+      "type": "report",
+      "label": "The Tank Museum",
+      "source_file": "source_library/21_tank-museum.md",
+      "author": "Wikipedia contributors",
+      "category": "Visual Reference"
+    },
+    {
+      "id": "src_22_dday_story",
+      "type": "report",
+      "label": "The D-Day Story",
+      "source_file": "source_library/22_dday-story.md",
+      "author": "Wikipedia contributors",
+      "category": "Visual Reference"
+    },
+    {
+      "id": "src_23_overlord_museum",
+      "type": "report",
+      "label": "Overlord Museum",
+      "source_file": "source_library/23_overlord-museum.md",
+      "author": "Wikipedia contributors",
+      "category": "Visual Reference"
+    },
+    {
+      "id": "src_24_m3_half_track",
+      "type": "report",
+      "label": "M3 half-track",
+      "source_file": "source_library/24_m3-half-track.md",
+      "author": "Wikipedia contributors",
+      "category": "Vehicle Data"
+    },
+    {
+      "id": "src_25_panther_tank",
+      "type": "report",
+      "label": "Panther tank",
+      "source_file": "source_library/25_panther-tank.md",
+      "author": "Wikipedia contributors",
+      "category": "Vehicle Data"
+    },
+    {
+      "id": "src_26_panzer_iv",
+      "type": "report",
+      "label": "Panzer IV",
+      "source_file": "source_library/26_panzer-iv.md",
+      "author": "Wikipedia contributors",
+      "category": "Vehicle Data"
+    },
+    {
+      "id": "src_27_m36_tank_destroyer",
+      "type": "report",
+      "label": "M36 tank destroyer",
+      "source_file": "source_library/27_m36-tank-destroyer.md",
+      "author": "Wikipedia contributors",
+      "category": "Vehicle Data"
+    },
+    {
+      "id": "src_28_cromwell_tank",
+      "type": "report",
+      "label": "Cromwell tank",
+      "source_file": "source_library/28_cromwell-tank.md",
+      "author": "Wikipedia contributors",
+      "category": "Vehicle Data"
+    },
+    {
+      "id": "src_29_operation_windsor",
+      "type": "report",
+      "label": "HQ 8 Cdn Inf Bde, Operation Windsor",
+      "source_file": "source_library/29_operation-windsor.md",
+      "author": "HQ 8 Canadian Infantry Brigade",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "src_30_m3_stuart",
+      "type": "report",
+      "label": "M3 Stuart",
+      "source_file": "source_library/30_m3-stuart.md",
+      "author": "Wikipedia contributors",
+      "category": "Vehicle Data"
+    },
+    {
+      "id": "src_31_jacob_l_devers",
+      "type": "report",
+      "label": "Jacob L. Devers",
+      "source_file": "source_library/31_jacob-l-devers.md",
+      "author": "Wikipedia contributors",
+      "category": "Doctrine"
+    },
+    {
+      "id": "src_32_fm_17_12_tank_gunnery",
+      "type": "report",
+      "label": "FM 17-12 Tank Gunnery",
+      "source_file": "source_library/32_fm-17-12-tank-gunnery.md",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "category": "Tank Command"
+    },
+    {
+      "id": "src_33_fm_17_30_tank_platoon",
+      "type": "report",
+      "label": "FM 17-30 Tank Platoon",
+      "source_file": "source_library/33_fm-17-30-tank-platoon.md",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "category": "Tank Command"
+    },
+    {
+      "id": "src_34_fm_17_33_the_tank_battalion_light_and_medium",
+      "type": "report",
+      "label": "FM 17-33 The Tank Battalion, Light and Medium",
+      "source_file": "source_library/34_fm-17-33-the-tank-battalion-light-and-medium.md",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "category": "Tank Command"
+    },
+    {
+      "id": "src_35_fm_18_5_tactical_employment_tank_destroyer_unit",
+      "type": "report",
+      "label": "FM 18-5 Tactical Employment: Tank Destroyer Unit",
+      "source_file": "source_library/35_fm-18-5-tactical-employment-tank-destroyer-unit.md",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "category": "Doctrine"
+    },
+    {
+      "id": "src_36_fm_24_5_basic_field_manual_signal_communication",
+      "type": "report",
+      "label": "FM 24-5 Basic Field Manual, Signal Communication",
+      "source_file": "source_library/36_fm-24-5-basic-field-manual-signal-communication.md",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "category": "Radio Corpus"
+    },
+    {
+      "id": "src_37_fm_24_6_radio_operator_s_manual",
+      "type": "report",
+      "label": "FM 24-6 Radio Operator's Manual",
+      "source_file": "source_library/37_fm-24-6-radio-operator-s-manual.md",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "category": "Radio Corpus"
+    },
+    {
+      "id": "src_38_fm_24_18_radio_communication",
+      "type": "report",
+      "label": "FM 24-18 Radio Communication",
+      "source_file": "source_library/38_fm-24-18-radio-communication.md",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "category": "Radio Corpus"
+    },
+    {
+      "id": "src_39_fm_24_19_radio_operator_s_handbook",
+      "type": "report",
+      "label": "FM 24-19 Radio Operator's Handbook",
+      "source_file": "source_library/39_fm-24-19-radio-operator-s-handbook.md",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "category": "Radio Corpus"
+    },
+    {
+      "id": "src_40_combat_stress_reaction",
+      "type": "report",
+      "label": "Combat stress reaction",
+      "source_file": "source_library/40_combat-stress-reaction.md",
+      "author": "Wikipedia contributors",
+      "category": "Human Factors"
+    },
+    {
+      "id": "src_41_united_states_army_air_forces",
+      "type": "report",
+      "label": "United States Army Air Forces",
+      "source_file": "source_library/41_united_states_army_air_forces.md",
+      "author": "Wikipedia contributors",
+      "category": "Crew Reality"
+    },
+    {
+      "id": "src_42_army_service_forces",
+      "type": "report",
+      "label": "Army Service Forces",
+      "source_file": "source_library/42_army_service_forces.md",
+      "author": "Wikipedia contributors",
+      "category": "Logistics"
+    },
+    {
+      "id": "src_43_united_states_army_during_world_war_ii",
+      "type": "report",
+      "label": "United States Army during World War II",
+      "source_file": "source_library/43_united_states_army_during_world_war_ii.md",
+      "author": "Wikipedia contributors",
+      "category": "Daily Life"
+    },
+    {
+      "id": "src_44_military_government",
+      "type": "report",
+      "label": "Military government",
+      "source_file": "source_library/44_military_government.md",
+      "author": "Wikipedia contributors",
+      "category": "Occupation"
+    },
+    {
+      "id": "src_45_military_occupation",
+      "type": "report",
+      "label": "Military occupation",
+      "source_file": "source_library/45_military_occupation.md",
+      "author": "Wikipedia contributors",
+      "category": "Occupation"
+    },
+    {
+      "id": "src_46_military_mail",
+      "type": "report",
+      "label": "Military mail",
+      "source_file": "source_library/46_military_mail.md",
+      "author": "Wikipedia contributors",
+      "category": "Morale"
+    },
+    {
+      "id": "src_47_garrison_ration",
+      "type": "report",
+      "label": "Garrison ration",
+      "source_file": "source_library/47_garrison_ration.md",
+      "author": "Wikipedia contributors",
+      "category": "Daily Life"
+    },
+    {
+      "id": "src_48_vehicle_recovery",
+      "type": "report",
+      "label": "Vehicle recovery",
+      "source_file": "source_library/48_vehicle_recovery.md",
+      "author": "Wikipedia contributors",
+      "category": "Maintenance"
+    },
+    {
+      "id": "src_49_united_states_army_ordnance_corps",
+      "type": "report",
+      "label": "United States Army Ordnance Corps",
+      "source_file": "source_library/49_united_states_army_ordnance_corps.md",
+      "author": "Wikipedia contributors",
+      "category": "Logistics"
+    },
+    {
+      "id": "src_50_army_ground_forces",
+      "type": "report",
+      "label": "Army Ground Forces",
+      "source_file": "source_library/50_army_ground_forces.md",
+      "author": "Wikipedia contributors",
+      "category": "Training"
+    },
+    {
+      "id": "src_51_office_of_military_government_united_states",
+      "type": "report",
+      "label": "Office of Military Government, United States",
+      "source_file": "source_library/51_office_of_military_government_united_states.md",
+      "author": "Wikipedia contributors",
+      "category": "Occupation"
+    },
+    {
+      "id": "src_52_united_states_army_in_world_war_ii",
+      "type": "report",
+      "label": "United States Army in World War II",
+      "source_file": "source_library/52_united_states_army_in_world_war_ii.md",
+      "author": "Wikipedia contributors",
+      "category": "Bureaucracy"
+    },
+    {
+      "id": "src_53_operation_astonia",
+      "type": "report",
+      "label": "Operation Astonia",
+      "source_file": "source_library/53_operation_astonia.md",
+      "author": "Wikipedia contributors",
+      "category": "Historical Campaign"
+    },
+    {
+      "id": "topic_medical",
+      "type": "training_topic",
+      "label": "Medical"
+    },
+    {
+      "id": "topic_security",
+      "type": "training_topic",
+      "label": "Security"
+    },
+    {
+      "id": "topic_sanitation",
+      "type": "training_topic",
+      "label": "Sanitation"
+    },
+    {
+      "id": "topic_chaplaincy",
+      "type": "training_topic",
+      "label": "Chaplaincy"
+    },
+    {
+      "id": "topic_pow",
+      "type": "training_topic",
+      "label": "POW Captivity"
+    },
+    {
+      "id": "topic_grief",
+      "type": "training_topic",
+      "label": "Grief"
+    },
+    {
+      "id": "src_54_military_police_corps_united_states",
+      "type": "report",
+      "label": "Military Police Corps (United States)",
+      "source_file": "source_library/54_military_police_corps_united_states.md",
+      "author": "Wikipedia contributors",
+      "category": "Occupation"
+    },
+    {
+      "id": "src_55_chaplain_corps_united_states_army",
+      "type": "report",
+      "label": "Chaplain Corps (United States Army)",
+      "source_file": "source_library/55_chaplain_corps_united_states_army.md",
+      "author": "Wikipedia contributors",
+      "category": "Morale"
+    },
+    {
+      "id": "src_56_field_hygiene_and_sanitation",
+      "type": "report",
+      "label": "Field hygiene and sanitation",
+      "source_file": "source_library/56_field_hygiene_and_sanitation.md",
+      "author": "Wikipedia contributors",
+      "category": "Hygiene"
+    },
+    {
+      "id": "src_57_combat_medic",
+      "type": "report",
+      "label": "Combat medic",
+      "source_file": "source_library/57_combat_medic.md",
+      "author": "Wikipedia contributors",
+      "category": "Human Factors"
+    },
+    {
+      "id": "src_58_field_hospital",
+      "type": "report",
+      "label": "Field hospital",
+      "source_file": "source_library/58_field_hospital.md",
+      "author": "Wikipedia contributors",
+      "category": "Human Factors"
+    },
+    {
+      "id": "src_59_prisoner_of_war_camp",
+      "type": "report",
+      "label": "Prisoner-of-war camp",
+      "source_file": "source_library/59_prisoner_of_war_camp.md",
+      "author": "Wikipedia contributors",
+      "category": "Occupation"
+    },
+    {
+      "id": "src_60_german_prisoner_of_war_camps_world_war_ii",
+      "type": "report",
+      "label": "German prisoner-of-war camps in World War II",
+      "source_file": "source_library/60_german_prisoner_of_war_camps_world_war_ii.md",
+      "author": "Wikipedia contributors",
+      "category": "Occupation"
+    },
+    {
+      "id": "src_61_feldgendarmerie",
+      "type": "report",
+      "label": "Feldgendarmerie",
+      "source_file": "source_library/61_feldgendarmerie.md",
+      "author": "Wikipedia contributors",
+      "category": "Occupation"
+    },
+    {
+      "id": "src_62_10th_field_hospital",
+      "type": "report",
+      "label": "10th Field Hospital",
+      "source_file": "source_library/62_10th_field_hospital.md",
+      "author": "Wikipedia contributors",
+      "category": "Human Factors"
+    },
+    {
+      "id": "src_63_95th_evacuation_hospital",
+      "type": "report",
+      "label": "95th Evacuation Hospital",
+      "source_file": "source_library/63_95th_evacuation_hospital.md",
+      "author": "Wikipedia contributors",
+      "category": "Human Factors"
+    },
+    {
+      "id": "src_64_stalag_ii_d",
+      "type": "report",
+      "label": "Stalag II-D",
+      "source_file": "source_library/64_stalag_ii_d.md",
+      "author": "Wikipedia contributors",
+      "category": "Occupation"
+    }
+  ],
+  "edges": [
+    {
+      "source": "person_marshall",
+      "target": "unit_agf",
+      "relation": "commanded"
+    },
+    {
+      "source": "person_marshall",
+      "target": "unit_asf",
+      "relation": "commanded"
+    },
+    {
+      "source": "person_devers",
+      "target": "unit_agf",
+      "relation": "commanded"
+    },
+    {
+      "source": "person_somervell",
+      "target": "unit_asf",
+      "relation": "commanded"
+    },
+    {
+      "source": "person_lutes",
+      "target": "unit_asf",
+      "relation": "commanded"
+    },
+    {
+      "source": "unit_agf",
+      "target": "topic_training",
+      "relation": "trained_in"
+    },
+    {
+      "source": "unit_asf",
+      "target": "topic_logistics",
+      "relation": "affected_by"
+    },
+    {
+      "source": "unit_asf",
+      "target": "topic_maintenance",
+      "relation": "affected_by"
+    },
+    {
+      "source": "unit_asf",
+      "target": "topic_daily_life",
+      "relation": "affected_by"
+    },
+    {
+      "source": "unit_omgus",
+      "target": "topic_occupation",
+      "relation": "affected_by"
+    },
+    {
+      "source": "unit_761",
+      "target": "battle_overlord",
+      "relation": "participated_in"
+    },
+    {
+      "source": "unit_761",
+      "target": "battle_cobra",
+      "relation": "participated_in"
+    },
+    {
+      "source": "person_pool",
+      "target": "unit_3arm",
+      "relation": "commanded"
+    },
+    {
+      "source": "person_leach",
+      "target": "unit_4arm",
+      "relation": "commanded"
+    },
+    {
+      "source": "battle_cobra",
+      "target": "location_normandy",
+      "relation": "located_at"
+    },
+    {
+      "source": "battle_totalize",
+      "target": "location_normandy",
+      "relation": "located_at"
+    },
+    {
+      "source": "battle_astonia",
+      "target": "location_le_havre",
+      "relation": "located_at"
+    },
+    {
+      "source": "battle_omaha",
+      "target": "location_omaha",
+      "relation": "located_at"
+    },
+    {
+      "source": "battle_carentan",
+      "target": "location_carentan",
+      "relation": "located_at"
+    },
+    {
+      "source": "battle_villers",
+      "target": "location_bocage",
+      "relation": "located_at"
+    },
+    {
+      "source": "report_information_state",
+      "target": "topic_mail",
+      "relation": "observed"
+    },
+    {
+      "source": "report_information_state",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "report_crew_memory",
+      "target": "topic_morale",
+      "relation": "observed"
+    },
+    {
+      "source": "report_after_action",
+      "target": "topic_maintenance",
+      "relation": "observed"
+    },
+    {
+      "source": "topic_fatigue",
+      "target": "var_fatigue",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_mail",
+      "target": "var_mail_latency",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_logistics",
+      "target": "var_fuel_reserve",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_logistics",
+      "target": "var_repair_queue",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_occupation",
+      "target": "var_occupation_rules",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_occupation",
+      "target": "var_civilian_contact",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_daily_life",
+      "target": "var_sleep_debt",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_daily_life",
+      "target": "var_hunger",
+      "relation": "affected_by"
+    },
+    {
+      "source": "doctrine_fm1730",
+      "target": "topic_training",
+      "relation": "trained_in"
+    },
+    {
+      "source": "doctrine_fm1733",
+      "target": "topic_training",
+      "relation": "trained_in"
+    },
+    {
+      "source": "doctrine_fm2419",
+      "target": "topic_mail",
+      "relation": "trained_in"
+    },
+    {
+      "source": "vehicle_sherman",
+      "target": "terrain_bocage",
+      "relation": "affected_by"
+    },
+    {
+      "source": "vehicle_sherman",
+      "target": "terrain_road",
+      "relation": "located_at"
+    },
+    {
+      "source": "vehicle_panther",
+      "target": "terrain_bocage",
+      "relation": "affected_by"
+    },
+    {
+      "source": "vehicle_stug",
+      "target": "terrain_village",
+      "relation": "affected_by"
+    },
+    {
+      "source": "vehicle_m3_halftrack",
+      "target": "topic_logistics",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_maintenance",
+      "target": "vehicle_sherman",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_maintenance",
+      "target": "vehicle_panther",
+      "relation": "affected_by"
+    },
+    {
+      "source": "src_01_omaha_beachhead",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_02_cross_channel_attack_ch8",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_03_cross_channel_attack_ch9",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_04_utah_beach_to_cherbourg_carentan",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_05_victory_campaign",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_06_normandy_landings",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_07_omaha_beach_wiki",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_08_operation_cobra",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_09_operation_totalize",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_10_battle_villers_bocage",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_11_m4_sherman",
+      "target": "vehicle_sherman",
+      "relation": "observed"
+    },
+    {
+      "source": "src_12_tank_destroyer_battalion",
+      "target": "topic_training",
+      "relation": "observed"
+    },
+    {
+      "source": "src_13_sixteen_line_message_format",
+      "target": "topic_mail",
+      "relation": "observed"
+    },
+    {
+      "source": "src_14_radiotelephony_procedure",
+      "target": "topic_mail",
+      "relation": "observed"
+    },
+    {
+      "source": "src_15_allied_military_phonetic_spelling_alphabets",
+      "target": "topic_mail",
+      "relation": "observed"
+    },
+    {
+      "source": "src_16_stanislaw_maczek",
+      "target": "topic_morale",
+      "relation": "observed"
+    },
+    {
+      "source": "src_17_first_polish_armoured_division",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_18_dday_battle_for_normandy",
+      "target": "topic_morale",
+      "relation": "observed"
+    },
+    {
+      "source": "src_19_bomb_tank",
+      "target": "topic_morale",
+      "relation": "observed"
+    },
+    {
+      "source": "src_20_heinrich_severloh",
+      "target": "topic_morale",
+      "relation": "observed"
+    },
+    {
+      "source": "src_21_tank_museum",
+      "target": "terrain_village",
+      "relation": "observed"
+    },
+    {
+      "source": "src_22_dday_story",
+      "target": "terrain_village",
+      "relation": "observed"
+    },
+    {
+      "source": "src_23_overlord_museum",
+      "target": "terrain_village",
+      "relation": "observed"
+    },
+    {
+      "source": "src_24_m3_half_track",
+      "target": "vehicle_sherman",
+      "relation": "observed"
+    },
+    {
+      "source": "src_25_panther_tank",
+      "target": "vehicle_sherman",
+      "relation": "observed"
+    },
+    {
+      "source": "src_26_panzer_iv",
+      "target": "vehicle_sherman",
+      "relation": "observed"
+    },
+    {
+      "source": "src_27_m36_tank_destroyer",
+      "target": "vehicle_sherman",
+      "relation": "observed"
+    },
+    {
+      "source": "src_28_cromwell_tank",
+      "target": "vehicle_sherman",
+      "relation": "observed"
+    },
+    {
+      "source": "src_29_operation_windsor",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_30_m3_stuart",
+      "target": "vehicle_sherman",
+      "relation": "observed"
+    },
+    {
+      "source": "src_31_jacob_l_devers",
+      "target": "topic_training",
+      "relation": "observed"
+    },
+    {
+      "source": "src_32_fm_17_12_tank_gunnery",
+      "target": "topic_training",
+      "relation": "observed"
+    },
+    {
+      "source": "src_33_fm_17_30_tank_platoon",
+      "target": "topic_training",
+      "relation": "observed"
+    },
+    {
+      "source": "src_34_fm_17_33_the_tank_battalion_light_and_medium",
+      "target": "topic_training",
+      "relation": "observed"
+    },
+    {
+      "source": "src_35_fm_18_5_tactical_employment_tank_destroyer_unit",
+      "target": "topic_training",
+      "relation": "observed"
+    },
+    {
+      "source": "src_36_fm_24_5_basic_field_manual_signal_communication",
+      "target": "topic_mail",
+      "relation": "observed"
+    },
+    {
+      "source": "src_37_fm_24_6_radio_operator_s_manual",
+      "target": "topic_mail",
+      "relation": "observed"
+    },
+    {
+      "source": "src_38_fm_24_18_radio_communication",
+      "target": "topic_mail",
+      "relation": "observed"
+    },
+    {
+      "source": "src_39_fm_24_19_radio_operator_s_handbook",
+      "target": "topic_mail",
+      "relation": "observed"
+    },
+    {
+      "source": "src_40_combat_stress_reaction",
+      "target": "topic_fatigue",
+      "relation": "observed"
+    },
+    {
+      "source": "src_41_united_states_army_air_forces",
+      "target": "topic_morale",
+      "relation": "observed"
+    },
+    {
+      "source": "src_42_army_service_forces",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_43_united_states_army_during_world_war_ii",
+      "target": "topic_daily_life",
+      "relation": "observed"
+    },
+    {
+      "source": "src_44_military_government",
+      "target": "topic_occupation",
+      "relation": "observed"
+    },
+    {
+      "source": "src_45_military_occupation",
+      "target": "topic_occupation",
+      "relation": "observed"
+    },
+    {
+      "source": "src_46_military_mail",
+      "target": "topic_morale",
+      "relation": "observed"
+    },
+    {
+      "source": "src_47_garrison_ration",
+      "target": "topic_daily_life",
+      "relation": "observed"
+    },
+    {
+      "source": "src_48_vehicle_recovery",
+      "target": "topic_maintenance",
+      "relation": "observed"
+    },
+    {
+      "source": "src_49_united_states_army_ordnance_corps",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_50_army_ground_forces",
+      "target": "topic_training",
+      "relation": "observed"
+    },
+    {
+      "source": "src_51_office_of_military_government_united_states",
+      "target": "topic_occupation",
+      "relation": "observed"
+    },
+    {
+      "source": "src_52_united_states_army_in_world_war_ii",
+      "target": "report_after_action",
+      "relation": "observed"
+    },
+    {
+      "source": "src_53_operation_astonia",
+      "target": "topic_logistics",
+      "relation": "observed"
+    },
+    {
+      "source": "src_54_military_police_corps_united_states",
+      "target": "topic_security",
+      "relation": "observed"
+    },
+    {
+      "source": "src_55_chaplain_corps_united_states_army",
+      "target": "topic_chaplaincy",
+      "relation": "observed"
+    },
+    {
+      "source": "src_56_field_hygiene_and_sanitation",
+      "target": "topic_sanitation",
+      "relation": "observed"
+    },
+    {
+      "source": "src_57_combat_medic",
+      "target": "topic_medical",
+      "relation": "observed"
+    },
+    {
+      "source": "src_58_field_hospital",
+      "target": "topic_medical",
+      "relation": "observed"
+    },
+    {
+      "source": "src_59_prisoner_of_war_camp",
+      "target": "topic_security",
+      "relation": "observed"
+    },
+    {
+      "source": "src_60_german_prisoner_of_war_camps_world_war_ii",
+      "target": "topic_security",
+      "relation": "observed"
+    },
+    {
+      "source": "src_61_feldgendarmerie",
+      "target": "topic_security",
+      "relation": "observed"
+    },
+    {
+      "source": "src_62_10th_field_hospital",
+      "target": "topic_medical",
+      "relation": "observed"
+    },
+    {
+      "source": "src_63_95th_evacuation_hospital",
+      "target": "topic_medical",
+      "relation": "observed"
+    },
+    {
+      "source": "src_64_stalag_ii_d",
+      "target": "topic_security",
+      "relation": "observed"
+    },
+    {
+      "source": "topic_medical",
+      "target": "var_evacuation_delay",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_medical",
+      "target": "var_triage_capacity",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_medical",
+      "target": "var_medical_load",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_security",
+      "target": "var_route_control",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_security",
+      "target": "var_detention_load",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_security",
+      "target": "var_traffic_delay",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_sanitation",
+      "target": "var_sanitation_state",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_sanitation",
+      "target": "var_disease_risk",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_sanitation",
+      "target": "var_water_supply",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_chaplaincy",
+      "target": "var_grief_load",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_chaplaincy",
+      "target": "var_moral_support",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_chaplaincy",
+      "target": "var_loss_memory",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_pow",
+      "target": "var_camp_type",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_pow",
+      "target": "var_captivity_stress",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_pow",
+      "target": "var_labor_assignment",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_grief",
+      "target": "var_grief_load",
+      "relation": "affected_by"
+    },
+    {
+      "source": "topic_grief",
+      "target": "var_loss_memory",
+      "relation": "affected_by"
+    }
+  ]
+}

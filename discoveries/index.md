@@ -1,0 +1,76 @@
+# Discoveries
+
+This folder contains the design-changing historical distillation cards.
+
+- `bocage_is_information_compression`: Bocage turns terrain into information compression
+  - variable: `route_dependency`
+  - confidence: 0.93
+  - file: `discoveries/bocage_is_information_compression.md`
+- `capture_is_branch_not_end`: Capture is a branch, not an end
+  - variable: `captivity_stress`
+  - confidence: 0.88
+  - file: `discoveries/capture_is_branch_not_end.md`
+- `chaplaincy_turns_grief_into_process`: Chaplaincy turns grief into process
+  - variable: `grief_load`
+  - confidence: 0.84
+  - file: `discoveries/chaplaincy_turns_grief_into_process.md`
+- `command_is_attention_management`: Command is attention management
+  - variable: `attention_budget`
+  - confidence: 0.93
+  - file: `discoveries/command_is_attention_management.md`
+- `fatigue_degrades_orders_before_firepower`: Fatigue degrades orders before firepower
+  - variable: `fatigue`
+  - confidence: 0.94
+  - file: `discoveries/fatigue_degrades_orders_before_firepower.md`
+- `friendly_fire_is_visibility_and_identifier_failure`: Friendly fire is a visibility and identifier failure
+  - variable: `identity_confidence`
+  - confidence: 0.91
+  - file: `discoveries/friendly_fire_is_visibility_and_identifier_failure.md`
+- `hq_picture_stale_by_default`: HQ picture is stale by default
+  - variable: `hq_picture_freshness`
+  - confidence: 0.95
+  - file: `discoveries/hq_picture_stale_by_default.md`
+- `mail_is_morale_infrastructure`: Mail is morale infrastructure
+  - variable: `mail_latency`
+  - confidence: 0.87
+  - file: `discoveries/mail_is_morale_infrastructure.md`
+- `medical_care_is_queue_management`: Medical care is queue management
+  - variable: `evacuation_delay`
+  - confidence: 0.9
+  - file: `discoveries/medical_care_is_queue_management.md`
+- `occupation_is_second_game_mode`: Occupation is a second game mode
+  - variable: `occupation_load`
+  - confidence: 0.9
+  - file: `discoveries/occupation_is_second_game_mode.md`
+- `radio_latency_message_shape`: Radio latency and message shape are a mechanic
+  - variable: `report_latency`
+  - confidence: 0.96
+  - file: `discoveries/radio_latency_message_shape.md`
+- `rear_area_is_a_playable_network`: The rear area is a playable network
+  - variable: `rear_area_throughput`
+  - confidence: 0.96
+  - file: `discoveries/rear_area_is_a_playable_network.md`
+- `replacement_crews_reduce_trust_before_capacity`: Replacement crews reduce trust before they add capacity
+  - variable: `replacement_familiarity`
+  - confidence: 0.92
+  - file: `discoveries/replacement_crews_reduce_trust_before_capacity.md`
+- `route_control_and_security_are_supply_gameplay`: Route control and security are supply gameplay
+  - variable: `route_control`
+  - confidence: 0.89
+  - file: `discoveries/route_control_and_security_are_supply_gameplay.md`
+- `sanitation_is_hidden_attrition`: Sanitation is hidden attrition
+  - variable: `sanitation_state`
+  - confidence: 0.88
+  - file: `discoveries/sanitation_is_hidden_attrition.md`
+- `training_is_role_learning_not_vehicle_learning`: Training is role learning, not vehicle learning
+  - variable: `commander_training_level`
+  - confidence: 0.94
+  - file: `discoveries/training_is_role_learning_not_vehicle_learning.md`
+- `vehicle_damage_is_state_machine`: Vehicle damage is a state machine
+  - variable: `immobility_state`
+  - confidence: 0.95
+  - file: `discoveries/vehicle_damage_is_state_machine.md`
+- `visibility_is_stateful`: Visibility is stateful, not a static stat
+  - variable: `visibility_arc`
+  - confidence: 0.88
+  - file: `discoveries/visibility_is_stateful.md`

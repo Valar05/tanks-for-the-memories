@@ -1,0 +1,28 @@
+{
+  "card_id": "tank_observation",
+  "summary": "Tank observation should vary by hatch state, scope use, and terrain, not just by vehicle position.",
+  "source_basis": [
+    "M4 Sherman",
+    "The D-Day Story",
+    "Battle of Villers-Bocage"
+  ],
+  "simulation_implications": [
+    "Observation should be best when exposed and worst when buttoned and in hedgerow terrain.",
+    "Gun-focused views should be less situationally aware than commander views."
+  ],
+  "game_implications": [
+    "The commander camera should be a deliberate tradeoff between safety and information.",
+    "The player should feel the penalty of narrow sight lines as a real tactical constraint."
+  ],
+  "variables": [
+    "visibility_arc",
+    "buttoned_visibility_penalty",
+    "hatch_visibility_bonus"
+  ],
+  "confidence": 0.9,
+  "citations": [
+    "source_library/11_m4-sherman.md",
+    "source_library/22_dday-story.md",
+    "source_library/10_battle-villers-bocage.md"
+  ]
+}

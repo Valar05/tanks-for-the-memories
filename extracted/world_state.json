@@ -1,0 +1,16 @@
+{
+  "facts": [
+    {
+      "fact": "A WWII life simulation needs person, unit, vehicle, location, report, doctrine, and simulation-variable state.",
+      "source": "root-generated",
+      "confidence": 0.95,
+      "note": "World model rather than narrow combat sim."
+    },
+    {
+      "fact": "Daily life, logistics, morale, occupation, and maintenance interact with tactical combat.",
+      "source": "root-generated",
+      "confidence": 0.95,
+      "note": "The package is only coherent if these systems are linked."
+    }
+  ]
+}

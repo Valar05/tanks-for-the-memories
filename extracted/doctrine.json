@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "doc1",
+      "name": "FM 17-30 Tank Platoon",
+      "source": [
+        "FM 17-30 Tank Platoon",
+        "M3 Stuart"
+      ],
+      "confidence": 0.85,
+      "extraction_note": "Platoon-level training, spacing, movement, and crew coordination anchor."
+    },
+    {
+      "id": "doc2",
+      "name": "FM 17-33 Tank Battalion, Light and Medium",
+      "source": [
+        "FM 17-33 The Tank Battalion, Light and Medium",
+        "M4 Sherman"
+      ],
+      "confidence": 0.88,
+      "extraction_note": "Battalion-role manual emphasizing that tanks served many roles, not just anti-tank duels."
+    },
+    {
+      "id": "doc3",
+      "name": "FM 18-5 Tank Destroyer Unit",
+      "source": [
+        "FM 18-5 Tactical Employment: Tank Destroyer Unit",
+        "Tank destroyer battalion (United States)"
+      ],
+      "confidence": 0.89,
+      "extraction_note": "Reserve/ambush doctrine for tank destroyers, later softened in practice."
+    },
+    {
+      "id": "doc4",
+      "name": "Combined arms training",
+      "source": [
+        "Jacob L. Devers",
+        "Cross-Channel Attack, Chapter VIII"
+      ],
+      "confidence": 0.83,
+      "extraction_note": "Training and preparation blended infantry, armor, artillery, and air support."
+    },
+    {
+      "id": "doc5",
+      "name": "Signal communication",
+      "source": [
+        "FM 24-5 Basic Field Manual, Signal Communication",
+        "16-line message format"
+      ],
+      "confidence": 0.9,
+      "extraction_note": "Message forms and signal discipline create the structure that reports move through."
+    }
+  ]
+}

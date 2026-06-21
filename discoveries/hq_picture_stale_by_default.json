@@ -1,0 +1,31 @@
+{
+  "id": "hq_picture_stale_by_default",
+  "title": "HQ picture is stale by default",
+  "discovery": "Higher headquarters should never see a live map. Their picture is an accumulation of late, scattered, filtered reports.",
+  "evidence": [
+    "source_library/03_cross-channel-attack-ch9.md:16-21 - supply shortfalls and late reports blocked a clean breakout.",
+    "source_library/04_utah-beach-to-cherbourg-carentan.md:16-21 - artillery communications were unavailable and some men never received the order."
+  ],
+  "why": "This justifies an information-lag layer in the command tree and prevents the player from assuming HQ has perfect strategic knowledge.",
+  "variable": {
+    "name": "hq_picture_freshness",
+    "definition": "How current the highest command picture is relative to ground truth.",
+    "range": "0-100",
+    "related": [
+      "report_delay",
+      "report_accuracy"
+    ]
+  },
+  "mechanic": "Delayed command map with stale-state propagation.",
+  "pressure": "Decision quality drops when the command picture falls behind reality.",
+  "confidence": 0.95,
+  "sources": [
+    "source_library/03_cross-channel-attack-ch9.md",
+    "source_library/04_utah-beach-to-cherbourg-carentan.md"
+  ],
+  "tags": [
+    "pressure",
+    "command",
+    "information"
+  ]
+}

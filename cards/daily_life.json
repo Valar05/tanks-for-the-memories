@@ -1,0 +1,29 @@
+{
+  "card_id": "daily_life",
+  "summary": "Soldier life alternates between routine, deprivation, boredom, strain, and brief violence.",
+  "source_basis": [
+    "43_united_states_army_during_world_war_ii.md",
+    "46_military_mail.md",
+    "47_garrison_ration.md"
+  ],
+  "simulation_implications": [
+    "Daily routine should be a state machine, not a background detail.",
+    "Food variety, sleep, hygiene, and letters affect persistence."
+  ],
+  "game_implications": [
+    "The player should manage more than combat; fatigue and morale must have teeth."
+  ],
+  "variables": [
+    "sleep_debt",
+    "hunger",
+    "hygiene_state",
+    "mail_latency",
+    "boredom_index"
+  ],
+  "confidence": 0.85,
+  "citations": [
+    "43_united_states_army_during_world_war_ii.md",
+    "46_military_mail.md",
+    "47_garrison_ration.md"
+  ]
+}

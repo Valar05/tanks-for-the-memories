@@ -1,0 +1,70 @@
+{
+  "query_id": "young_american_tank_commander_training",
+  "question": "What would training for a young American tank commander look like?",
+  "short_answer": "It would be a combined-arms, gunnery, radio, map-reading, and crew-coordination syllabus that teaches the commander to observe, report, and control the platoon, not just drive or shoot.",
+  "evidence_summary": [
+    "FM 17-30 and FM 17-33 define the platoon and battalion role set.",
+    "FM 17-12 emphasizes gunnery drills; Devers shows the broader combined-arms framing.",
+    "Radio manuals and 16-line message format show that communication procedure is part of training, not an afterthought."
+  ],
+  "structured_data": {
+    "training_focuses": [
+      "platoon movement",
+      "target recognition",
+      "gunnery",
+      "map reading",
+      "radio procedure",
+      "combined arms",
+      "contact reporting"
+    ],
+    "doctrinal_emphasis": [
+      "tank command",
+      "crew drill",
+      "battlefield observation",
+      "supporting infantry"
+    ],
+    "common_errors_to_train_against": [
+      "driving instead of commanding",
+      "overtrusting buttoned-up vision",
+      "sloppy radio wording",
+      "advancing without recon"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "commander_training_level",
+      "effect": "raises order quality and report quality."
+    },
+    {
+      "variable": "radio_reliability",
+      "effect": "improves the odds that reports and orders reach the right place."
+    },
+    {
+      "variable": "report_accuracy",
+      "effect": "reduces false contact pictures and stale map states."
+    },
+    {
+      "variable": "visibility_arc",
+      "effect": "improves with doctrine and command position, then narrows when buttoned."
+    },
+    {
+      "variable": "trust_in_commander",
+      "effect": "rises when training produces consistent calls under pressure."
+    }
+  ],
+  "game_implications": [
+    "The player should begin with a thin local picture and improve by learning procedures, not by unlocking omniscience.",
+    "Quick, disciplined radio and recon choices should matter more than raw vehicle strength in the opening slice."
+  ],
+  "confidence": 0.93,
+  "sources": [
+    "source_library/31_m3-stuart.md",
+    "source_library/32_jacob-l-devers.md",
+    "source_library/33_fm-17-12-tank-gunnery.md",
+    "source_library/34_fm-17-30-tank-platoon.md",
+    "source_library/35_fm-17-33-the-tank-battalion-light-and-medium.md",
+    "source_library/38_fm-24-5-basic-field-manual-signal-communication.md",
+    "source_library/39_fm-24-19-radio-operator-s-handbook.md",
+    "source_library/02_cross-channel-attack-ch8.md"
+  ]
+}

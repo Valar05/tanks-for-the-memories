@@ -1,0 +1,54 @@
+{
+  "query_id": "field_sanitation_routine",
+  "question": "What does a sanitation routine change in the simulation?",
+  "short_answer": "Sanitation changes disease risk, comfort, and long-term readiness; it makes water, waste, insects, and washing part of operational planning.",
+  "evidence_summary": [
+    "Field hygiene and sanitation sources explicitly cover water supply and waste disposal.",
+    "Disease and hygiene problems were major non-combat casualty sources in the U.S. Army during WWII.",
+    "Good sanitation is a hidden force multiplier, not just a morale bonus."
+  ],
+  "structured_data": {
+    "routine_items": [
+      "latrine",
+      "water",
+      "washing",
+      "foot care",
+      "waste removal",
+      "insect control"
+    ],
+    "risks": [
+      "disease",
+      "fatigue",
+      "insect exposure",
+      "rot"
+    ],
+    "effects": [
+      "comfort",
+      "health",
+      "morale"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "sanitation_state",
+      "effect": "lowers disease and discomfort when maintained."
+    },
+    {
+      "variable": "disease_risk",
+      "effect": "raises non-combat attrition when poor."
+    },
+    {
+      "variable": "water_supply",
+      "effect": "supports health and cleaning."
+    }
+  ],
+  "game_implications": [
+    "A clean bivouac should be a real tactical advantage.",
+    "Ignoring sanitation should have slow, compounding costs."
+  ],
+  "confidence": 0.86,
+  "sources": [
+    "56_field_hygiene_and_sanitation.md",
+    "43_united_states_army_during_world_war_ii.md"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "facts": [
+    {
+      "fact": "Combat fatigue reduced efficiency and altered judgment.",
+      "source": "40_combat_stress_reaction.md",
+      "confidence": 0.76,
+      "note": "Stress is an operational loss, not just a feeling."
+    },
+    {
+      "fact": "Mail, rest, and rotation shape morale.",
+      "source": "46_military_mail.md",
+      "confidence": 0.78,
+      "note": "Morale needs replenishment."
+    },
+    {
+      "fact": "Rotation policies existed to manage exhaustion.",
+      "source": "41_united_states_army_air_forces.md",
+      "confidence": 0.84,
+      "note": "Tour length can be a mechanic."
+    }
+  ]
+}

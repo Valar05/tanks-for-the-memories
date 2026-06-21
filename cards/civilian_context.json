@@ -1,0 +1,30 @@
+{
+  "card_id": "civilian_context",
+  "summary": "Liberation and occupation create civilian pressure, rules, displacement, and responsibility.",
+  "source_basis": [
+    "44_military_government.md",
+    "45_military_occupation.md",
+    "53_operation_astonia.md"
+  ],
+  "simulation_implications": [
+    "Civilian presence should affect movement, fire, and legitimacy.",
+    "Occupation and liberation are different rule sets."
+  ],
+  "game_implications": [
+    "Town control should have moral and logistical consequences.",
+    "Damage to civilians should leave memory and administrative load."
+  ],
+  "variables": [
+    "civilian_contact",
+    "occupation_rules",
+    "requisition_pressure",
+    "collateral_risk",
+    "language_barrier"
+  ],
+  "confidence": 0.82,
+  "citations": [
+    "44_military_government.md",
+    "45_military_occupation.md",
+    "53_operation_astonia.md"
+  ]
+}

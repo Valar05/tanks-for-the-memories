@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "rad1",
+      "phrase": "16-line message format",
+      "source": [
+        "16-line message format"
+      ],
+      "confidence": 0.92,
+      "extraction_note": "Structured message format for radio reports and acknowledgments."
+    },
+    {
+      "id": "rad2",
+      "phrase": "Accuracy, Brevity, Clarity",
+      "source": [
+        "Radiotelephony procedure"
+      ],
+      "confidence": 0.91,
+      "extraction_note": "Voice procedure principle used to keep radio traffic usable under stress."
+    },
+    {
+      "id": "rad3",
+      "phrase": "Alpha Bravo",
+      "source": [
+        "Radiotelephony procedure",
+        "Allied military phonetic spelling alphabets"
+      ],
+      "confidence": 0.9,
+      "extraction_note": "Spelling alphabet example that reduces misunderstanding over radio."
+    },
+    {
+      "id": "rad4",
+      "phrase": "call signs",
+      "source": [
+        "Radiotelephony procedure"
+      ],
+      "confidence": 0.88,
+      "extraction_note": "Call signs and functional designators carry identity across the net."
+    }
+  ]
+}

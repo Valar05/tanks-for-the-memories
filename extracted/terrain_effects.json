@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "ter1",
+      "feature": "hedgerow",
+      "source": [
+        "Operation Cobra",
+        "Battle of Villers-Bocage"
+      ],
+      "confidence": 0.95,
+      "extraction_note": "Cuts sight lines, channels movement, and rewards concealment."
+    },
+    {
+      "id": "ter2",
+      "feature": "causeway",
+      "source": [
+        "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg"
+      ],
+      "confidence": 0.96,
+      "extraction_note": "Narrow elevated route forces single-file movement and predictable exposure."
+    },
+    {
+      "id": "ter3",
+      "feature": "muddy road",
+      "source": [
+        "Tanks For The Memories current slice",
+        "Operation Cobra"
+      ],
+      "confidence": 0.83,
+      "extraction_note": "Road surfaces limit maneuver and increase dependence on reconnaissance and timing."
+    },
+    {
+      "id": "ter4",
+      "feature": "farmhouse on high ground",
+      "source": [
+        "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg"
+      ],
+      "confidence": 0.93,
+      "extraction_note": "A single building on height can dominate a causeway or lane."
+    },
+    {
+      "id": "ter5",
+      "feature": "beach current",
+      "source": [
+        "Omaha Beachhead"
+      ],
+      "confidence": 0.94,
+      "extraction_note": "Current and rough seas misalign landing craft and DD tanks."
+    },
+    {
+      "id": "ter6",
+      "feature": "marshland",
+      "source": [
+        "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg"
+      ],
+      "confidence": 0.95,
+      "extraction_note": "Marshes canalize and restrict movement outside the road network."
+    }
+  ]
+}

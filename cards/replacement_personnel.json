@@ -1,0 +1,28 @@
+{
+  "card_id": "replacement_personnel",
+  "summary": "Replacement crews arrive with procedural knowledge but limited mutual trust and local memory.",
+  "source_basis": [
+    "Bomb (tank)",
+    "1st Armoured Division (Poland)",
+    "Combat stress reaction"
+  ],
+  "simulation_implications": [
+    "Replacement_familiarity should begin low and improve slowly with shared missions.",
+    "Crew_confidence should drop after a crew change even if the vehicle remains intact."
+  ],
+  "game_implications": [
+    "Players should feel continuity loss after replacements.",
+    "Narrative memory should track who used to be in the tank."
+  ],
+  "variables": [
+    "replacement_familiarity",
+    "crew_confidence",
+    "trust_in_commander"
+  ],
+  "confidence": 0.9,
+  "citations": [
+    "source_library/19_bomb-tank.md",
+    "source_library/17_first-polish-armoured-division.md",
+    "source_library/42_combat-stress-reaction.md"
+  ]
+}

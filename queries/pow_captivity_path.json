@@ -1,0 +1,55 @@
+{
+  "query_id": "pow_captivity_path",
+  "question": "How should capture and POW life be represented?",
+  "short_answer": "Capture should open a separate captivity path with camp type, labor, food, discipline, and memory effects rather than simply ending the character.",
+  "evidence_summary": [
+    "POW camp sources distinguish camp types and treatment by rank and nationality.",
+    "Specific camp examples show winter conditions, labor, and confinement detail.",
+    "Captivity is both a legal state and a lived environment."
+  ],
+  "structured_data": {
+    "states": [
+      "captured",
+      "transit camp",
+      "stammlager/oflag",
+      "labor detail",
+      "repatriation"
+    ],
+    "variables": [
+      "camp type",
+      "labor assignment",
+      "food",
+      "security",
+      "winter exposure"
+    ],
+    "long_term": [
+      "memory",
+      "grief",
+      "family impact"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "detention_load",
+      "effect": "raises guard and admin burden."
+    },
+    {
+      "variable": "camp_type",
+      "effect": "changes living conditions and labor rules."
+    },
+    {
+      "variable": "captivity_stress",
+      "effect": "modifies memory and recovery after release."
+    }
+  ],
+  "game_implications": [
+    "A surrender should not erase the story; it should branch it.",
+    "POW memory can feed postwar narrative and trauma systems."
+  ],
+  "confidence": 0.81,
+  "sources": [
+    "59_prisoner_of_war_camp.md",
+    "60_german_prisoner_of_war_camps_world_war_ii.md",
+    "64_stalag_ii_d.md"
+  ]
+}

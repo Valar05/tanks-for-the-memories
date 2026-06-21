@@ -1,0 +1,29 @@
+{
+  "card_id": "pow_captivity",
+  "summary": "Capture should branch into labor, camp conditions, security, and remembered captivity.",
+  "source_basis": [
+    "59_prisoner_of_war_camp.md",
+    "60_german_prisoner_of_war_camps_world_war_ii.md",
+    "64_stalag_ii_d.md"
+  ],
+  "simulation_implications": [
+    "Capture is a new state with separate rules.",
+    "Nationality, rank, and camp type should alter the experience."
+  ],
+  "game_implications": [
+    "A surrender or capture event should open a distinct narrative path.",
+    "POW memory should influence survivors and families later."
+  ],
+  "variables": [
+    "detention_load",
+    "camp_type",
+    "labor_assignment",
+    "captivity_stress"
+  ],
+  "confidence": 0.81,
+  "citations": [
+    "59_prisoner_of_war_camp.md",
+    "60_german_prisoner_of_war_camps_world_war_ii.md",
+    "64_stalag_ii_d.md"
+  ]
+}

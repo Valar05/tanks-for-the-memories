@@ -1,0 +1,16 @@
+{
+  "facts": [
+    {
+      "fact": "POW camps had camp types, labor rules, and legal status differences.",
+      "source": "60_german_prisoner_of_war_camps_world_war_ii.md",
+      "confidence": 0.81,
+      "note": "Captivity is not uniform."
+    },
+    {
+      "fact": "Specific camps like Stalag II-D had cold winters and food variance.",
+      "source": "64_stalag_ii_d.md",
+      "confidence": 0.8,
+      "note": "Capture changes the life model completely."
+    }
+  ]
+}

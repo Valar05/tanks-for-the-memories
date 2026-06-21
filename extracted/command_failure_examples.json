@@ -1,0 +1,14 @@
+{
+  "examples": [
+    {
+      "example": "Late or scattered reports distort command decisions.",
+      "source": "03_cross-channel-attack-ch9.md",
+      "confidence": 0.97
+    },
+    {
+      "example": "Administrative confusion after occupation complicates authority.",
+      "source": "51_office_of_military_government_united_states.md",
+      "confidence": 0.81
+    }
+  ]
+}

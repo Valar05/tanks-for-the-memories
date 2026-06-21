@@ -1,0 +1,31 @@
+{
+  "id": "sanitation_is_hidden_attrition",
+  "title": "Sanitation is hidden attrition",
+  "discovery": "Water, waste, insects, and washing should degrade readiness over time if the player ignores them.",
+  "evidence": [
+    "source_library/56_field_hygiene_and_sanitation.md:15-17 - water, waste, insect-borne disease, and field health are explicit concerns.",
+    "source_library/43_united_states_army_during_world_war_ii.md:15-17 - poor hygiene, trench foot, and combat fatigue shape daily life."
+  ],
+  "why": "This makes field hygiene a slow combat system instead of a flavor layer.",
+  "variable": {
+    "name": "sanitation_state",
+    "definition": "Condition of water, waste, washing, and field cleanliness.",
+    "range": "0-100",
+    "related": [
+      "disease_risk",
+      "water_supply"
+    ]
+  },
+  "mechanic": "Bivouac hygiene routine with disease risk accumulation.",
+  "pressure": "Health erodes in the background if the unit cannot maintain basic living standards.",
+  "confidence": 0.88,
+  "sources": [
+    "source_library/56_field_hygiene_and_sanitation.md",
+    "source_library/43_united_states_army_during_world_war_ii.md"
+  ],
+  "tags": [
+    "sanitation",
+    "attrition",
+    "daily-life"
+  ]
+}

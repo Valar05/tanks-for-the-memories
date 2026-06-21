@@ -1,0 +1,37 @@
+# Discovery: Radio latency and message shape are a mechanic
+
+## Discovery
+Report flow is not just communication flavor. The message format itself constrains what can be said, and the radio layer adds delay, truncation, and processing overhead.
+
+## Historical Evidence
+- source_library/13_sixteen-line-message-format.md:15-17 - the 16-line format is a direct template for ordered reports and messages.
+- source_library/36_fm-24-5-basic-field-manual-signal-communication.md:15-17 - communication discipline is part of the manual, not an afterthought.
+- source_library/39_fm-24-19-radio-operator-s-handbook.md:15-17 - operator procedure and report flow are explicit concerns.
+- source_library/03_cross-channel-attack-ch9.md:19-21 - reports reaching division headquarters were late and scattered.
+
+## Why It Matters
+This changes the UI and turn structure: the player should compose, queue, and trust imperfect messages rather than instantly broadcasting perfect state.
+
+## Simulation Variable
+- Name: `report_latency`
+- Definition: Time from observation to received and processed report.
+- Range: 0-12
+- Related: `message_integrity`, `radio_reliability`
+
+## Mechanic Candidate
+Structured radio message composer with transmission delay and partial loss.
+
+## Pressure System Impact
+Command pictures decay as messages move; late reports become stale facts.
+
+## Confidence
+- 0.96
+
+## Sources
+- source_library/13_sixteen-line-message-format.md
+- source_library/36_fm-24-5-basic-field-manual-signal-communication.md
+- source_library/39_fm-24-19-radio-operator-s-handbook.md
+- source_library/03_cross-channel-attack-ch9.md
+
+## Tags
+- pressure, mechanic, command

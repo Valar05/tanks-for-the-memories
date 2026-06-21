@@ -1,0 +1,35 @@
+{
+  "id": "occupation_is_second_game_mode",
+  "title": "Occupation is a second game mode",
+  "discovery": "Once territory is controlled, the simulation should shift into administration, patrol, curfew, requisition, and civilian management.",
+  "evidence": [
+    "source_library/44_military_government.md:15-17 - military government covers temporary authority, curfews, checkpoints, requisition, and command responsibility.",
+    "source_library/45_military_occupation.md:15-17 - occupation defines how control is established and how authority behaves in occupied space.",
+    "source_library/51_office_of_military_government_united_states.md:15-17 - occupation brings denazification and administrative burden.",
+    "source_library/54_military_police_corps_united_states.md:15-17 - military police keep routes, prisoners, and rear areas functioning."
+  ],
+  "why": "Victory should open a different loop, not terminate the simulation.",
+  "variable": {
+    "name": "occupation_load",
+    "definition": "Administrative and security burden created by controlled territory.",
+    "range": "0-100",
+    "related": [
+      "civilian_contact",
+      "administrative_backlog"
+    ]
+  },
+  "mechanic": "Post-combat governance layer with patrols, paperwork, and legitimacy management.",
+  "pressure": "Captured ground keeps demanding attention and manpower.",
+  "confidence": 0.9,
+  "sources": [
+    "source_library/44_military_government.md",
+    "source_library/45_military_occupation.md",
+    "source_library/51_office_of_military_government_united_states.md",
+    "source_library/54_military_police_corps_united_states.md"
+  ],
+  "tags": [
+    "occupation",
+    "bureaucracy",
+    "civilian"
+  ]
+}

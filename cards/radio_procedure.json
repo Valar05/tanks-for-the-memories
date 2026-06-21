@@ -1,0 +1,32 @@
+{
+  "card_id": "radio_procedure",
+  "summary": "Radio procedure should be short, structured, and repeatable because every extra word increases delay and confusion.",
+  "source_basis": [
+    "FM 24-5 Basic Field Manual, Signal Communication",
+    "FM 24-6 Radio Operator's Manual",
+    "FM 24-19 Radio Operator's Handbook",
+    "Radiotelephony procedure",
+    "16-line message format"
+  ],
+  "simulation_implications": [
+    "Message structure should improve report_accuracy while adding a small action cost.",
+    "Poor procedure should increase report_delay and ambiguity."
+  ],
+  "game_implications": [
+    "Players should be able to choose quick, terse radio traffic over fuller but slower messages.",
+    "A radio phrase library is a gameplay asset, not just a cosmetic system."
+  ],
+  "variables": [
+    "radio_reliability",
+    "report_accuracy",
+    "report_delay"
+  ],
+  "confidence": 0.94,
+  "citations": [
+    "source_library/38_fm-24-5-basic-field-manual-signal-communication.md",
+    "source_library/39_fm-24-6-radio-operator-s-manual.md",
+    "source_library/39_fm-24-19-radio-operator-s-handbook.md",
+    "source_library/13_sixteen-line-message-format.md",
+    "source_library/14_radiotelephony-procedure.md"
+  ]
+}

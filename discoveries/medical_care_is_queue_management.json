@@ -1,0 +1,35 @@
+{
+  "id": "medical_care_is_queue_management",
+  "title": "Medical care is queue management",
+  "discovery": "Casualty treatment is a staged pipeline with bottlenecks at medics, litter bearers, vehicles, beds, and surgical time.",
+  "evidence": [
+    "source_library/57_combat_medic.md:15-17 - the medic handles point-of-wounding care, evacuation, and frontline trauma care.",
+    "source_library/58_field_hospital.md:15-17 - field hospitals turn injury into staged triage with queueing and capacity limits.",
+    "source_library/62_10th_field_hospital.md:15-17 - the field hospital example makes the capacity concrete.",
+    "source_library/63_95th_evacuation_hospital.md:15-17 - evacuation hospitals scale but still have finite beds and staff."
+  ],
+  "why": "Injury should become an operational queue, not just a death timer.",
+  "variable": {
+    "name": "evacuation_delay",
+    "definition": "Time from wounding to evacuation and treatment.",
+    "range": "0-24",
+    "related": [
+      "triage_capacity",
+      "medical_load"
+    ]
+  },
+  "mechanic": "Casualty pipeline with triage and treatment capacity.",
+  "pressure": "Medical throughput becomes a hidden force multiplier or hidden crisis.",
+  "confidence": 0.9,
+  "sources": [
+    "source_library/57_combat_medic.md",
+    "source_library/58_field_hospital.md",
+    "source_library/62_10th_field_hospital.md",
+    "source_library/63_95th_evacuation_hospital.md"
+  ],
+  "tags": [
+    "medical",
+    "queue",
+    "pressure"
+  ]
+}

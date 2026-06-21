@@ -1,0 +1,27 @@
+{
+  "card_id": "field_sanitation",
+  "summary": "Water, waste, insects, and washing are combat-relevant health systems.",
+  "source_basis": [
+    "56_field_hygiene_and_sanitation.md",
+    "43_united_states_army_during_world_war_ii.md"
+  ],
+  "simulation_implications": [
+    "Illness and comfort should decay when sanitation is poor.",
+    "Weather and terrain should affect hygiene costs."
+  ],
+  "game_implications": [
+    "A clean bivouac should be a tactical advantage.",
+    "Disease should be a slow pressure, not just a random event."
+  ],
+  "variables": [
+    "sanitation_state",
+    "disease_risk",
+    "water_supply",
+    "comfort"
+  ],
+  "confidence": 0.86,
+  "citations": [
+    "56_field_hygiene_and_sanitation.md",
+    "43_united_states_army_during_world_war_ii.md"
+  ]
+}

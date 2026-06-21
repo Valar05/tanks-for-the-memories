@@ -1,0 +1,22 @@
+{
+  "facts": [
+    {
+      "fact": "Combat medic handles point-of-wounding care and evacuation.",
+      "source": "57_combat_medic.md",
+      "confidence": 0.83,
+      "note": "Casualty care starts immediately, not at the hospital."
+    },
+    {
+      "fact": "Field hospitals provide temporary mobile capacity near casualties.",
+      "source": "58_field_hospital.md",
+      "confidence": 0.81,
+      "note": "Medical capacity is a queue, not magic."
+    },
+    {
+      "fact": "Evacuation hospitals can be scaled to 400 beds.",
+      "source": "63_95th_evacuation_hospital.md",
+      "confidence": 0.8,
+      "note": "Rear medical infrastructure has finite capacity."
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "crew1",
+      "behavior": "replacement personnel carry memory load",
+      "source": [
+        "Bomb (tank)",
+        "1st Armoured Division (Poland)"
+      ],
+      "confidence": 0.9,
+      "extraction_note": "Wounded commanders and replacements change the emotional and organizational memory of a vehicle or unit."
+    },
+    {
+      "id": "crew2",
+      "behavior": "hesitation under stress",
+      "source": [
+        "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg",
+        "Omaha Beachhead"
+      ],
+      "confidence": 0.91,
+      "extraction_note": "Orders not received and chaotic terrain create hesitation and local pause."
+    },
+    {
+      "id": "crew3",
+      "behavior": "combat fatigue",
+      "source": [
+        "Combat stress reaction",
+        "D-Day: The Battle for Normandy"
+      ],
+      "confidence": 0.86,
+      "extraction_note": "Stress and exhaustion shape endurance, attention, and response speed."
+    },
+    {
+      "id": "crew4",
+      "behavior": "survivor memory of enemy and friendly losses",
+      "source": [
+        "Heinrich Severloh",
+        "Operation Totalize"
+      ],
+      "confidence": 0.83,
+      "extraction_note": "Survivor accounts and friendly-fire incidents show memory as a tactical artifact."
+    }
+  ]
+}

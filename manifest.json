@@ -1,0 +1,620 @@
+{
+  "project": "tanks-for-the-memories",
+  "generated_at": "2026-06-21",
+  "source_count": 64,
+  "category_count": 16,
+  "doctrine_card_count": 24,
+  "variable_count": 49,
+  "query_count": 18,
+  "knowledge_graph_node_count": 132,
+  "primary_source_count": 4,
+  "secondary_source_count": 60,
+  "confidence_assessment": "strong on combat, sustainment, medical flow, discipline, and information pressure; moderate on direct manual scans and oral-history depth",
+  "known_gaps": [
+    "Direct scans of original WWII field manuals remain incomplete.",
+    "German-side doctrine, civilian voices, and tank-crew memoir depth are still thinner than Allied material.",
+    "Visual reference is still museum- and encyclopedia-heavy; direct interior image sets would improve the substrate."
+  ],
+  "recommended_next_acquisitions": [
+    "Direct scans of FM 17-30, FM 17-12, FM 17-33, FM 18-5, FM 24-5, FM 24-6, FM 24-18, and FM 24-19.",
+    "British, Canadian, German, and Polish manuals and occupation handbooks in original form.",
+    "More oral histories and diaries from replacements, drivers, loaders, medics, quartermasters, chaplains, MPs, and civilians.",
+    "Direct museum image catalogs for Sherman interiors, DD fittings, bocage visibility references, field hospitals, and POW camp imagery."
+  ],
+  "category_counts": {
+    "Bureaucracy": 1,
+    "Crew Reality": 5,
+    "Daily Life": 2,
+    "Doctrine": 3,
+    "Historical Campaign": 13,
+    "Human Factors": 5,
+    "Hygiene": 1,
+    "Logistics": 2,
+    "Maintenance": 1,
+    "Morale": 2,
+    "Occupation": 8,
+    "Radio Corpus": 7,
+    "Tank Command": 3,
+    "Training": 1,
+    "Vehicle Data": 7,
+    "Visual Reference": 3
+  },
+  "sources": [
+    {
+      "source": "Omaha Beachhead",
+      "category": "Historical Campaign",
+      "url": "https://web.archive.org/web/20031225063202/http://www.army.mil/cmh/books/wwii/100-11/ch3.htm",
+      "author": "Historical Division, War Department",
+      "publication_date": "1945-09-20",
+      "confidence": 0.98,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Cross-Channel Attack, Chapter VIII: The Sixth of June",
+      "category": "Historical Campaign",
+      "url": "https://web.archive.org/web/20031225073943/http://www.army.mil/cmh/books/wwii/7-4/7-4_8.HTM",
+      "author": "Gordon A. Harrison",
+      "publication_date": "1951",
+      "confidence": 0.96,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Cross-Channel Attack, Chapter IX: The V Corps Lodgment",
+      "category": "Historical Campaign",
+      "url": "https://www.history.army.mil/books/wwii/7-4/7-4_9.htm",
+      "author": "Gordon A. Harrison",
+      "publication_date": "1951",
+      "confidence": 0.97,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg",
+      "category": "Historical Campaign",
+      "url": "https://www.history.army.mil/BOOKS/WWII/utah/utah5.htm",
+      "author": "Historical Division, War Department",
+      "publication_date": "1948",
+      "confidence": 0.98,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Official History of the Canadian Army in the Second World War, Vol III: The Victory Campaign",
+      "category": "Historical Campaign",
+      "url": "https://www.canada.ca/content/dam/themes/defence/caf/militaryhistory/dhh/official/book-1960-army-ww2-3-en.pdf",
+      "author": "Stacey, C.P.",
+      "publication_date": "1960",
+      "confidence": 0.96,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Normandy landings",
+      "category": "Historical Campaign",
+      "url": "https://en.wikipedia.org/wiki/Normandy_landings",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.72,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Omaha Beach",
+      "category": "Historical Campaign",
+      "url": "https://en.wikipedia.org/wiki/Omaha_Beach",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.8,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Operation Cobra",
+      "category": "Historical Campaign",
+      "url": "https://en.wikipedia.org/wiki/Operation_Cobra",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.8,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Operation Totalize",
+      "category": "Historical Campaign",
+      "url": "https://en.wikipedia.org/wiki/Operation_Totalize",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.79,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Battle of Villers-Bocage",
+      "category": "Historical Campaign",
+      "url": "https://en.wikipedia.org/wiki/Battle_of_Villers-Bocage",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.77,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "M4 Sherman",
+      "category": "Vehicle Data",
+      "url": "https://en.wikipedia.org/wiki/M4_Sherman",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.88,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Tank destroyer battalion (United States)",
+      "category": "Doctrine",
+      "url": "https://en.wikipedia.org/wiki/Tank_destroyer_battalion_(United_States)",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.9,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "16-line message format",
+      "category": "Radio Corpus",
+      "url": "https://en.wikipedia.org/wiki/16-line_message_format",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.92,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Radiotelephony procedure",
+      "category": "Radio Corpus",
+      "url": "https://en.wikipedia.org/wiki/Radiotelephony_procedure",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.9,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Allied military phonetic spelling alphabets",
+      "category": "Radio Corpus",
+      "url": "https://en.wikipedia.org/wiki/Allied_military_phonetic_spelling_alphabets",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.82,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Stanis\u0142aw Maczek",
+      "category": "Crew Reality",
+      "url": "https://en.wikipedia.org/wiki/Stanis%C5%82aw_Maczek",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.84,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "1st Armoured Division (Poland)",
+      "category": "Historical Campaign",
+      "url": "https://en.wikipedia.org/wiki/1st_Armoured_Division_(Poland)",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.84,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "D-Day: The Battle for Normandy",
+      "category": "Crew Reality",
+      "url": "https://en.wikipedia.org/wiki/D-Day%3A_The_Battle_for_Normandy",
+      "author": "Wikipedia contributors",
+      "publication_date": "2009",
+      "confidence": 0.87,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Bomb (tank)",
+      "category": "Crew Reality",
+      "url": "https://en.wikipedia.org/wiki/Bomb_%28tank%29",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.9,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Heinrich Severloh",
+      "category": "Crew Reality",
+      "url": "https://en.wikipedia.org/wiki/Heinrich_Severloh",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.78,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "The Tank Museum",
+      "category": "Visual Reference",
+      "url": "https://en.wikipedia.org/wiki/The_Tank_Museum",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.74,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "The D-Day Story",
+      "category": "Visual Reference",
+      "url": "https://en.wikipedia.org/wiki/The_D-Day_Story",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.78,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Overlord Museum",
+      "category": "Visual Reference",
+      "url": "https://en.wikipedia.org/wiki/Overlord_Museum",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.73,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "M3 half-track",
+      "category": "Vehicle Data",
+      "url": "https://en.wikipedia.org/wiki/M3_half-track",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.85,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Panther tank",
+      "category": "Vehicle Data",
+      "url": "https://en.wikipedia.org/wiki/Panther_tank",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.83,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Panzer IV",
+      "category": "Vehicle Data",
+      "url": "https://en.wikipedia.org/wiki/Panzer_IV",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.82,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "M36 tank destroyer",
+      "category": "Vehicle Data",
+      "url": "https://en.wikipedia.org/wiki/M36_tank_destroyer",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.83,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Cromwell tank",
+      "category": "Vehicle Data",
+      "url": "https://en.wikipedia.org/wiki/Cromwell_tank",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.8,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "HQ 8 Cdn Inf Bde, Operation Windsor",
+      "category": "Historical Campaign",
+      "url": "http://canadianmilitaryhistory.ca/wp-content/uploads/2012/08/op-windsor1.pdf",
+      "author": "HQ 8 Canadian Infantry Brigade",
+      "publication_date": "1944",
+      "confidence": 0.89,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "M3 Stuart",
+      "category": "Vehicle Data",
+      "url": "https://en.wikipedia.org/wiki/M3_Stuart",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.84,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Jacob L. Devers",
+      "category": "Doctrine",
+      "url": "https://en.wikipedia.org/wiki/Jacob_L._Devers",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.8,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "FM 17-12 Tank Gunnery",
+      "category": "Tank Command",
+      "url": "https://en.wikipedia.org/wiki/M3_Stuart",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "publication_date": "1943-04-22",
+      "confidence": 0.82,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "FM 17-30 Tank Platoon",
+      "category": "Tank Command",
+      "url": "https://en.wikipedia.org/wiki/M3_Stuart",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "publication_date": "1942-10-22",
+      "confidence": 0.82,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "FM 17-33 The Tank Battalion, Light and Medium",
+      "category": "Tank Command",
+      "url": "https://en.wikipedia.org/wiki/M4_Sherman",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "publication_date": "1942-09-18",
+      "confidence": 0.84,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "FM 18-5 Tactical Employment: Tank Destroyer Unit",
+      "category": "Doctrine",
+      "url": "https://en.wikipedia.org/wiki/Tank_destroyer_battalion_(United_States)",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "publication_date": "1944-07-18",
+      "confidence": 0.85,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "FM 24-5 Basic Field Manual, Signal Communication",
+      "category": "Radio Corpus",
+      "url": "https://en.wikipedia.org/wiki/16-line_message_format",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "publication_date": "1939-11",
+      "confidence": 0.88,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "FM 24-6 Radio Operator's Manual",
+      "category": "Radio Corpus",
+      "url": "https://en.wikipedia.org/wiki/Radiogram_(message)",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "publication_date": "n.d.",
+      "confidence": 0.88,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "FM 24-18 Radio Communication",
+      "category": "Radio Corpus",
+      "url": "https://en.wikipedia.org/wiki/Radiogram_(message)",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "publication_date": "n.d.",
+      "confidence": 0.86,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "FM 24-19 Radio Operator's Handbook",
+      "category": "Radio Corpus",
+      "url": "https://en.wikipedia.org/wiki/16-line_message_format",
+      "author": "U.S. Army Field Manual referenced via Wikipedia citation trail",
+      "publication_date": "n.d.",
+      "confidence": 0.86,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Combat stress reaction",
+      "category": "Human Factors",
+      "url": "https://en.wikipedia.org/wiki/Combat_stress_reaction",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.76,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "United States Army Air Forces",
+      "category": "Crew Reality",
+      "url": "https://en.wikipedia.org/wiki/United_States_Army_Air_Forces",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.84,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Army Service Forces",
+      "category": "Logistics",
+      "url": "https://en.wikipedia.org/wiki/Army_Service_Forces",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.88,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "United States Army during World War II",
+      "category": "Daily Life",
+      "url": "https://en.wikipedia.org/wiki/United_States_Army_during_World_War_II",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.86,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Military government",
+      "category": "Occupation",
+      "url": "https://en.wikipedia.org/wiki/Military_government",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.82,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Military occupation",
+      "category": "Occupation",
+      "url": "https://en.wikipedia.org/wiki/Military_occupation",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.83,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Military mail",
+      "category": "Morale",
+      "url": "https://en.wikipedia.org/wiki/Military_mail",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.78,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Garrison ration",
+      "category": "Daily Life",
+      "url": "https://en.wikipedia.org/wiki/Garrison_ration",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.79,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Vehicle recovery",
+      "category": "Maintenance",
+      "url": "https://en.wikipedia.org/wiki/Vehicle_recovery",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.85,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "United States Army Ordnance Corps",
+      "category": "Logistics",
+      "url": "https://en.wikipedia.org/wiki/United_States_Army_Ordnance_Corps",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.84,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Army Ground Forces",
+      "category": "Training",
+      "url": "https://en.wikipedia.org/wiki/Army_Ground_Forces",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.83,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Office of Military Government, United States",
+      "category": "Occupation",
+      "url": "https://en.wikipedia.org/wiki/Office_of_Military_Government%2C_United_States",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.81,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "United States Army in World War II",
+      "category": "Bureaucracy",
+      "url": "https://en.wikipedia.org/wiki/United_States_Army_in_World_War_II",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.86,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Operation Astonia",
+      "category": "Historical Campaign",
+      "url": "https://en.wikipedia.org/wiki/Operation_Astonia",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.8,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Military Police Corps (United States)",
+      "category": "Occupation",
+      "url": "https://en.wikipedia.org/wiki/Military_Police_Corps_%28United_States%29",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.84,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Chaplain Corps (United States Army)",
+      "category": "Morale",
+      "url": "https://en.wikipedia.org/wiki/Chaplain_Corps_%28United_States_Army%29",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.8,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Field hygiene and sanitation",
+      "category": "Hygiene",
+      "url": "https://en.wikipedia.org/wiki/Field_hygiene_and_sanitation",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.86,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Combat medic",
+      "category": "Human Factors",
+      "url": "https://en.wikipedia.org/wiki/Combat_medic",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.83,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Field hospital",
+      "category": "Human Factors",
+      "url": "https://en.wikipedia.org/wiki/Field_hospital",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.81,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Prisoner-of-war camp",
+      "category": "Occupation",
+      "url": "https://en.wikipedia.org/wiki/Prisoner-of-war_camp",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.8,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "German prisoner-of-war camps in World War II",
+      "category": "Occupation",
+      "url": "https://en.wikipedia.org/wiki/German_prisoner-of-war_camps_in_World_War_II",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.81,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Feldgendarmerie",
+      "category": "Occupation",
+      "url": "https://en.wikipedia.org/wiki/Feldgendarmerie",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.82,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "10th Field Hospital",
+      "category": "Human Factors",
+      "url": "https://en.wikipedia.org/wiki/10th_Field_Hospital",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.8,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "95th Evacuation Hospital",
+      "category": "Human Factors",
+      "url": "https://en.wikipedia.org/wiki/95th_Evacuation_Hospital",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.8,
+      "extraction_status": "indexed"
+    },
+    {
+      "source": "Stalag II-D",
+      "category": "Occupation",
+      "url": "https://en.wikipedia.org/wiki/Stalag_II-D",
+      "author": "Wikipedia contributors",
+      "publication_date": "n.d.",
+      "confidence": 0.8,
+      "extraction_status": "indexed"
+    }
+  ]
+}

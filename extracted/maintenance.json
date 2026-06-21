@@ -1,0 +1,22 @@
+{
+  "facts": [
+    {
+      "fact": "Vehicle recovery has self-recovery, like-recovery, and dedicated recovery levels.",
+      "source": "48_vehicle_recovery.md",
+      "confidence": 0.85,
+      "note": "Disabling a tank is not always the same as destroying it."
+    },
+    {
+      "fact": "Ordnance and maintenance determine how many vehicles return to service.",
+      "source": "49_united_states_army_ordnance_corps.md",
+      "confidence": 0.84,
+      "note": "Repair capacity is a tactical variable."
+    },
+    {
+      "fact": "Army Service Forces also handled repair infrastructure.",
+      "source": "42_army_service_forces.md",
+      "confidence": 0.88,
+      "note": "Repair depends on depot and transport depth."
+    }
+  ]
+}

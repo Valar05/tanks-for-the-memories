@@ -1,0 +1,14 @@
+{
+  "examples": [
+    {
+      "example": "Combat fatigue and slowed reaction time after prolonged combat.",
+      "source": "40_combat_stress_reaction.md",
+      "confidence": 0.76
+    },
+    {
+      "example": "Rotation and relief policies in air units to manage exhaustion.",
+      "source": "41_united_states_army_air_forces.md",
+      "confidence": 0.84
+    }
+  ]
+}

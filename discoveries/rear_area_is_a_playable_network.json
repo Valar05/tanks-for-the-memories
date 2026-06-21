@@ -1,0 +1,44 @@
+{
+  "id": "rear_area_is_a_playable_network",
+  "title": "The rear area is a playable network",
+  "discovery": "Support units are not scenery. The rear area is a network of roads, depots, hospitals, mail channels, sanitation routines, and police control points, each with its own throughput and failure modes.",
+  "evidence": [
+    "source_library/42_army_service_forces.md:15-17 - food, fuel, ammunition, transport, medical care, and repair sit behind the front line.",
+    "source_library/49_united_states_army_ordnance_corps.md:15-17 - procurement, repair, bomb disposal, and maintenance depth are institutional work.",
+    "source_library/54_military_police_corps_united_states.md:15-17 - traffic control, POW handling, route security, and rear-area order are explicit tasks.",
+    "source_library/58_field_hospital.md:15-17 - casualty flow is staged and capacity-limited.",
+    "source_library/46_military_mail.md:15-17 - mail is a morale and memory channel.",
+    "source_library/56_field_hygiene_and_sanitation.md:15-17 - water, waste, insect-borne disease, and field health shape readiness.",
+    "source_library/55_chaplain_corps_united_states_army.md:15-17 - grief response and moral support are organized functions."
+  ],
+  "why": "This changes the map layer: the player should see roads, depots, aid stations, police, and mail as active nodes that can queue, fail, or save the unit.",
+  "variable": {
+    "name": "rear_area_throughput",
+    "definition": "How much supply, care, and information can move through the support network per unit time.",
+    "range": "0-100",
+    "related": [
+      "maintenance_backlog",
+      "medical_load",
+      "traffic_delay",
+      "mail_latency"
+    ]
+  },
+  "mechanic": "Support-network graph with queues, bottlenecks, and cascade failures.",
+  "pressure": "A delay in one rear node can starve combat, care, morale, and recovery at once.",
+  "confidence": 0.96,
+  "sources": [
+    "source_library/42_army_service_forces.md",
+    "source_library/49_united_states_army_ordnance_corps.md",
+    "source_library/54_military_police_corps_united_states.md",
+    "source_library/58_field_hospital.md",
+    "source_library/46_military_mail.md",
+    "source_library/56_field_hygiene_and_sanitation.md",
+    "source_library/55_chaplain_corps_united_states_army.md"
+  ],
+  "tags": [
+    "rear-area",
+    "network",
+    "pressure",
+    "logistics"
+  ]
+}

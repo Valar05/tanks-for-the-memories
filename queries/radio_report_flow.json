@@ -1,0 +1,59 @@
+{
+  "query_id": "radio_report_flow",
+  "question": "How does radio report flow work in this setting?",
+  "short_answer": "Observation becomes a structured report, the report moves over radio, the report ages while it travels, and the HQ picture may arrive stale or incomplete.",
+  "evidence_summary": [
+    "16-line message format gives the message skeleton.",
+    "Radiotelephony procedure gives the spoken discipline and spelling alphabet.",
+    "Omaha and Cross-Channel Attack show what happens when radios are lost or reports arrive late."
+  ],
+  "structured_data": {
+    "flow": [
+      "observe",
+      "compress into report",
+      "transmit",
+      "acknowledge",
+      "update ledger",
+      "decide"
+    ],
+    "failure_modes": [
+      "lost radio",
+      "late report",
+      "partial report",
+      "contradictory report"
+    ],
+    "message_attributes": [
+      "source",
+      "subject",
+      "position",
+      "confidence",
+      "expiry"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "report_accuracy",
+      "effect": "controls how much the report helps the map."
+    },
+    {
+      "variable": "report_delay",
+      "effect": "controls how stale the report is on arrival."
+    },
+    {
+      "variable": "radio_reliability",
+      "effect": "controls whether the message gets through at all."
+    }
+  ],
+  "game_implications": [
+    "The report ledger should feel like a living communications problem.",
+    "Players should learn to prefer concise, high-confidence reports when under fire."
+  ],
+  "confidence": 0.95,
+  "sources": [
+    "source_library/13_sixteen-line-message-format.md",
+    "source_library/14_radiotelephony-procedure.md",
+    "source_library/01_omaha-beachhead.md",
+    "source_library/03_cross-channel-attack-ch9.md",
+    "source_library/38_fm-24-5-basic-field-manual-signal-communication.md"
+  ]
+}

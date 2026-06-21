@@ -1,0 +1,16 @@
+{
+  "facts": [
+    {
+      "fact": "Army Service Forces and Ordnance were bureaucratic systems that moved material into combat.",
+      "source": "42_army_service_forces.md",
+      "confidence": 0.88,
+      "note": "Paperwork and depots are part of war."
+    },
+    {
+      "fact": "The official Army history series itself is a bureaucratic artifact of learning from war.",
+      "source": "52_united_states_army_in_world_war_ii.md",
+      "confidence": 0.86,
+      "note": "History is part of institutional memory."
+    }
+  ]
+}

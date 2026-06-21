@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-06-21",
+  "queries": [
+    "bocage_visibility",
+    "chaplain_and_grief",
+    "civilian_contact_in_normandy",
+    "fatigue_and_decision_degradation",
+    "field_sanitation_routine",
+    "green_sherman_crew",
+    "logistics_pressure",
+    "mail_and_home",
+    "maintenance_and_recovery",
+    "medical_evacuation_flow",
+    "pow_captivity_path",
+    "radio_report_flow",
+    "replacement_and_rotation",
+    "replacement_loader_effects",
+    "route_control_and_security",
+    "tank_commander_field_of_view",
+    "what_does_a_soldier_do_all_day",
+    "young_american_tank_commander_training"
+  ]
+}

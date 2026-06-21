@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-06-21",
+  "items": [
+    {
+      "id": "loc1",
+      "name": "Omaha Beach",
+      "source": [
+        "Omaha Beachhead",
+        "Omaha Beach"
+      ],
+      "confidence": 0.97,
+      "extraction_note": "Beach sector where visibility, mislandings, and radio loss changed command control."
+    },
+    {
+      "id": "loc2",
+      "name": "Carentan causeway",
+      "source": [
+        "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg"
+      ],
+      "confidence": 0.96,
+      "extraction_note": "Narrow route that canalized movement and exposed the attackers to flanking fire."
+    },
+    {
+      "id": "loc3",
+      "name": "Bocage country",
+      "source": [
+        "Operation Cobra",
+        "Battle of Villers-Bocage"
+      ],
+      "confidence": 0.92,
+      "extraction_note": "Hedgerow terrain that sharply reduced visibility and maneuver freedom."
+    },
+    {
+      "id": "loc4",
+      "name": "Mont Ormel",
+      "source": [
+        "Operation Totalize",
+        "1st Armoured Division (Poland)"
+      ],
+      "confidence": 0.9,
+      "extraction_note": "Falaise-pocket hilltop that became a decisive memory and command-pressure node."
+    },
+    {
+      "id": "loc5",
+      "name": "Villers-Bocage",
+      "source": [
+        "Battle of Villers-Bocage"
+      ],
+      "confidence": 0.89,
+      "extraction_note": "Road- and hedgerow-constrained battlefield illustrating surprise and command collapse."
+    },
+    {
+      "id": "loc6",
+      "name": "Bayeux",
+      "source": [
+        "Cross-Channel Attack, Chapter IX"
+      ],
+      "confidence": 0.88,
+      "extraction_note": "German reports around Bayeux were late/scattered, showing command-picture lag."
+    }
+  ]
+}

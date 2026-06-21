@@ -1,0 +1,16 @@
+{
+  "facts": [
+    {
+      "fact": "Military mail enabled letters and packages from combat zones.",
+      "source": "46_military_mail.md",
+      "confidence": 0.78,
+      "note": "Mail is a morale and memory channel."
+    },
+    {
+      "fact": "Censorship shaped what soldiers could say.",
+      "source": "46_military_mail.md",
+      "confidence": 0.78,
+      "note": "Information is also constrained by policy."
+    }
+  ]
+}

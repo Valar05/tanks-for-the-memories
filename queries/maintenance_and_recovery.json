@@ -1,0 +1,60 @@
+{
+  "query_id": "maintenance_and_recovery",
+  "question": "How should tank maintenance and recovery behave?",
+  "short_answer": "A disabled tank should usually enter a recoverable state first, with towing, repair queues, and ordnance support deciding whether it returns or is lost.",
+  "evidence_summary": [
+    "Vehicle recovery distinguishes self-recovery, like-recovery, and dedicated recovery.",
+    "Ordnance and Army Service Forces supply the maintenance infrastructure behind the front.",
+    "Sherman design favored field repair and standardization."
+  ],
+  "structured_data": {
+    "states": [
+      "mobile",
+      "stuck",
+      "immobile",
+      "recovering",
+      "repaired",
+      "abandoned"
+    ],
+    "inputs": [
+      "tow assets",
+      "spares",
+      "terrain",
+      "time",
+      "enemy fire"
+    ],
+    "outputs": [
+      "returned to service",
+      "cannibalized",
+      "lost"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "immobility_state",
+      "effect": "opens recovery and abandonment branches."
+    },
+    {
+      "variable": "recovery_delay",
+      "effect": "adds time pressure to the battlefield ledger."
+    },
+    {
+      "variable": "repair_queue",
+      "effect": "shows depot bottlenecks."
+    },
+    {
+      "variable": "tow_risk",
+      "effect": "captures exposure during extraction."
+    }
+  ],
+  "game_implications": [
+    "Disabled armor should create a decision, not just a health bar loss.",
+    "Recovery should be visible and narratively meaningful."
+  ],
+  "confidence": 0.85,
+  "sources": [
+    "48_vehicle_recovery.md",
+    "49_united_states_army_ordnance_corps.md",
+    "42_army_service_forces.md"
+  ]
+}

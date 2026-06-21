@@ -1,0 +1,28 @@
+{
+  "card_id": "platoon_leadership",
+  "summary": "Platoon leadership is about spacing, timing, contact reporting, and maintaining a survivable picture for the whole section.",
+  "source_basis": [
+    "FM 17-30 Tank Platoon",
+    "Cross-Channel Attack, Chapter IX",
+    "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg"
+  ],
+  "simulation_implications": [
+    "Platoon command should reward coordinated movement and report discipline.",
+    "Broken spacing and delayed orders should be expensive."
+  ],
+  "game_implications": [
+    "Make the wingman a dependent but independent-thinking unit.",
+    "Use patrol/recon choices to shape what the platoon knows before contact."
+  ],
+  "variables": [
+    "commander_training_level",
+    "report_delay",
+    "trust_in_commander"
+  ],
+  "confidence": 0.91,
+  "citations": [
+    "source_library/34_fm-17-30-tank-platoon.md",
+    "source_library/03_cross-channel-attack-ch9.md",
+    "source_library/04_utah-beach-to-cherbourg-carentan.md"
+  ]
+}

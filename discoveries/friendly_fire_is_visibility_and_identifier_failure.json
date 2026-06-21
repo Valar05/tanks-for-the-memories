@@ -1,0 +1,31 @@
+{
+  "id": "friendly_fire_is_visibility_and_identifier_failure",
+  "title": "Friendly fire is a visibility and identifier failure",
+  "discovery": "Friendly fire in Normandy is not just tragic randomness. It emerges from smoke, night movement, cross-domain coordination, and weak identification.",
+  "evidence": [
+    "source_library/09_operation-totalize.md:15-21 - allied aircraft and ground forces misidentified each other in smoke and night movement.",
+    "source_library/08_operation-cobra.md:15-21 - Cobra explicitly includes friendly-fire casualties."
+  ],
+  "why": "Target identification should be a mechanic in itself, especially when air, armor, and infantry are all active.",
+  "variable": {
+    "name": "identity_confidence",
+    "definition": "Confidence that a contact is friend, foe, or neutral.",
+    "range": "0-100",
+    "related": [
+      "IFF_clarity",
+      "contact_classification"
+    ]
+  },
+  "mechanic": "Contact classification and misidentification under smoke/night/coalition pressure.",
+  "pressure": "The harder it is to identify contacts, the more likely the player hurts allies or wastes time waiting.",
+  "confidence": 0.91,
+  "sources": [
+    "source_library/09_operation-totalize.md",
+    "source_library/08_operation-cobra.md"
+  ],
+  "tags": [
+    "friendly-fire",
+    "visibility",
+    "coalition"
+  ]
+}

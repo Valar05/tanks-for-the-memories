@@ -1,0 +1,853 @@
+{
+  "generated_at": "2026-06-21",
+  "variables": [
+    {
+      "variable": "commander_training_level",
+      "definition": "How well the commander has learned platoon leadership, gunnery, and combined arms.",
+      "source_basis": [
+        "34_fm-17-33-the-tank-battalion-light-and-medium.md",
+        "50_army_ground_forces.md"
+      ],
+      "affected_systems": [
+        "orders",
+        "reports",
+        "initiative"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.93
+    },
+    {
+      "variable": "crew_confidence",
+      "definition": "Crew trust in the commander, vehicle, and each other.",
+      "source_basis": [
+        "40_combat_stress_reaction.md",
+        "19_bomb-tank.md",
+        "46_military_mail.md"
+      ],
+      "affected_systems": [
+        "reaction",
+        "obedience",
+        "hesitation"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.86
+    },
+    {
+      "variable": "report_accuracy",
+      "definition": "How close battlefield reports are to ground truth.",
+      "source_basis": [
+        "13_sixteen-line-message-format.md",
+        "03_cross-channel-attack-ch9.md"
+      ],
+      "affected_systems": [
+        "information state",
+        "orders",
+        "map updates"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.91
+    },
+    {
+      "variable": "report_delay",
+      "definition": "Time from observation to received and processed report.",
+      "source_basis": [
+        "03_cross-channel-attack-ch9.md",
+        "36_fm-24-5-basic-field-manual-signal-communication.md"
+      ],
+      "affected_systems": [
+        "information flow",
+        "command timing"
+      ],
+      "suggested_range": [
+        0,
+        12
+      ],
+      "confidence": 0.9
+    },
+    {
+      "variable": "visibility_arc",
+      "definition": "What the commander can actually see from current posture and vehicle position.",
+      "source_basis": [
+        "bocage sources",
+        "31_m3-stuart.md"
+      ],
+      "affected_systems": [
+        "spotting",
+        "target acquisition",
+        "navigation"
+      ],
+      "suggested_range": [
+        0,
+        360
+      ],
+      "confidence": 0.88
+    },
+    {
+      "variable": "buttoned_visibility_penalty",
+      "definition": "Loss of visibility when buttoned inside the vehicle.",
+      "source_basis": [
+        "30_m3-stuart.md",
+        "31_m3-stuart.md"
+      ],
+      "affected_systems": [
+        "spotting",
+        "reaction"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.86
+    },
+    {
+      "variable": "hatch_visibility_bonus",
+      "definition": "Improved view when the commander is exposed.",
+      "source_basis": [
+        "30_m3-stuart.md",
+        "31_m3-stuart.md"
+      ],
+      "affected_systems": [
+        "spotting",
+        "risk"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.84
+    },
+    {
+      "variable": "radio_reliability",
+      "definition": "Probability that messages are transmitted, understood, and retained.",
+      "source_basis": [
+        "13_sixteen-line-message-format.md",
+        "38_fm-24-18-radio-communication.md",
+        "39_fm-24-19-radio-operator-s-handbook.md"
+      ],
+      "affected_systems": [
+        "orders",
+        "reports",
+        "coordination"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.94
+    },
+    {
+      "variable": "fatigue",
+      "definition": "Accumulated physical and cognitive exhaustion.",
+      "source_basis": [
+        "40_combat_stress_reaction.md",
+        "43_united_states_army_during_world_war_ii.md"
+      ],
+      "affected_systems": [
+        "judgment",
+        "reaction",
+        "cohesion"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.88
+    },
+    {
+      "variable": "trust_in_commander",
+      "definition": "How much the crew and adjacent units believe the commander is making good calls.",
+      "source_basis": [
+        "32_jacob-l-devers.md",
+        "34_fm-17-33-the-tank-battalion-light-and-medium.md"
+      ],
+      "affected_systems": [
+        "initiative",
+        "obedience",
+        "morale"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.85
+    },
+    {
+      "variable": "replacement_familiarity",
+      "definition": "How well replacements know the unit and its habits.",
+      "source_basis": [
+        "41_united_states_army_air_forces.md",
+        "50_army_ground_forces.md"
+      ],
+      "affected_systems": [
+        "coordination",
+        "trust",
+        "error rate"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.84
+    },
+    {
+      "variable": "sleep_debt",
+      "definition": "Accumulated sleep loss from long operations, watches, and poor rest.",
+      "source_basis": [
+        "43_united_states_army_during_world_war_ii.md"
+      ],
+      "affected_systems": [
+        "attention",
+        "memory",
+        "reaction"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.87
+    },
+    {
+      "variable": "hunger",
+      "definition": "Effect of inadequate or repetitive food on endurance and patience.",
+      "source_basis": [
+        "43_united_states_army_during_world_war_ii.md",
+        "47_garrison_ration.md"
+      ],
+      "affected_systems": [
+        "endurance",
+        "morale",
+        "patience"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.84
+    },
+    {
+      "variable": "hygiene_state",
+      "definition": "Cleanliness, wetness, and disease risk in field conditions.",
+      "source_basis": [
+        "43_united_states_army_during_world_war_ii.md"
+      ],
+      "affected_systems": [
+        "illness",
+        "comfort",
+        "morale"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.83
+    },
+    {
+      "variable": "mail_latency",
+      "definition": "Time between sending and receiving home contact.",
+      "source_basis": [
+        "46_military_mail.md"
+      ],
+      "affected_systems": [
+        "morale",
+        "memory",
+        "home attachment"
+      ],
+      "suggested_range": [
+        0,
+        30
+      ],
+      "confidence": 0.79
+    },
+    {
+      "variable": "maintenance_backlog",
+      "definition": "Unresolved repair and service work across vehicles and weapons.",
+      "source_basis": [
+        "42_army_service_forces.md",
+        "49_united_states_army_ordnance_corps.md"
+      ],
+      "affected_systems": [
+        "readiness",
+        "mobility",
+        "tempo"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.89
+    },
+    {
+      "variable": "fuel_reserve",
+      "definition": "Available fuel for movement and maneuver.",
+      "source_basis": [
+        "42_army_service_forces.md"
+      ],
+      "affected_systems": [
+        "mobility",
+        "pursuit",
+        "tempo"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.9
+    },
+    {
+      "variable": "ammo_reserve",
+      "definition": "Available ammunition for planned and unplanned engagements.",
+      "source_basis": [
+        "42_army_service_forces.md"
+      ],
+      "affected_systems": [
+        "firepower",
+        "engagement endurance"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.9
+    },
+    {
+      "variable": "transport_capacity",
+      "definition": "Ability of the supply system to move material forward.",
+      "source_basis": [
+        "42_army_service_forces.md"
+      ],
+      "affected_systems": [
+        "supply",
+        "tempo"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.88
+    },
+    {
+      "variable": "civilian_contact",
+      "definition": "How much civilian presence affects a location or operation.",
+      "source_basis": [
+        "44_military_government.md",
+        "53_operation_astonia.md"
+      ],
+      "affected_systems": [
+        "movement",
+        "fire discipline",
+        "civilian relations"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.82
+    },
+    {
+      "variable": "occupation_rules",
+      "definition": "The current authority regime for controlled territory.",
+      "source_basis": [
+        "44_military_government.md",
+        "45_military_occupation.md",
+        "51_office_of_military_government_united_states.md"
+      ],
+      "affected_systems": [
+        "patrols",
+        "civilian movement",
+        "paperwork"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.81
+    },
+    {
+      "variable": "requisition_pressure",
+      "definition": "Pressure to seize or control local resources.",
+      "source_basis": [
+        "44_military_government.md"
+      ],
+      "affected_systems": [
+        "civilian relations",
+        "supply"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.77
+    },
+    {
+      "variable": "collateral_risk",
+      "definition": "Chance that military action harms civilians or local infrastructure.",
+      "source_basis": [
+        "53_operation_astonia.md",
+        "45_military_occupation.md"
+      ],
+      "affected_systems": [
+        "morality",
+        "administrative load",
+        "civilian contact"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.8
+    },
+    {
+      "variable": "administrative_backlog",
+      "definition": "Outstanding reports, occupation tasks, casualty accounting, and paperwork.",
+      "source_basis": [
+        "51_office_of_military_government_united_states.md",
+        "44_military_government.md"
+      ],
+      "affected_systems": [
+        "command burden",
+        "occupation",
+        "after-action reporting"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.8
+    },
+    {
+      "variable": "immobility_state",
+      "definition": "Whether a vehicle is mobile, stuck, disabled, or recoverable.",
+      "source_basis": [
+        "48_vehicle_recovery.md"
+      ],
+      "affected_systems": [
+        "recovery",
+        "repair",
+        "abandonment"
+      ],
+      "suggested_range": [
+        0,
+        4
+      ],
+      "confidence": 0.85
+    },
+    {
+      "variable": "repair_queue",
+      "definition": "Queue depth for service and repair at depots or workshops.",
+      "source_basis": [
+        "42_army_service_forces.md",
+        "49_united_states_army_ordnance_corps.md"
+      ],
+      "affected_systems": [
+        "readiness",
+        "delay"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.84
+    },
+    {
+      "variable": "recovery_delay",
+      "definition": "Time needed to extract or tow a disabled vehicle.",
+      "source_basis": [
+        "48_vehicle_recovery.md"
+      ],
+      "affected_systems": [
+        "tempo",
+        "risk"
+      ],
+      "suggested_range": [
+        0,
+        24
+      ],
+      "confidence": 0.84
+    },
+    {
+      "variable": "tow_risk",
+      "definition": "Exposure while attempting a recovery under pressure.",
+      "source_basis": [
+        "48_vehicle_recovery.md"
+      ],
+      "affected_systems": [
+        "casualty risk",
+        "recovery success"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.8
+    },
+    {
+      "variable": "rotation_interval",
+      "definition": "How long a crew can stay in action before relief or replacement.",
+      "source_basis": [
+        "41_united_states_army_air_forces.md",
+        "50_army_ground_forces.md"
+      ],
+      "affected_systems": [
+        "fatigue",
+        "cohesion",
+        "readiness"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.83
+    },
+    {
+      "variable": "boredom_index",
+      "definition": "Accumulated waiting and monotony that can degrade morale or attention.",
+      "source_basis": [
+        "43_united_states_army_during_world_war_ii.md"
+      ],
+      "affected_systems": [
+        "morale",
+        "attention",
+        "friction"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.8
+    },
+    {
+      "variable": "home_attachment",
+      "definition": "Strength of ties to home, family, and letters.",
+      "source_basis": [
+        "46_military_mail.md"
+      ],
+      "affected_systems": [
+        "morale",
+        "grief",
+        "attachment"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.79
+    },
+    {
+      "variable": "evacuation_delay",
+      "definition": "Time between wounding and evacuation from the point of injury.",
+      "source_basis": [
+        "57_combat_medic.md",
+        "58_field_hospital.md"
+      ],
+      "affected_systems": [
+        "casualty survival",
+        "medical load"
+      ],
+      "suggested_range": [
+        0,
+        24
+      ],
+      "confidence": 0.82
+    },
+    {
+      "variable": "triage_capacity",
+      "definition": "How many wounded can be sorted and treated at once.",
+      "source_basis": [
+        "58_field_hospital.md",
+        "63_95th_evacuation_hospital.md"
+      ],
+      "affected_systems": [
+        "medical queue",
+        "survival"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.81
+    },
+    {
+      "variable": "wound_stabilization_time",
+      "definition": "How long it takes to stabilize a casualty enough for transport.",
+      "source_basis": [
+        "57_combat_medic.md"
+      ],
+      "affected_systems": [
+        "survival",
+        "evacuation"
+      ],
+      "suggested_range": [
+        0,
+        12
+      ],
+      "confidence": 0.83
+    },
+    {
+      "variable": "medical_load",
+      "definition": "Capacity burden on medics, aid stations, and hospitals.",
+      "source_basis": [
+        "57_combat_medic.md",
+        "58_field_hospital.md"
+      ],
+      "affected_systems": [
+        "medical throughput",
+        "fatigue"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.8
+    },
+    {
+      "variable": "route_control",
+      "definition": "Effectiveness of road and convoy control by security forces.",
+      "source_basis": [
+        "54_military_police_corps_united_states.md",
+        "61_feldgendarmerie.md"
+      ],
+      "affected_systems": [
+        "supply flow",
+        "convoy delay"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.83
+    },
+    {
+      "variable": "detention_load",
+      "definition": "Burden from guarding, moving, and administrating prisoners.",
+      "source_basis": [
+        "54_military_police_corps_united_states.md",
+        "59_prisoner_of_war_camp.md"
+      ],
+      "affected_systems": [
+        "security",
+        "paperwork"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.82
+    },
+    {
+      "variable": "traffic_delay",
+      "definition": "Delay caused by congested roads, checkpoints, and route disruptions.",
+      "source_basis": [
+        "54_military_police_corps_united_states.md",
+        "61_feldgendarmerie.md"
+      ],
+      "affected_systems": [
+        "tempo",
+        "supply",
+        "evacuation"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.8
+    },
+    {
+      "variable": "discipline_pressure",
+      "definition": "Pressure to maintain order, movement discipline, and compliance.",
+      "source_basis": [
+        "54_military_police_corps_united_states.md",
+        "61_feldgendarmerie.md"
+      ],
+      "affected_systems": [
+        "obedience",
+        "routing",
+        "rear security"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.8
+    },
+    {
+      "variable": "grief_load",
+      "definition": "Accumulated emotional burden from losses and funerals.",
+      "source_basis": [
+        "55_chaplain_corps_united_states_army.md"
+      ],
+      "affected_systems": [
+        "morale",
+        "cohesion",
+        "decision-making"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.8
+    },
+    {
+      "variable": "moral_support",
+      "definition": "Effectiveness of chaplaincy, counseling, and ritual in stabilizing the unit.",
+      "source_basis": [
+        "55_chaplain_corps_united_states_army.md"
+      ],
+      "affected_systems": [
+        "grief",
+        "cohesion"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.8
+    },
+    {
+      "variable": "loss_memory",
+      "definition": "Whether named dead and lost are retained in the unit memory record.",
+      "source_basis": [
+        "55_chaplain_corps_united_states_army.md"
+      ],
+      "affected_systems": [
+        "narrative memory",
+        "morale"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.79
+    },
+    {
+      "variable": "sanitation_state",
+      "definition": "Condition of water, waste, washing, and field cleanliness.",
+      "source_basis": [
+        "56_field_hygiene_and_sanitation.md"
+      ],
+      "affected_systems": [
+        "disease risk",
+        "comfort",
+        "morale"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.86
+    },
+    {
+      "variable": "disease_risk",
+      "definition": "Chance of non-combat illness from hygiene and environment.",
+      "source_basis": [
+        "56_field_hygiene_and_sanitation.md",
+        "43_united_states_army_during_world_war_ii.md"
+      ],
+      "affected_systems": [
+        "medical load",
+        "readiness"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.85
+    },
+    {
+      "variable": "water_supply",
+      "definition": "Availability of potable water for drinking, cooking, and washing.",
+      "source_basis": [
+        "56_field_hygiene_and_sanitation.md"
+      ],
+      "affected_systems": [
+        "health",
+        "endurance",
+        "morale"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.85
+    },
+    {
+      "variable": "comfort",
+      "definition": "General physical comfort from dry shelter, clean clothing, and rest.",
+      "source_basis": [
+        "43_united_states_army_during_world_war_ii.md",
+        "56_field_hygiene_and_sanitation.md"
+      ],
+      "affected_systems": [
+        "sleep",
+        "morale",
+        "fatigue"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.8
+    },
+    {
+      "variable": "camp_type",
+      "definition": "Type of POW camp or detention setting.",
+      "source_basis": [
+        "60_german_prisoner_of_war_camps_world_war_ii.md",
+        "64_stalag_ii_d.md"
+      ],
+      "affected_systems": [
+        "captivity rules",
+        "labor",
+        "conditions"
+      ],
+      "suggested_range": [
+        0,
+        10
+      ],
+      "confidence": 0.8
+    },
+    {
+      "variable": "captivity_stress",
+      "definition": "Stress caused by capture, confinement, uncertainty, and deprivation.",
+      "source_basis": [
+        "59_prisoner_of_war_camp.md",
+        "64_stalag_ii_d.md"
+      ],
+      "affected_systems": [
+        "memory",
+        "morale",
+        "postwar recovery"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.81
+    },
+    {
+      "variable": "labor_assignment",
+      "definition": "Type and intensity of work performed while detained.",
+      "source_basis": [
+        "60_german_prisoner_of_war_camps_world_war_ii.md"
+      ],
+      "affected_systems": [
+        "fatigue",
+        "health",
+        "routine"
+      ],
+      "suggested_range": [
+        0,
+        100
+      ],
+      "confidence": 0.8
+    }
+  ]
+}

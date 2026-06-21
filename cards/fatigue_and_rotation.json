@@ -1,0 +1,29 @@
+{
+  "card_id": "fatigue_and_rotation",
+  "summary": "Exhaustion accumulates and is relieved only by rotation, rest, and replacement policy.",
+  "source_basis": [
+    "41_united_states_army_air_forces.md",
+    "40_combat_stress_reaction.md",
+    "50_army_ground_forces.md"
+  ],
+  "simulation_implications": [
+    "Fatigue should degrade reaction time and judgment.",
+    "Rotation policy should be a strategic resource."
+  ],
+  "game_implications": [
+    "The player should be forced to triage exhausted crews.",
+    "Relief can save capability but may reduce continuity."
+  ],
+  "variables": [
+    "fatigue",
+    "rotation_interval",
+    "crew_confidence",
+    "trust_in_reports"
+  ],
+  "confidence": 0.84,
+  "citations": [
+    "41_united_states_army_air_forces.md",
+    "40_combat_stress_reaction.md",
+    "50_army_ground_forces.md"
+  ]
+}

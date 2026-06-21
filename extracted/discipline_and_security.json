@@ -1,0 +1,16 @@
+{
+  "facts": [
+    {
+      "fact": "Military police manage traffic, prisoners, route security, and discipline.",
+      "source": "54_military_police_corps_united_states.md",
+      "confidence": 0.84,
+      "note": "Rear-area order is a real workload."
+    },
+    {
+      "fact": "Feldgendarmerie performs road traffic control and checkpoint security.",
+      "source": "61_feldgendarmerie.md",
+      "confidence": 0.82,
+      "note": "Opposing-side discipline is also part of the battlefield."
+    }
+  ]
+}

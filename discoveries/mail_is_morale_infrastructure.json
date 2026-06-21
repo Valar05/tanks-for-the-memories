@@ -1,0 +1,33 @@
+{
+  "id": "mail_is_morale_infrastructure",
+  "title": "Mail is morale infrastructure",
+  "discovery": "Letters and packages should be treated like an infrastructure system because they control home attachment, censorship, and the emotional rhythm of long campaigns.",
+  "evidence": [
+    "source_library/46_military_mail.md:15-17 - military mail explicitly shapes morale and memory.",
+    "source_library/43_united_states_army_during_world_war_ii.md:15-17 - daily life includes repetitive food, hygiene, and boredom, which mail interrupts.",
+    "source_library/55_chaplain_corps_united_states_army.md:15-17 - moral support and grief processing sit adjacent to mail in unit life."
+  ],
+  "why": "Mail arrival can be a meaningful event, not a cosmetic flavor line.",
+  "variable": {
+    "name": "mail_latency",
+    "definition": "Time between sending and receiving home contact.",
+    "range": "0-30",
+    "related": [
+      "home_attachment",
+      "morale_bonus_from_mail"
+    ]
+  },
+  "mechanic": "Delayed letter and package events that adjust morale and memory.",
+  "pressure": "Long silence is a kind of attrition.",
+  "confidence": 0.87,
+  "sources": [
+    "source_library/46_military_mail.md",
+    "source_library/43_united_states_army_during_world_war_ii.md",
+    "source_library/55_chaplain_corps_united_states_army.md"
+  ],
+  "tags": [
+    "morale",
+    "mail",
+    "memory"
+  ]
+}

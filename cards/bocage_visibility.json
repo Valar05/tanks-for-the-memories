@@ -1,0 +1,28 @@
+{
+  "card_id": "bocage_visibility",
+  "summary": "Bocage terrain collapses long sight lines and forces a commander to rely on short-range observation and reports.",
+  "source_basis": [
+    "Operation Cobra",
+    "Battle of Villers-Bocage",
+    "The Battle of Carentan (8-15 June): Utah Beach to Cherbourg"
+  ],
+  "simulation_implications": [
+    "Visibility arc should narrow sharply in hedgerow country.",
+    "Buttoned-up penalties should matter more in bocage than in open terrain."
+  ],
+  "game_implications": [
+    "The map should not be omniscient; hidden threats should remain hidden until observed or reported.",
+    "Terrain should be a communications problem, not just a movement penalty."
+  ],
+  "variables": [
+    "visibility_arc",
+    "buttoned_visibility_penalty",
+    "hatch_visibility_bonus"
+  ],
+  "confidence": 0.96,
+  "citations": [
+    "source_library/08_operation-cobra.md",
+    "source_library/10_battle-villers-bocage.md",
+    "source_library/04_utah-beach-to-cherbourg-carentan.md"
+  ]
+}

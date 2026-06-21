@@ -1,0 +1,33 @@
+{
+  "id": "fatigue_degrades_orders_before_firepower",
+  "title": "Fatigue degrades orders before firepower",
+  "discovery": "Under prolonged stress, the first thing to fail is not the gun; it is judgment, sequencing, and the ability to keep a coherent plan in mind.",
+  "evidence": [
+    "source_library/40_combat-stress-reaction.md:15-17 - fatigue becomes operationally visible through stress reaction and unit cohesion loss.",
+    "source_library/41_united_states_army_air_forces.md:15-17 - the Army used rotation policy because exhaustion had real effectiveness costs.",
+    "source_library/50_army_ground_forces.md:15-17 - replacements and training are the institutional answer to degraded effectiveness."
+  ],
+  "why": "This suggests a command-degradation system where options, sequencing, and recall get worse before raw combat ability fully collapses.",
+  "variable": {
+    "name": "fatigue",
+    "definition": "Accumulated physical and cognitive exhaustion.",
+    "range": "0-100",
+    "related": [
+      "decision_quality",
+      "reaction_time"
+    ]
+  },
+  "mechanic": "Progressive command degradation, not just stat penalties.",
+  "pressure": "Tired crews produce worse plans, slower reaction, and more mistakes than healthy crews.",
+  "confidence": 0.94,
+  "sources": [
+    "source_library/40_combat-stress-reaction.md",
+    "source_library/41_united_states_army_air_forces.md",
+    "source_library/50_army_ground_forces.md"
+  ],
+  "tags": [
+    "fatigue",
+    "command",
+    "pressure"
+  ]
+}

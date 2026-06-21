@@ -1,0 +1,36 @@
+{
+  "card_id": "young_american_tank_commander",
+  "summary": "A young American tank commander should be trained to observe, report, coordinate, and conserve the platoon picture, not merely to drive or shoot.",
+  "source_basis": [
+    "FM 17-30 Tank Platoon",
+    "FM 17-33 The Tank Battalion, Light and Medium",
+    "FM 17-12 Tank Gunnery",
+    "Jacob L. Devers",
+    "16-line message format"
+  ],
+  "simulation_implications": [
+    "Training raises commander_training_level, radio_reliability use, and report_accuracy.",
+    "Early play should punish solo heroics and reward a clean report chain."
+  ],
+  "game_implications": [
+    "Start with narrow awareness and incomplete doctrine; unlock broader control through drill and experience.",
+    "Teach the player to use map/report view and radio procedures as a combat tool."
+  ],
+  "variables": [
+    "commander_training_level",
+    "report_accuracy",
+    "radio_reliability",
+    "visibility_arc",
+    "trust_in_commander"
+  ],
+  "confidence": 0.92,
+  "citations": [
+    "source_library/31_m3-stuart.md",
+    "source_library/32_jacob-l-devers.md",
+    "source_library/33_fm-17-12-tank-gunnery.md",
+    "source_library/34_fm-17-30-tank-platoon.md",
+    "source_library/35_fm-17-33-the-tank-battalion-light-and-medium.md",
+    "source_library/38_fm-24-5-basic-field-manual-signal-communication.md",
+    "source_library/39_fm-24-19-radio-operator-s-handbook.md"
+  ]
+}

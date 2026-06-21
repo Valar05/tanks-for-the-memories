@@ -1,0 +1,27 @@
+{
+  "card_id": "maintenance_recovery",
+  "summary": "Tanks and vehicles fail, stall, and return through a recovery-and-repair network.",
+  "source_basis": [
+    "48_vehicle_recovery.md",
+    "49_united_states_army_ordnance_corps.md"
+  ],
+  "simulation_implications": [
+    "Mobility loss should be distinct from destruction.",
+    "Recovery assets and time should matter."
+  ],
+  "game_implications": [
+    "Disable states should create tension without always ending the vehicle.",
+    "Tow requests and repair delays should be tactical decisions."
+  ],
+  "variables": [
+    "immobility_state",
+    "recovery_delay",
+    "tow_risk",
+    "repair_queue"
+  ],
+  "confidence": 0.85,
+  "citations": [
+    "48_vehicle_recovery.md",
+    "49_united_states_army_ordnance_corps.md"
+  ]
+}

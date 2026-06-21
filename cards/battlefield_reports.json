@@ -1,0 +1,27 @@
+{
+  "card_id": "battlefield_reports",
+  "summary": "Battlefield reports should be partial, stale, and occasionally contradictory, not perfectly truthful HUD data.",
+  "source_basis": [
+    "Omaha Beachhead",
+    "Cross-Channel Attack, Chapter IX",
+    "HQ 8 Cdn Inf Bde, Operation Windsor"
+  ],
+  "simulation_implications": [
+    "Report_accuracy and report_delay should determine whether a report is partial, stale, or confirmed.",
+    "The game should preserve uncertainty in the map/report board."
+  ],
+  "game_implications": [
+    "Reports should be a resource to manage, not a passive overlay.",
+    "After-action reports should explicitly memorialize what was missing or late."
+  ],
+  "variables": [
+    "report_accuracy",
+    "report_delay"
+  ],
+  "confidence": 0.96,
+  "citations": [
+    "source_library/01_omaha-beachhead.md",
+    "source_library/03_cross-channel-attack-ch9.md",
+    "source_library/29_operation-windsor.md"
+  ]
+}

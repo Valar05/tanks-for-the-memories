@@ -1,0 +1,33 @@
+{
+  "id": "visibility_is_stateful",
+  "title": "Visibility is stateful, not a static stat",
+  "discovery": "What a commander can see depends on posture, terrain, vehicle role, and whether the vehicle is being used as a reconnaissance platform or a firing platform.",
+  "evidence": [
+    "source_library/30_m3-stuart.md:15-18 - the light tank is explicitly tied to reconnaissance use, support role, and gunnery training references.",
+    "source_library/11_m4-sherman.md:15-17 - the Sherman is framed as an infantry-support vehicle in doctrine terms.",
+    "source_library/10_battle-villers-bocage.md:15-17 - confined roads and tactical surprise let terrain dominate vehicle quality."
+  ],
+  "why": "The camera model should change with command posture and terrain instead of being a fixed 360-degree oracle.",
+  "variable": {
+    "name": "visibility_arc",
+    "definition": "Effective scan arc available to the commander in the current posture and terrain.",
+    "range": "0-360",
+    "related": [
+      "buttoned_visibility_penalty",
+      "hatch_visibility_bonus"
+    ]
+  },
+  "mechanic": "Commander viewpoint state machine with buttoned/open posture and terrain occlusion.",
+  "pressure": "Seeing less makes every other system worse because the player has less reliable ground truth.",
+  "confidence": 0.88,
+  "sources": [
+    "source_library/30_m3-stuart.md",
+    "source_library/11_m4-sherman.md",
+    "source_library/10_battle-villers-bocage.md"
+  ],
+  "tags": [
+    "visibility",
+    "mechanic",
+    "terrain"
+  ]
+}

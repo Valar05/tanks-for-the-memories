@@ -1,0 +1,16 @@
+{
+  "facts": [
+    {
+      "fact": "Occupation is temporary hostile control and can trigger administrative burdens.",
+      "source": "44_military_government.md",
+      "confidence": 0.82,
+      "note": "Combat control and civil control differ."
+    },
+    {
+      "fact": "OMGUS shows occupation is also a chain-of-command problem.",
+      "source": "51_office_of_military_government_united_states.md",
+      "confidence": 0.81,
+      "note": "Victory creates new information and authority problems."
+    }
+  ]
+}

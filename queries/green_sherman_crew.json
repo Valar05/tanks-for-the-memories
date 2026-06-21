@@ -1,0 +1,56 @@
+{
+  "query_id": "green_sherman_crew",
+  "question": "How should a green Sherman crew be modeled?",
+  "short_answer": "As a crew that can handle the vehicle physically but still loses time and confidence to poor coordination, weak radio habits, and uncertain target recognition.",
+  "evidence_summary": [
+    "Bomb shows how named crews and replacement commanders matter to memory and performance.",
+    "M4 Sherman and M3 Stuart materials show that crew roles and gunnery are doctrinally distinct.",
+    "Combat stress and fatigue sources show why crew confidence is not static."
+  ],
+  "structured_data": {
+    "crew_roles": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "assistant driver/bow gunner"
+    ],
+    "green_crew_risks": [
+      "slow target handoff",
+      "hesitant movement",
+      "radio confusion",
+      "overexposure when buttoned up"
+    ],
+    "maturity_path": [
+      "practice drill",
+      "repeat contact reports",
+      "learn terrain cues",
+      "build mutual trust"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "crew_confidence",
+      "effect": "starts low and is damaged by losses or confusion."
+    },
+    {
+      "variable": "replacement_familiarity",
+      "effect": "keeps fresh crews clumsy until they learn each other."
+    },
+    {
+      "variable": "fatigue",
+      "effect": "makes green crews fail faster under prolonged pressure."
+    }
+  ],
+  "game_implications": [
+    "Crew growth should be visible over several contacts and not just through upgrades.",
+    "Replacing a crew member should cause a temporary performance dip."
+  ],
+  "confidence": 0.9,
+  "sources": [
+    "source_library/19_bomb-tank.md",
+    "source_library/11_m4-sherman.md",
+    "source_library/31_m3-stuart.md",
+    "source_library/42_combat-stress-reaction.md"
+  ]
+}

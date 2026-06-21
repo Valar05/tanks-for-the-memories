@@ -1,0 +1,64 @@
+{
+  "query_id": "logistics_pressure",
+  "question": "How does logistics pressure shape a tank unit in WWII?",
+  "short_answer": "Logistics pressure decides whether the unit is merely armed or actually ready: fuel, ammo, transport, repair, and replacement flow determine how long the platoon can keep moving and fighting.",
+  "evidence_summary": [
+    "Army Service Forces centralized food, fuel, ammunition, transport, and medical support.",
+    "Ordnance and recovery sources show that broken vehicles are an input to the sustainment system.",
+    "Army history volumes route the Normandy campaign through logistics as much as tactics."
+  ],
+  "structured_data": {
+    "pressure_points": [
+      "fuel",
+      "ammunition",
+      "spares",
+      "tow assets",
+      "depots",
+      "repair time"
+    ],
+    "failure_modes": [
+      "stalled advance",
+      "vehicle cannibalization",
+      "lost mobility",
+      "missed opportunity"
+    ],
+    "command_effects": [
+      "reduced tempo",
+      "forced halts",
+      "route dependency"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "fuel_reserve",
+      "effect": "limits movement and pursuit."
+    },
+    {
+      "variable": "ammo_reserve",
+      "effect": "limits fire plan flexibility."
+    },
+    {
+      "variable": "transport_capacity",
+      "effect": "controls how far supply can follow."
+    },
+    {
+      "variable": "maintenance_backlog",
+      "effect": "reduces readiness over time."
+    },
+    {
+      "variable": "recovery_delay",
+      "effect": "turns immobility into a time cost."
+    }
+  ],
+  "game_implications": [
+    "A well-led platoon still stops when logistics stop.",
+    "The player should manage tempo against the sustainment tail."
+  ],
+  "confidence": 0.88,
+  "sources": [
+    "42_army_service_forces.md",
+    "49_united_states_army_ordnance_corps.md",
+    "48_vehicle_recovery.md",
+    "52_united_states_army_in_world_war_ii.md"
+  ]
+}

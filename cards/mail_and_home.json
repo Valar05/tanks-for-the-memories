@@ -1,0 +1,27 @@
+{
+  "card_id": "mail_and_home",
+  "summary": "Mail is a morale engine, a censorship channel, and a memory trigger.",
+  "source_basis": [
+    "46_military_mail.md",
+    "43_united_states_army_during_world_war_ii.md"
+  ],
+  "simulation_implications": [
+    "Mail delay should affect morale and cohesion.",
+    "Home contact should change emotional load, not just flavor."
+  ],
+  "game_implications": [
+    "Letter arrivals can be mechanically meaningful events.",
+    "Interrupted mail should feel like a real loss."
+  ],
+  "variables": [
+    "mail_latency",
+    "mail_censorship",
+    "home_attachment",
+    "morale_bonus_from_mail"
+  ],
+  "confidence": 0.78,
+  "citations": [
+    "46_military_mail.md",
+    "43_united_states_army_during_world_war_ii.md"
+  ]
+}

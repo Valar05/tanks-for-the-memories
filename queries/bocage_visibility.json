@@ -1,0 +1,50 @@
+{
+  "query_id": "bocage_visibility",
+  "question": "What does bocage visibility do to the commander?",
+  "short_answer": "It shrinks the commander’s useful field of view, hides enemy positions, and turns every lane into a report problem as much as a movement problem.",
+  "evidence_summary": [
+    "Operation Cobra and Villers-Bocage show hedgerow country forcing short-range engagement.",
+    "Carentan shows how a causeway and hedgerows channel movement and hide threats.",
+    "Omaha shows similar visibility loss from smoke, water, and chaos even before the bocage proper."
+  ],
+  "structured_data": {
+    "terrain_constraints": [
+      "hedgerow occlusion",
+      "single-lane approach",
+      "ambush from short range",
+      "limited artillery observation"
+    ],
+    "visibility_modes": [
+      "buttoned up",
+      "hatch open",
+      "gunner scope",
+      "map/report"
+    ],
+    "information_effect": "uncertainty stays high until recon or contact reports reduce it"
+  },
+  "simulation_variables": [
+    {
+      "variable": "visibility_arc",
+      "effect": "narrows in bocage and widens in open ground."
+    },
+    {
+      "variable": "buttoned_visibility_penalty",
+      "effect": "is most punishing in hedgerow country."
+    },
+    {
+      "variable": "hatch_visibility_bonus",
+      "effect": "improves spotting but increases exposure."
+    }
+  ],
+  "game_implications": [
+    "The player should not be able to see the whole lane from the tank HUD.",
+    "Reports and reconnaissance should be the route to certainty, not camera zoom."
+  ],
+  "confidence": 0.96,
+  "sources": [
+    "source_library/08_operation-cobra.md",
+    "source_library/10_battle-villers-bocage.md",
+    "source_library/04_utah-beach-to-cherbourg-carentan.md",
+    "source_library/01_omaha-beachhead.md"
+  ]
+}

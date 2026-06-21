@@ -1,0 +1,28 @@
+{
+  "card_id": "dd_tank_operations",
+  "summary": "DD tank operations are a weather and launch-management problem before they are a gunnery problem.",
+  "source_basis": [
+    "Omaha Beachhead",
+    "The D-Day Story",
+    "Cross-Channel Attack, Chapter VIII"
+  ],
+  "simulation_implications": [
+    "Sea state, current, and launch timing should decide whether amphibious tanks reach the fight.",
+    "Players should see DD losses as information and timing failures, not only vehicle failures."
+  ],
+  "game_implications": [
+    "DD missions should be high-risk preparatory actions with visible uncertainty.",
+    "Beach landings should integrate vehicle exposure with command-picture quality."
+  ],
+  "variables": [
+    "report_delay",
+    "report_accuracy",
+    "visibility_arc"
+  ],
+  "confidence": 0.95,
+  "citations": [
+    "source_library/01_omaha-beachhead.md",
+    "source_library/22_dday-story.md",
+    "source_library/02_cross-channel-attack-ch8.md"
+  ]
+}

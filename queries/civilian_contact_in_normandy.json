@@ -1,0 +1,59 @@
+{
+  "query_id": "civilian_contact_in_normandy",
+  "question": "What does civilian contact in Normandy mean for the simulation?",
+  "short_answer": "It means towns are not empty backdrops: civilians, damage, occupation rules, and administrative burden change what the unit can do and what it remembers.",
+  "evidence_summary": [
+    "Military government and occupation define the rule-set for civilians under armed control.",
+    "Operation Astonia shows civilian harm can accompany tactical victory.",
+    "Occupation authority and chain-of-command confusion add a bureaucratic layer after combat."
+  ],
+  "structured_data": {
+    "civilian_states": [
+      "fleeing",
+      "occupies town",
+      "displaced",
+      "requisitioned",
+      "protected"
+    ],
+    "player_effects": [
+      "movement limits",
+      "fire discipline",
+      "reputation",
+      "paperwork"
+    ],
+    "emotional_effects": [
+      "guilt",
+      "urgency",
+      "burden"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "civilian_contact",
+      "effect": "changes movement and fire rules in towns."
+    },
+    {
+      "variable": "occupation_rules",
+      "effect": "changes what authority can do."
+    },
+    {
+      "variable": "collateral_risk",
+      "effect": "adds moral and administrative cost."
+    },
+    {
+      "variable": "administrative_backlog",
+      "effect": "slows post-combat control."
+    }
+  ],
+  "game_implications": [
+    "Winning a firefight should not end the simulation state.",
+    "Civilian outcomes should remain visible in the ledger."
+  ],
+  "confidence": 0.82,
+  "sources": [
+    "44_military_government.md",
+    "45_military_occupation.md",
+    "51_office_of_military_government_united_states.md",
+    "53_operation_astonia.md"
+  ]
+}

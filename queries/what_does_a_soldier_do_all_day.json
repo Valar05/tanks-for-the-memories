@@ -1,0 +1,69 @@
+{
+  "query_id": "what_does_a_soldier_do_all_day",
+  "question": "What does a WWII soldier do all day in a detailed life simulation?",
+  "short_answer": "He spends most of the day waiting, moving, digging, maintaining gear, eating, listening for orders, and trying to stay clean and rested enough to fight when the moment comes.",
+  "evidence_summary": [
+    "U.S. Army living-conditions sources describe repetitive rations, poor hygiene, and long periods of field routine.",
+    "Mail and rotation sources show that morale depends on small replenishments, not constant action.",
+    "Logistics and maintenance sources show that repair and supply are part of daily life, not a separate layer."
+  ],
+  "structured_data": {
+    "daily_activities": [
+      "march",
+      "dig",
+      "stand-to",
+      "eat",
+      "clean weapon",
+      "rest",
+      "listen for orders"
+    ],
+    "stressors": [
+      "sleep debt",
+      "hunger",
+      "cold",
+      "mud",
+      "boredom",
+      "mail delay"
+    ],
+    "support_systems": [
+      "rations",
+      "medical care",
+      "maintenance",
+      "letters",
+      "rotation"
+    ]
+  },
+  "simulation_variables": [
+    {
+      "variable": "sleep_debt",
+      "effect": "reduces alertness and decision quality."
+    },
+    {
+      "variable": "hunger",
+      "effect": "reduces endurance and patience."
+    },
+    {
+      "variable": "hygiene_state",
+      "effect": "affects illness and comfort."
+    },
+    {
+      "variable": "mail_latency",
+      "effect": "changes morale and attachment."
+    },
+    {
+      "variable": "maintenance_backlog",
+      "effect": "reduces available vehicles and tools."
+    }
+  ],
+  "game_implications": [
+    "Idle time should still cost the player something.",
+    "The best move is often to preserve capacity for the next unknown event."
+  ],
+  "confidence": 0.86,
+  "sources": [
+    "43_united_states_army_during_world_war_ii.md",
+    "46_military_mail.md",
+    "47_garrison_ration.md",
+    "42_army_service_forces.md"
+  ]
+}
