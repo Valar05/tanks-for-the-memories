@@ -1,0 +1,242 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --bg: #0d1624;
+  --panel: rgba(12, 18, 29, 0.76);
+  --panel-border: rgba(158, 180, 216, 0.2);
+  --text: #eef4ff;
+  --muted: #a8b7d6;
+  --accent: #80d3ff;
+  --good: #9af28c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(75, 104, 172, 0.18), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(76, 195, 255, 0.16), transparent 24%),
+    linear-gradient(180deg, #0d1624 0%, #090d14 100%);
+}
+
+body {
+  color: var(--text);
+}
+
+#app,
+.viewport {
+  position: fixed;
+  inset: 0;
+}
+
+.shell {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hud {
+  position: absolute;
+  inset: 0 0 auto 0;
+  padding: 24px;
+}
+
+.titlebar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  line-height: 0.95;
+  max-width: 10ch;
+}
+
+.badges,
+.controls,
+.help,
+.panels {
+  display: flex;
+  gap: 12px;
+}
+
+.badges {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.badge,
+.panel,
+.controls button,
+.tank-label {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.badge {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(20, 28, 42, 0.78);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  font-size: 0.85rem;
+}
+
+.badge.ghost {
+  color: var(--muted);
+}
+
+.panels {
+  margin-top: 20px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.panel {
+  flex: 1 1 320px;
+  min-width: 280px;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+}
+
+.panel p {
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.panel code {
+  color: var(--good);
+}
+
+.log {
+  margin-top: 12px;
+  min-height: 150px;
+  max-height: 32vh;
+  overflow: auto;
+  display: grid;
+  gap: 8px;
+}
+
+.log-line {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #dbe8ff;
+}
+
+.controls {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  pointer-events: auto;
+}
+
+.controls button {
+  appearance: none;
+  border: 1px solid rgba(128, 211, 255, 0.25);
+  color: var(--text);
+  background: rgba(16, 24, 37, 0.82);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.controls button:hover {
+  border-color: rgba(128, 211, 255, 0.5);
+}
+
+.help {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--muted);
+  text-align: right;
+  font-size: 0.92rem;
+}
+
+.tank-label {
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(8, 12, 20, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 0.8rem;
+  pointer-events: none;
+  transform: translate(-9999px, -9999px);
+  will-change: transform, opacity;
+}
+
+.tank-label.player {
+  border-color: rgba(76, 195, 255, 0.4);
+}
+
+.tank-label.ally {
+  border-color: rgba(138, 242, 124, 0.38);
+}
+
+.tank-label.enemy {
+  border-color: rgba(255, 107, 107, 0.35);
+}
+
+@media (max-width: 720px) {
+  .hud {
+    padding: 16px;
+  }
+
+  .titlebar {
+    flex-direction: column;
+  }
+
+  .badges,
+  .help {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .controls {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .controls button {
+    flex: 1 1 140px;
+  }
+}
