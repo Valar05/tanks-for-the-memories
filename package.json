@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "smoke": "node scripts/smoke.mjs",
+    "bootstrap": "sh scripts/bootstrap.sh"
   },
   "dependencies": {
     "three": "^0.166.1"

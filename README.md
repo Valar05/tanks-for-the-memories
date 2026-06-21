@@ -29,12 +29,20 @@ Supported command phrases include:
 
 Low-confidence speech is ignored silently. Accepted commands appear in the command log.
 
+
+## Local Setup
+
+- `npm install`
+- `npm run smoke`
+- `npm run build`
+- `sh scripts/bootstrap.sh`
+
 ## Architecture
 
 - `src/main.ts` wires the scene, HUD, voice input, and tank logic.
 - `SpeechRecognition` feeds transcripts into a simple parser.
 - Parsed commands are queued and consumed by tank state machines.
-- Tank behavior is intentionally simple: idle, moving, attacking, and holding.
+- TankAgent behavior is intentionally simple: idle, moving, attacking, and holding.
 - The scene uses a flat terrain, a road strip, and three box tanks with no art assets.
 
 ## Notes

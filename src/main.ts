@@ -11,7 +11,7 @@ type Command = {
   action: 'advance' | 'halt' | 'reverse' | 'scan' | 'fire' | 'follow' | 'attack' | 'hold';
 };
 
-type Tank = {
+type TankAgent = {
   role: TankRole;
   mesh: THREE.Mesh;
   label: HTMLSpanElement;
@@ -108,9 +108,9 @@ road.rotation.x = -Math.PI / 2;
 road.position.y = 0.02;
 scene.add(road);
 
-const tanks = new Map<TankRole, Tank>();
+const tanks = new Map<TankRole, TankAgent>();
 
-function createTank(role: TankRole, color: number, position: THREE.Vector3): Tank {
+function createTank(role: TankRole, color: number, position: THREE.Vector3): TankAgent {
   const body = new THREE.Mesh(
     new THREE.BoxGeometry(3, 1.5, 4),
     new THREE.MeshStandardMaterial({ color })
@@ -124,7 +124,7 @@ function createTank(role: TankRole, color: number, position: THREE.Vector3): Tan
   label.textContent = role.toUpperCase();
   document.body.appendChild(label);
 
-  const tank: Tank = {
+  const tank: TankAgent = {
     role,
     mesh: body,
     label,
@@ -246,7 +246,7 @@ function applyCommand(command: Command) {
   appendLog(`ACK: ${acknowledge(command.action)}`);
 }
 
-function updateTank(tank: Tank, delta: number) {
+function updateTank(tank: TankAgent, delta: number) {
   if (tank.role === 'enemy') {
     const target = playerTank.mesh.position.clone();
     target.y = tank.mesh.position.y;
