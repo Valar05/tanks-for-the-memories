@@ -34,6 +34,9 @@ The player is a commander converting partial reports, crew observations, visual 
 - Medical care is a queue.
 - Logistics is tempo control.
 - Visibility is posture-, terrain-, and role-dependent.
+- Battlefield awareness is observer-sourced and confidence-weighted.
+- Battlefield contacts are edge-triggered records: first sighting creates the contact, later sightings refine confidence and status without replaying the reveal.
+- The camera and UI should follow information events, not omniscient input.
 - Training is role learning, not vehicle learning.
 - Replacement personnel change both capacity and trust.
 - Morale is not flavor; it is operational throughput.

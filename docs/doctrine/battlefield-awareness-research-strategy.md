@@ -36,6 +36,7 @@ Every candidate source should be mined for:
 - line-of-sight constraints
 - confidence level
 - delay before report
+- whether this was first contact or a later confirmation
 - whether the report was corrected
 - whether the report changed the tactical decision
 - whether the report created a new memory marker

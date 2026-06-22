@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import './styles.css';
 import { beginBattle, buildAfterActionHtml, buildCrewPanelHtml, getCrewModifiers, loadCrewState, noteCrewSighting, registerBattleEvent, saveCrewState, tickCrewState } from './crew';
+import { cloneAwarenessState, createAwarenessState, getPrimaryContact, recordEnemyTankContact, type AwarenessState } from './awareness';
 
 type ViewMode = 'hatch' | 'buttoned' | 'scope' | 'map';
 type Phase = 'live' | 'failure' | 'victory';
@@ -61,6 +62,7 @@ type Checkpoint = {
   ambushTriggered: boolean;
   attackTimer: number;
   ammo: number;
+  awarenessState: AwarenessState;
   lastLesson: string;
 };
 
@@ -91,6 +93,7 @@ shell.innerHTML = [
   '    <div class="chip" data-view-chip></div>',
   '    <div class="chip muted" data-threat-chip></div>',
   '    <div class="chip muted" data-morale-chip></div>',
+  '    <div class="chip muted" data-awareness-chip></div>',
   '  </div>',
   '  <div class="layout">',
   '    <section class="panel command-panel">',
@@ -133,6 +136,7 @@ shell.innerHTML = [
   '        <div class="crew-log" data-crew-log></div>',
   '      </div>',
   '    </section>',
+  '    <div class="chip muted" data-awareness-chip></div>',
   '  </div>',
   '  <div class="after-action hidden" data-aar></div>',
   '  <div class="vignette" data-vignette></div>',
@@ -157,6 +161,7 @@ type StatusRefs = {
   crewSummary: HTMLSpanElement;
   crewCards: HTMLDivElement;
   crewLog: HTMLDivElement;
+  awarenessChip: HTMLDivElement;
   aar: HTMLDivElement;
   vignette: HTMLDivElement;
 };
@@ -178,6 +183,7 @@ const refs = {
   crewSummary: shell.querySelector<HTMLSpanElement>('[data-crew-summary]')!,
   crewCards: shell.querySelector<HTMLDivElement>('[data-crew-cards]')!,
   crewLog: shell.querySelector<HTMLDivElement>('[data-crew-log]')!,
+  awarenessChip: shell.querySelector<HTMLDivElement>('[data-awareness-chip]')!,
   aar: shell.querySelector<HTMLDivElement>('[data-aar]')!,
   vignette: shell.querySelector<HTMLDivElement>('[data-vignette]')!
 };
@@ -237,6 +243,7 @@ let enemyRevealed = false;
 let enemyDestroyed = false;
 let currentLesson = '';
 const crewState = loadCrewState();
+const awarenessState = createAwarenessState();
 let ammo = 6;
 let battleAmmoStart = ammo;
 const commandQueue: Command[] = [];
@@ -312,6 +319,7 @@ const initialCheckpoint: Checkpoint = {
   ambushTriggered: false,
   attackTimer: 0,
   ammo,
+  awarenessState: cloneAwarenessState(awarenessState),
   lastLesson: ''
 };
 checkpoint = cloneCheckpoint(initialCheckpoint);
@@ -525,6 +533,7 @@ function cloneCheckpoint(source: Checkpoint): Checkpoint {
     ambushTriggered: source.ambushTriggered,
     attackTimer: source.attackTimer,
     ammo: source.ammo,
+    awarenessState: cloneAwarenessState(source.awarenessState),
     lastLesson: source.lastLesson
   };
 }
@@ -562,6 +571,7 @@ function captureCheckpoint() {
     ambushTriggered,
     attackTimer,
     ammo,
+    awarenessState: cloneAwarenessState(awarenessState),
     lastLesson: currentLesson
   };
 }
@@ -584,6 +594,9 @@ function restoreCheckpoint() {
   ambushTriggered = checkpoint.ambushTriggered;
   attackTimer = checkpoint.attackTimer;
   ammo = checkpoint.ammo;
+  awarenessState.contacts = cloneAwarenessState(checkpoint.awarenessState).contacts;
+  awarenessState.lastRevealAt = checkpoint.awarenessState.lastRevealAt;
+  awarenessState.nextContactId = checkpoint.awarenessState.nextContactId;
   currentLesson = checkpoint.lastLesson;
   player.intent = 'idle';
   wingman.intent = 'idle';
@@ -597,6 +610,7 @@ function restoreCheckpoint() {
   updateViewMode(viewMode, false);
   refs.aar.classList.add('hidden');
   refs.aar.innerHTML = '';
+  refreshAwarenessChip();
   appendStatus('Checkpoint restored.');
   renderHud();
 }
@@ -611,6 +625,58 @@ function logEvent(source: string, message: string) {
 
 function appendStatus(message: string) {
   currentLesson = message;
+}
+
+
+function showAwarenessReveal(text: string) {
+  refs.awarenessChip.textContent = text;
+  refs.awarenessChip.className = 'chip muted chip-awareness';
+  logEvent('AWARENESS', text);
+}
+
+function refreshAwarenessChip() {
+  const contact = getPrimaryContact(awarenessState);
+  if (!contact) {
+    refs.awarenessChip.textContent = 'No active contact';
+    refs.awarenessChip.className = 'chip muted';
+    return;
+  }
+  refs.awarenessChip.textContent = contact.observer + ' · ' + contact.status.replace('-', ' ') + ' · ' + Math.round(contact.confidence * 100) + '%';
+  refs.awarenessChip.className = 'chip chip-awareness';
+}
+
+function recordAwarenessContact(observed: { label: string; x: number; z: number; radius: number; confidence: number }, observer: string, sourceUnit: string, confirmed = false) {
+  const transition = recordEnemyTankContact(awarenessState, {
+    observer,
+    sourceUnit,
+    time: gameTime,
+    label: observed.label,
+    confidence: observed.confidence,
+    confirmed
+  });
+  refreshAwarenessChip();
+  if (transition.shouldReveal) {
+    showAwarenessReveal(transition.revealText);
+    addReport({
+      type: 'contact',
+      source: observer + ' / ' + sourceUnit,
+      subject: transition.reportSubject,
+      approxPosition: {
+        label: observed.label,
+        x: observed.x,
+        z: observed.z,
+        radius: observed.radius
+      },
+      confidence: transition.contact.confidence,
+      truth: transition.contact.status === 'confirmed-armor' ? 'confirmed' : 'partial'
+    });
+  }
+  enemyKnown = true;
+  if (transition.contact.status === 'confirmed-armor') {
+    enemyRevealed = true;
+    enemy.visible = true;
+  }
+  return transition;
 }
 
 function addReport(input: Omit<Report, 'id' | 'truth' | 'createdAt' | 'expiryAt'> & { truth?: Report['truth'] }) {
@@ -963,6 +1029,9 @@ function restartFromCheckpoint() {
   ambushTriggered = checkpoint.ambushTriggered;
   attackTimer = checkpoint.attackTimer;
   ammo = checkpoint.ammo;
+  awarenessState.contacts = cloneAwarenessState(checkpoint.awarenessState).contacts;
+  awarenessState.lastRevealAt = checkpoint.awarenessState.lastRevealAt;
+  awarenessState.nextContactId = checkpoint.awarenessState.nextContactId;
   currentLesson = checkpoint.lastLesson;
   player.intent = 'idle';
   wingman.intent = 'idle';
@@ -976,6 +1045,7 @@ function restartFromCheckpoint() {
   refs.aar.innerHTML = '';
   beginBattle(crewState, ammo, gameTime);
   updateViewMode(viewMode, false);
+  refreshAwarenessChip();
   logEvent('HQ', 'Checkpoint restored.');
   renderHud();
 }
@@ -1083,25 +1153,8 @@ function updateUnit(unit: Unit, delta: number) {
         if (!enemyDestroyed) {
           const observed = observeEnemy(unit);
           if (observed) {
-            const report = addReport({
-              type: 'contact',
-              source: 'Wingman Sherman',
-              subject: unit.scoutSide === 'right' ? 'AT gun behind the right hedgerow' : 'Possible hostile contact beyond the bocage',
-              approxPosition: {
-                label: observed.label,
-                x: observed.x,
-                z: observed.z,
-                radius: observed.radius
-              },
-              confidence: observed.confidence,
-              truth: observed.confidence > 0.8 ? 'confirmed' : 'partial'
-            });
-            enemyKnown = true;
-            if (observed.confidence > 0.8) {
-              enemyRevealed = true;
-              enemy.visible = true;
-            }
-            logEvent('WINGMAN', 'Contact report filed: ' + report.subject + '.');
+            const transition = recordAwarenessContact(observed, 'Smoker', 'Wingman Sherman', observed.confidence > 0.8);
+            logEvent('WINGMAN', 'Contact report filed: ' + transition.reportSubject + '.');
           } else {
             addReport({
               type: 'sighting',
@@ -1275,6 +1328,7 @@ function renderHud() {
   const crewView = buildCrewPanelHtml(crewState, ammo, phase);
   refs.moraleChip.textContent = crewView.summary;
   refs.threatChip.textContent = enemyDestroyed ? 'Enemy silenced' : enemyKnown ? 'Contact known' : 'Enemy hidden';
+  refreshAwarenessChip();
   refs.ledgerSummary.textContent = activeReports().length + ' active report' + (activeReports().length === 1 ? '' : 's');
   refs.radioLog.innerHTML = logLines.map(function (entry) {
     return '<div class="radio-entry">' + escapeHtml(entry) + '</div>';
@@ -1413,23 +1467,15 @@ function tick(now: number) {
 function updateCommandersAwareness() {
   if (phase !== 'live' || viewMode === 'map') return;
   const playerObservation = observeEnemy(player);
-  if (playerObservation && !enemyKnown) {
-    enemyKnown = true;
-    addReport({
-      type: 'contact',
-      source: 'Commander Sherman',
-      subject: 'Sighted hostile AT gun through the hedge line',
-      approxPosition: {
-        label: playerObservation.label,
-        x: playerObservation.x,
-        z: playerObservation.z,
-        radius: playerObservation.radius
-      },
-      confidence: playerObservation.confidence,
-      truth: playerObservation.confidence > 0.8 ? 'confirmed' : 'partial'
-    });
-    logEvent('COMMANDER', 'Direct sighting confirmed.');
-    noteCrewSighting(crewState, gameTime, 'Commander spotted the hedge-line contact and finally got a clean picture.');
+  const contact = getPrimaryContact(awarenessState);
+  if (playerObservation && (!contact || playerObservation.confidence > contact.confidence + 0.08 || (contact.status !== 'confirmed-armor' && playerObservation.confidence >= 0.82))) {
+    const transition = recordAwarenessContact(playerObservation, 'Commander Mercer', 'Player Sherman', playerObservation.confidence > 0.8);
+    if (transition.shouldReveal) {
+      logEvent('COMMANDER', 'Direct sighting confirmed.');
+    }
+    if (transition.created || transition.statusChanged) {
+      noteCrewSighting(crewState, gameTime, 'Commander spotted the hedge-line contact and finally got a clean picture.');
+    }
   }
 }
 

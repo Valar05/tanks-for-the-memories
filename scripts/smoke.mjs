@@ -64,4 +64,9 @@ if (localTsc && localVite) {
   process.exit(result.status ?? 1);
 }
 
+const awarenessResult = spawnSync('npm', ['run', 'awareness-smoke'], { stdio: 'inherit' });
+if ((awarenessResult.status ?? 1) !== 0) {
+  process.exit(awarenessResult.status ?? 1);
+}
+
 console.log('Smoke check passed without local build tools. Run npm install, then npm run build.');
