@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "NODE_PATH=/data/data/com.termux/files/usr/tmp/tftm-deps/node_modules node /data/data/com.termux/files/usr/tmp/tftm-deps/node_modules/typescript/bin/tsc -b && NODE_PATH=/data/data/com.termux/files/usr/tmp/tftm-deps/node_modules node /data/data/com.termux/files/usr/tmp/tftm-deps/node_modules/vite/bin/vite.js build --configLoader native --config /data/data/com.termux/files/usr/tmp/tftm-deps/vite.config.js",
+    "build": "node ./scripts/build.mjs",
     "preview": "vite preview",
     "smoke": "node scripts/smoke.mjs",
     "awareness-smoke": "node scripts/awareness-smoke.mjs",
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.13.5",
+    "esbuild-wasm": "^0.28.1",
     "typescript": "^5.7.3",
     "vite": "^6.1.0"
   }

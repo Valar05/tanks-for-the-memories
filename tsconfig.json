@@ -1,11 +1,6 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "three": [
-        "/data/data/com.termux/files/usr/tmp/tftm-deps/node_modules/three"
-      ]
-    },
     "target": "ES2022",
     "useDefineForClassFields": true,
     "lib": [

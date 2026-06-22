@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
-const tsc = '/data/data/com.termux/files/usr/tmp/tftm-deps/node_modules/typescript/bin/tsc';
+const tsc = 'node_modules/typescript/bin/tsc';
 const workDir = mkdtempSync(join(tmpdir(), 'tftm-awareness-'));
 const compile = spawnSync('node', [tsc, '--target', 'ES2022', '--module', 'ES2022', '--moduleResolution', 'Bundler', '--outDir', workDir, 'src/awareness.ts'], { stdio: 'inherit' });
 if ((compile.status ?? 1) !== 0) {

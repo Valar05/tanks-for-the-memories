@@ -1069,17 +1069,18 @@ function observeEnemy(observer: Unit) {
   const enemyPos = new THREE.Vector3(enemy.position.x, 0.7, enemy.position.z);
   const distance = observerPos.distanceTo(enemyPos);
   const forwardBias = enemyPos.x >= observerPos.x ? 1 : 0;
-  const maxRange = viewMode === 'hatch' ? 78 : viewMode === 'buttoned' ? 48 : viewMode === 'scope' ? 68 : 0;
-  const arcCheck = viewMode === 'scope' ? Math.abs(enemyPos.z - observerPos.z) < 10 : true;
-  const scoutBonus = observer.intent === 'scout-left' || observer.intent === 'scout-right' ? 1 : 0;
+  const observerMode = getObserverSightMode(observer);
+  if (!observerMode) return null;
+  const maxRange = observerMode === 'hatch' ? 78 : observerMode === 'buttoned' ? 48 : observerMode === 'scope' ? 68 : observerMode === 'scout' ? 72 : 58;
+  const arcCheck = observerMode === 'scope' ? Math.abs(enemyPos.z - observerPos.z) < 10 : observerMode === 'scout' ? Math.abs(enemyPos.z - observerPos.z) < 14 : true;
+  const scoutBonus = observerMode === 'scout' ? 1 : 0;
   const crewBonus = observer.role === 'player' ? getCrewModifiers(crewState).spottingBonus : 0;
-  if (viewMode === 'map') return null;
   if (distance > maxRange) return null;
   if (!arcCheck) return null;
   if (blockedByHedgerow(observerPos, enemyPos) && scoutBonus === 0) {
     return null;
   }
-  const confidence = clamp((0.45 + (maxRange - distance) / maxRange * 0.4 + scoutBonus * 0.2 + forwardBias * 0.1 + crewBonus) * viewConfidenceMultiplier(), 0.25, 0.98);
+  const confidence = clamp((0.45 + (maxRange - distance) / maxRange * 0.4 + scoutBonus * 0.2 + forwardBias * 0.1 + crewBonus) * viewConfidenceMultiplier(observerMode), 0.25, 0.98);
   return {
     label: 'right hedgerow, about ' + Math.round(distance * 2.2) + 'm ahead',
     x: enemyPos.x,
@@ -1087,6 +1088,17 @@ function observeEnemy(observer: Unit) {
     radius: confidence >= 0.8 ? 5 : 10,
     confidence
   };
+}
+
+function getObserverSightMode(observer: Unit): Exclude<ViewMode, 'map'> | 'scout' | 'field' | null {
+  if (observer.role === 'player') {
+    if (viewMode === 'map') return null;
+    return viewMode;
+  }
+  if (observer.intent === 'scout-left' || observer.intent === 'scout-right') {
+    return 'scout';
+  }
+  return 'field';
 }
 
 function blockedByHedgerow(start: THREE.Vector3, end: THREE.Vector3) {
@@ -1116,10 +1128,11 @@ function segmentIntersectsRect(start: THREE.Vector3, end: THREE.Vector3, rect: {
   return false;
 }
 
-function viewConfidenceMultiplier() {
-  if (viewMode === 'hatch') return 1.1;
-  if (viewMode === 'buttoned') return 0.75;
-  if (viewMode === 'scope') return 1.2;
+function viewConfidenceMultiplier(mode: Exclude<ViewMode, 'map'> | 'scout' | 'field') {
+  if (mode === 'hatch') return 1.1;
+  if (mode === 'buttoned') return 0.75;
+  if (mode === 'scope') return 1.2;
+  if (mode === 'scout') return 1.08;
   return 1;
 }
 
@@ -1237,8 +1250,8 @@ function handleAttackResolution(delta: number) {
   attackTimer = Math.max(0, attackTimer - delta);
   if (attackTimer === 0 && !enemyDestroyed) {
     const mods = getCrewModifiers(crewState);
-    const hitChance = clamp((viewMode === 'hatch' ? 0.88 : viewMode === 'buttoned' ? 0.72 : viewMode === 'scope' ? 0.94 : 0.76) + mods.attackBonus + (ammo <= 1 ? -0.05 : 0), 0.1, 0.98);
-    if (hitChance > 0.8 || enemyKnown) {
+    const hitChance = clamp((viewMode === 'hatch' ? 0.88 : viewMode === 'buttoned' ? 0.72 : viewMode === 'scope' ? 0.94 : 0.76) + mods.attackBonus + (enemyKnown ? 0.08 : 0) + (ammo <= 1 ? -0.05 : 0), 0.1, 0.98);
+    if (Math.random() < hitChance) {
       enemyDestroyed = true;
       enemy.visible = false;
       enemyRevealed = true;
@@ -1257,6 +1270,9 @@ function handleAttackResolution(delta: number) {
       });
       logEvent('PLATOON', 'Target neutralized.');
       registerBattleEvent(crewState, 'destroyed-tank', gameTime, 'The gun went up in smoke and the crew had a clear wreck to remember.');
+    } else {
+      logEvent('PLATOON', 'Round missed the target.');
+      registerBattleEvent(crewState, 'note', gameTime, 'The shot missed and the crew had to correct the picture.');
     }
   }
 }

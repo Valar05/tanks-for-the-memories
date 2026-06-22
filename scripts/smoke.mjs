@@ -32,12 +32,12 @@ for (const scriptName of ['build', 'dev', 'smoke', 'bootstrap']) {
 }
 
 const deps = [
-  '/data/data/com.termux/files/usr/tmp/tftm-deps/node_modules/typescript/bin/tsc',
-  '/data/data/com.termux/files/usr/tmp/tftm-deps/node_modules/vite/bin/vite.js'
+  'node_modules/typescript/bin/tsc',
+  'node_modules/esbuild-wasm/lib/main.js'
 ];
 for (const dep of deps) {
   if (!existsSync(dep)) {
-    failures.push('missing installed temp dependency ' + dep);
+    failures.push('missing repo-local dependency ' + dep);
   }
 }
 
