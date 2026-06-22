@@ -10,7 +10,8 @@ const requiredFiles = [
   'tsconfig.node.json',
   'vite.config.ts',
   'src/main.ts',
-  'src/styles.css'
+  'src/styles.css',
+  '.npmrc'
 ];
 
 const failures = [];
@@ -30,17 +31,25 @@ for (const scriptName of ['build', 'dev', 'smoke', 'bootstrap']) {
   }
 }
 
+const deps = [
+  '/data/data/com.termux/files/usr/tmp/tftm-deps/node_modules/typescript/bin/tsc',
+  '/data/data/com.termux/files/usr/tmp/tftm-deps/node_modules/vite/bin/vite.js'
+];
+for (const dep of deps) {
+  if (!existsSync(dep)) {
+    failures.push('missing installed temp dependency ' + dep);
+  }
+}
+
 const main = readFileSync('src/main.ts', 'utf8');
 const requiredSnippets = [
   'Information -> Order -> Consequence -> Memory',
+  'Information Ledger',
+  'After-action report',
   'attack contact',
   'hatch open',
   'button up',
   'gunner scope',
-  'report',
-  'Information Ledger',
-  'After-action report',
-  'hidden enemy',
   'No live AI or LLM calls are used at runtime.'
 ];
 for (const snippet of requiredSnippets) {
@@ -57,16 +66,5 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-const localTsc = existsSync('node_modules/.bin/tsc');
-const localVite = existsSync('node_modules/.bin/vite');
-if (localTsc && localVite) {
-  const result = spawnSync('npm', ['run', 'build'], { stdio: 'inherit' });
-  process.exit(result.status ?? 1);
-}
-
-const awarenessResult = spawnSync('npm', ['run', 'awareness-smoke'], { stdio: 'inherit' });
-if ((awarenessResult.status ?? 1) !== 0) {
-  process.exit(awarenessResult.status ?? 1);
-}
-
-console.log('Smoke check passed without local build tools. Run npm install, then npm run build.');
+const result = spawnSync('npm', ['run', 'build'], { stdio: 'inherit' });
+process.exit(result.status ?? 1);

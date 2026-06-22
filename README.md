@@ -56,10 +56,10 @@ Invalid commands do nothing and produce no correction message.
 
 ## Local setup
 
-- npm install
-- npm run smoke
-- npm run build
-- sh scripts/bootstrap.sh
+- `npm install`
+- `npm run smoke`
+- `npm run build`
+- `sh scripts/bootstrap.sh`
 
 ## Notes
 
