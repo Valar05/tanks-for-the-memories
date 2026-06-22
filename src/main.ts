@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import './styles.css';
+import { beginBattle, buildAfterActionHtml, buildCrewPanelHtml, getCrewModifiers, loadCrewState, noteCrewSighting, registerBattleEvent, saveCrewState, tickCrewState } from './crew';
 
 type ViewMode = 'hatch' | 'buttoned' | 'scope' | 'map';
 type Phase = 'live' | 'failure' | 'victory';
@@ -59,6 +60,7 @@ type Checkpoint = {
   enemyDestroyed: boolean;
   ambushTriggered: boolean;
   attackTimer: number;
+  ammo: number;
   lastLesson: string;
 };
 
@@ -121,6 +123,16 @@ shell.innerHTML = [
   '        <div class="map-caption" data-map-caption></div>',
   '      </div>',
   '    </section>',
+  '    <section class="panel crew-panel">',
+  '      <header class="panel-head">',
+  '        <h2>Crew</h2>',
+  '        <span class="panel-subtitle" data-crew-summary></span>',
+  '      </header>',
+  '      <div class="crew-panel-body">',
+  '        <div class="crew-cards" data-crew-cards></div>',
+  '        <div class="crew-log" data-crew-log></div>',
+  '      </div>',
+  '    </section>',
   '  </div>',
   '  <div class="after-action hidden" data-aar></div>',
   '  <div class="vignette" data-vignette></div>',
@@ -142,6 +154,9 @@ type StatusRefs = {
   mapCard: HTMLDivElement;
   mapGrid: HTMLDivElement;
   mapCaption: HTMLDivElement;
+  crewSummary: HTMLSpanElement;
+  crewCards: HTMLDivElement;
+  crewLog: HTMLDivElement;
   aar: HTMLDivElement;
   vignette: HTMLDivElement;
 };
@@ -160,6 +175,9 @@ const refs = {
   mapCard: shell.querySelector<HTMLDivElement>('[data-map-card]')!,
   mapGrid: shell.querySelector<HTMLDivElement>('[data-map-grid]')!,
   mapCaption: shell.querySelector<HTMLDivElement>('[data-map-caption]')!,
+  crewSummary: shell.querySelector<HTMLSpanElement>('[data-crew-summary]')!,
+  crewCards: shell.querySelector<HTMLDivElement>('[data-crew-cards]')!,
+  crewLog: shell.querySelector<HTMLDivElement>('[data-crew-log]')!,
   aar: shell.querySelector<HTMLDivElement>('[data-aar]')!,
   vignette: shell.querySelector<HTMLDivElement>('[data-vignette]')!
 };
@@ -207,7 +225,7 @@ const cameras = {
   map: new THREE.OrthographicCamera(-34, 34, 20, -20, 0.1, 250)
 };
 
-let activeCamera = cameras.hatch;
+let activeCamera: THREE.Camera = cameras.hatch;
 let viewMode: ViewMode = 'hatch';
 let phase: Phase = 'live';
 let gameTime = 0;
@@ -218,10 +236,15 @@ let enemyKnown = false;
 let enemyRevealed = false;
 let enemyDestroyed = false;
 let currentLesson = '';
+const crewState = loadCrewState();
+let ammo = 6;
+let battleAmmoStart = ammo;
 const commandQueue: Command[] = [];
 const logLines: string[] = [];
 const reports: Report[] = [];
 let checkpoint: Checkpoint | null = null;
+beginBattle(crewState, ammo, 0);
+saveCrewState(crewState);
 
 const terrain = new THREE.Group();
 scene.add(terrain);
@@ -288,6 +311,7 @@ const initialCheckpoint: Checkpoint = {
   enemyDestroyed: false,
   ambushTriggered: false,
   attackTimer: 0,
+  ammo,
   lastLesson: ''
 };
 checkpoint = cloneCheckpoint(initialCheckpoint);
@@ -500,6 +524,7 @@ function cloneCheckpoint(source: Checkpoint): Checkpoint {
     enemyDestroyed: source.enemyDestroyed,
     ambushTriggered: source.ambushTriggered,
     attackTimer: source.attackTimer,
+    ammo: source.ammo,
     lastLesson: source.lastLesson
   };
 }
@@ -536,6 +561,7 @@ function captureCheckpoint() {
     enemyDestroyed,
     ambushTriggered,
     attackTimer,
+    ammo,
     lastLesson: currentLesson
   };
 }
@@ -557,6 +583,7 @@ function restoreCheckpoint() {
   enemyDestroyed = checkpoint.enemyDestroyed;
   ambushTriggered = checkpoint.ambushTriggered;
   attackTimer = checkpoint.attackTimer;
+  ammo = checkpoint.ammo;
   currentLesson = checkpoint.lastLesson;
   player.intent = 'idle';
   wingman.intent = 'idle';
@@ -566,6 +593,7 @@ function restoreCheckpoint() {
   wingman.attackTarget = null;
   enemy.visible = enemyRevealed && !enemyDestroyed;
   enemy.scale.setScalar(1);
+  beginBattle(crewState, ammo, gameTime);
   updateViewMode(viewMode, false);
   refs.aar.classList.add('hidden');
   refs.aar.innerHTML = '';
@@ -585,7 +613,7 @@ function appendStatus(message: string) {
   currentLesson = message;
 }
 
-function addReport(input: Omit<Report, 'id' | 'truth'> & { truth?: Report['truth'] }) {
+function addReport(input: Omit<Report, 'id' | 'truth' | 'createdAt' | 'expiryAt'> & { truth?: Report['truth'] }) {
   const report: Report = {
     id: 'R' + String(nextReportId++).padStart(3, '0'),
     type: input.type,
@@ -790,6 +818,7 @@ function issueReport(target: 'platoon' | 'wingman') {
     });
     logEvent('INFO', 'Report updated from current contact picture.');
     enemyKnown = true;
+    noteCrewSighting(crewState, gameTime, 'The commander tightened the picture from an existing contact report.');
     return;
   }
 
@@ -844,13 +873,23 @@ function engageKnownContact() {
     logEvent('FIRE', 'No confirmed target.');
     return;
   }
+  if (ammo <= 0) {
+    logEvent('FIRE', 'Empty rack. Loader says the tank is out of useful shells.');
+    registerBattleEvent(crewState, 'low-ammo', gameTime, 'The rack is empty and the crew knows it.');
+    return;
+  }
+  const mods = getCrewModifiers(crewState);
+  ammo = Math.max(0, ammo - 1);
   enemyKnown = true;
-  attackTimer = 1.25;
+  attackTimer = clamp(1.35 - mods.attackBonus * 1.9, 0.72, 1.35);
   player.intent = 'attack';
   wingman.intent = 'attack';
   player.attackTarget = new THREE.Vector3(contact.approxPosition.x, 0.7, contact.approxPosition.z);
   wingman.attackTarget = new THREE.Vector3(contact.approxPosition.x, 0.7, contact.approxPosition.z);
   logEvent('FIRE', 'Engaging ' + contact.approxPosition.label + '.');
+  if (ammo <= 2) {
+    registerBattleEvent(crewState, 'low-ammo', gameTime, 'The loader counted the remaining rounds after the shot.');
+  }
 }
 
 function chooseContactReport() {
@@ -882,6 +921,7 @@ function triggerAmbush() {
     truth: 'confirmed'
   });
   logEvent('ENEMY', 'Ambush. The hidden AT gun fired first.');
+  registerBattleEvent(crewState, 'taking-fire', gameTime, 'The enemy gun fired first from the right hedgerow.');
   currentLesson = 'Missing information: you advanced without a contact report or scout pass.';
   failMission('Ambushed in the bocage lane. You needed a scout report before advancing.');
 }
@@ -895,14 +935,7 @@ function failMission(message: string) {
   wingman.destination = null;
   player.attackTarget = null;
   wingman.attackTarget = null;
-  const report = [
-    '<h3>After-action report</h3>',
-    '<p>' + escapeHtml(message) + '</p>',
-    '<p><strong>What was missing:</strong> ' + escapeHtml(currentLesson || 'A scout report on the hidden enemy.') + '</p>',
-    '<p><strong>Restart:</strong> return to the checkpoint and try the lane again.</p>',
-    '<button type="button" data-restart-button>Restart checkpoint</button>'
-  ].join('');
-  refs.aar.innerHTML = report;
+  refs.aar.innerHTML = buildAfterActionHtml(crewState, 'failure', message, currentLesson || 'A scout report on the hidden enemy.', ammo);
   refs.aar.classList.remove('hidden');
   const restart = refs.aar.querySelector<HTMLButtonElement>('[data-restart-button]');
   if (restart) {
@@ -929,6 +962,7 @@ function restartFromCheckpoint() {
   enemyDestroyed = checkpoint.enemyDestroyed;
   ambushTriggered = checkpoint.ambushTriggered;
   attackTimer = checkpoint.attackTimer;
+  ammo = checkpoint.ammo;
   currentLesson = checkpoint.lastLesson;
   player.intent = 'idle';
   wingman.intent = 'idle';
@@ -940,6 +974,7 @@ function restartFromCheckpoint() {
   enemy.scale.setScalar(1);
   refs.aar.classList.add('hidden');
   refs.aar.innerHTML = '';
+  beginBattle(crewState, ammo, gameTime);
   updateViewMode(viewMode, false);
   logEvent('HQ', 'Checkpoint restored.');
   renderHud();
@@ -948,13 +983,7 @@ function restartFromCheckpoint() {
 function winMission(message: string) {
   if (phase !== 'live') return;
   phase = 'victory';
-  const report = [
-    '<h3>Mission complete</h3>',
-    '<p>' + escapeHtml(message) + '</p>',
-    '<p><strong>Memory:</strong> scouting produced the report that let the platoon act safely.</p>',
-    '<button type="button" data-restart-button>Run checkpoint again</button>'
-  ].join('');
-  refs.aar.innerHTML = report;
+  refs.aar.innerHTML = buildAfterActionHtml(crewState, 'victory', message, 'Scouting produced the report that let the platoon act safely.', ammo);
   refs.aar.classList.remove('hidden');
   const restart = refs.aar.querySelector<HTMLButtonElement>('[data-restart-button]');
   if (restart) {
@@ -973,13 +1002,14 @@ function observeEnemy(observer: Unit) {
   const maxRange = viewMode === 'hatch' ? 78 : viewMode === 'buttoned' ? 48 : viewMode === 'scope' ? 68 : 0;
   const arcCheck = viewMode === 'scope' ? Math.abs(enemyPos.z - observerPos.z) < 10 : true;
   const scoutBonus = observer.intent === 'scout-left' || observer.intent === 'scout-right' ? 1 : 0;
+  const crewBonus = observer.role === 'player' ? getCrewModifiers(crewState).spottingBonus : 0;
   if (viewMode === 'map') return null;
   if (distance > maxRange) return null;
   if (!arcCheck) return null;
   if (blockedByHedgerow(observerPos, enemyPos) && scoutBonus === 0) {
     return null;
   }
-  const confidence = clamp((0.45 + (maxRange - distance) / maxRange * 0.4 + scoutBonus * 0.2 + forwardBias * 0.1) * viewConfidenceMultiplier(), 0.25, 0.98);
+  const confidence = clamp((0.45 + (maxRange - distance) / maxRange * 0.4 + scoutBonus * 0.2 + forwardBias * 0.1 + crewBonus) * viewConfidenceMultiplier(), 0.25, 0.98);
   return {
     label: 'right hedgerow, about ' + Math.round(distance * 2.2) + 'm ahead',
     x: enemyPos.x,
@@ -1144,6 +1174,7 @@ function handleAmbushLogic() {
 function handleVictoryLogic() {
   if (phase !== 'live' || enemyDestroyed === false) return;
   if (player.group.position.x > 42) {
+    registerBattleEvent(crewState, 'victory', gameTime, 'The lane opened and the crew could finally breathe.');
     winMission('The lane is open. Your platoon reached the farmhouse line with the contact neutralized.');
   }
 }
@@ -1152,7 +1183,8 @@ function handleAttackResolution(delta: number) {
   if (attackTimer <= 0) return;
   attackTimer = Math.max(0, attackTimer - delta);
   if (attackTimer === 0 && !enemyDestroyed) {
-    const hitChance = viewMode === 'hatch' ? 0.88 : viewMode === 'buttoned' ? 0.72 : viewMode === 'scope' ? 0.94 : 0.76;
+    const mods = getCrewModifiers(crewState);
+    const hitChance = clamp((viewMode === 'hatch' ? 0.88 : viewMode === 'buttoned' ? 0.72 : viewMode === 'scope' ? 0.94 : 0.76) + mods.attackBonus + (ammo <= 1 ? -0.05 : 0), 0.1, 0.98);
     if (hitChance > 0.8 || enemyKnown) {
       enemyDestroyed = true;
       enemy.visible = false;
@@ -1171,6 +1203,7 @@ function handleAttackResolution(delta: number) {
         truth: 'confirmed'
       });
       logEvent('PLATOON', 'Target neutralized.');
+      registerBattleEvent(crewState, 'destroyed-tank', gameTime, 'The gun went up in smoke and the crew had a clear wreck to remember.');
     }
   }
 }
@@ -1239,7 +1272,8 @@ function updateEnemyLabel() {
 }
 
 function renderHud() {
-  refs.moraleChip.textContent = phase === 'live' ? 'Checkpoint ready' : phase === 'failure' ? 'Failure' : 'Victory';
+  const crewView = buildCrewPanelHtml(crewState, ammo, phase);
+  refs.moraleChip.textContent = crewView.summary;
   refs.threatChip.textContent = enemyDestroyed ? 'Enemy silenced' : enemyKnown ? 'Contact known' : 'Enemy hidden';
   refs.ledgerSummary.textContent = activeReports().length + ' active report' + (activeReports().length === 1 ? '' : 's');
   refs.radioLog.innerHTML = logLines.map(function (entry) {
@@ -1248,6 +1282,9 @@ function renderHud() {
   refs.ledgerList.innerHTML = renderReports();
   refs.mapGrid.innerHTML = renderMap();
   refs.mapCaption.textContent = viewMode === 'map' ? 'Map view shows report quality, not omniscience.' : 'Use map/report view for uncertainty, confidence, and timing.';
+  refs.crewSummary.textContent = crewView.summary;
+  refs.crewCards.innerHTML = crewView.cards;
+  refs.crewLog.innerHTML = crewView.log;
   if (phase === 'live') {
     refs.aar.classList.add('hidden');
   }
@@ -1346,12 +1383,26 @@ function tick(now: number) {
   if (phase === 'live') {
     gameTime += delta;
     processOrders();
+    player.speed = 5.2 * getCrewModifiers(crewState).driveSpeedMultiplier;
     updateUnit(player, delta);
     updateUnit(wingman, delta);
     handleAmbushLogic();
     handleAttackResolution(delta);
     handleVictoryLogic();
     updateCommandersAwareness();
+    tickCrewState(crewState, {
+      time: gameTime,
+      delta,
+      phase,
+      ammo,
+      playerIntent: player.intent,
+      moving: player.intent === 'advance' || player.intent === 'reverse',
+      underFire: ambushTriggered && !enemyDestroyed,
+      enemyKnown,
+      enemyRevealed,
+      enemyDestroyed,
+      friendlyLoss: false
+    });
   }
   updateCameras();
   renderer.render(scene, activeCamera);
@@ -1378,6 +1429,7 @@ function updateCommandersAwareness() {
       truth: playerObservation.confidence > 0.8 ? 'confirmed' : 'partial'
     });
     logEvent('COMMANDER', 'Direct sighting confirmed.');
+    noteCrewSighting(crewState, gameTime, 'Commander spotted the hedge-line contact and finally got a clean picture.');
   }
 }
 

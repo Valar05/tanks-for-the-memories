@@ -125,7 +125,7 @@ body::after {
   bottom: 16px;
   top: 68px;
   display: grid;
-  grid-template-columns: minmax(280px, 1.1fr) minmax(260px, 0.9fr) minmax(260px, 0.9fr);
+  grid-template-columns: minmax(300px, 1.15fr) minmax(250px, 0.95fr) minmax(250px, 0.95fr) minmax(280px, 1fr);
   gap: 14px;
   pointer-events: none;
 }
@@ -269,7 +269,8 @@ h1 {
 }
 
 .ledger-panel,
-.map-panel {
+.map-panel,
+.crew-panel {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -307,6 +308,170 @@ h1 {
 .report-card.stale {
   opacity: 0.55;
 }
+
+.crew-panel-body {
+  min-height: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.crew-cards {
+  min-height: 0;
+  display: grid;
+  gap: 10px;
+  overflow: auto;
+  padding-right: 4px;
+  max-height: 40vh;
+}
+
+.crew-card {
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(11, 15, 12, 0.8));
+}
+
+.crew-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.crew-card-head strong {
+  display: block;
+  font-size: 0.98rem;
+}
+
+.crew-card-head span,
+.crew-age,
+.crew-footer,
+.crew-injury {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.crew-age {
+  min-width: 2.5ch;
+  text-align: right;
+}
+
+.crew-trait {
+  margin: 8px 0 10px;
+  color: var(--amber);
+  font-size: 0.84rem;
+  letter-spacing: 0.02em;
+}
+
+.crew-stats {
+  display: grid;
+  gap: 8px;
+}
+
+.crew-stat {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.78rem;
+}
+
+.crew-stat span {
+  color: var(--muted);
+}
+
+.crew-stat strong {
+  font-size: 0.78rem;
+  color: var(--text);
+}
+
+.crew-meter {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.crew-meter i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--amber), var(--green));
+}
+
+.crew-stat-fatigue .crew-meter i {
+  background: linear-gradient(90deg, #d77f77, #e1b26d);
+}
+
+.crew-stat-fear .crew-meter i {
+  background: linear-gradient(90deg, #c45c5c, #e08a6b);
+}
+
+.crew-stat-morale .crew-meter i {
+  background: linear-gradient(90deg, #7eb4df, #88c08a);
+}
+
+.crew-stat-experience .crew-meter i {
+  background: linear-gradient(90deg, #d7bb77, #88c08a);
+}
+
+.crew-footer {
+  margin-top: 8px;
+}
+
+.crew-injury {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.crew-injury-none {
+  opacity: 0.7;
+}
+
+.crew-log {
+  min-height: 0;
+  display: grid;
+  gap: 8px;
+  overflow: auto;
+  padding-right: 4px;
+  max-height: 23vh;
+}
+
+.crew-log-entry {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.crew-log-role,
+.crew-log-kind {
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.crew-log-entry p {
+  margin-top: 6px;
+  color: var(--text);
+  line-height: 1.45;
+  font-size: 0.86rem;
+}
+
+.aar-section {
+  margin: 0 0 10px;
+}
+
+.aar-section ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: #dde5d9;
+}
+
 
 .report-topline,
 .report-meta {
@@ -541,7 +706,7 @@ h1 {
   }
 
   .panel {
-    min-height: 280px;
+    min-height: 260px;
   }
 }
 
@@ -567,6 +732,11 @@ h1 {
 
   .command-form {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .crew-cards,
+  .crew-log {
+    max-height: none;
   }
 
   .command-form input {

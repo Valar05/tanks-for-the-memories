@@ -1,9 +1,16 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "vite": [
+        "/data/data/com.termux/files/usr/tmp/tftm-deps/node_modules/vite"
+      ]
+    },
     "composite": true,
     "module": "ES2022",
-    "moduleResolution": "Bundler",
-    "types": ["node"]
+    "moduleResolution": "Bundler"
   },
-  "include": ["vite.config.ts"]
+  "include": [
+    "vite.config.ts"
+  ]
 }
