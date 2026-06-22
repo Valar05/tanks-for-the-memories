@@ -67,6 +67,7 @@ Invalid commands do nothing and produce no correction message.
 - The prototype uses Three.js primitives instead of finished art assets.
 - Reports can be partial, stale, or unconfirmed.
 - The map/report view shows uncertainty, not omniscience.
+- Camera and UI should privilege observer-sourced awareness over god view.
 
 ## Repo Doctrine
 
