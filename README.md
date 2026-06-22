@@ -6,6 +6,19 @@ The player is a platoon commander, not a driver. The loop is:
 
 Information -> Order -> Consequence -> Memory
 
+## Current Vision
+
+Tanks For The Memories is a tank commander operation game about managing uncertainty from inside a crewed machine.
+
+The player succeeds by becoming less wrong faster than the battlefield changes around them.
+
+Current promoted doctrine:
+
+- [Repo Doctrine](./REPO_DOCTRINE.md) - durable working doctrine extracted from the corpus
+- [Verne-Wells Doctrine](./docs/doctrine/verne-wells-doctrine.md) - discovery and consequence as the project's creative engine
+- [Repo Crucible Report](./docs/doctrine/repo-crucible-report.md) - gold, ore, and dross classification for current direction
+- [Archival Memory Visual Doctrine](./docs/doctrine/archival-memory-visual-doctrine.md) - historical memory under pressure, not a black-and-white filter
+
 ## Current slice
 
 - One Normandy bocage lane
