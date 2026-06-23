@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import './styles.css';
 import { beginBattle, buildAfterActionHtml, buildCrewPanelHtml, getCrewModifiers, loadCrewState, noteCrewSighting, registerBattleEvent, saveCrewState, tickCrewState } from './crew';
-import { cloneAwarenessState, createAwarenessState, getPrimaryContact, recordEnemyTankContact, type AwarenessState } from './awareness';
+import { cloneAwarenessState, createAwarenessState, getPrimaryContact, recordEnemyTankContact, resolveEnemyPicture, type AwarenessState } from './awareness';
 
 type ViewMode = 'hatch' | 'buttoned' | 'scope' | 'map';
 type Phase = 'live' | 'failure' | 'victory';
@@ -641,7 +641,7 @@ function refreshAwarenessChip() {
     refs.awarenessChip.className = 'chip muted';
     return;
   }
-  refs.awarenessChip.textContent = contact.observer + ' · ' + contact.status.replace('-', ' ') + ' · ' + Math.round(contact.confidence * 100) + '%';
+  refs.awarenessChip.textContent = contact.observer + ' · ' + contact.status.replace('-', ' ') + ' · ' + Math.round(contact.confidence * 100) + '%' + (contact.realityLabel ? ' → ' + contact.realityLabel : '');
   refs.awarenessChip.className = 'chip chip-awareness';
 }
 
@@ -973,10 +973,24 @@ function triggerAmbush() {
   ambushTriggered = true;
   enemy.visible = true;
   enemyRevealed = true;
+  const resolution = resolveEnemyPicture(awarenessState, {
+    observer: 'Player Sherman',
+    sourceUnit: 'Enemy AT gun',
+    time: gameTime,
+    kind: 'underestimation',
+    realityLabel: 'concealed anti-tank gun',
+    consequence: [
+      'Original Report: Wingman Sherman reported suspected armor.',
+      'Reality: Concealed anti-tank gun.',
+      'Consequence: Platoon advanced before confirmation.',
+      'Lesson: Observation quality matters.'
+    ].join('\n')
+  });
+  refreshAwarenessChip();
   addReport({
     type: 'contact',
     source: 'Enemy AT gun',
-    subject: 'Ambush from right hedgerow near the farmhouse',
+    subject: 'Reality: concealed anti-tank gun behind the right hedgerow',
     approxPosition: {
       label: 'right hedgerow, 34m ahead',
       x: 34,
@@ -986,12 +1000,17 @@ function triggerAmbush() {
     confidence: 0.98,
     truth: 'confirmed'
   });
-  logEvent('ENEMY', 'Ambush. The hidden AT gun fired first.');
+  logEvent('ENEMY', 'Ambush. The hidden AT gun proved the scout picture wrong.');
+  logEvent('AWARENESS', resolution.revealText);
   registerBattleEvent(crewState, 'taking-fire', gameTime, 'The enemy gun fired first from the right hedgerow.');
-  currentLesson = 'Missing information: you advanced without a contact report or scout pass.';
-  failMission('Ambushed in the bocage lane. You needed a scout report before advancing.');
+  currentLesson = resolution.resolutionText || [
+    'Original Report: Wingman Sherman reported suspected armor.',
+    'Reality: Concealed anti-tank gun.',
+    'Consequence: Platoon advanced before confirmation.',
+    'Lesson: Observation quality matters.'
+  ].join('\n');
+  failMission('Ambushed in the bocage lane. The scout report was believable and wrong.');
 }
-
 function failMission(message: string) {
   if (phase !== 'live') return;
   phase = 'failure';
@@ -1166,7 +1185,7 @@ function updateUnit(unit: Unit, delta: number) {
         if (!enemyDestroyed) {
           const observed = observeEnemy(unit);
           if (observed) {
-            const transition = recordAwarenessContact(observed, 'Smoker', 'Wingman Sherman', observed.confidence > 0.8);
+            const transition = recordAwarenessContact(observed, 'Wingman Sherman', 'Wingman Sherman', observed.confidence > 0.8);
             logEvent('WINGMAN', 'Contact report filed: ' + transition.reportSubject + '.');
           } else {
             addReport({
@@ -1230,8 +1249,9 @@ function handleAmbushLogic() {
   if (phase !== 'live' || enemyDestroyed) return;
   const triggerLine = 11.5;
   if (!ambushTriggered && player.group.position.x > triggerLine) {
-    const knownContact = activeReports().some((report) => report.subject.toLowerCase().includes('contact') || report.subject.toLowerCase().includes('gun') || report.subject.toLowerCase().includes('enemy'));
-    if (!knownContact) {
+    const contact = getPrimaryContact(awarenessState);
+    const pictureResolved = Boolean(contact?.realityLabel);
+    if (!pictureResolved) {
       triggerAmbush();
     }
   }

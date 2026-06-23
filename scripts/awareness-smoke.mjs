@@ -40,5 +40,20 @@ if (second.created || second.shouldReveal || second.contact.status !== 'confirme
 if (mod.getPrimaryContact(state)?.status !== 'confirmed-armor') {
   throw new Error('primary contact did not persist as confirmed armor');
 }
+
+const resolution = mod.resolveEnemyPicture(state, {
+  observer: 'Player Sherman',
+  sourceUnit: 'Enemy AT gun',
+  time: 24,
+  kind: 'underestimation',
+  realityLabel: 'concealed anti-tank gun',
+  consequence: ['Original Report: Wingman Sherman reported suspected armor.', 'Reality: Concealed anti-tank gun.', 'Consequence: Platoon advanced before confirmation.', 'Lesson: Observation quality matters.'].join('\n')
+});
+if (resolution.contact.realityLabel !== 'concealed anti-tank gun' || resolution.contact.resolutionKind !== 'underestimation') {
+  throw new Error('resolution did not preserve the false picture and final reality');
+}
+if (!resolution.chipText.includes('concealed anti-tank gun') || !resolution.revealText.includes('picture wrong')) {
+  throw new Error('resolution did not produce a readable correction');
+}
 console.log('Awareness smoke passed: first contact reveals once, later confirmation updates without spamming.');
 rmSync(workDir, { recursive: true, force: true });

@@ -365,10 +365,16 @@ export function buildCrewPanelHtml(state: CrewState, ammo: number, phase: 'live'
 export function buildAfterActionHtml(state: CrewState, outcome: BattleOutcome, message: string, lesson: string, ammoEnd: number) {
   const recap = finalizeBattle(state, outcome, ammoEnd);
   const ammoSpent = Math.max(0, state.battleStartAmmo - ammoEnd);
+  const lessonLines = (lesson || 'A scout report on the hidden enemy.')
+    .split(/\n+/)
+    .filter((line) => line.trim().length > 0)
+    .map((line) => '<p>' + escapeHtml(line) + '</p>')
+    .join('');
   return [
     '<h3>After-action report</h3>',
     '<p>' + escapeHtml(message) + '</p>',
-    '<p><strong>What was missing:</strong> ' + escapeHtml(lesson || 'A scout report on the hidden enemy.') + '</p>',
+    '<p><strong>What the picture got wrong:</strong></p>',
+    lessonLines,
     '<p><strong>Ammo used:</strong> ' + ammoSpent + ' rounds (' + state.battleStartAmmo + ' started, ' + ammoEnd + ' left).</p>',
     renderListSection('Crew changes', recap.crewChanges),
     renderListSection('Notable moments', recap.notableMoments),

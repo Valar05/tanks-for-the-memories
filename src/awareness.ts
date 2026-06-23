@@ -1,4 +1,5 @@
 export type AwarenessStatus = 'suspected-armor' | 'confirmed-armor';
+export type AwarenessResolutionKind = 'false-positive' | 'misidentification' | 'underestimation';
 
 export type AwarenessSighting = {
   observer: string;
@@ -19,6 +20,10 @@ export type AwarenessContact = {
   firstSeenAt: number;
   lastSeenAt: number;
   revealShown: boolean;
+  resolvedAt: number | null;
+  resolutionKind: AwarenessResolutionKind | null;
+  realityLabel: string | null;
+  realityReport: string | null;
   notes: string[];
 };
 
@@ -37,6 +42,7 @@ export type AwarenessTransition = {
   revealText: string;
   reportSubject: string;
   chipText: string;
+  resolutionText?: string;
 };
 
 export function createAwarenessState(): AwarenessState {
@@ -95,6 +101,41 @@ export function recordEnemyTankContact(state: AwarenessState, sighting: Awarenes
   };
 }
 
+export function resolveEnemyPicture(state: AwarenessState, input: {
+  observer: string;
+  sourceUnit: string;
+  time: number;
+  kind: AwarenessResolutionKind;
+  realityLabel: string;
+  consequence: string;
+}): AwarenessTransition {
+  const contact = state.contacts[0];
+  if (!contact) {
+    throw new Error('awareness contact resolution failed');
+  }
+
+  contact.resolvedAt = input.time;
+  contact.resolutionKind = input.kind;
+  contact.realityLabel = input.realityLabel;
+  contact.realityReport = input.consequence;
+  contact.lastSeenAt = input.time;
+  contact.notes.push(buildResolutionNote(input, contact));
+  while (contact.notes.length > 6) {
+    contact.notes.shift();
+  }
+
+  return {
+    contact: cloneContact(contact),
+    created: false,
+    statusChanged: false,
+    shouldReveal: true,
+    revealText: input.observer + ' proves the picture wrong: ' + input.realityLabel + '.',
+    reportSubject: 'Reality resolved by ' + input.observer + ': ' + input.realityLabel,
+    chipText: buildChipText(contact),
+    resolutionText: input.consequence
+  };
+}
+
 export function getPrimaryContact(state: AwarenessState) {
   return state.contacts[0] ? cloneContact(state.contacts[0]) : null;
 }
@@ -111,6 +152,10 @@ function createContact(state: AwarenessState, sighting: AwarenessSighting): Awar
     firstSeenAt: sighting.time,
     lastSeenAt: sighting.time,
     revealShown: false,
+    resolvedAt: null,
+    resolutionKind: null,
+    realityLabel: null,
+    realityReport: null,
     notes: [buildObservationNote(sighting, status)]
   };
   state.contacts = [contact];
@@ -121,12 +166,27 @@ function buildObservationNote(sighting: AwarenessSighting, status: AwarenessStat
   return sighting.observer + ' reported ' + status.replace('-', ' ') + ' from ' + sighting.sourceUnit + ' at ' + sighting.label + '.';
 }
 
+function buildResolutionNote(input: {
+  observer: string;
+  sourceUnit: string;
+  time: number;
+  kind: AwarenessResolutionKind;
+  realityLabel: string;
+  consequence: string;
+}, contact: AwarenessContact) {
+  return input.observer + ' corrected ' + contact.observer + "'s picture from " + contact.status.replace('-', ' ') + ' to ' + input.realityLabel + ' (' + input.kind + ').';
+}
+
 function buildRevealText(sighting: AwarenessSighting, status: AwarenessStatus) {
   return sighting.observer + ' sees ' + status.replace('-', ' ') + ' at ' + sighting.label + '.';
 }
 
 function buildChipText(contact: AwarenessContact) {
-  return contact.observer + ' · ' + contact.status.replace('-', ' ') + ' · ' + Math.round(contact.confidence * 100) + '%';
+  const base = contact.observer + ' · ' + contact.status.replace('-', ' ') + ' · ' + Math.round(contact.confidence * 100) + '%';
+  if (contact.realityLabel) {
+    return base + ' → ' + contact.realityLabel;
+  }
+  return base;
 }
 
 function cloneContact(contact: AwarenessContact): AwarenessContact {
@@ -140,6 +200,10 @@ function cloneContact(contact: AwarenessContact): AwarenessContact {
     firstSeenAt: contact.firstSeenAt,
     lastSeenAt: contact.lastSeenAt,
     revealShown: contact.revealShown,
+    resolvedAt: contact.resolvedAt,
+    resolutionKind: contact.resolutionKind,
+    realityLabel: contact.realityLabel,
+    realityReport: contact.realityReport,
     notes: [...contact.notes]
   };
 }
