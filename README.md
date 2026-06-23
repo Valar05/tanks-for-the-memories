@@ -1,13 +1,13 @@
 # Tanks For The Memories
 
-A small WW2 command simulation about reports, orders, consequences, and memory.
+A small WW2 command simulation about uncertainty, posture, and memory from inside a Sherman turret.
 
-The player is a platoon commander, not a driver.
-The player wins by reading the feed better than the battlefield can change.
+The player is a young tank lieutenant, not a dashboard user.
+The player wins by reading the tank's fragments better than the battlefield can change.
 
 ## Current vision
 
-Tanks For The Memories is a feed-first information game about managing uncertainty from inside a crewed machine.
+Tanks For The Memories is an embodied command game about managing uncertainty from inside a crewed machine.
 
 Current promoted doctrine:
 
@@ -18,31 +18,31 @@ Current promoted doctrine:
 
 ## Current slice
 
-- One live report feed
-- Scout, radio, visual, and HQ reports
-- At least one incomplete, stale, or wrong claim in the queue
-- Multiple-choice command decisions that change outcomes
-- Attention pressure from unresolved reports
-- Cartesia TTS bark arrivals
-- Physical evidence carriers for each report type
+- A commander station inside a Sherman turret
+- Hatch, optics, radio, and intercom as the main information channels
+- A small folded map as a physical tool, not a main screen
+- A/B/C/D posture choices that change what the commander can trust
+- At least one incomplete, stale, or wrong contact in the picture
+- False-picture memory where a believable report later resolves into a different reality
+- Crew voice and radio interruption layer
 - Memory events that summarize what the commander learned
 
 ## What works
 
-- Feed cards with source, confidence, age, and content
-- A/B/C/D command choices for the selected report
-- Continuous report arrival while older claims remain unresolved
+- Commander-station layout with hatch rim, optics frame, and radio bay
+- A/B/C/D posture controls for head out, hatch cracked, buttoned up, and optics scan
+- Continuous contact arrival while older claims remain unresolved
 - Backlog pressure and attention collapse
-- Voice interrupt layer for report arrival
-- Physical evidence sheets for scout, radio, visual, and HQ claims
-- WWDD validation markers inside the app
+- Voice interrupt layer for contact arrival
+- Physical evidence carriers for scout, radio, visual, and HQ claims
+- After-action memory sheets with original report, reality, consequence, and lesson
 
 ## Commands
 
-- `A` advance immediately
-- `B` request confirmation
-- `C` send wingman
-- `D` hold position
+- `A` head out
+- `B` hatch cracked
+- `C` buttoned up
+- `D` optics scan
 - `R` restart after victory or failure
 - `Wake radio net` to unlock ambient audio and TTS playback
 
@@ -51,14 +51,14 @@ Current promoted doctrine:
 - `npm install`
 - `npm run smoke`
 - `npm run build`
-- `sh scripts/bootstrap.sh`
+- `npm run dev`
 
 ## Notes
 
 - No live AI or LLM calls are used at runtime.
-- The prototype is feed-first, not map-first.
+- The prototype is commander-station-first, not dashboard-first.
 - Reports are claims, not truth.
-- New reports keep arriving while unresolved ones age in place.
+- Contacts keep arriving while unresolved ones age in place.
 
 ## Repo Doctrine
 

@@ -46,14 +46,15 @@ for (const dep of deps) {
 
 const main = readFileSync('src/main.ts', 'utf8');
 const requiredSnippets = [
-  'The Feed Is The Battlefield',
-  'Wake radio net',
-  'Scout report',
-  'Radio report',
-  'Visual observation',
-  'HQ message',
-  'Cartesia',
-  'A / B / C / D resolve the selected report.',
+  'Inside a tank',
+  'Sherman commander station',
+  'Hatch and optics',
+  'Radio / intercom',
+  'A / B / C / D change the commander’s posture.',
+  'Observation -> Interpretation -> Commitment -> Revelation -> Memory',
+  'hatch view',
+  'optics',
+  'buttoned up',
   'No live AI or LLM calls are used at runtime.'
 ];
 for (const snippet of requiredSnippets) {

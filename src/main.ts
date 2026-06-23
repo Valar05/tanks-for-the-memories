@@ -3,6 +3,7 @@ import './styles.css';
 type FeedType = 'Scout report' | 'Radio report' | 'Visual observation' | 'HQ message';
 type Assessment = 'incomplete' | 'stale' | 'wrong' | 'solid';
 type DecisionKey = 'advance' | 'confirm' | 'send wingman' | 'hold';
+type Posture = 'head-out' | 'hatch-cracked' | 'buttoned-up' | 'optic-scan';
 type Phase = 'live' | 'victory' | 'failure';
 type ArtifactKey = 'scout-photo' | 'radio-transcript' | 'visual-snapshot' | 'hq-dispatch';
 type VoiceRole = 'scout' | 'radio' | 'visual' | 'hq' | 'memory';
@@ -46,6 +47,7 @@ type AudioState = {
 
 type FeedState = {
   phase: Phase;
+  posture: Posture;
   time: number;
   score: number;
   attention: number;
@@ -167,10 +169,10 @@ const REPORT_LIBRARY: ReportTemplate[] = [
 ];
 
 const DECISIONS: DecisionOption[] = [
-  { key: 'advance', label: 'Advance', hotkey: 'A' },
-  { key: 'confirm', label: 'Confirm', hotkey: 'B' },
-  { key: 'send wingman', label: 'Send wingman', hotkey: 'C' },
-  { key: 'hold', label: 'Hold', hotkey: 'D' }
+  { key: 'advance', label: 'Head out', hotkey: 'A' },
+  { key: 'confirm', label: 'Hatch cracked', hotkey: 'B' },
+  { key: 'send wingman', label: 'Buttoned up', hotkey: 'C' },
+  { key: 'hold', label: 'Optics scan', hotkey: 'D' }
 ];
 
 let nextReportId = 1;
@@ -184,12 +186,13 @@ if (!root) {
 const shell = document.createElement('div');
 shell.className = 'shell';
 shell.innerHTML = `
-  <div class="feed-app">
+  <div class="tank-app">
     <header class="masthead">
       <div class="masthead-copy">
-        <p class="eyebrow">WWDD validation required</p>
-        <h1>The Feed Is The Battlefield</h1>
-        <p class="lede">Reports arrive as Cartesia voice barks, paper, film, and delay. The player spends most of their time interpreting claims rather than directly observing reality.</p>
+        <p class="eyebrow">Sherman commander station</p>
+        <h1>Inside a tank</h1>
+        <p class="lede">Lt. Mercer is buttoned up in the turret. The player sees the world through hatch rim, periscope frame, radio, and crew calls before they ever see a clean map.</p>
+        <div class="posture-strip" data-posture-strip></div>
         <button class="audio-wake" type="button" data-audio-wake>Wake radio net</button>
       </div>
       <div class="masthead-metrics">
@@ -201,44 +204,72 @@ shell.innerHTML = `
     </header>
 
     <main class="layout">
-      <section class="panel feed-panel">
+      <section class="panel station-panel">
         <div class="panel-head">
           <div>
-            <h2>Live Feed</h2>
-            <p class="panel-subtitle">Claims keep arriving. Older claims keep aging. Attention is the resource.</p>
+            <h2>Hatch and optics</h2>
+            <p class="panel-subtitle">The commander’s body is the first interface. Hatch state changes what can be seen, heard, and trusted.</p>
           </div>
-          <span class="pill" data-feed-count></span>
+          <span class="pill" data-posture-pill></span>
         </div>
-        <div class="feed-stream" data-feed-stream></div>
+        <div class="tank-stage">
+          <div class="tank-hull">
+            <div class="turret-plate">
+              <div class="hatch-rim">
+                <span class="hatch-title">Commander hatch</span>
+                <span class="hatch-state" data-hatch-state></span>
+              </div>
+              <div class="periscope-frame">
+                <div class="optic-slit">
+                  <span class="slit-caption">Periscope frame</span>
+                  <div class="outside-glimpse" data-outside-glimpse></div>
+                </div>
+              </div>
+            </div>
+            <div class="radio-bay">
+              <div class="radio-head">Radio / intercom</div>
+              <div class="radio-static">Crew voices come through armor, not a dashboard.</div>
+              <div class="radio-tags">
+                <span class="tag">hatch view</span>
+                <span class="tag">optics</span>
+                <span class="tag">radio</span>
+                <span class="tag">intercom</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="posture-grid" data-decision-grid></div>
       </section>
 
       <section class="panel command-panel">
         <div class="panel-head">
           <div>
-            <h2>Command Options</h2>
-            <p class="panel-subtitle">Concise choices resolve the selected report and change outcomes.</p>
+            <h2>Signals inside armor</h2>
+            <p class="panel-subtitle">Contacts are not cards in a dashboard. They are glimpses, barks, and corrections arriving through the commander station.</p>
           </div>
         </div>
         <article class="active-report" data-active-report></article>
-        <div class="decision-grid" data-decision-grid></div>
+        <div class="map-tool" data-map-tool></div>
+        <div class="signal-strip" data-feed-stream></div>
         <div class="command-note" data-command-note></div>
       </section>
 
       <section class="panel memory-panel">
         <div class="panel-head">
           <div>
-            <h2>Memory</h2>
-            <p class="panel-subtitle">Major mistakes resolve into original report, reality, consequence, and lesson.</p>
+            <h2>After-action memory</h2>
+            <p class="panel-subtitle">When the picture breaks, the memory sheet preserves what was seen, what was true, and why the commander was wrong.</p>
           </div>
+          <span class="pill" data-contact-count></span>
         </div>
         <div class="memory-feed" data-memory-feed></div>
       </section>
     </main>
 
     <footer class="footer">
-      <span class="footer-chip">A / B / C / D resolve the selected report.</span>
-      <span class="footer-chip">Unresolved reports stay live and keep aging.</span>
-      <span class="footer-chip">The feed interrupts the player.</span>
+      <span class="footer-chip">A / B / C / D change the commander’s posture.</span>
+      <span class="footer-chip">Contacts arrive through hatch, optics, radio, and intercom.</span>
+      <span class="footer-chip">The tank body interrupts the player.</span>
       <span class="footer-chip">No live AI or LLM calls are used at runtime.</span>
     </footer>
   </div>
@@ -250,17 +281,23 @@ const refs = {
   doctrine: shell.querySelector<HTMLDivElement>('[data-doctrine]')!,
   attention: shell.querySelector<HTMLDivElement>('[data-attention]')!,
   score: shell.querySelector<HTMLDivElement>('[data-score]')!,
-  feedCount: shell.querySelector<HTMLSpanElement>('[data-feed-count]')!,
+  contactCount: shell.querySelector<HTMLSpanElement>('[data-contact-count]')!,
   feedStream: shell.querySelector<HTMLDivElement>('[data-feed-stream]')!,
   activeReport: shell.querySelector<HTMLDivElement>('[data-active-report]')!,
   decisionGrid: shell.querySelector<HTMLDivElement>('[data-decision-grid]')!,
+  posturePill: shell.querySelector<HTMLSpanElement>('[data-posture-pill]')!,
+  hatchState: shell.querySelector<HTMLSpanElement>('[data-hatch-state]')!,
+  outsideGlimpse: shell.querySelector<HTMLDivElement>('[data-outside-glimpse]')!,
+  mapTool: shell.querySelector<HTMLDivElement>('[data-map-tool]')!,
   commandNote: shell.querySelector<HTMLDivElement>('[data-command-note]')!,
   memoryFeed: shell.querySelector<HTMLDivElement>('[data-memory-feed]')!,
-  audioWake: shell.querySelector<HTMLButtonElement>('[data-audio-wake]')!
+  audioWake: shell.querySelector<HTMLButtonElement>('[data-audio-wake]')!,
+  postureStrip: shell.querySelector<HTMLDivElement>('[data-posture-strip]')!
 };
 
 const state: FeedState = {
   phase: 'live',
+  posture: 'buttoned-up',
   time: 0,
   score: 0,
   attention: 6,
@@ -347,16 +384,6 @@ function bindControls() {
     if (key === 'c') chooseDecision('send wingman');
     if (key === 'd') chooseDecision('hold');
   });
-
-  document.body.addEventListener('click', (event) => {
-    const target = event.target as HTMLElement | null;
-    const card = target?.closest<HTMLElement>('[data-report-id]');
-    if (!card) return;
-    const id = card.dataset.reportId;
-    if (!id) return;
-    state.selectedReportId = id;
-    render();
-  });
 }
 
 function tick(now: number) {
@@ -413,16 +440,38 @@ function chooseDecision(decision: DecisionKey) {
   if (state.phase !== 'live') return;
   const report = getActiveReport();
   if (!report || report.resolved) {
-    state.lastAnnouncement = 'No active report to resolve.';
+    state.lastAnnouncement = 'No active contact to resolve.';
     return;
   }
 
+  state.posture = decisionToPosture(decision);
   const outcome = resolveReport(report, decision);
   state.decisions[decision] += 1;
   state.turnCount += 1;
   state.selectedReportId = pickNextReportId();
-  state.lastAnnouncement = outcome.announcement;
+  state.lastAnnouncement = `${postureLabel(state.posture)}: ${outcome.announcement}`;
   maybeTransition();
+}
+
+function decisionToPosture(decision: DecisionKey): Posture {
+  if (decision === 'advance') return 'head-out';
+  if (decision === 'confirm') return 'hatch-cracked';
+  if (decision === 'send wingman') return 'buttoned-up';
+  return 'optic-scan';
+}
+
+function postureLabel(posture: Posture) {
+  if (posture === 'head-out') return 'Head out';
+  if (posture === 'hatch-cracked') return 'Hatch cracked';
+  if (posture === 'buttoned-up') return 'Buttoned up';
+  return 'Optics scan';
+}
+
+function postureHint(posture: Posture) {
+  if (posture === 'head-out') return 'best hatch view, worst protection';
+  if (posture === 'hatch-cracked') return 'mixed hatch and crew view';
+  if (posture === 'buttoned-up') return 'radio and intercom dominate';
+  return 'periscope and optics dominate';
 }
 
 function resolveReport(report: Report, decision: DecisionKey) {
@@ -465,14 +514,14 @@ function assessDecision(report: Report, decision: DecisionKey) {
       scoreDelta = 2;
       attentionDelta = 0.7;
       pressureDelta = -0.5;
-      announcement = 'False picture caught before it drove the platoon.';
-      text = 'The report was wrong, and the confirmation kept the feed honest.';
+      announcement = 'The optics caught the lie before it drove the platoon.';
+      text = 'The hatch and optic picture disagreed with the first glance, and the false picture failed early.';
       memory = {
         time: state.time,
         original: `Original Report: ${report.content}`,
-        reality: 'Reality: the visual picture was a hidden anti-tank gun.',
-        consequence: 'Consequence: the commander avoided a bad advance and kept the platoon alive.',
-        lesson: 'Lesson: a clean-looking visual can still be a lie.',
+        reality: 'Reality: the visual picture was a concealed anti-tank gun.',
+        consequence: 'Consequence: the commander did not drive the platoon into the kill zone.',
+        lesson: 'Lesson: a clean-looking view can still be a lie.',
         clip: 'memory-the-feed-was-wrong.mp3'
       };
       clip = 'memory-the-feed-was-wrong.mp3';
@@ -480,14 +529,14 @@ function assessDecision(report: Report, decision: DecisionKey) {
       scoreDelta = -2;
       attentionDelta = -1.4;
       pressureDelta = 1.2;
-      announcement = 'Wrong report acted on too early.';
-      text = 'The feed was mistaken and the rushed order paid for it.';
+      announcement = 'The head-out picture went forward too early.';
+      text = 'The commander committed on a thin read and paid for the haste.';
       memory = {
         time: state.time,
         original: `Original Report: ${report.content}`,
-        reality: 'Reality: the picture was incomplete and the enemy was not where the report implied.',
-        consequence: 'Consequence: the platoon spent attention and tempo on a false lead.',
-        lesson: 'Lesson: the first report is not the truth; it is only the first claim.',
+        reality: 'Reality: the shape was incomplete and the enemy was not where the report implied.',
+        consequence: 'Consequence: the platoon spent tempo on a false lead.',
+        lesson: 'Lesson: the first picture is not the truth; it is only the first claim.',
         clip: 'memory-original-report.mp3'
       };
     }
@@ -496,13 +545,13 @@ function assessDecision(report: Report, decision: DecisionKey) {
       scoreDelta = 2;
       attentionDelta = 0.3;
       pressureDelta = -0.2;
-      announcement = 'Incomplete report forced a useful second look.';
-      text = 'The gap in the picture was treated as a signal, not a finish.';
+      announcement = 'The incomplete picture forced a useful second look.';
+      text = 'The gap in the picture was treated as a clue, not a finish.';
       memory = {
         time: state.time,
         original: `Original Report: ${report.content}`,
         reality: 'Reality: the report was incomplete, so the commander waited for more evidence.',
-        consequence: 'Consequence: the feed grew clearer before action.',
+        consequence: 'Consequence: the platoon learned before it moved.',
         lesson: 'Lesson: incomplete is not useless; it is a prompt to confirm.',
         clip: 'memory-original-report.mp3'
       };
@@ -510,7 +559,7 @@ function assessDecision(report: Report, decision: DecisionKey) {
       scoreDelta = stale ? -1 : 0;
       attentionDelta = -0.8;
       pressureDelta = 0.9;
-      announcement = 'Advance outran the picture.';
+      announcement = 'The hatch view outran the picture.';
       text = 'The commander moved on a report that had not finished talking.';
       memory = {
         time: state.time,
@@ -524,16 +573,16 @@ function assessDecision(report: Report, decision: DecisionKey) {
       scoreDelta = 0;
       attentionDelta = 0.5;
       pressureDelta = -0.1;
-      announcement = 'Holding bought time for the feed to breathe.';
-      text = 'The pause kept the incomplete report from becoming a trap.';
+      announcement = 'Buttoning up bought time for the picture to breathe.';
+      text = 'The pause kept the incomplete contact from becoming a trap.';
     }
   } else if (category === 'stale') {
     if (decision === 'hold' || decision === 'confirm') {
       scoreDelta = 2;
       attentionDelta = 0.5;
       pressureDelta = -0.6;
-      announcement = 'Stale report treated as stale, not sacred.';
-      text = 'The age on the report mattered more than the drama in the wording.';
+      announcement = 'The stale contact was treated as stale, not sacred.';
+      text = 'The age on the contact mattered more than the drama in the wording.';
       memory = {
         time: state.time,
         original: `Original Report: ${report.content}`,
@@ -546,14 +595,14 @@ function assessDecision(report: Report, decision: DecisionKey) {
       scoreDelta = -1;
       attentionDelta = -1.1;
       pressureDelta = 0.8;
-      announcement = 'Stale report pushed into action.';
-      text = 'The feed was late and the rushed choice made the lag expensive.';
+      announcement = 'A stale contact pushed the platoon into motion.';
+      text = 'The picture was late and the rushed choice made the delay expensive.';
       memory = {
         time: state.time,
         original: `Original Report: ${report.content}`,
         reality: 'Reality: the report was already stale by the time the order went out.',
         consequence: 'Consequence: the platoon moved on old information.',
-        lesson: 'Lesson: the feed must be timed, not merely read.',
+        lesson: 'Lesson: the picture must be timed, not merely read.',
         clip: 'memory-original-report.mp3'
       };
     }
@@ -562,26 +611,26 @@ function assessDecision(report: Report, decision: DecisionKey) {
       scoreDelta = fresh ? 3 : 2;
       attentionDelta = 0.5;
       pressureDelta = -0.7;
-      announcement = 'Solid report converted into action.';
-      text = 'The feed supported the move and the commander used it.';
+      announcement = 'The commander committed on a solid picture.';
+      text = 'The hatch view supported the move and the commander used it.';
     } else if (decision === 'confirm') {
       scoreDelta = 1;
       attentionDelta = 0.6;
       pressureDelta = -0.2;
-      announcement = 'Confirmation strengthened an already decent picture.';
-      text = 'The report held up under one more look.';
+      announcement = 'The hatch crack strengthened an already decent picture.';
+      text = 'The contact held up under one more look.';
     } else if (decision === 'send wingman') {
       scoreDelta = 0;
       attentionDelta = 0.2;
       pressureDelta = 0.2;
-      announcement = 'Wingman sent to recheck a report that was already good enough.';
+      announcement = 'The commander stayed buttoned up and asked for another set of eyes.';
       text = 'The extra check cost attention without buying much clarity.';
     } else {
       scoreDelta = 1;
       attentionDelta = 0.8;
       pressureDelta = -0.3;
-      announcement = 'Holding preserved the option to act later.';
-      text = 'The report was solid, but the commander bought more time instead of spending it.';
+      announcement = 'The optics scan preserved the option to act later.';
+      text = 'The contact was solid, but the commander bought more time instead of spending it.';
     }
   }
 
@@ -604,7 +653,7 @@ function spawnFollowupReport(sourceReport: Report) {
   const followup = createReport(followupTemplate, state.time + 0.3);
   state.reports.unshift(followup);
   state.reportTypesSeen.add(followup.type);
-  state.lastAnnouncement = 'Cross-check generated a new report instead of a map.';
+  state.lastAnnouncement = 'Cross-check generated a new contact instead of a map.';
   speak(followup.clip);
 }
 
@@ -613,7 +662,7 @@ function maybeSpontaneousCommentary() {
   const unresolved = state.reports.filter((item) => !item.resolved).length;
   if (unresolved >= 3) {
     state.lastSpontaneousAt = state.time;
-    state.lastAnnouncement = 'The feed is stacking up and attention is the only thing that runs out first.';
+    state.lastAnnouncement = 'The station is stacking up contacts and attention is the only thing that runs out first.';
   }
 }
 
@@ -623,12 +672,12 @@ function maybeTransition() {
     state.phase = 'failure';
     if (!state.failureLogged) {
       state.failureLogged = true;
-      state.lastAnnouncement = 'Attention collapsed. The feed outran the commander.';
+      state.lastAnnouncement = 'Attention collapsed. The tank lost the picture.';
       addMemoryEvent({
         time: state.time,
-        original: 'Original Report: Too many reports unresolved at once.',
+        original: 'Original Report: Too many contacts unresolved at once.',
         reality: 'Reality: the commander lost the picture in the backlog.',
-        consequence: 'Consequence: the feed became noise and the run failed.',
+        consequence: 'Consequence: the station became noise and the run failed.',
         lesson: 'Lesson: unresolved claims are a pressure system.',
         clip: 'memory-the-feed-was-wrong.mp3'
       });
@@ -641,13 +690,13 @@ function maybeTransition() {
     state.phase = 'victory';
     if (!state.victoryLogged) {
       state.victoryLogged = true;
-      state.lastAnnouncement = 'The commander learned to work the feed instead of the map.';
+      state.lastAnnouncement = 'The commander learned to work the tank instead of the map.';
       addMemoryEvent({
         time: state.time,
-        original: 'Original Report: The feed kept arriving.',
+        original: 'Original Report: Contacts kept arriving.',
         reality: 'Reality: the commander learned to trust confirmation over instinct.',
-        consequence: 'Consequence: the run stabilized and the barrage of claims became usable.',
-        lesson: 'Lesson: the battlefield was the feed.',
+        consequence: 'Consequence: the station stabilized and the barrage of claims became usable.',
+        lesson: 'Lesson: the battlefield lives inside the commander station.',
         clip: 'memory-original-report.mp3'
       });
     }
@@ -679,57 +728,70 @@ function getActiveReport() {
 
 function render() {
   const activeReport = getActiveReport();
-  refs.status.textContent = state.phase === 'live' ? 'Live feed' : state.phase === 'victory' ? 'Command won the feed' : 'Feed collapse';
+  refs.status.textContent = state.phase === 'live' ? 'Inside tank' : state.phase === 'victory' ? 'Picture held' : 'Station collapse';
   refs.status.className = 'metric ' + (state.phase === 'live' ? 'live' : state.phase === 'victory' ? 'victory' : 'failure');
-  refs.doctrine.textContent = 'The Feed Is The Battlefield';
+  refs.doctrine.textContent = 'Observation -> Interpretation -> Commitment -> Revelation -> Memory';
   refs.attention.textContent = 'Attention ' + state.attention.toFixed(1) + ' / 10';
   refs.score.textContent = 'Score ' + state.score.toFixed(0) + ' · Pressure ' + state.pressure.toFixed(1);
-  refs.feedCount.textContent = state.reports.filter((report) => !report.resolved).length + ' unresolved';
-  refs.feedStream.innerHTML = renderFeed();
+  refs.contactCount.textContent = state.reports.filter((report) => !report.resolved).length + ' contacts';
+  refs.feedStream.innerHTML = renderSignalStrip();
   refs.activeReport.innerHTML = renderActiveReport(activeReport);
+  refs.mapTool.innerHTML = renderMapTool(activeReport);
   refs.commandNote.textContent = state.lastAnnouncement;
   refs.memoryFeed.innerHTML = renderMemoryFeed();
   refs.audioWake.textContent = state.audio.unlocked ? 'Radio net awake' : 'Wake radio net';
   refs.audioWake.disabled = state.audio.unlocked;
+  refs.posturePill.textContent = postureLabel(state.posture) + ' · ' + postureHint(state.posture);
+  refs.hatchState.textContent = hatchStateLabel(state.posture);
+  refs.outsideGlimpse.innerHTML = renderOutsideGlimpse(activeReport);
+  refs.postureStrip.innerHTML = renderPostureStrip();
 }
 
-function renderFeed() {
+function renderPostureStrip() {
+  return DECISIONS.map((option) => {
+    const posture = decisionToPosture(option.key);
+    const active = posture === state.posture;
+    return `
+      <span class="posture-chip ${active ? 'active' : ''}">
+        <span class="hotkey">${option.hotkey}</span>
+        <span>${escapeHtml(option.label)}</span>
+      </span>
+    `;
+  }).join('');
+}
+
+function renderSignalStrip() {
   const ordered = [...state.reports].sort((a, b) => b.createdAt - a.createdAt);
   if (ordered.length === 0) {
-    return '<div class="empty-state">The feed is empty. It will not stay that way for long.</div>';
+    return '<div class="empty-state">No contacts. The station is listening.</div>';
   }
   return ordered.map((report) => {
-    const selected = report.id === state.selectedReportId;
     const status = report.resolved ? 'resolved' : getReportStatus(report);
     const age = Math.max(0, state.time - report.createdAt);
     return `
-      <button class="report-card ${selected ? 'selected' : ''} ${status}" data-report-id="${report.id}" type="button">
-        <div class="report-artifact artifact-${report.artifact}">
-          <img src="/tftm/evidence/${artifactFile(report.artifact)}" alt="${escapeHtml(report.type)} carrier" loading="lazy" />
-          <span class="artifact-label">${escapeHtml(carrierLabel(report.artifact))}</span>
-        </div>
-        <div class="report-topline">
+      <article class="signal-card ${status}">
+        <div class="signal-topline">
           <strong>${escapeHtml(report.type)}</strong>
           <span>${escapeHtml(report.source)}</span>
         </div>
-        <p class="report-content">${escapeHtml(report.content)}</p>
-        <div class="report-meta">
-          <span>source ${escapeHtml(report.source)}</span>
+        <p class="signal-content">${escapeHtml(report.content)}</p>
+        <div class="signal-meta">
+          <span>channel ${escapeHtml(reportChannel(report))}</span>
           <span>confidence ${Math.round(report.confidence * 100)}%</span>
           <span>age ${formatAge(age)}</span>
         </div>
         <div class="report-tags">
           <span class="tag">${escapeHtml(status)}</span>
-          <span class="tag muted">${report.resolved ? 'resolved' : report.voice}</span>
+          <span class="tag muted">${escapeHtml(report.voice)}</span>
         </div>
-      </button>
+      </article>
     `;
   }).join('');
 }
 
 function renderActiveReport(report: Report | null) {
   if (!report) {
-    return '<div class="empty-state">No active report selected.</div>';
+    return '<div class="empty-state">No active contact selected.</div>';
   }
   const age = Math.max(0, state.time - report.createdAt);
   return `
@@ -739,28 +801,63 @@ function renderActiveReport(report: Report | null) {
         <span class="artifact-label">${escapeHtml(carrierLabel(report.artifact))}</span>
       </div>
       <div class="report-topline">
-        <strong>Selected report</strong>
+        <strong>Current contact</strong>
         <span>${escapeHtml(report.id)}</span>
       </div>
       <h3>${escapeHtml(report.type)}</h3>
       <p class="report-content">${escapeHtml(report.content)}</p>
       <dl class="active-details">
         <div><dt>Source</dt><dd>${escapeHtml(report.source)}</dd></div>
+        <div><dt>Channel</dt><dd>${escapeHtml(reportChannel(report))}</dd></div>
         <div><dt>Confidence</dt><dd>${Math.round(report.confidence * 100)}%</dd></div>
         <div><dt>Age</dt><dd>${formatAge(age)}</dd></div>
         <div><dt>Assessment</dt><dd>${escapeHtml(getReportStatus(report))}</dd></div>
+        <div><dt>Posture</dt><dd>${escapeHtml(postureLabel(state.posture))}</dd></div>
       </dl>
+    </div>
+  `;
+}
+
+function renderMapTool(report: Report | null) {
+  if (!report) {
+    return '<div class="map-sheet empty-state">No map note yet. The tank is still listening.</div>';
+  }
+  const channel = reportChannel(report);
+  const x = report.type === 'Scout report' ? '28%' : report.type === 'Radio report' ? '58%' : report.type === 'Visual observation' ? '74%' : '45%';
+  const y = report.type === 'Scout report' ? '34%' : report.type === 'Radio report' ? '62%' : report.type === 'Visual observation' ? '41%' : '20%';
+  return `
+    <div class="map-sheet">
+      <div class="map-grid"></div>
+      <span class="map-marker" style="left:${x};top:${y};"></span>
+      <div class="map-legend">
+        <strong>Folded map</strong>
+        <span>${escapeHtml(report.source)} · ${escapeHtml(channel)}</span>
+      </div>
+      <p class="map-caption">A small tool on the commander’s lap, not the main screen.</p>
+    </div>
+  `;
+}
+
+function renderOutsideGlimpse(report: Report | null) {
+  if (!report) {
+    return '<div class="glimpse-note">No contact. Hatch, optics, and radio are quiet.</div>';
+  }
+  return `
+    <div class="glimpse-note ${report.resolved ? 'resolved' : getReportStatus(report)}">
+      <span>${escapeHtml(reportChannel(report))}</span>
+      <strong>${escapeHtml(report.source)}</strong>
+      <p>${escapeHtml(report.bark)}</p>
     </div>
   `;
 }
 
 function renderMemoryFeed() {
   if (state.memoryEvents.length === 0) {
-    return '<div class="empty-state">No memory report yet. Make a major mistake or stabilize the feed to produce one.</div>';
+    return '<div class="empty-state">No memory sheet yet. Make a major mistake or stabilize the picture to produce one.</div>';
   }
   return state.memoryEvents.map((event) => `
     <article class="memory-card">
-      <img src="/tftm/evidence/${artifactFile('hq-dispatch') }" alt="after-action sheet" class="memory-image" />
+      <img src="/tftm/evidence/hq_dispatch.svg" alt="After-action sheet" class="memory-image" />
       <span class="memory-time">${formatAge(state.time - event.time)} old</span>
       <p><strong>${escapeHtml(event.original)}</strong></p>
       <p>${escapeHtml(event.reality)}</p>
@@ -783,8 +880,23 @@ function formatAge(age: number) {
   return Math.max(0, Math.ceil(age)).toString() + 's';
 }
 
+function hatchStateLabel(posture: Posture) {
+  if (posture === 'head-out') return 'hatch open';
+  if (posture === 'hatch-cracked') return 'hatch cracked';
+  if (posture === 'buttoned-up') return 'buttoned up';
+  return 'optics only';
+}
+
+function reportChannel(report: Report) {
+  if (report.type === 'Scout report') return 'hatch view';
+  if (report.type === 'Radio report') return 'radio';
+  if (report.type === 'Visual observation') return 'optics';
+  return 'intercom';
+}
+
 function restart() {
   state.phase = 'live';
+  state.posture = 'buttoned-up';
   state.time = 0;
   state.score = 0;
   state.attention = 6;
@@ -795,8 +907,8 @@ function restart() {
   state.nextReportIndex = 0;
   state.reports = buildInitialReports();
   nextReportId = state.reports.length + 1;
-  state.memoryEvents = []; 
-  state.lastAnnouncement = 'Mission restarted. The feed is live again.';
+  state.memoryEvents = [];
+  state.lastAnnouncement = 'Mission restarted. The station is buttoned up again.';
   state.falseReportPresent = true;
   state.fedDoctrineValidated = false;
   state.decisions = { advance: 0, confirm: 0, 'send wingman': 0, hold: 0 };
@@ -958,17 +1070,4 @@ function getAudio(clip: string) {
   audio.preload = 'auto';
   audio.volume = 0.96;
   return audio;
-}
-
-function renderMemoryCard(event: MemoryEvent) {
-  return `
-    <article class="memory-card">
-      <img src="/tftm/evidence/hq_dispatch.svg" alt="After-action sheet" class="memory-image" />
-      <span class="memory-time">${formatAge(state.time - event.time)} old</span>
-      <p><strong>${escapeHtml(event.original)}</strong></p>
-      <p>${escapeHtml(event.reality)}</p>
-      <p>${escapeHtml(event.consequence)}</p>
-      <p>${escapeHtml(event.lesson)}</p>
-    </article>
-  `;
 }
