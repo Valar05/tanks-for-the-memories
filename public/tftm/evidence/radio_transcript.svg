@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Radio transcript strip">
+  <defs>
+    <filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="19"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 0.18"/></feComponentTransfer></filter>
+  </defs>
+  <rect width="1200" height="800" fill="#1b1714"/>
+  <path d="M72 176 h1060 l-28 404 h-1000 z" fill="#25201b" transform="rotate(-2 600 400)"/>
+  <path d="M100 212 h1004 l-24 338 h-956 z" fill="#e4dcc8" transform="rotate(-2 600 400)"/>
+  <path d="M110 196 h992 l-20 18 h-952 z" fill="#b8a580" opacity="0.46" transform="rotate(-2 600 400)"/>
+  <path d="M98 536 h980 l-18 22 h-944 z" fill="#9e8a67" opacity="0.22" transform="rotate(-2 600 400)"/>
+  <text x="138" y="278" font-family="monospace" font-size="32" fill="#241f19">CALL SIGN: WINGMAN</text>
+  <text x="138" y="322" font-family="monospace" font-size="31" fill="#241f19">CONTACT LOST</text>
+  <text x="138" y="366" font-family="monospace" font-size="26" fill="#4c4133">possible armor? maybe. hard to say.</text>
+  <text x="138" y="410" font-family="monospace" font-size="24" fill="#6a5847">static static / / / hedgerow / / /</text>
+  <text x="138" y="454" font-family="monospace" font-size="22" fill="#705d49">relay is late. repeat: relay is late.</text>
+  <path d="M138 494 h560" stroke="#826b50" stroke-width="4" opacity="0.28"/>
+  <path d="M138 528 h740" stroke="#826b50" stroke-width="4" opacity="0.28"/>
+  <path d="M138 562 h620" stroke="#826b50" stroke-width="4" opacity="0.28"/>
+  <g opacity="0.36">
+    <path d="M138 244 l86 0" stroke="#7b6951" stroke-width="8"/>
+    <path d="M138 244 l-14 30" stroke="#7b6951" stroke-width="8"/>
+    <path d="M224 244 l20 30" stroke="#7b6951" stroke-width="8"/>
+  </g>
+  <g opacity="0.3">
+    <path d="M854 214 l82 0" stroke="#7f6a4d" stroke-width="10"/>
+    <path d="M854 214 l-18 40" stroke="#7f6a4d" stroke-width="10"/>
+    <path d="M936 214 l16 40" stroke="#7f6a4d" stroke-width="10"/>
+  </g>
+  <g filter="url(#noise)"><rect width="1200" height="800" fill="#fff" opacity="0.5"/></g>
+</svg>

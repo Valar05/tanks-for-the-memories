@@ -125,6 +125,22 @@ h1 {
   font-size: 1rem;
 }
 
+.audio-wake {
+  margin-top: 14px;
+  padding: 11px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(214, 179, 108, 0.38);
+  background: rgba(214, 179, 108, 0.1);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.audio-wake:disabled {
+  opacity: 0.72;
+  cursor: default;
+}
+
 .metric,
 .pill,
 .footer-chip,
@@ -257,6 +273,72 @@ h1 {
 
 .report-card.solid {
   background: linear-gradient(180deg, rgba(141, 201, 141, 0.1), rgba(255, 255, 255, 0.03));
+}
+
+.report-artifact,
+.memory-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(6, 8, 9, 0.82);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.report-artifact {
+  margin-bottom: 10px;
+}
+
+.report-artifact img,
+.memory-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.active-artifact {
+  margin-bottom: 12px;
+}
+
+.artifact-label {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: rgba(15, 20, 23, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--text);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.report-bark {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-left: 3px solid rgba(214, 179, 108, 0.62);
+  border-radius: 0 14px 14px 0;
+  background: rgba(214, 179, 108, 0.07);
+  color: var(--warm);
+  line-height: 1.4;
+  font-size: 0.95rem;
+}
+
+.memory-card {
+  padding: 12px 14px 14px;
+}
+
+.memory-image {
+  margin-bottom: 10px;
+  opacity: 0.92;
+}
+
+.memory-card p {
+  margin-top: 8px;
+  color: var(--text);
+  line-height: 1.45;
 }
 
 .report-topline,
@@ -423,17 +505,6 @@ h1 {
   overflow: auto;
   padding-right: 2px;
 }
-
-.memory-card {
-  padding: 12px 14px;
-}
-
-.memory-card p {
-  margin-top: 8px;
-  color: var(--text);
-  line-height: 1.45;
-}
-
 .memory-time {
   min-height: 0;
   padding: 0.4rem 0.65rem;

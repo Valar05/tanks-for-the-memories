@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Muddy scout photograph">
+  <defs>
+    <linearGradient id="paper" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#7c5d3a"/>
+      <stop offset="100%" stop-color="#35261b"/>
+    </linearGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="12"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.22"/>
+      </feComponentTransfer>
+    </filter>
+    <filter id="blur"><feGaussianBlur stdDeviation="4"/></filter>
+  </defs>
+  <rect width="1200" height="800" fill="#15100c"/>
+  <rect x="48" y="40" width="1104" height="720" rx="30" fill="url(#paper)" opacity="0.95"/>
+  <rect x="80" y="72" width="1040" height="656" rx="18" fill="#241a13" opacity="0.78"/>
+  <path d="M110 560 C230 515, 350 492, 500 470 S760 448, 1040 390" fill="none" stroke="#4d3d2d" stroke-width="26" stroke-linecap="round" opacity="0.9"/>
+  <path d="M118 565 C250 534, 386 510, 498 498 S780 470, 1040 414" fill="none" stroke="#6d5a44" stroke-width="10" stroke-linecap="round" opacity="0.62"/>
+  <g opacity="0.95">
+    <path d="M196 160 h160 l42 54 h-210 z" fill="#2f271d"/>
+    <path d="M224 154 v108" stroke="#8b6a44" stroke-width="10" opacity="0.7"/>
+    <path d="M314 154 v108" stroke="#8b6a44" stroke-width="10" opacity="0.7"/>
+    <path d="M384 160 v104" stroke="#8b6a44" stroke-width="10" opacity="0.7"/>
+  </g>
+  <ellipse cx="832" cy="332" rx="88" ry="126" fill="#0c0a08" opacity="0.92" filter="url(#blur)"/>
+  <ellipse cx="836" cy="322" rx="72" ry="108" fill="#1b140f" opacity="0.88"/>
+  <path d="M818 226 l48 18 30 42 -8 94 -38 62 -62 8 -34 -32 -6 -88 22 -58z" fill="#4b3926" opacity="0.9"/>
+  <circle cx="842" cy="314" r="12" fill="#c4ad84" opacity="0.76"/>
+  <circle cx="878" cy="312" r="12" fill="#c4ad84" opacity="0.76"/>
+  <path d="M820 360 q42 16 74 0" fill="none" stroke="#c6b18d" stroke-width="8" stroke-linecap="round" opacity="0.65"/>
+  <path d="M740 260 q48 -54 100 -42" fill="none" stroke="#6f5539" stroke-width="20" opacity="0.7"/>
+  <path d="M888 258 q52 22 76 68" fill="none" stroke="#6f5539" stroke-width="20" opacity="0.65"/>
+  <ellipse cx="258" cy="612" rx="176" ry="22" fill="#9f845c" opacity="0.12"/>
+  <ellipse cx="258" cy="612" rx="176" ry="22" fill="#271d13" opacity="0.7"/>
+  <rect x="40" y="34" width="1120" height="732" rx="32" fill="none" stroke="#b39b76" stroke-width="10" opacity="0.7"/>
+  <rect x="72" y="62" width="1056" height="676" rx="22" fill="none" stroke="#e7d3ab" stroke-width="4" opacity="0.12"/>
+  <g filter="url(#grain)"><rect width="1200" height="800" fill="#fff" opacity="0.55"/></g>
+</svg>

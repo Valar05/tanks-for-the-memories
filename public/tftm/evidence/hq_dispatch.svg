@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="HQ dispatch paper">
+  <defs>
+    <filter id="paperNoise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="7"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="table" tableValues="0 0.12"/></feComponentTransfer></filter>
+  </defs>
+  <rect width="1200" height="800" fill="#201713"/>
+  <rect x="80" y="56" width="1040" height="688" rx="28" fill="#d8c6a1" transform="rotate(-1 600 400)"/>
+  <rect x="80" y="56" width="1040" height="688" rx="28" fill="#f0dfbd" opacity="0.88" transform="rotate(-1 600 400)"/>
+  <path d="M140 188 C280 160, 420 160, 1060 206" stroke="#7f6f4f" stroke-width="6" opacity="0.22"/>
+  <path d="M140 242 C370 220, 560 222, 1020 270" stroke="#6f5e46" stroke-width="6" opacity="0.18"/>
+  <path d="M138 296 C360 280, 610 286, 1010 336" stroke="#6f5e46" stroke-width="6" opacity="0.18"/>
+  <path d="M170 522 C286 530, 366 534, 452 520" stroke="#8a6237" stroke-width="10" opacity="0.28"/>
+  <circle cx="898" cy="552" r="88" fill="none" stroke="#ad6d59" stroke-width="14" opacity="0.28"/>
+  <circle cx="900" cy="554" r="58" fill="none" stroke="#ad6d59" stroke-width="4" opacity="0.22"/>
+  <rect x="180" y="116" width="120" height="48" rx="8" fill="#ca2f32" opacity="0.75" transform="rotate(-10 240 140)"/>
+  <text x="192" y="147" font-family="monospace" font-size="28" fill="#f7e8d1" transform="rotate(-10 240 140)">HQ</text>
+  <text x="176" y="410" font-family="monospace" font-size="34" fill="#2b241d">ADVANCE IMMEDIATELY</text>
+  <text x="176" y="452" font-family="monospace" font-size="28" fill="#403329">Dispatch delayed in transit.</text>
+  <text x="176" y="494" font-family="monospace" font-size="24" fill="#594a3d">The picture may already be stale.</text>
+  <path d="M176 610 h532" stroke="#70553d" stroke-width="3" opacity="0.32"/>
+  <path d="M176 644 h420" stroke="#70553d" stroke-width="3" opacity="0.32"/>
+  <path d="M176 676 h640" stroke="#70553d" stroke-width="3" opacity="0.32"/>
+  <g transform="translate(74 48) rotate(0 526 344)" opacity="0.8">
+    <rect width="1050" height="680" rx="26" fill="none" stroke="#ad8e61" stroke-width="6"/>
+    <rect x="28" y="28" width="994" height="624" rx="18" fill="none" stroke="#d0b686" stroke-width="2" opacity="0.5"/>
+  </g>
+  <g filter="url(#paperNoise)"><rect width="1200" height="800" fill="#fff" opacity="0.5"/></g>
+</svg>

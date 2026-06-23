@@ -1,0 +1,42 @@
+{
+  "provider": "Cartesia",
+  "version": "2026-03-01",
+  "model_id": "sonic-3.5",
+  "selection": [
+    {
+      "role": "scout",
+      "name": "Archie - Approachable Mate",
+      "id": "ef191366-f52f-447a-a398-ed8c0f2943a1",
+      "language": "en-GB",
+      "why": "Field-readable, human, and not too announcer-like."
+    },
+    {
+      "role": "radio",
+      "name": "Daniel - Modern Assistant",
+      "id": "47c38ca4-5f35-497b-b1a3-415245fb35e1",
+      "language": "en-US",
+      "why": "Clear, clipped, and easy to cut through static."
+    },
+    {
+      "role": "visual",
+      "name": "Skylar - Friendly Guide",
+      "id": "db6b0ed5-d5d3-463d-ae85-518a07d3c2b4",
+      "language": "en-US",
+      "why": "Readable and immediate for quick sighting calls."
+    },
+    {
+      "role": "hq",
+      "name": "Gemma - Decisive Agent",
+      "id": "62ae83ad-4f6a-430b-af41-a9bede9286ca",
+      "language": "en-GB",
+      "why": "Authority without sounding like a general-purpose assistant."
+    },
+    {
+      "role": "memory",
+      "name": "Katie - Friendly Fixer",
+      "id": "f786b574-daa5-4673-aa0c-cbe3e8534c02",
+      "language": "en-US",
+      "why": "Soft enough for after-action lessons without losing clarity."
+    }
+  ]
+}

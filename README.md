@@ -23,6 +23,8 @@ Current promoted doctrine:
 - At least one incomplete, stale, or wrong claim in the queue
 - Multiple-choice command decisions that change outcomes
 - Attention pressure from unresolved reports
+- Cartesia TTS bark arrivals
+- Physical evidence carriers for each report type
 - Memory events that summarize what the commander learned
 
 ## What works
@@ -31,7 +33,9 @@ Current promoted doctrine:
 - A/B/C/D command choices for the selected report
 - Continuous report arrival while older claims remain unresolved
 - Backlog pressure and attention collapse
-- WWDD validation panel inside the app
+- Voice interrupt layer for report arrival
+- Physical evidence sheets for scout, radio, visual, and HQ claims
+- WWDD validation markers inside the app
 
 ## Commands
 
@@ -40,6 +44,7 @@ Current promoted doctrine:
 - `C` send wingman
 - `D` hold position
 - `R` restart after victory or failure
+- `Wake radio net` to unlock ambient audio and TTS playback
 
 ## Local setup
 

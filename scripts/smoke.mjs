@@ -11,7 +11,10 @@ const requiredFiles = [
   'vite.config.ts',
   'src/main.ts',
   'src/styles.css',
-  '.npmrc'
+  '.npmrc',
+  'public/tftm/evidence/manifest.json',
+  'public/tftm/audio/manifest.json',
+  'public/tftm/audio/cartesia_voice_index.json'
 ];
 
 const failures = [];
@@ -44,19 +47,24 @@ for (const dep of deps) {
 const main = readFileSync('src/main.ts', 'utf8');
 const requiredSnippets = [
   'The Feed Is The Battlefield',
+  'Wake radio net',
   'Scout report',
   'Radio report',
   'Visual observation',
   'HQ message',
+  'Cartesia',
   'A / B / C / D resolve the selected report.',
-  'WWDD validation required',
-  'Attention is the resource.',
   'No live AI or LLM calls are used at runtime.'
 ];
 for (const snippet of requiredSnippets) {
   if (!main.includes(snippet)) {
     failures.push('missing source marker ' + snippet);
   }
+}
+
+const manifest = JSON.parse(readFileSync('public/tftm/audio/manifest.json', 'utf8'));
+if (manifest.provider !== 'Cartesia' || !Array.isArray(manifest.clips) || manifest.clips.length < 8) {
+  failures.push('audio manifest missing Cartesia clips');
 }
 
 if (failures.length > 0) {

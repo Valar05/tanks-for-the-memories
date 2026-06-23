@@ -4,15 +4,24 @@ type FeedType = 'Scout report' | 'Radio report' | 'Visual observation' | 'HQ mes
 type Assessment = 'incomplete' | 'stale' | 'wrong' | 'solid';
 type DecisionKey = 'advance' | 'confirm' | 'send wingman' | 'hold';
 type Phase = 'live' | 'victory' | 'failure';
+type ArtifactKey = 'scout-photo' | 'radio-transcript' | 'visual-snapshot' | 'hq-dispatch';
+type VoiceRole = 'scout' | 'radio' | 'visual' | 'hq' | 'memory';
 
-type Report = {
-  id: string;
+type ReportTemplate = {
   type: FeedType;
   source: string;
   confidence: number;
-  createdAt: number;
   content: string;
   assessment: Assessment;
+  artifact: ArtifactKey;
+  bark: string;
+  clip: string;
+  voice: VoiceRole;
+};
+
+type Report = ReportTemplate & {
+  id: string;
+  createdAt: number;
   resolved: boolean;
   resolvedAt: number | null;
   decision: DecisionKey | null;
@@ -21,7 +30,18 @@ type Report = {
 
 type MemoryEvent = {
   time: number;
-  text: string;
+  original: string;
+  reality: string;
+  consequence: string;
+  lesson: string;
+  clip: string;
+};
+
+type AudioState = {
+  unlocked: boolean;
+  context: AudioContext | null;
+  noiseSources: AudioBufferSourceNode[];
+  ambientTimer: number | null;
 };
 
 type FeedState = {
@@ -44,6 +64,9 @@ type FeedState = {
   victoryLogged: boolean;
   failureLogged: boolean;
   lastSpontaneousAt: number;
+  pendingSpeech: string[];
+  currentSpeech: HTMLAudioElement | null;
+  audio: AudioState;
 };
 
 type DecisionOption = {
@@ -52,15 +75,106 @@ type DecisionOption = {
   hotkey: string;
 };
 
-const REPORT_TYPES: FeedType[] = ['Scout report', 'Radio report', 'Visual observation', 'HQ message'];
+const REPORT_LIBRARY: ReportTemplate[] = [
+  {
+    type: 'Scout report',
+    source: 'Scout Team Blue',
+    confidence: 0.62,
+    content: 'Possible armor near orchard fence.',
+    assessment: 'incomplete',
+    artifact: 'scout-photo',
+    bark: 'Scout reports movement, right hedgerow.',
+    clip: 'scout-movement-right-hedgerow.mp3',
+    voice: 'scout'
+  },
+  {
+    type: 'Radio report',
+    source: 'Relay Net',
+    confidence: 0.44,
+    content: 'Friendly tank missing on the left track. The message arrived late and clipped.',
+    assessment: 'stale',
+    artifact: 'radio-transcript',
+    bark: 'Radio contact lost.',
+    clip: 'radio-contact-lost.mp3',
+    voice: 'radio'
+  },
+  {
+    type: 'Visual observation',
+    source: 'Command binoculars',
+    confidence: 0.71,
+    content: 'Movement observed. Could be a hedge line, could be a gun team setting.',
+    assessment: 'wrong',
+    artifact: 'visual-snapshot',
+    bark: 'Movement observed.',
+    clip: 'visual-movement-observed.mp3',
+    voice: 'visual'
+  },
+  {
+    type: 'HQ message',
+    source: 'Battalion HQ',
+    confidence: 0.89,
+    content: 'Advance immediately. The picture is never going to get perfectly clean.',
+    assessment: 'solid',
+    artifact: 'hq-dispatch',
+    bark: 'HQ requests immediate advance.',
+    clip: 'hq-advance-immediately.mp3',
+    voice: 'hq'
+  },
+  {
+    type: 'Scout report',
+    source: 'Scout Team Echo',
+    confidence: 0.58,
+    content: 'Boxy shape beyond the orchard fence. The hedge cuts the lane and hides the far side.',
+    assessment: 'incomplete',
+    artifact: 'scout-photo',
+    bark: 'Scout says the orchard fence is hiding something.',
+    clip: 'scout-possible-armor-orchard-fence.mp3',
+    voice: 'scout'
+  },
+  {
+    type: 'Radio report',
+    source: 'Wingman Net',
+    confidence: 0.63,
+    content: 'Wingman reports a pause on the right flank. The net is clear, but the picture is narrow.',
+    assessment: 'solid',
+    artifact: 'radio-transcript',
+    bark: 'Wingman says the right flank went quiet.',
+    clip: 'radio-friendly-tank-missing.mp3',
+    voice: 'radio'
+  },
+  {
+    type: 'Visual observation',
+    source: 'Gunner sight',
+    confidence: 0.8,
+    content: 'Scope picture looks usable, but the blur could still lie.',
+    assessment: 'solid',
+    artifact: 'scope-snapshot',
+    bark: 'Movement observed through the scope.',
+    clip: 'visual-maybe-muzzle-flash.mp3',
+    voice: 'visual'
+  },
+  {
+    type: 'HQ message',
+    source: 'Battalion HQ',
+    confidence: 0.9,
+    content: 'Hold until the picture clears. HQ is late enough that the line may already have changed.',
+    assessment: 'stale',
+    artifact: 'hq-dispatch',
+    bark: 'HQ says hold until the picture clears.',
+    clip: 'hq-hold-until-clear.mp3',
+    voice: 'hq'
+  }
+];
+
 const DECISIONS: DecisionOption[] = [
-  { key: 'advance', label: 'Advance immediately', hotkey: 'A' },
-  { key: 'confirm', label: 'Request confirmation', hotkey: 'B' },
+  { key: 'advance', label: 'Advance', hotkey: 'A' },
+  { key: 'confirm', label: 'Confirm', hotkey: 'B' },
   { key: 'send wingman', label: 'Send wingman', hotkey: 'C' },
-  { key: 'hold', label: 'Hold position', hotkey: 'D' }
+  { key: 'hold', label: 'Hold', hotkey: 'D' }
 ];
 
 let nextReportId = 1;
+let lastTick = 0;
 
 const root = document.querySelector<HTMLDivElement>('#app');
 if (!root) {
@@ -75,7 +189,8 @@ shell.innerHTML = `
       <div class="masthead-copy">
         <p class="eyebrow">WWDD validation required</p>
         <h1>The Feed Is The Battlefield</h1>
-        <p class="lede">The player spends most of their time interpreting reports rather than directly observing reality.</p>
+        <p class="lede">Reports arrive as Cartesia voice barks, paper, film, and delay. The player spends most of their time interpreting claims rather than directly observing reality.</p>
+        <button class="audio-wake" type="button" data-audio-wake>Wake radio net</button>
       </div>
       <div class="masthead-metrics">
         <div class="metric" data-status></div>
@@ -90,7 +205,7 @@ shell.innerHTML = `
         <div class="panel-head">
           <div>
             <h2>Live Feed</h2>
-            <p class="panel-subtitle">Claims keep arriving. Old ones keep aging. Attention is the resource.</p>
+            <p class="panel-subtitle">Claims keep arriving. Older claims keep aging. Attention is the resource.</p>
           </div>
           <span class="pill" data-feed-count></span>
         </div>
@@ -101,7 +216,7 @@ shell.innerHTML = `
         <div class="panel-head">
           <div>
             <h2>Command Options</h2>
-            <p class="panel-subtitle">Multiple-choice orders resolve the selected report.</p>
+            <p class="panel-subtitle">Concise choices resolve the selected report and change outcomes.</p>
           </div>
         </div>
         <article class="active-report" data-active-report></article>
@@ -109,43 +224,13 @@ shell.innerHTML = `
         <div class="command-note" data-command-note></div>
       </section>
 
-      <section class="panel validation-panel">
+      <section class="panel memory-panel">
         <div class="panel-head">
           <div>
-            <h2>WWDD Validation</h2>
-            <p class="panel-subtitle">Green only if the feed itself becomes the gameplay surface.</p>
+            <h2>Memory</h2>
+            <p class="panel-subtitle">Major mistakes resolve into original report, reality, consequence, and lesson.</p>
           </div>
         </div>
-        <dl class="validation-grid">
-          <div>
-            <dt>Status</dt>
-            <dd data-validation-status></dd>
-          </div>
-          <div>
-            <dt>Doctrine</dt>
-            <dd data-validation-doctrine></dd>
-          </div>
-          <div>
-            <dt>Feed Types Implemented</dt>
-            <dd data-validation-types></dd>
-          </div>
-          <div>
-            <dt>Player Decisions</dt>
-            <dd data-validation-decisions></dd>
-          </div>
-          <div>
-            <dt>False Report Present</dt>
-            <dd data-validation-false></dd>
-          </div>
-          <div>
-            <dt>Memory Event Produced</dt>
-            <dd data-validation-memory></dd>
-          </div>
-          <div>
-            <dt>Commit</dt>
-            <dd data-validation-commit></dd>
-          </div>
-        </dl>
         <div class="memory-feed" data-memory-feed></div>
       </section>
     </main>
@@ -153,7 +238,7 @@ shell.innerHTML = `
     <footer class="footer">
       <span class="footer-chip">A / B / C / D resolve the selected report.</span>
       <span class="footer-chip">Unresolved reports stay live and keep aging.</span>
-      <span class="footer-chip">Attention collapses first; reality comes later.</span>
+      <span class="footer-chip">The feed interrupts the player.</span>
       <span class="footer-chip">No live AI or LLM calls are used at runtime.</span>
     </footer>
   </div>
@@ -167,17 +252,11 @@ const refs = {
   score: shell.querySelector<HTMLDivElement>('[data-score]')!,
   feedCount: shell.querySelector<HTMLSpanElement>('[data-feed-count]')!,
   feedStream: shell.querySelector<HTMLDivElement>('[data-feed-stream]')!,
-  activeReport: shell.querySelector<HTMLElement>('[data-active-report]')!,
+  activeReport: shell.querySelector<HTMLDivElement>('[data-active-report]')!,
   decisionGrid: shell.querySelector<HTMLDivElement>('[data-decision-grid]')!,
   commandNote: shell.querySelector<HTMLDivElement>('[data-command-note]')!,
-  validationStatus: shell.querySelector<HTMLElement>('[data-validation-status]')!,
-  validationDoctrine: shell.querySelector<HTMLElement>('[data-validation-doctrine]')!,
-  validationTypes: shell.querySelector<HTMLElement>('[data-validation-types]')!,
-  validationDecisions: shell.querySelector<HTMLElement>('[data-validation-decisions]')!,
-  validationFalse: shell.querySelector<HTMLElement>('[data-validation-false]')!,
-  validationMemory: shell.querySelector<HTMLElement>('[data-validation-memory]')!,
-  validationCommit: shell.querySelector<HTMLElement>('[data-validation-commit]')!,
-  memoryFeed: shell.querySelector<HTMLDivElement>('[data-memory-feed]')!
+  memoryFeed: shell.querySelector<HTMLDivElement>('[data-memory-feed]')!,
+  audioWake: shell.querySelector<HTMLButtonElement>('[data-audio-wake]')!
 };
 
 const state: FeedState = {
@@ -188,23 +267,26 @@ const state: FeedState = {
   pressure: 0,
   turnCount: 0,
   selectedReportId: null,
-  nextReportAt: 1.5,
+  nextReportAt: 1.4,
   nextReportIndex: 0,
   reports: buildInitialReports(),
   memoryEvents: [],
-  lastAnnouncement: 'Mission start. The feed is already active.',
+  lastAnnouncement: 'Tap to wake the radio net.',
   falseReportPresent: true,
   fedDoctrineValidated: false,
-  decisions: {
-    advance: 0,
-    confirm: 0,
-    'send wingman': 0,
-    hold: 0
-  },
-  reportTypesSeen: new Set<FeedType>(REPORT_TYPES),
+  decisions: { advance: 0, confirm: 0, 'send wingman': 0, hold: 0 },
+  reportTypesSeen: new Set<FeedType>(['Scout report', 'Radio report', 'Visual observation', 'HQ message']),
   victoryLogged: false,
   failureLogged: false,
-  lastSpontaneousAt: 0
+  lastSpontaneousAt: 0,
+  pendingSpeech: [],
+  currentSpeech: null,
+  audio: {
+    unlocked: false,
+    context: null,
+    noiseSources: [],
+    ambientTimer: null
+  }
 };
 
 nextReportId = state.reports.length + 1;
@@ -215,55 +297,28 @@ requestAnimationFrame(tick);
 
 function buildInitialReports(): Report[] {
   return [
-    createReport({
-      type: 'Scout report',
-      source: 'Scout Team Blue',
-      confidence: 0.62,
-      content: 'Scout says the orchard edge may hide armor. The hedge breaks the silhouette, so the picture is incomplete.',
-      assessment: 'incomplete'
-    }, 0),
-    createReport({
-      type: 'Radio report',
-      source: 'Relay Net',
-      confidence: 0.43,
-      content: 'Wingman reports movement on the left track. The message arrived late enough to be stale on arrival.',
-      assessment: 'stale'
-    }, 0),
-    createReport({
-      type: 'Visual observation',
-      source: 'Command binoculars',
-      confidence: 0.71,
-      content: 'A muzzle flash or a fence post. The glass says one thing and the dust says another.',
-      assessment: 'wrong'
-    }, 0),
-    createReport({
-      type: 'HQ message',
-      source: 'Battalion HQ',
-      confidence: 0.89,
-      content: 'Hold until the picture is clear. Do not spend attention on every blur in the hedgerow.',
-      assessment: 'solid'
-    }, 0)
+    createReport(REPORT_LIBRARY[0], 0),
+    createReport(REPORT_LIBRARY[1], 0),
+    createReport(REPORT_LIBRARY[2], 0),
+    createReport(REPORT_LIBRARY[3], 0)
   ];
 }
 
-function createReport(
-  input: Omit<Report, 'id' | 'resolved' | 'resolvedAt' | 'decision' | 'outcome'>,
-  createdAt = state.time
-): Report {
-  const id = 'R' + String(nextReportId++).padStart(3, '0');
+function createReport(template: ReportTemplate, createdAt = state.time): Report {
   return {
-    id,
-    type: input.type,
-    source: input.source,
-    confidence: clamp(input.confidence, 0, 1),
+    ...template,
+    id: 'R' + String(nextReportId++).padStart(3, '0'),
     createdAt,
-    content: input.content,
-    assessment: input.assessment,
     resolved: false,
     resolvedAt: null,
     decision: null,
     outcome: ''
   };
+}
+
+function seedInitialSelection() {
+  const unresolved = state.reports.find((report) => !report.resolved);
+  state.selectedReportId = unresolved ? unresolved.id : null;
 }
 
 function bindControls() {
@@ -276,11 +331,14 @@ function bindControls() {
     refs.decisionGrid.appendChild(button);
   }
 
+  refs.audioWake.addEventListener('click', () => unlockAudio());
+  window.addEventListener('pointerdown', () => unlockAudio(), { once: true });
   window.addEventListener('keydown', (event) => {
+    if (event.key.toLowerCase() === 'r' && state.phase !== 'live') {
+      restart();
+      return;
+    }
     if (state.phase !== 'live') {
-      if (event.key.toLowerCase() === 'r') {
-        restart();
-      }
       return;
     }
     const key = event.key.toLowerCase();
@@ -293,24 +351,14 @@ function bindControls() {
   document.body.addEventListener('click', (event) => {
     const target = event.target as HTMLElement | null;
     const card = target?.closest<HTMLElement>('[data-report-id]');
-    if (!card) {
-      return;
-    }
-    const reportId = card.dataset.reportId;
-    if (!reportId) {
-      return;
-    }
-    state.selectedReportId = reportId;
+    if (!card) return;
+    const id = card.dataset.reportId;
+    if (!id) return;
+    state.selectedReportId = id;
     render();
   });
 }
 
-function seedInitialSelection() {
-  const unresolved = state.reports.find((report) => !report.resolved);
-  state.selectedReportId = unresolved ? unresolved.id : null;
-}
-
-let lastTick = 0;
 function tick(now: number) {
   const delta = Math.min(0.1, (now - lastTick) / 1000 || 0.016);
   lastTick = now;
@@ -330,16 +378,10 @@ function tick(now: number) {
 
 function ageReports() {
   for (const report of state.reports) {
-    if (report.resolved) {
-      continue;
-    }
+    if (report.resolved) continue;
     const age = state.time - report.createdAt;
-    if (age > 10 && report.assessment === 'incomplete') {
-      report.assessment = 'stale';
-    }
-    if (age > 12 && report.assessment === 'solid') {
-      report.assessment = 'stale';
-    }
+    if (age > 10 && report.assessment === 'incomplete') report.assessment = 'stale';
+    if (age > 12 && report.assessment === 'solid') report.assessment = 'stale';
   }
 }
 
@@ -351,111 +393,35 @@ function drainAttention(delta: number) {
 }
 
 function maybeSpawnReport() {
-  if (state.time < state.nextReportAt || state.phase !== 'live') {
-    return;
-  }
-
-  const report = createFeedReport(state.nextReportIndex);
+  if (state.time < state.nextReportAt) return;
+  const template = REPORT_LIBRARY[state.nextReportIndex % REPORT_LIBRARY.length];
   state.nextReportIndex += 1;
+  const report = createReport(template, state.time);
   state.reports.unshift(report);
   state.reportTypesSeen.add(report.type);
   state.selectedReportId = report.id;
-  state.lastAnnouncement = report.source + ' pushes a new claim into the feed.';
+  state.lastAnnouncement = report.bark;
+  speak(report.clip);
 
   const unresolved = state.reports.filter((item) => !item.resolved).length;
-  const pressureDelay = unresolved >= 4 ? 2.2 : 3.6;
+  const pressureDelay = unresolved >= 4 ? 2.2 : 3.5;
   const cadence = clamp(pressureDelay - state.pressure * 0.12, 1.8, 4.4);
   state.nextReportAt = state.time + cadence;
 }
 
-function createFeedReport(index: number): Report {
-  const type = REPORT_TYPES[index % REPORT_TYPES.length];
-  const templates: Record<FeedType, Array<Omit<Report, 'id' | 'resolved' | 'resolvedAt' | 'decision' | 'outcome'>>> = {
-    'Scout report': [
-      {
-        type,
-        source: 'Scout Team Echo',
-        confidence: 0.58,
-        content: 'Scout says a boxy shape may be behind the orchard fence, but the hedge still cuts the lane.',
-        assessment: 'incomplete'
-      },
-      {
-        type,
-        source: 'Scout Team Able',
-        confidence: 0.67,
-        content: 'Scout claims the left shoulder is clear enough for a short push, though the view is still partial.',
-        assessment: 'solid'
-      }
-    ],
-    'Radio report': [
-      {
-        type,
-        source: 'Relay Net',
-        confidence: 0.46,
-        content: 'Radio says movement was seen on the old track, but the message has already gone soft and late.',
-        assessment: 'stale'
-      },
-      {
-        type,
-        source: 'Wingman Net',
-        confidence: 0.63,
-        content: 'Wingman reports a careful pause on the right flank. The net is clear, but the picture is still narrow.',
-        assessment: 'incomplete'
-      }
-    ],
-    'Visual observation': [
-      {
-        type,
-        source: 'Command binoculars',
-        confidence: 0.72,
-        content: 'A muzzle flash or a fence post. The dust line makes the object look convincing and maybe wrong.',
-        assessment: 'wrong'
-      },
-      {
-        type,
-        source: 'Gunner sight',
-        confidence: 0.81,
-        content: 'Scope picture looks clean enough to act on, but only if the feed is still fresh when you choose.',
-        assessment: 'solid'
-      }
-    ],
-    'HQ message': [
-      {
-        type,
-        source: 'Battalion HQ',
-        confidence: 0.9,
-        content: 'Hold until the picture is clear. HQ is late enough that the line may already have changed.',
-        assessment: 'stale'
-      },
-      {
-        type,
-        source: 'Battalion HQ',
-        confidence: 0.92,
-        content: 'Advance on the verified lane. Two reports now point the same way, so the feed can support action.',
-        assessment: 'solid'
-      }
-    ]
-  };
-  const pool = templates[type];
-  const template = pool[index % pool.length];
-  return createReport(template, state.time + 0.3);
-}
-
 function chooseDecision(decision: DecisionKey) {
-  if (state.phase !== 'live') {
-    return;
-  }
+  if (state.phase !== 'live') return;
   const report = getActiveReport();
   if (!report || report.resolved) {
     state.lastAnnouncement = 'No active report to resolve.';
     return;
   }
 
-  resolveReport(report, decision);
+  const outcome = resolveReport(report, decision);
   state.decisions[decision] += 1;
   state.turnCount += 1;
   state.selectedReportId = pickNextReportId();
-  maybeRecordMemory(report, decision);
+  state.lastAnnouncement = outcome.announcement;
   maybeTransition();
 }
 
@@ -465,11 +431,19 @@ function resolveReport(report: Report, decision: DecisionKey) {
   report.resolvedAt = state.time;
   report.decision = decision;
   report.outcome = outcome.text;
-
   state.score = clamp(state.score + outcome.scoreDelta, -9, 20);
   state.attention = clamp(state.attention + outcome.attentionDelta, 0, 10);
   state.pressure = clamp(state.pressure + outcome.pressureDelta, 0, 10);
-  state.lastAnnouncement = outcome.announcement;
+
+  if (outcome.memory) {
+    addMemoryEvent(outcome.memory, outcome.clip);
+  }
+
+  if (decision === 'send wingman') {
+    spawnFollowupReport(report);
+  }
+
+  return outcome;
 }
 
 function assessDecision(report: Report, decision: DecisionKey) {
@@ -483,6 +457,8 @@ function assessDecision(report: Report, decision: DecisionKey) {
   let pressureDelta = 0;
   let announcement = '';
   let text = '';
+  let memory: MemoryEvent | null = null;
+  let clip = 'memory-original-report.mp3';
 
   if (category === 'wrong') {
     if (decision === 'confirm' || decision === 'hold') {
@@ -491,12 +467,29 @@ function assessDecision(report: Report, decision: DecisionKey) {
       pressureDelta = -0.5;
       announcement = 'False picture caught before it drove the platoon.';
       text = 'The report was wrong, and the confirmation kept the feed honest.';
+      memory = {
+        time: state.time,
+        original: `Original Report: ${report.content}`,
+        reality: 'Reality: the visual picture was a hidden anti-tank gun.',
+        consequence: 'Consequence: the commander avoided a bad advance and kept the platoon alive.',
+        lesson: 'Lesson: a clean-looking visual can still be a lie.',
+        clip: 'memory-the-feed-was-wrong.mp3'
+      };
+      clip = 'memory-the-feed-was-wrong.mp3';
     } else {
       scoreDelta = -2;
       attentionDelta = -1.4;
       pressureDelta = 1.2;
       announcement = 'Wrong report acted on too early.';
       text = 'The feed was mistaken and the rushed order paid for it.';
+      memory = {
+        time: state.time,
+        original: `Original Report: ${report.content}`,
+        reality: 'Reality: the picture was incomplete and the enemy was not where the report implied.',
+        consequence: 'Consequence: the platoon spent attention and tempo on a false lead.',
+        lesson: 'Lesson: the first report is not the truth; it is only the first claim.',
+        clip: 'memory-original-report.mp3'
+      };
     }
   } else if (category === 'incomplete') {
     if (decision === 'confirm' || decision === 'send wingman') {
@@ -505,12 +498,28 @@ function assessDecision(report: Report, decision: DecisionKey) {
       pressureDelta = -0.2;
       announcement = 'Incomplete report forced a useful second look.';
       text = 'The gap in the picture was treated as a signal, not a finish.';
+      memory = {
+        time: state.time,
+        original: `Original Report: ${report.content}`,
+        reality: 'Reality: the report was incomplete, so the commander waited for more evidence.',
+        consequence: 'Consequence: the feed grew clearer before action.',
+        lesson: 'Lesson: incomplete is not useless; it is a prompt to confirm.',
+        clip: 'memory-original-report.mp3'
+      };
     } else if (decision === 'advance') {
       scoreDelta = stale ? -1 : 0;
       attentionDelta = -0.8;
       pressureDelta = 0.9;
       announcement = 'Advance outran the picture.';
       text = 'The commander moved on a report that had not finished talking.';
+      memory = {
+        time: state.time,
+        original: `Original Report: ${report.content}`,
+        reality: 'Reality: the report had not been confirmed and the lane was still uncertain.',
+        consequence: 'Consequence: the platoon spent tempo on a hunch.',
+        lesson: 'Lesson: motion without confirmation burns attention.',
+        clip: 'memory-original-report.mp3'
+      };
     } else {
       scoreDelta = 0;
       attentionDelta = 0.5;
@@ -525,12 +534,28 @@ function assessDecision(report: Report, decision: DecisionKey) {
       pressureDelta = -0.6;
       announcement = 'Stale report treated as stale, not sacred.';
       text = 'The age on the report mattered more than the drama in the wording.';
+      memory = {
+        time: state.time,
+        original: `Original Report: ${report.content}`,
+        reality: 'Reality: the claim had gone stale before it reached the commander.',
+        consequence: 'Consequence: the commander saved the platoon from chasing old news.',
+        lesson: 'Lesson: age is part of truth management.',
+        clip: 'memory-original-report.mp3'
+      };
     } else {
       scoreDelta = -1;
       attentionDelta = -1.1;
       pressureDelta = 0.8;
       announcement = 'Stale report pushed into action.';
       text = 'The feed was late and the rushed choice made the lag expensive.';
+      memory = {
+        time: state.time,
+        original: `Original Report: ${report.content}`,
+        reality: 'Reality: the report was already stale by the time the order went out.',
+        consequence: 'Consequence: the platoon moved on old information.',
+        lesson: 'Lesson: the feed must be timed, not merely read.',
+        clip: 'memory-original-report.mp3'
+      };
     }
   } else {
     if (decision === 'advance') {
@@ -560,78 +585,53 @@ function assessDecision(report: Report, decision: DecisionKey) {
     }
   }
 
-  if (decision === 'send wingman') {
-    spawnFollowupReport(report);
-  }
-
-  return { scoreDelta, attentionDelta, pressureDelta, announcement, text };
+  return { scoreDelta, attentionDelta, pressureDelta, announcement, text, memory, clip };
 }
 
 function spawnFollowupReport(sourceReport: Report) {
   const followupType: FeedType = sourceReport.type === 'Scout report' ? 'Radio report' : 'Scout report';
-  const followup = createReport({
+  const followupTemplate: ReportTemplate = {
     type: followupType,
     source: sourceReport.type === 'Scout report' ? 'Wingman Sherman' : 'Scout Team Blue',
     confidence: clamp(sourceReport.confidence + 0.12, 0, 1),
     content: 'Follow-up arrives because the commander spent attention to cross-check the first claim.',
-    assessment: sourceReport.assessment === 'wrong' ? 'incomplete' : 'solid'
-  }, state.time + 0.3);
+    assessment: sourceReport.assessment === 'wrong' ? 'incomplete' : 'solid',
+    artifact: sourceReport.type === 'Scout report' ? 'radio-transcript' : 'scout-photo',
+    bark: 'Cross-check report incoming.',
+    clip: sourceReport.type === 'Scout report' ? 'radio-contact-lost.mp3' : 'scout-possible-armor-orchard-fence.mp3',
+    voice: sourceReport.type === 'Scout report' ? 'radio' : 'scout'
+  };
+  const followup = createReport(followupTemplate, state.time + 0.3);
   state.reports.unshift(followup);
   state.reportTypesSeen.add(followup.type);
   state.lastAnnouncement = 'Cross-check generated a new report instead of a map.';
-}
-
-function maybeRecordMemory(report: Report, decision: DecisionKey) {
-  const resolvedCount = state.reports.filter((item) => item.resolved).length;
-  const wrongCaught = report.assessment === 'wrong' && (decision === 'confirm' || decision === 'hold');
-  const pattern = decision === 'confirm' && resolvedCount >= 2;
-  const backlog = state.reports.filter((item) => !item.resolved).length >= 4;
-
-  if (wrongCaught) {
-    addMemoryEvent('Memory: the commander stopped trusting the first clean-looking visual when the feed said the picture was unstable.');
-  } else if (pattern && !state.fedDoctrineValidated) {
-    state.fedDoctrineValidated = true;
-    addMemoryEvent('Memory: confirmation is becoming a habit, which is exactly what the feed asked for.');
-  } else if (backlog) {
-    addMemoryEvent('Memory: unresolved reports are now competing for attention instead of waiting politely.');
-  }
-}
-
-function addMemoryEvent(text: string) {
-  const event = { time: state.time, text };
-  const last = state.memoryEvents[0];
-  if (!last || last.text !== text) {
-    state.memoryEvents.unshift(event);
-    while (state.memoryEvents.length > 5) {
-      state.memoryEvents.pop();
-    }
-  }
+  speak(followup.clip);
 }
 
 function maybeSpontaneousCommentary() {
-  if (state.time - state.lastSpontaneousAt < 6) {
-    return;
-  }
+  if (state.time - state.lastSpontaneousAt < 6) return;
   const unresolved = state.reports.filter((item) => !item.resolved).length;
   if (unresolved >= 3) {
     state.lastSpontaneousAt = state.time;
-    const report = getActiveReport();
-    const label = report ? report.type.toLowerCase() : 'the feed';
-    addMemoryEvent('Commentary: ' + label + ' is still waiting while the next claim arrives.');
+    state.lastAnnouncement = 'The feed is stacking up and attention is the only thing that runs out first.';
   }
 }
 
 function maybeTransition() {
-  if (state.phase !== 'live') {
-    return;
-  }
-
+  if (state.phase !== 'live') return;
   if (state.attention <= 0 || state.pressure >= 10) {
     state.phase = 'failure';
     if (!state.failureLogged) {
       state.failureLogged = true;
-      state.lastAnnouncement = 'Attention collapsed. The feed kept moving.';
-      addMemoryEvent('Memory: the command lost the feed to overload.');
+      state.lastAnnouncement = 'Attention collapsed. The feed outran the commander.';
+      addMemoryEvent({
+        time: state.time,
+        original: 'Original Report: Too many reports unresolved at once.',
+        reality: 'Reality: the commander lost the picture in the backlog.',
+        consequence: 'Consequence: the feed became noise and the run failed.',
+        lesson: 'Lesson: unresolved claims are a pressure system.',
+        clip: 'memory-the-feed-was-wrong.mp3'
+      });
     }
     return;
   }
@@ -641,39 +641,44 @@ function maybeTransition() {
     state.phase = 'victory';
     if (!state.victoryLogged) {
       state.victoryLogged = true;
-      state.lastAnnouncement = 'The commander is reading the feed instead of chasing the map.';
-      addMemoryEvent('Memory: the battlefield was the feed, and the feed started yielding reliable command.');
+      state.lastAnnouncement = 'The commander learned to work the feed instead of the map.';
+      addMemoryEvent({
+        time: state.time,
+        original: 'Original Report: The feed kept arriving.',
+        reality: 'Reality: the commander learned to trust confirmation over instinct.',
+        consequence: 'Consequence: the run stabilized and the barrage of claims became usable.',
+        lesson: 'Lesson: the battlefield was the feed.',
+        clip: 'memory-original-report.mp3'
+      });
     }
   }
 }
 
+function addMemoryEvent(event: MemoryEvent) {
+  state.memoryEvents.unshift(event);
+  while (state.memoryEvents.length > 5) {
+    state.memoryEvents.pop();
+  }
+  speak(event.clip);
+}
+
 function pickNextReportId() {
   const unresolved = state.reports.filter((report) => !report.resolved);
-  if (unresolved.length === 0) {
-    return null;
-  }
+  if (unresolved.length === 0) return null;
   unresolved.sort((a, b) => a.createdAt - b.createdAt);
   return unresolved[0].id;
 }
 
 function getActiveReport() {
   const selected = state.reports.find((report) => report.id === state.selectedReportId && !report.resolved);
-  if (selected) {
-    return selected;
-  }
+  if (selected) return selected;
   const next = state.reports.find((report) => !report.resolved);
-  if (next) {
-    state.selectedReportId = next.id;
-  }
+  if (next) state.selectedReportId = next.id;
   return next || null;
 }
 
 function render() {
   const activeReport = getActiveReport();
-  if (!state.selectedReportId && activeReport) {
-    state.selectedReportId = activeReport.id;
-  }
-
   refs.status.textContent = state.phase === 'live' ? 'Live feed' : state.phase === 'victory' ? 'Command won the feed' : 'Feed collapse';
   refs.status.className = 'metric ' + (state.phase === 'live' ? 'live' : state.phase === 'victory' ? 'victory' : 'failure');
   refs.doctrine.textContent = 'The Feed Is The Battlefield';
@@ -683,14 +688,9 @@ function render() {
   refs.feedStream.innerHTML = renderFeed();
   refs.activeReport.innerHTML = renderActiveReport(activeReport);
   refs.commandNote.textContent = state.lastAnnouncement;
-  refs.validationStatus.textContent = state.phase.toUpperCase();
-  refs.validationDoctrine.textContent = 'The Feed Is The Battlefield';
-  refs.validationTypes.textContent = REPORT_TYPES.join(', ');
-  refs.validationDecisions.textContent = DECISIONS.map((option) => option.label).join(' · ');
-  refs.validationFalse.textContent = state.falseReportPresent ? 'yes' : 'no';
-  refs.validationMemory.textContent = state.memoryEvents[0]?.text || 'pending';
-  refs.validationCommit.textContent = 'pending';
   refs.memoryFeed.innerHTML = renderMemoryFeed();
+  refs.audioWake.textContent = state.audio.unlocked ? 'Radio net awake' : 'Wake radio net';
+  refs.audioWake.disabled = state.audio.unlocked;
 }
 
 function renderFeed() {
@@ -704,6 +704,10 @@ function renderFeed() {
     const age = Math.max(0, state.time - report.createdAt);
     return `
       <button class="report-card ${selected ? 'selected' : ''} ${status}" data-report-id="${report.id}" type="button">
+        <div class="report-artifact artifact-${report.artifact}">
+          <img src="/tftm/evidence/${artifactFile(report.artifact)}" alt="${escapeHtml(report.type)} carrier" loading="lazy" />
+          <span class="artifact-label">${escapeHtml(carrierLabel(report.artifact))}</span>
+        </div>
         <div class="report-topline">
           <strong>${escapeHtml(report.type)}</strong>
           <span>${escapeHtml(report.source)}</span>
@@ -716,7 +720,7 @@ function renderFeed() {
         </div>
         <div class="report-tags">
           <span class="tag">${escapeHtml(status)}</span>
-          <span class="tag muted">${report.decision ? escapeHtml(report.decision) : 'unresolved'}</span>
+          <span class="tag muted">${report.resolved ? 'resolved' : report.voice}</span>
         </div>
       </button>
     `;
@@ -730,6 +734,10 @@ function renderActiveReport(report: Report | null) {
   const age = Math.max(0, state.time - report.createdAt);
   return `
     <div class="active-card ${report.resolved ? 'resolved' : getReportStatus(report)}">
+      <div class="report-artifact artifact-${report.artifact} active-artifact">
+        <img src="/tftm/evidence/${artifactFile(report.artifact)}" alt="${escapeHtml(report.type)} carrier" loading="lazy" />
+        <span class="artifact-label">${escapeHtml(carrierLabel(report.artifact))}</span>
+      </div>
       <div class="report-topline">
         <strong>Selected report</strong>
         <span>${escapeHtml(report.id)}</span>
@@ -748,30 +756,26 @@ function renderActiveReport(report: Report | null) {
 
 function renderMemoryFeed() {
   if (state.memoryEvents.length === 0) {
-    return '<div class="empty-state">No memory event yet. Resolve a report to produce one.</div>';
+    return '<div class="empty-state">No memory report yet. Make a major mistake or stabilize the feed to produce one.</div>';
   }
   return state.memoryEvents.map((event) => `
-    <div class="memory-card">
-      <span class="memory-time">${formatAge(state.time - event.time)}</span>
-      <p>${escapeHtml(event.text)}</p>
-    </div>
+    <article class="memory-card">
+      <img src="/tftm/evidence/${artifactFile('hq-dispatch') }" alt="after-action sheet" class="memory-image" />
+      <span class="memory-time">${formatAge(state.time - event.time)} old</span>
+      <p><strong>${escapeHtml(event.original)}</strong></p>
+      <p>${escapeHtml(event.reality)}</p>
+      <p>${escapeHtml(event.consequence)}</p>
+      <p>${escapeHtml(event.lesson)}</p>
+    </article>
   `).join('');
 }
 
 function getReportStatus(report: Report) {
   const age = state.time - report.createdAt;
-  if (report.resolved) {
-    return 'resolved';
-  }
-  if (report.assessment === 'wrong') {
-    return 'wrong';
-  }
-  if (age >= 7 || report.assessment === 'stale') {
-    return 'stale';
-  }
-  if (report.assessment === 'incomplete') {
-    return 'incomplete';
-  }
+  if (report.resolved) return 'resolved';
+  if (report.assessment === 'wrong') return 'wrong';
+  if (age >= 7 || report.assessment === 'stale') return 'stale';
+  if (report.assessment === 'incomplete') return 'incomplete';
   return 'solid';
 }
 
@@ -787,24 +791,22 @@ function restart() {
   state.pressure = 0;
   state.turnCount = 0;
   state.selectedReportId = null;
-  state.nextReportAt = 1.5;
+  state.nextReportAt = 1.4;
   state.nextReportIndex = 0;
   state.reports = buildInitialReports();
   nextReportId = state.reports.length + 1;
-  state.memoryEvents = [];
+  state.memoryEvents = []; 
   state.lastAnnouncement = 'Mission restarted. The feed is live again.';
   state.falseReportPresent = true;
   state.fedDoctrineValidated = false;
-  state.decisions = {
-    advance: 0,
-    confirm: 0,
-    'send wingman': 0,
-    hold: 0
-  };
-  state.reportTypesSeen = new Set<FeedType>(REPORT_TYPES);
+  state.decisions = { advance: 0, confirm: 0, 'send wingman': 0, hold: 0 };
+  state.reportTypesSeen = new Set<FeedType>(['Scout report', 'Radio report', 'Visual observation', 'HQ message']);
   state.victoryLogged = false;
   state.failureLogged = false;
   state.lastSpontaneousAt = 0;
+  state.pendingSpeech = [];
+  state.currentSpeech = null;
+  state.audio = { unlocked: state.audio.unlocked, context: state.audio.context, noiseSources: state.audio.noiseSources, ambientTimer: state.audio.ambientTimer };
   seedInitialSelection();
   render();
 }
@@ -824,4 +826,149 @@ function escapeHtml(text: string) {
     };
     return map[char] || char;
   });
+}
+
+function artifactFile(key: ArtifactKey) {
+  if (key === 'scout-photo') return 'scout_photo.svg';
+  if (key === 'radio-transcript') return 'radio_transcript.svg';
+  if (key === 'visual-snapshot') return 'scope_snapshot.svg';
+  return 'hq_dispatch.svg';
+}
+
+function carrierLabel(key: ArtifactKey) {
+  if (key === 'scout-photo') return 'Scout photograph';
+  if (key === 'radio-transcript') return 'Radio transcript';
+  if (key === 'visual-snapshot') return 'Scope snapshot';
+  return 'HQ dispatch';
+}
+
+function unlockAudio() {
+  if (state.audio.unlocked) return;
+  const AudioContextCtor = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!AudioContextCtor) {
+    state.lastAnnouncement = 'Audio unavailable on this browser.';
+    render();
+    return;
+  }
+  const context = new AudioContextCtor();
+  state.audio.context = context;
+  state.audio.unlocked = true;
+  startAmbient(context);
+  flushSpeechQueue();
+  render();
+}
+
+function startAmbient(context: AudioContext) {
+  const master = context.createGain();
+  master.gain.value = 0.18;
+  master.connect(context.destination);
+
+  const engine = context.createOscillator();
+  engine.type = 'sawtooth';
+  engine.frequency.value = 44;
+  const engineFilter = context.createBiquadFilter();
+  engineFilter.type = 'lowpass';
+  engineFilter.frequency.value = 110;
+  const engineGain = context.createGain();
+  engineGain.gain.value = 0.03;
+  engine.connect(engineFilter).connect(engineGain).connect(master);
+  engine.start();
+
+  const windNoise = createNoiseBuffer(context, 2.5);
+  const wind = context.createBufferSource();
+  wind.buffer = windNoise;
+  wind.loop = true;
+  const windFilter = context.createBiquadFilter();
+  windFilter.type = 'bandpass';
+  windFilter.frequency.value = 850;
+  windFilter.Q.value = 0.7;
+  const windGain = context.createGain();
+  windGain.gain.value = 0.015;
+  wind.connect(windFilter).connect(windGain).connect(master);
+  wind.start();
+
+  const staticNoise = createNoiseBuffer(context, 1.5);
+  const staticSource = context.createBufferSource();
+  staticSource.buffer = staticNoise;
+  staticSource.loop = true;
+  const staticFilter = context.createBiquadFilter();
+  staticFilter.type = 'highpass';
+  staticFilter.frequency.value = 1700;
+  const staticGain = context.createGain();
+  staticGain.gain.value = 0.008;
+  staticSource.connect(staticFilter).connect(staticGain).connect(master);
+  staticSource.start();
+
+  state.audio.noiseSources = [wind, staticSource];
+  state.audio.ambientTimer = window.setInterval(() => triggerArtilleryBurst(context, master), 22000 + Math.random() * 11000);
+}
+
+function createNoiseBuffer(context: AudioContext, seconds: number) {
+  const buffer = context.createBuffer(1, Math.floor(context.sampleRate * seconds), context.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < data.length; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  return buffer;
+}
+
+function triggerArtilleryBurst(context: AudioContext, master: GainNode) {
+  if (state.phase !== 'live') return;
+  const burst = context.createOscillator();
+  burst.type = 'sine';
+  burst.frequency.setValueAtTime(82, context.currentTime);
+  burst.frequency.exponentialRampToValueAtTime(26, context.currentTime + 0.18);
+  const gain = context.createGain();
+  gain.gain.setValueAtTime(0.0001, context.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.09, context.currentTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.4);
+  burst.connect(gain).connect(master);
+  burst.start();
+  burst.stop(context.currentTime + 0.45);
+}
+
+function speak(clip: string) {
+  if (!clip) return;
+  if (!state.audio.unlocked) {
+    state.pendingSpeech = [clip];
+    return;
+  }
+  const source = getAudio(clip);
+  if (state.currentSpeech) {
+    state.currentSpeech.pause();
+    state.currentSpeech.currentTime = 0;
+  }
+  state.currentSpeech = source;
+  source.play().catch(() => {
+    state.pendingSpeech = [clip];
+  });
+}
+
+function flushSpeechQueue() {
+  const clip = state.pendingSpeech.pop();
+  state.pendingSpeech = [];
+  if (clip) {
+    speak(clip);
+  }
+}
+
+function getAudio(clip: string) {
+  const url = '/tftm/audio/' + clip;
+  const audio = new Audio(url);
+  audio.preload = 'auto';
+  audio.volume = 0.96;
+  return audio;
+}
+
+function renderMemoryCard(event: MemoryEvent) {
+  return `
+    <article class="memory-card">
+      <img src="/tftm/evidence/hq_dispatch.svg" alt="After-action sheet" class="memory-image" />
+      <span class="memory-time">${formatAge(state.time - event.time)} old</span>
+      <p><strong>${escapeHtml(event.original)}</strong></p>
+      <p>${escapeHtml(event.reality)}</p>
+      <p>${escapeHtml(event.consequence)}</p>
+      <p>${escapeHtml(event.lesson)}</p>
+    </article>
+  `;
 }

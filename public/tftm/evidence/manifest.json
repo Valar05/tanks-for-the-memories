@@ -1,0 +1,30 @@
+{
+  "collection": "tftm-slice-one-evidence",
+  "purpose": "Physical carriers for report arrivals in Tanks For The Memories.",
+  "assets": [
+    {
+      "key": "scout-photo",
+      "file": "/tftm/evidence/scout_photo.svg",
+      "carrier": "Scout photograph",
+      "notes": "Muddy lens smear, partial silhouette, orchard fence, torn paper edge."
+    },
+    {
+      "key": "hq-dispatch",
+      "file": "/tftm/evidence/hq_dispatch.svg",
+      "carrier": "HQ dispatch",
+      "notes": "Crumpled order sheet with red stamp and coffee ring."
+    },
+    {
+      "key": "radio-transcript",
+      "file": "/tftm/evidence/radio_transcript.svg",
+      "carrier": "Radio transcript strip",
+      "notes": "Typewriter strip with static, grease marks, and torn edges."
+    },
+    {
+      "key": "scope-snapshot",
+      "file": "/tftm/evidence/scope_snapshot.svg",
+      "carrier": "Scope snapshot",
+      "notes": "Reticle view with haze, blur, and partial contact."
+    }
+  ]
+}

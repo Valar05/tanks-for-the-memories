@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, rmSync, writeFileSync, existsSync, statSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 
@@ -9,6 +9,7 @@ const root = process.cwd();
 const srcDir = path.join(root, 'src');
 const distDir = path.join(root, 'dist');
 const assetsDir = path.join(distDir, 'assets');
+const publicDir = path.join(root, 'public');
 
 rmSync(distDir, { recursive: true, force: true });
 mkdirSync(assetsDir, { recursive: true });
@@ -23,6 +24,22 @@ function resolveImport(importPath, resolveDir) {
     }
   }
   return null;
+}
+
+function copyRecursive(source, destination) {
+  if (!existsSync(source)) {
+    return;
+  }
+  const stats = statSync(source);
+  if (stats.isDirectory()) {
+    mkdirSync(destination, { recursive: true });
+    for (const entry of readdirSync(source)) {
+      copyRecursive(path.join(source, entry), path.join(destination, entry));
+    }
+    return;
+  }
+  mkdirSync(path.dirname(destination), { recursive: true });
+  copyFileSync(source, destination);
 }
 
 await esbuild.build({
@@ -65,4 +82,5 @@ const html = readFileSync(path.join(root, 'index.html'), 'utf8')
   .replace('<script type="module" src="/src/main.ts"></script>', '<script type="module" src="./assets/index.js"></script>');
 
 writeFileSync(path.join(distDir, 'index.html'), html);
+copyRecursive(publicDir, distDir);
 console.log('Built dist using esbuild-wasm.');
