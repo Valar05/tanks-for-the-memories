@@ -2,25 +2,26 @@
 
 ## Loop
 
-Information -> Order -> Consequence -> Memory
+Feed -> Order -> Consequence -> Memory
 
 ## Systems
 
-- Command parser accepts typed commands first and optional speech later.
-- Orders are queued and executed against the platoon state machine.
-- The information ledger stores reports with id, type, source, subject, approximate position, confidence, created time, and expiry time.
-- Hidden contacts only become known through report generation or line of sight.
-- Failure produces an after-action report and restarts the checkpoint.
+- A live feed of claims shows source, confidence, age, and content.
+- Reports arrive continuously while older reports remain unresolved.
+- The selected report is resolved with concise multiple-choice commands.
+- Each command alters score, attention, pressure, and memory.
+- At least one report is incomplete, stale, or wrong to force interpretation.
+- Attention collapse or pressure overload ends the run.
+- Victory comes from managing the feed, not from observing a map.
 
 ## Views
 
-- Hatch open: broad outside awareness, more exposed.
-- Buttoned up: narrower and safer.
-- Gunner scope: tight forward focus.
-- Map / report: tactical board with uncertainty and report timing.
+- Live feed: the battlefield surface.
+- Command options: A/B/C/D decisions for the selected report.
+- WWDD validation: a visible runtime summary of the doctrine check.
 
 ## Runtime pieces
 
-- src/main.ts builds the Three.js bocage lane, the command HUD, the report ledger, the map/report board, and the tank command model.
-- src/styles.css handles the field-log visual language and responsive panels.
-- scripts/smoke.mjs validates the repo shape and source markers before a real build.
+- `src/main.ts` builds the feed UI, the report generator, the decision loop, and the validation summary.
+- `src/styles.css` handles the feed-first layout and responsive panels.
+- `scripts/smoke.mjs` validates the feed doctrine markers before a real build.

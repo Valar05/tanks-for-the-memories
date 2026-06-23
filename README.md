@@ -1,16 +1,13 @@
 # Tanks For The Memories
 
-A small WW2 tank-command information simulation.
+A small WW2 command simulation about reports, orders, consequences, and memory.
 
-The player is a platoon commander, not a driver. The loop is:
+The player is a platoon commander, not a driver.
+The player wins by reading the feed better than the battlefield can change.
 
-Information -> Order -> Consequence -> Memory
+## Current vision
 
-## Current Vision
-
-Tanks For The Memories is a tank commander operation game about managing uncertainty from inside a crewed machine.
-
-The player succeeds by becoming less wrong faster than the battlefield changes around them.
+Tanks For The Memories is a feed-first information game about managing uncertainty from inside a crewed machine.
 
 Current promoted doctrine:
 
@@ -21,38 +18,28 @@ Current promoted doctrine:
 
 ## Current slice
 
-- One Normandy bocage lane
-- Player Sherman
-- Wingman Sherman
-- One hidden enemy AT gun
-- Farmhouse and church landmarks
-- Hedgerow cover and muddy road
+- One live report feed
+- Scout, radio, visual, and HQ reports
+- At least one incomplete, stale, or wrong claim in the queue
+- Multiple-choice command decisions that change outcomes
+- Attention pressure from unresolved reports
+- Memory events that summarize what the commander learned
 
 ## What works
 
-- Typed command input
-- Voice input when the browser supports SpeechRecognition
-- Information ledger with report data
-- Hatch, buttoned-up, gunner scope, and map/report views
-- Wingman scout, advance, hold, and attack behavior
-- Failure report plus checkpoint restart
+- Feed cards with source, confidence, age, and content
+- A/B/C/D command choices for the selected report
+- Continuous report arrival while older claims remain unresolved
+- Backlog pressure and attention collapse
+- WWDD validation panel inside the app
 
 ## Commands
 
-- report
-- scout left
-- scout right
-- advance
-- halt
-- reverse
-- hold
-- attack contact
-- hatch open
-- button up
-- gunner scope
-- map
-
-Invalid commands do nothing and produce no correction message.
+- `A` advance immediately
+- `B` request confirmation
+- `C` send wingman
+- `D` hold position
+- `R` restart after victory or failure
 
 ## Local setup
 
@@ -64,10 +51,9 @@ Invalid commands do nothing and produce no correction message.
 ## Notes
 
 - No live AI or LLM calls are used at runtime.
-- The prototype uses Three.js primitives instead of finished art assets.
-- Reports can be partial, stale, or unconfirmed.
-- The map/report view shows uncertainty, not omniscience.
-- Camera and UI should privilege observer-sourced awareness over god view.
+- The prototype is feed-first, not map-first.
+- Reports are claims, not truth.
+- New reports keep arriving while unresolved ones age in place.
 
 ## Repo Doctrine
 

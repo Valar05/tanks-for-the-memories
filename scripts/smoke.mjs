@@ -43,13 +43,14 @@ for (const dep of deps) {
 
 const main = readFileSync('src/main.ts', 'utf8');
 const requiredSnippets = [
-  'Information -> Order -> Consequence -> Memory',
-  'Information Ledger',
-  'After-action report',
-  'attack contact',
-  'hatch open',
-  'button up',
-  'gunner scope',
+  'The Feed Is The Battlefield',
+  'Scout report',
+  'Radio report',
+  'Visual observation',
+  'HQ message',
+  'A / B / C / D resolve the selected report.',
+  'WWDD validation required',
+  'Attention is the resource.',
   'No live AI or LLM calls are used at runtime.'
 ];
 for (const snippet of requiredSnippets) {
