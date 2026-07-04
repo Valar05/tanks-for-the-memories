@@ -1,0 +1,64 @@
+{
+  "asset_id": "authored_sherman_boxmodel_v1",
+  "display_name": "Authored Sherman Boxmodel V1",
+  "silhouette_revision": "v1-blender-boxmodel-sherman-silhouette",
+  "generated_at": "2026-07-04T18:09:29.715294Z",
+  "generator": "scripts/export_authored_sherman_boxmodel.py",
+  "blender": "4.3.2",
+  "source_blend": "assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend",
+  "output_glb": "public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb",
+  "source_policy": "fully authored Blender box-model geometry; no Meshy chassis or turret imports; rejected retopo remains prior evidence only",
+  "uv_policy": "box and planar UV plates, one 0-1 paintable plate per surface family; no atlas packing",
+  "dalle_paintability": {
+    "template_dir": "assets/authored/authored_sherman_boxmodel_v1/texture_templates",
+    "runtime_plate_dir": "public/tftm/models/authored_sherman_boxmodel_v1/texture_plates",
+    "prompt_rule": "Use the filename/surface id in the prompt; do not paint labels or readable typography inside the image.",
+    "first_pass": "runtime albedo plates avoid guide seams; authoring templates retain safe-area guides."
+  },
+  "face_plate_ids": [
+    "hull_glacis",
+    "hull_left",
+    "hull_right",
+    "hull_rear",
+    "engine_deck",
+    "turret_front",
+    "turret_left",
+    "turret_right",
+    "turret_top",
+    "turret_bustle",
+    "mantlet",
+    "barrel_strip",
+    "track_outer",
+    "track_inner_top_bottom",
+    "wheel_disc",
+    "bogie_side"
+  ],
+  "node_contract": [
+    "tank_root",
+    "hull_root",
+    "turret_traverse_pivot",
+    "turret_shell",
+    "cannon_elevation_pivot",
+    "mantlet",
+    "barrel",
+    "left_track_motion",
+    "right_track_motion",
+    "left_roadwheel_group",
+    "right_roadwheel_group",
+    "commander_hatch__turret_top"
+  ],
+  "runtime_contract": {
+    "turret_traverse": "rotate turret_traverse_pivot around Y",
+    "cannon_elevation": "rotate cannon_elevation_pivot for barrel pitch",
+    "tread_motion": "scroll material maps on left_track_motion and right_track_motion",
+    "wheel_motion": "rotate children of left_roadwheel_group and right_roadwheel_group",
+    "commander_hatch": "commander_hatch__turret_top is a named posture marker"
+  },
+  "budget": {
+    "target_triangles": "2500-4500",
+    "hard_cap_triangles": 6000,
+    "actual_triangles": 2618,
+    "mesh_count": 91
+  },
+  "approximate_triangles": 2618
+}

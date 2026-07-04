@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { AUTHORED_SHERMAN_RETOPO_FACE_PLATES, AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL, SHERMAN_DEFAULT_OLIVE_ALBEDO_URL, SHERMAN_DEFAULT_TREAD_ALBEDO_URL } from './sherman-asset-links';
+import { AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES, AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL, AUTHORED_SHERMAN_RETOPO_FACE_PLATES, AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL, SHERMAN_DEFAULT_OLIVE_ALBEDO_URL, SHERMAN_DEFAULT_TREAD_ALBEDO_URL } from './sherman-asset-links';
 
 type MaterialTarget = 'olive' | 'tread';
 
@@ -73,20 +73,21 @@ function normalizeSurfaceId(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9_]+/g, '_');
 }
 
-function surfaceIdForMesh(mesh: THREE.Object3D, material: THREE.Material) {
+function surfaceIdForMesh(mesh: THREE.Object3D, material: THREE.Material, facePlateIds: readonly string[]) {
   const fromUserData = typeof mesh.userData?.surface_id === 'string' ? mesh.userData.surface_id : '';
   const source = fromUserData || material.name || mesh.name;
   const normalized = normalizeSurfaceId(source);
-  for (const plateId of AUTHORED_SHERMAN_RETOPO_FACE_PLATES) {
+  const sortedPlateIds = [...facePlateIds].sort((a, b) => b.length - a.length);
+  for (const plateId of sortedPlateIds) {
     if (normalized.includes(plateId)) return plateId;
   }
   return 'hull_left';
 }
 
-export function applyAuthoredRetopoTexturePlates(root: THREE.Object3D) {
+function applyAuthoredTexturePlates(root: THREE.Object3D, facePlateIds: readonly string[], baseUrl: string, sourceName: string) {
   const textureByPlate = new Map<string, THREE.Texture>();
-  for (const plateId of AUTHORED_SHERMAN_RETOPO_FACE_PLATES) {
-    textureByPlate.set(plateId, makeAlbedoTexture(AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL + plateId + '.png', 1, 1));
+  for (const plateId of facePlateIds) {
+    textureByPlate.set(plateId, makeAlbedoTexture(baseUrl + plateId + '.png', 1, 1));
   }
   let texturedMaterials = 0;
   const usedPlateIds = new Set<string>();
@@ -96,7 +97,7 @@ export function applyAuthoredRetopoTexturePlates(root: THREE.Object3D) {
     if (!mesh.isMesh || !mesh.material) return;
     const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
     const nextMaterials = materials.map((sourceMaterial) => {
-      const plateId = surfaceIdForMesh(mesh, sourceMaterial);
+      const plateId = surfaceIdForMesh(mesh, sourceMaterial, facePlateIds);
       const map = textureByPlate.get(plateId) || textureByPlate.get('hull_left')!;
       usedPlateIds.add(plateId);
       texturedMaterials += 1;
@@ -105,10 +106,20 @@ export function applyAuthoredRetopoTexturePlates(root: THREE.Object3D) {
     mesh.material = Array.isArray(mesh.material) ? nextMaterials : nextMaterials[0];
   });
 
-  root.userData.authoredRetopoTextureSet = {
-    source: 'authored_sherman_retopo_v1',
-    base: AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL,
+  root.userData.authoredTextureSet = {
+    source: sourceName,
+    base: baseUrl,
     texturedMaterials,
     usedPlateIds: Array.from(usedPlateIds).sort()
   };
+}
+
+export function applyAuthoredRetopoTexturePlates(root: THREE.Object3D) {
+  applyAuthoredTexturePlates(root, AUTHORED_SHERMAN_RETOPO_FACE_PLATES, AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL, 'authored_sherman_retopo_v1');
+  root.userData.authoredRetopoTextureSet = root.userData.authoredTextureSet;
+}
+
+export function applyAuthoredBoxmodelTexturePlates(root: THREE.Object3D) {
+  applyAuthoredTexturePlates(root, AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES, AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL, 'authored_sherman_boxmodel_v1');
+  root.userData.authoredBoxmodelTextureSet = root.userData.authoredTextureSet;
 }

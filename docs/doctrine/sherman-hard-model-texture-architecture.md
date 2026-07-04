@@ -93,3 +93,7 @@ If human visual review says only one commander tank has the right graphic shell,
 ### Runtime Plate Seams
 
 For authored retopo reviews, authoring templates may keep safe-area guide borders and center marks, but runtime texture plates should not show obvious guide seams. If a cloud review shows visible plate boxes, treat that as placeholder albedo leakage, not accepted paint language. The current silhouette revision is `v1.1-sherman-silhouette-subdivision`: a stable authored asset id with a second geometry/detail pass for Sherman-like massing, cast turret read, VVSS bogies, track cleats, fenders, and barrel/mantlet ownership.
+
+### Blender Boxmodel Replacement
+
+The active replacement candidate after the failed high-poly retopo is `authored_sherman_boxmodel_v1`. It is generated from `scripts/export_authored_sherman_boxmodel.py` in Debian proot Blender 4.3.2 and preserves a source `.blend`. The target is Sherman silhouette first: sloped glacis, hull tub/sponsons, VVSS masses, and a non-cube oval/cast turret with front cheek, flattened roof, and rear bustle. Use box and planar UV plates, not a packed atlas, until cloud/Sense accepts the form.

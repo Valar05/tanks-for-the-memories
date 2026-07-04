@@ -2,6 +2,17 @@ import { existsSync, readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 
 const requiredFiles = [
+  'public/tftm/models/authored_sherman_boxmodel_v1/texture_plates/hull_glacis.png',
+  'public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb',
+  'public/tftm/models/authored_sherman_boxmodel_v1/model_manifest.json',
+  'assets/authored/authored_sherman_boxmodel_v1/texture_templates/hull_glacis.png',
+  'assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend',
+  'scripts/validate_boxmodel_tank_cloud_gate.mjs',
+  'scripts/validate_authored_boxmodel_asset.mjs',
+  'scripts/export_authored_sherman_boxmodel.mjs',
+  'scripts/export_authored_sherman_boxmodel.py',
+  'src/boxmodel-tank.ts',
+  'boxmodel-tank.html',
   'index.html',
   'alpha-control.html',
   'single-tank.html',
@@ -196,7 +207,10 @@ const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 if (packageJson.name !== 'tftm') {
   failures.push('package name should be tftm');
 }
-for (const scriptName of ['build', 'dev', 'smoke', 'alpha-control-smoke', 'bootstrap', 'cloud-visual-release', 'visual-qa:model-assay', 'visual-qa:single-tank', 'visual-qa:retopo-tank', 'alpha-decal-smoke', 'single-tank-smoke', 'authored-retopo-smoke', 'export:authored-retopo']) {
+for (const scriptName of ['build', 'dev', 'smoke', 'alpha-control-smoke', 'bootstrap', 'cloud-visual-release', 'visual-qa:model-assay', 'visual-qa:single-tank', 'visual-qa:retopo-tank', 'alpha-decal-smoke', 'single-tank-smoke', 'authored-retopo-smoke', 'export:authored-retopo',
+  'export:authored-boxmodel',
+  'authored-boxmodel-smoke',
+  'visual-qa:boxmodel-tank']) {
   if (!packageJson.scripts || !packageJson.scripts[scriptName]) {
     failures.push('missing npm script ' + scriptName);
   }

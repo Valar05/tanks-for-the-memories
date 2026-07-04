@@ -7,6 +7,7 @@ const distRoot = join(releaseRoot, 'dist');
 const tankManifestPath = 'public/tftm/models/m4a3_75_vvss_sherman_alpha_mobile/model_manifest.json';
 const shermanSourceManifestPath = 'assets/generated/meshy/sherman_part_meshy_kit_v1/assembly_manifest.json';
 const authoredRetopoManifestPath = 'public/tftm/models/authored_sherman_retopo_v1/model_manifest.json';
+const authoredBoxmodelManifestPath = 'public/tftm/models/authored_sherman_boxmodel_v1/model_manifest.json';
 
 const build = spawnSync('npm', ['run', 'build'], { stdio: 'inherit' });
 if ((build.status ?? 1) !== 0) {
@@ -29,10 +30,15 @@ if (!existsSync(authoredRetopoManifestPath)) {
   console.error('missing authored retopo manifest ' + authoredRetopoManifestPath);
   process.exit(1);
 }
+if (!existsSync(authoredBoxmodelManifestPath)) {
+  console.error('missing authored boxmodel manifest ' + authoredBoxmodelManifestPath);
+  process.exit(1);
+}
 
 const tankManifest = JSON.parse(readFileSync(tankManifestPath, 'utf8'));
 const shermanSourceManifest = JSON.parse(readFileSync(shermanSourceManifestPath, 'utf8'));
 const authoredRetopoManifest = JSON.parse(readFileSync(authoredRetopoManifestPath, 'utf8'));
+const authoredBoxmodelManifest = JSON.parse(readFileSync(authoredBoxmodelManifestPath, 'utf8'));
 const gitHead = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8' });
 const gitStatus = spawnSync('git', ['status', '--short'], { encoding: 'utf8' });
 
@@ -48,6 +54,19 @@ const releaseManifest = {
     expected_build: 'tftm-single-linked-sherman-textured-v1-20260704',
     asset_policy: 'one linked vanilla Sherman GLB; existing constrained albedo texture set linked at runtime; no copied model or texture variant',
     acceptance: 'Sense Simulation must confirm one Sherman with visible olive armor albedo, visible tread albedo, no fused/parade/assay scene, and right-side camera interaction.'
+  },
+  authored_boxmodel_review: {
+    route: 'boxmodel-tank.html',
+    expected_build: 'tftm-authored-sherman-boxmodel-v1-20260704',
+    asset_id: authoredBoxmodelManifest.asset_id,
+    output_glb: authoredBoxmodelManifest.output_glb,
+    source_blend: authoredBoxmodelManifest.source_blend,
+    approximate_triangles: authoredBoxmodelManifest.approximate_triangles,
+    glb_hard_cap_triangles: authoredBoxmodelManifest.budget?.hard_cap_triangles,
+    uv_policy: authoredBoxmodelManifest.uv_policy,
+    face_plate_ids: authoredBoxmodelManifest.face_plate_ids,
+    asset_policy: 'fully authored Blender box-model chassis and non-cube cast turret silhouette; no Meshy chassis or turret imports; box UV PNG plates for DALL-E paintability',
+    acceptance: 'Sense Simulation must confirm Sherman silhouette, non-cube turret massing, barrel belongs to mantlet, box UV texture plates map sanely, and local capture was not used.'
   },
   authored_retopo_review: {
     route: 'retopo-tank.html',
@@ -85,6 +104,9 @@ const releaseManifest = {
     }]))
   },
   required_cloud_captures: [
+    'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-20260704',
+    'boxmodel-tank phone landscape showing Sherman silhouette, non-cube turret, and no local capture',
+    'boxmodel-tank close-up review showing Blender box-model form, barrel/mantlet ownership, and box UV plate paintability',
     'retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-1-20260704',
     'retopo-tank phone landscape showing split face texture plates with sane UV mapping and no local capture',
     'retopo-tank close-up chassis and turret review showing hard-surface authored form, usable turret ring, and barrel/mantlet ownership',
@@ -103,6 +125,9 @@ const releaseManifest = {
     required_next_evidence: 'Next tank visual pass must show a fresh cloud screenshot or time-separated cloud capture with visible delta for tread volume, barrel material, and barrel verticality.'
   },
   sense_simulation_questions: [
+    'Does authored_sherman_boxmodel_v1 read closer to a real Sherman silhouette than the rejected high-poly box retopo?',
+    'Does the turret read as a non-cube cast turret form with cheek mass, roof flattening, and rear bustle?',
+    'Do the box UV plates stay paintable without obvious runtime guide seams or DALL-E-unpaintable UV spaghetti?',
     'Does authored_sherman_retopo_v1 read as a usable hard-surface chassis and turret at close-up distance?',
     'Do the split face texture plates map sanely without stretching, seams across the wrong surfaces, or DALL-E-unpaintable UV spaghetti?',
     'Does each candidate read as Sherman hard-surface rather than toy, pillow, primitive assembly, or soft sculpture?',

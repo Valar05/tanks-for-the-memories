@@ -162,3 +162,7 @@ The current approved authored mesh exception is `tread_ribbon_only`, but "ribbon
 ### Authored Retopo V1.1 Review
 
 The `authored_sherman_retopo_v1` asset now carries silhouette revision `v1.1-sherman-silhouette-subdivision`. Cloud/Sense review should judge whether the added detail layer improves Sherman silhouette without turning the split face plate system into visible seams. Runtime plates are intentionally seam-minimized; authoring templates are allowed to retain guide borders for repaint work.
+
+### Blender Boxmodel Review Gate
+
+The current cloud-first visual candidate is `authored_sherman_boxmodel_v1`, not the rejected high-poly retopo. Acceptance requires Sense Simulation on `boxmodel-tank.html` to confirm the silhouette moved toward a Sherman, the turret no longer reads as a cube, the barrel/mantlet relationship is coherent, and the box UV plates are paintable without local capture evidence.

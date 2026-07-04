@@ -24,3 +24,24 @@ export const AUTHORED_SHERMAN_RETOPO_FACE_PLATES = [
   'wheel_disc',
   'bogie_side'
 ] as const;
+
+export const AUTHORED_SHERMAN_BOXMODEL_GLB_URL = './tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb';
+export const AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL = './tftm/models/authored_sherman_boxmodel_v1/texture_plates/';
+export const AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES = [
+  'hull_glacis',
+  'hull_left',
+  'hull_right',
+  'hull_rear',
+  'engine_deck',
+  'turret_front',
+  'turret_left',
+  'turret_right',
+  'turret_top',
+  'turret_bustle',
+  'mantlet',
+  'barrel_strip',
+  'track_outer',
+  'track_inner_top_bottom',
+  'wheel_disc',
+  'bogie_side'
+] as const;
