@@ -19,7 +19,7 @@ def R(rx, ry, rz):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_boxmodel_v1'
-REVISION = 'v1-2-blender-z-up-upright-wheels'
+REVISION = 'v1-3-gun-axis-skirt-occlusion'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -118,7 +118,10 @@ def box(name, plate_id, size, loc, parent, rot=(0,0,0), bevel=0.0):
     return obj
 
 def cylinder(name, plate_id, radius, depth, vertices, loc, parent, rot=(0,0,0)):
-    bpy.ops.mesh.primitive_cylinder_add(vertices=vertices, radius=radius, depth=depth, end_fill_type='NGON', location=P(*loc), rotation=R(*rot))
+    # Cylinder rotations are explicit Blender-axis alignments, not authored Euler rotations.
+    # Forward barrels use (0, pi/2, 0); side-facing wheels use (pi/2, 0, 0);
+    # vertical roof details use the default. Do not run these through R().
+    bpy.ops.mesh.primitive_cylinder_add(vertices=vertices, radius=radius, depth=depth, end_fill_type='NGON', location=P(*loc), rotation=rot)
     obj = bpy.context.object
     obj.name = name
     obj.data.name = name + '_mesh'
@@ -180,21 +183,22 @@ box('rear_deck_weld_cover__hull_rear', 'hull_rear', (0.06,0.05,1.02), (-1.52,0.6
 
 for z, side, wheel_parent in [(-0.83,'left',left_wheels),(0.83,'right',right_wheels)]:
     sign = -1 if z < 0 else 1
-    box(f'{side}_track_motion', 'track_outer', (3.48,0.48,0.28), (-0.05,-0.27,z), hull_root, bevel=0.045)
+    box(f'{side}_track_motion', 'track_outer', (3.48,0.48,0.30), (-0.05,-0.27,z), hull_root, bevel=0.045)
+    box(f'{side}_outer_track_skirt__track_outer', 'track_outer', (3.34,0.38,0.055), (-0.08,-0.20,z+sign*0.175), hull_root, bevel=0.018)
     box(f'{side}_track_top_inner__track_inner_top_bottom', 'track_inner_top_bottom', (3.02,0.10,0.22), (-0.06,0.08,z), hull_root)
     box(f'{side}_track_ground_run__track_inner_top_bottom', 'track_inner_top_bottom', (3.12,0.10,0.22), (-0.06,-0.50,z), hull_root)
     for x in [-1.50,-1.15,-0.80,-0.45,-0.10,0.25,0.60,0.95,1.30]:
         box(f'{side}_track_cleat_{x:.2f}__track_outer', 'track_outer', (0.035,0.60,0.29), (x,-0.22,z), hull_root, rot=(0,0,0.05))
     for bx in [-0.96,-0.16,0.64]:
-        box(f'{side}_vvss_bogie_{bx:.2f}__bogie_side', 'bogie_side', (0.46,0.16,0.08), (bx,-0.08,z+sign*0.18), wheel_parent, bevel=0.015)
-        box(f'{side}_vvss_arm_front_{bx:.2f}__bogie_side', 'bogie_side', (0.28,0.04,0.07), (bx+0.12,-0.20,z+sign*0.18), wheel_parent, rot=(0,0,-0.45))
-        box(f'{side}_vvss_arm_rear_{bx:.2f}__bogie_side', 'bogie_side', (0.28,0.04,0.07), (bx-0.12,-0.20,z+sign*0.18), wheel_parent, rot=(0,0,0.45))
+        box(f'{side}_vvss_bogie_{bx:.2f}__bogie_side', 'bogie_side', (0.46,0.16,0.08), (bx,-0.08,z+sign*0.045), wheel_parent, bevel=0.015)
+        box(f'{side}_vvss_arm_front_{bx:.2f}__bogie_side', 'bogie_side', (0.28,0.04,0.07), (bx+0.12,-0.20,z+sign*0.045), wheel_parent, rot=(0,0,-0.45))
+        box(f'{side}_vvss_arm_rear_{bx:.2f}__bogie_side', 'bogie_side', (0.28,0.04,0.07), (bx-0.12,-0.20,z+sign*0.045), wheel_parent, rot=(0,0,0.45))
         for dx in [-0.16,0.16]:
-            cylinder(f'{side}_roadwheel_{bx+dx:.2f}__wheel_disc', 'wheel_disc', 0.145, 0.07, 18, (bx+dx,-0.32,z+sign*0.19), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_front_sprocket__bogie_side', 'bogie_side', 0.25, 0.085, 20, (1.48,-0.20,z+sign*0.18), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_rear_idler__bogie_side', 'bogie_side', 0.22, 0.085, 20, (-1.50,-0.23,z+sign*0.18), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_return_roller_front__wheel_disc', 'wheel_disc', 0.08, 0.055, 16, (0.56,0.0,z+sign*0.19), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_return_roller_rear__wheel_disc', 'wheel_disc', 0.08, 0.055, 16, (-0.78,0.0,z+sign*0.19), wheel_parent, rot=(math.pi/2,0,0))
+            cylinder(f'{side}_roadwheel_{bx+dx:.2f}__wheel_disc', 'wheel_disc', 0.145, 0.07, 18, (bx+dx,-0.32,z+sign*0.055), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_front_sprocket__bogie_side', 'bogie_side', 0.25, 0.085, 20, (1.48,-0.20,z+sign*0.045), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_rear_idler__bogie_side', 'bogie_side', 0.22, 0.085, 20, (-1.50,-0.23,z+sign*0.045), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_return_roller_front__wheel_disc', 'wheel_disc', 0.08, 0.055, 16, (0.56,0.0,z+sign*0.055), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_return_roller_rear__wheel_disc', 'wheel_disc', 0.08, 0.055, 16, (-0.78,0.0,z+sign*0.055), wheel_parent, rot=(math.pi/2,0,0))
 
 turret_cast_mesh()
 box('turret_rear_bustle__turret_bustle', 'turret_bustle', (0.48,0.26,0.58), (-0.50,0.18,0), turret_shell, bevel=0.045)
@@ -253,7 +257,7 @@ manifest = {
         'authored_axes': 'X forward/back, Y up/down, Z left/right',
         'blender_axes': 'X forward/back, Y left/right, Z up/down after P/S/R conversion helpers',
         'threejs_axes_after_gltf': 'X forward/back, Y up/down, Z left/right',
-        'visual_regression_prevented': 'tank must not export on its side; wheels must face hull sides, not sky'
+        'visual_regression_prevented': 'tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts instead of exposing tire backs'
     },
     'runtime_contract': {
         'turret_traverse': 'rotate turret_traverse_pivot around Y',
@@ -261,6 +265,7 @@ manifest = {
         'coaxial_mg': 'coaxial_mg is parented to cannon_elevation_pivot and must move with the barrel',
         'tread_motion': 'scroll material maps on left_track_motion and right_track_motion',
         'wheel_motion': 'rotate children of left_roadwheel_group and right_roadwheel_group',
+        'side_skirt_occlusion': 'roadwheel discs sit inside track skirt volume; exterior track cover hides tire backs from front and side views',
         'commander_hatch': 'commander_hatch__turret_top is a named posture marker'
     },
     'budget': {'target_triangles': '2500-4500', 'hard_cap_triangles': 6000, 'actual_triangles': triangles, 'mesh_count': mesh_count},

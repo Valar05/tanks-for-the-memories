@@ -49,6 +49,81 @@ function glbPositionBounds(json) {
   }
   return { min, max, size: max.map((value, axis) => value - min[axis]) };
 }
+function quatTransformVector(q, v) {
+  const [x, y, z, w] = q || [0, 0, 0, 1];
+  const [vx, vy, vz] = v;
+  const tx = 2 * (y * vz - z * vy);
+  const ty = 2 * (z * vx - x * vz);
+  const tz = 2 * (x * vy - y * vx);
+  return [
+    vx + w * tx + (y * tz - z * ty),
+    vy + w * ty + (z * tx - x * tz),
+    vz + w * tz + (x * ty - y * tx)
+  ];
+}
+function composeTransform(parent, node) {
+  const t = node.translation || [0, 0, 0];
+  const r = node.rotation || [0, 0, 0, 1];
+  const parentRotatedT = quatTransformVector(parent.rotation, t);
+  return {
+    translation: [
+      parent.translation[0] + parentRotatedT[0],
+      parent.translation[1] + parentRotatedT[1],
+      parent.translation[2] + parentRotatedT[2]
+    ],
+    rotation: [
+      parent.rotation[3] * r[0] + parent.rotation[0] * r[3] + parent.rotation[1] * r[2] - parent.rotation[2] * r[1],
+      parent.rotation[3] * r[1] - parent.rotation[0] * r[2] + parent.rotation[1] * r[3] + parent.rotation[2] * r[0],
+      parent.rotation[3] * r[2] + parent.rotation[0] * r[1] - parent.rotation[1] * r[0] + parent.rotation[2] * r[3],
+      parent.rotation[3] * r[3] - parent.rotation[0] * r[0] - parent.rotation[1] * r[1] - parent.rotation[2] * r[2]
+    ]
+  };
+}
+function nodeWorldTransforms(json) {
+  const transforms = new Map();
+  const visit = (index, parent) => {
+    const node = json.nodes[index];
+    const transform = composeTransform(parent, node);
+    transforms.set(index, transform);
+    for (const child of node.children || []) visit(child, transform);
+  };
+  const childSet = new Set((json.nodes || []).flatMap((node) => node.children || []));
+  for (let index = 0; index < (json.nodes || []).length; index += 1) {
+    if (!childSet.has(index)) visit(index, { translation: [0, 0, 0], rotation: [0, 0, 0, 1] });
+  }
+  return transforms;
+}
+function nodeWorldBoundsByName(json, nodeName) {
+  const nodeIndex = (json.nodes || []).findIndex((node) => node.name === nodeName);
+  if (nodeIndex < 0) return null;
+  const node = json.nodes[nodeIndex];
+  const mesh = json.meshes?.[node.mesh];
+  if (!mesh) return null;
+  const transform = nodeWorldTransforms(json).get(nodeIndex);
+  const min = [Infinity, Infinity, Infinity];
+  const max = [-Infinity, -Infinity, -Infinity];
+  for (const primitive of mesh.primitives || []) {
+    const accessor = json.accessors?.[primitive.attributes?.POSITION];
+    if (!accessor?.min || !accessor?.max) continue;
+    for (const x of [accessor.min[0], accessor.max[0]]) {
+      for (const y of [accessor.min[1], accessor.max[1]]) {
+        for (const z of [accessor.min[2], accessor.max[2]]) {
+          const rotated = quatTransformVector(transform.rotation, [x, y, z]);
+          const world = [rotated[0] + transform.translation[0], rotated[1] + transform.translation[1], rotated[2] + transform.translation[2]];
+          for (let axis = 0; axis < 3; axis += 1) {
+            min[axis] = Math.min(min[axis], world[axis]);
+            max[axis] = Math.max(max[axis], world[axis]);
+          }
+        }
+      }
+    }
+  }
+  return { min, max, size: max.map((value, axis) => value - min[axis]) };
+}
+
+function axisString(bounds) {
+  return bounds ? bounds.size.map((n) => n.toFixed(3)).join(' x ') : 'missing';
+}
 
 for (const file of [glbPath, manifestPath, blendPath, blenderScriptPath, wrapperPath, 'boxmodel-tank.html', 'src/boxmodel-tank.ts', 'src/sherman-asset-links.ts', 'src/sherman-runtime-materials.ts', 'scripts/build.mjs']) {
   if (!existsSync(file)) fail('missing ' + file);
@@ -69,6 +144,9 @@ if (failures.length === 0) {
   const materialNames = new Set((json.materials || []).map((material, index) => material.name || 'material_' + index));
   const triangleCount = glbTriangles(json);
   const bounds = glbPositionBounds(json);
+  const barrelBounds = nodeWorldBoundsByName(json, 'barrel');
+  const coaxBounds = nodeWorldBoundsByName(json, 'coaxial_mg');
+  const roadwheelBounds = nodeWorldBoundsByName(json, 'left_roadwheel_0.00__wheel_disc');
   const blenderScript = read(blenderScriptPath);
   const wrapper = read(wrapperPath);
   const runtime = read('src/boxmodel-tank.ts') + read('src/sherman-asset-links.ts') + read('src/sherman-runtime-materials.ts');
@@ -81,13 +159,17 @@ if (failures.length === 0) {
   if (!String(manifest.source_policy || '').includes('solidified overlapping armor plates')) fail('manifest must identify solidified overlapping armor plates');
   if (!String(manifest.source_policy || '').includes('coaxial MG')) fail('manifest must identify coaxial MG');
   if (!String(manifest.source_policy || '').includes('Blender Z-up basis conversion')) fail('manifest must identify Blender Z-up basis conversion');
-  if (!manifest.orientation_contract || !String(manifest.orientation_contract.visual_regression_prevented || '').includes('wheels must face hull sides')) fail('manifest must preserve upright/wheel orientation contract');
+  if (!manifest.orientation_contract || !String(manifest.orientation_contract.visual_regression_prevented || '').includes('wheels must sit inside side skirts')) fail('manifest must preserve upright/gun/skirt orientation contract');
+  if (!manifest.runtime_contract?.side_skirt_occlusion) fail('manifest must preserve side skirt occlusion contract');
   if (!String(manifest.source_policy || '').includes('no Meshy chassis or turret')) fail('manifest must reject Meshy chassis/turret imports');
   if (!String(manifest.uv_policy || '').includes('box and planar UV plates')) fail('manifest must use box/planar UV plate policy');
   if (triangleCount > 6000) fail('GLB must stay below 6000 triangles, saw ' + triangleCount);
   if (manifest.approximate_triangles > 6000) fail('manifest triangle count must stay below 6000');
   if (triangleCount < 1500) fail('GLB triangle count is suspiciously low for Sherman boxmodel: ' + triangleCount);
   if (!(bounds.size[0] > bounds.size[2] && bounds.size[2] > bounds.size[1])) fail('GLB axis bounds must be X length > Z width > Y height for upright Three.js tank, saw ' + bounds.size.map((n) => n.toFixed(3)).join(' x '));
+  if (!barrelBounds || !(barrelBounds.size[0] > 1.0 && barrelBounds.size[0] > barrelBounds.size[1] * 6 && barrelBounds.size[0] > barrelBounds.size[2] * 6)) fail('barrel mesh must be long on X, not vertical/perpendicular; saw ' + axisString(barrelBounds));
+  if (!coaxBounds || !(coaxBounds.size[0] > 0.45 && coaxBounds.size[0] > coaxBounds.size[1] * 6 && coaxBounds.size[0] > coaxBounds.size[2] * 6)) fail('coaxial MG mesh must be visible and long on X; saw ' + axisString(coaxBounds));
+  if (!roadwheelBounds || !(roadwheelBounds.size[2] < roadwheelBounds.size[0] * 0.45 && roadwheelBounds.size[2] < roadwheelBounds.size[1] * 0.45)) fail('roadwheel disc must be thin on Z so it faces the hull side; saw ' + axisString(roadwheelBounds));
   for (const id of facePlateIds) {
     if (!manifest.face_plate_ids?.includes(id)) fail('manifest missing face plate id ' + id);
     if (!materialNames.has(id)) fail('GLB missing material slot ' + id);
@@ -99,7 +181,7 @@ if (failures.length === 0) {
     if (blenderScript.includes(forbidden) || wrapper.includes(forbidden)) fail('boxmodel exporter must not use rejected/import marker ' + forbidden);
   }
   if (!blenderScript.includes('def P(') || !blenderScript.includes('Blender is Z-up')) fail('boxmodel exporter must declare Blender basis conversion helpers');
-  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-2-20260704']) {
+  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-3-20260704']) {
     if (!runtime.includes(marker)) fail('boxmodel runtime missing marker ' + marker);
   }
   if (!build.includes("buildEntry('boxmodel-tank.ts', 'boxmodel-tank')")) fail('build must bundle boxmodel-tank.ts');
