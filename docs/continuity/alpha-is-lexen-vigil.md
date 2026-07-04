@@ -109,3 +109,123 @@ Home -> War -> Tank -> Command -> Memory -> False Comfort -> Revolt
 Tanks For The Memories is no longer adjacent to Holding Vigil.
 
 It is the buried root system.
+
+## Scene Manifest
+
+Keep the first pass straightforward: one scene, one observed question, one continuity function.
+
+These are not lore chapters. They are simulation targets. Each scene should observe a concrete moment and let later fiction mine the result.
+
+### Phase I — Home Before Normandy
+
+Purpose: establish Lexen before Alpha without overexplaining him.
+
+1. **Lexen at Home Before the War** — What does ordinary Vigil family life feel like before history reaches the house?
+2. **Sunday Dinner** — How does family faith, gratitude, silence, and scarcity shape Lexen's discomfort with comfort?
+3. **Alice Writes After a Casualty Report** — How does Alice practice holding vigil before Lexen leaves?
+4. **Buying Shoes During Wartime Shortages** — How does material scarcity teach repair, patience, and social obligation?
+5. **Lexen's Last Night at Home** — What does he notice when he knows he is leaving but cannot say what he is becoming?
+6. **The Train to Basic** — What does departure feel like before war has given him a role?
+7. **Alice Watches the Train Leave** — What does home lose before it receives any official wound?
+
+### Phase II — Becoming Alpha
+
+Purpose: show Lexen becoming useful before he becomes mythic.
+
+8. **First Day in Basic** — How does discipline hit a boy who is already looking for weight?
+9. **First Friend** — Who first recognizes that Lexen's silence is not emptiness?
+10. **First Punishment** — What does imposed pain teach him that home never could?
+11. **First Cigarette** — When does smoke become a field ritual instead of rebellion?
+12. **First Drink** — When does whiskey become presence instead of pleasure?
+13. **First Tank** — What does Lexen feel when he first enters a machine that is both shelter and coffin?
+14. **First Crew** — How do other men begin measuring him before they trust him?
+15. **First Command Mistake** — What does Alpha learn when a wrong order has witnesses?
+16. **The Name Alpha** — When does the crew stop calling him Lexen?
+
+### Phase III — Normandy
+
+Purpose: bind Alpha to the playable WWII simulation: uncertainty, crew memory, fatigue, mail, logistics, and command under partial knowledge.
+
+17. **First Night in the Sherman** — What does sleep feel like inside steel walls?
+18. **Waiting for Fuel** — How does logistics control courage?
+19. **Waiting for Orders** — What does command feel like when nothing moves but fear?
+20. **Mail Call** — How does home enter the tank without belonging there?
+21. **Alice's Letter Reaches France** — What happens when Alpha is addressed as Lexen?
+22. **Christmas in the Motor Pool** — How does the crew imitate peace with grease, cold food, and bad jokes?
+23. **Recovering a Knocked-Out Sherman** — How does Alpha learn that machines and men can be disabled without being gone?
+24. **First Replacement Crewman** — How does trust reset inside a vehicle that remembers the missing man?
+25. **First Civilian Liberated** — What does victory look like when civilians are hungry, afraid, and watching?
+26. **First Crew Death** — What changes in Alpha when command consequence becomes permanent?
+27. **First Lie Home** — What does Lexen omit from a letter to Alice, and why?
+
+### Phase IV — End of the War
+
+Purpose: prove that victory does not restore the prewar self.
+
+28. **Crossing Into Germany** — What does Alpha feel when the enemy's home becomes visible?
+29. **Occupation Duty** — How does command change when the shooting slows but responsibility spreads?
+30. **The War Is Ending** — What does Alpha fear when the machine no longer needs him?
+31. **Going Home** — What does the return journey reveal before the family sees him?
+32. **Alice at the Station** — Who does Alice recognize first: Lexen, Alpha, or the wound between them?
+33. **Home Is Smaller** — What ordinary comfort now feels false?
+34. **Lexen Is Not the Same** — What does he do that proves the family cannot simply receive him back unchanged?
+
+### Phase V — Cold War / Paradise Ground
+
+Purpose: land older, disillusioned Lexen in the era that naturally births Paradise.
+
+The Cold War is the correct pressure environment for older Lexen. Open war becomes managed tension. Battlefields become proxy wars, intelligence rooms, psychological operations, nuclear dread, classified laboratories, and simulations of possible futures.
+
+Paradise should emerge from that world, not from generic cyberpunk.
+
+35. **A Veteran in a Peacetime War** — How does Lexen react when the world claims peace while remaining mobilized?
+36. **First Intelligence Briefing** — What does he think of war fought through maps, projections, and incomplete reports?
+37. **Proxy War Debrief** — How does he respond when consequences are hidden behind deniability?
+38. **The First Simulation Room** — What does analog prediction feel like to a man trained by real mud, steel, and casualty lists?
+39. **Paradise Prototype** — When does comfort first become a tool of management?
+40. **Lexen Recognizes the Lie** — What part of Paradise reminds him of the impossible dream of going home unchanged?
+
+### Phase VI — Analog Future / Dieselpunk Sky Line
+
+Purpose: connect WWII industry to the ruined-air future without jumping into clean digital sci-fi.
+
+This timeline is not electricity-as-magic and not sleek cyberpunk. It is an analog future: diesel, hydraulic, electromechanical, vacuum-tube, relay-driven, repairable, heavy, loud, oily, and physical.
+
+The future grows from wartime logistics, Cold War infrastructure, analog computation, airship freight, diesel-electric systems, mechanical archives, and institutional attempts to manage human consequence at scale.
+
+41. **The First Diesel Airship Factory** — How does wartime manufacturing become sky logistics?
+42. **Analog Computing Office** — What does prediction look like when it is punched, wired, sorted, and overheated?
+43. **Mechanical Archive** — How does memory become infrastructure before it becomes myth?
+44. **Airship Convoy Over Ruined Rail** — When does the sky become the new road?
+45. **Paradise As Infrastructure** — How does managed comfort become a civic system?
+46. **The First Floating District** — What survival problem lifts cities off the ground?
+47. **The Ruined-Air Generation** — What do children inherit when the sky civilization is already old?
+48. **Infinite Brutality Root Scene** — What remains of Lexen's war when the far future only remembers the machinery, scars, and myths?
+
+## Cross-Project Spine
+
+The continuity should remain one historical line:
+
+```text
+Lexen Vigil
+  -> Home before the war
+  -> WWII / Tanks For The Memories
+  -> Occupation and failed return
+  -> Cold War pressure state
+  -> Holding Vigil / Paradise
+  -> Analog divergence
+  -> Dieselpunk sky future
+  -> Infinite Brutality
+```
+
+Project relationships:
+
+- **Tanks For The Memories** is the historical root system.
+- **Holding Vigil** is the Cold War / Paradise rupture grown from that root.
+- **Infinite Brutality** is the distant analog dieselpunk sky future descended from the same industrial and psychological lineage.
+
+No parallel universes.
+No clean retcon.
+No lore dump.
+
+Generate the scenes one-to-one, preserve what they observe, and let the future accrete from consequences.
