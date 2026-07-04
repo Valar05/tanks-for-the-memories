@@ -99,3 +99,9 @@ For authored retopo reviews, authoring templates may keep safe-area guide border
 The active replacement candidate after the failed high-poly retopo is `authored_sherman_boxmodel_v1`. It is generated from `scripts/export_authored_sherman_boxmodel.py` in Debian proot Blender 4.3.2 and preserves a source `.blend`. The target is Sherman silhouette first: sloped glacis, hull tub/sponsons, VVSS masses, and a non-cube oval/cast turret with front cheek, flattened roof, and rear bustle. Use box and planar UV plates, not a packed atlas, until cloud/Sense accepts the form.
 
 The boxmodel v1.1 repair requires solidified overlapping armor plates and a named coaxial MG on the cannon elevation assembly; zero-thickness separated planes are a red build.
+## Authored Boxmodel Axis Contract - 2026-07-04
+
+The boxmodel exporter authors tank geometry in runtime-readable coordinates: X is hull length, Y is vertical height, and Z is hull width. Blender is Z-up, so `scripts/export_authored_sherman_boxmodel.py` must convert every authored position and mesh vertex through the P/S/R basis helpers before saving the .blend or exporting GLB. The cloud-facing GLB must load in Three.js with X length greater than Z width greater than Y height; otherwise the tank is on its side.
+
+This is now a hard smoke condition in `scripts/validate_authored_boxmodel_asset.mjs`. Node names, material slots, or manifest text are not sufficient evidence for visual parity if the axis bounds fail. Wheels must face the hull sides, turret hatches must sit on the turret roof, and the coaxial MG must remain parented to the cannon elevation pivot.
+

@@ -34,6 +34,21 @@ function glbTriangles(json) {
   }
   return triangles;
 }
+function glbPositionBounds(json) {
+  const min = [Infinity, Infinity, Infinity];
+  const max = [-Infinity, -Infinity, -Infinity];
+  for (const mesh of json.meshes || []) {
+    for (const primitive of mesh.primitives || []) {
+      const accessor = json.accessors?.[primitive.attributes?.POSITION];
+      if (!accessor?.min || !accessor?.max) continue;
+      for (let axis = 0; axis < 3; axis += 1) {
+        min[axis] = Math.min(min[axis], accessor.min[axis]);
+        max[axis] = Math.max(max[axis], accessor.max[axis]);
+      }
+    }
+  }
+  return { min, max, size: max.map((value, axis) => value - min[axis]) };
+}
 
 for (const file of [glbPath, manifestPath, blendPath, blenderScriptPath, wrapperPath, 'boxmodel-tank.html', 'src/boxmodel-tank.ts', 'src/sherman-asset-links.ts', 'src/sherman-runtime-materials.ts', 'scripts/build.mjs']) {
   if (!existsSync(file)) fail('missing ' + file);
@@ -53,6 +68,7 @@ if (failures.length === 0) {
   const nodeNames = new Set((json.nodes || []).map((node, index) => node.name || 'node_' + index));
   const materialNames = new Set((json.materials || []).map((material, index) => material.name || 'material_' + index));
   const triangleCount = glbTriangles(json);
+  const bounds = glbPositionBounds(json);
   const blenderScript = read(blenderScriptPath);
   const wrapper = read(wrapperPath);
   const runtime = read('src/boxmodel-tank.ts') + read('src/sherman-asset-links.ts') + read('src/sherman-runtime-materials.ts');
@@ -64,11 +80,14 @@ if (failures.length === 0) {
   if (!String(manifest.source_policy || '').includes('fully authored Blender box-model')) fail('manifest must identify authored Blender box-model geometry');
   if (!String(manifest.source_policy || '').includes('solidified overlapping armor plates')) fail('manifest must identify solidified overlapping armor plates');
   if (!String(manifest.source_policy || '').includes('coaxial MG')) fail('manifest must identify coaxial MG');
+  if (!String(manifest.source_policy || '').includes('Blender Z-up basis conversion')) fail('manifest must identify Blender Z-up basis conversion');
+  if (!manifest.orientation_contract || !String(manifest.orientation_contract.visual_regression_prevented || '').includes('wheels must face hull sides')) fail('manifest must preserve upright/wheel orientation contract');
   if (!String(manifest.source_policy || '').includes('no Meshy chassis or turret')) fail('manifest must reject Meshy chassis/turret imports');
   if (!String(manifest.uv_policy || '').includes('box and planar UV plates')) fail('manifest must use box/planar UV plate policy');
   if (triangleCount > 6000) fail('GLB must stay below 6000 triangles, saw ' + triangleCount);
   if (manifest.approximate_triangles > 6000) fail('manifest triangle count must stay below 6000');
   if (triangleCount < 1500) fail('GLB triangle count is suspiciously low for Sherman boxmodel: ' + triangleCount);
+  if (!(bounds.size[0] > bounds.size[2] && bounds.size[2] > bounds.size[1])) fail('GLB axis bounds must be X length > Z width > Y height for upright Three.js tank, saw ' + bounds.size.map((n) => n.toFixed(3)).join(' x '));
   for (const id of facePlateIds) {
     if (!manifest.face_plate_ids?.includes(id)) fail('manifest missing face plate id ' + id);
     if (!materialNames.has(id)) fail('GLB missing material slot ' + id);
@@ -79,7 +98,8 @@ if (failures.length === 0) {
   for (const forbidden of ['sherman_part_meshy_kit_v1', 'hull.glb', 'turret.glb', 'SimplifyModifier', 'RoundedBoxGeometry']) {
     if (blenderScript.includes(forbidden) || wrapper.includes(forbidden)) fail('boxmodel exporter must not use rejected/import marker ' + forbidden);
   }
-  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-1-20260704']) {
+  if (!blenderScript.includes('def P(') || !blenderScript.includes('Blender is Z-up')) fail('boxmodel exporter must declare Blender basis conversion helpers');
+  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-2-20260704']) {
     if (!runtime.includes(marker)) fail('boxmodel runtime missing marker ' + marker);
   }
   if (!build.includes("buildEntry('boxmodel-tank.ts', 'boxmodel-tank')")) fail('build must bundle boxmodel-tank.ts');

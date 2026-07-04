@@ -168,3 +168,7 @@ The `authored_sherman_retopo_v1` asset now carries silhouette revision `v1.1-she
 The current cloud-first visual candidate is `authored_sherman_boxmodel_v1`, not the rejected high-poly retopo. Acceptance requires Sense Simulation on `boxmodel-tank.html` to confirm the silhouette moved toward a Sherman, the turret no longer reads as a cube, the barrel/mantlet relationship is coherent, and the box UV plates are paintable without local capture evidence.
 
 The boxmodel v1.1 repair requires solidified overlapping armor plates and a named coaxial MG on the cannon elevation assembly; zero-thickness separated planes are a red build.
+## Boxmodel Red-Build Axis Rule - 2026-07-04
+
+For `boxmodel-tank.html`, the cloud/Sense review must explicitly reject any build where the tank lies on its side, wheels face vertically, hatches appear on side armor, or armor plates read as detached cardboard planes. Local capture remains forbidden; however, source validators must still prove the GLB runtime bounds are X length, Y height, Z width before deployment.
+

@@ -1,13 +1,13 @@
 {
   "asset_id": "authored_sherman_boxmodel_v1",
   "display_name": "Authored Sherman Boxmodel V1",
-  "silhouette_revision": "v1-1-solid-armor-plates-coaxial-mg",
-  "generated_at": "2026-07-04T18:27:13.602283Z",
+  "silhouette_revision": "v1-2-blender-z-up-upright-wheels",
+  "generated_at": "2026-07-04T18:44:02.904719Z",
   "generator": "scripts/export_authored_sherman_boxmodel.py",
   "blender": "4.3.2",
   "source_blend": "assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend",
   "output_glb": "public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb",
-  "source_policy": "fully authored Blender box-model geometry with solidified overlapping armor plates and coaxial MG; no Meshy chassis or turret imports; rejected retopo remains prior evidence only",
+  "source_policy": "fully authored Blender box-model geometry with Blender Z-up basis conversion, solidified overlapping armor plates and coaxial MG; no Meshy chassis or turret imports; rejected retopo remains prior evidence only",
   "uv_policy": "box and planar UV plates, one 0-1 paintable plate per surface family; no atlas packing",
   "dalle_paintability": {
     "template_dir": "assets/authored/authored_sherman_boxmodel_v1/texture_templates",
@@ -49,6 +49,12 @@
     "right_roadwheel_group",
     "commander_hatch__turret_top"
   ],
+  "orientation_contract": {
+    "authored_axes": "X forward/back, Y up/down, Z left/right",
+    "blender_axes": "X forward/back, Y left/right, Z up/down after P/S/R conversion helpers",
+    "threejs_axes_after_gltf": "X forward/back, Y up/down, Z left/right",
+    "visual_regression_prevented": "tank must not export on its side; wheels must face hull sides, not sky"
+  },
   "runtime_contract": {
     "turret_traverse": "rotate turret_traverse_pivot around Y",
     "cannon_elevation": "rotate cannon_elevation_pivot for barrel and coaxial MG pitch",

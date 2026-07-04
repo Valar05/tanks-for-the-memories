@@ -5,9 +5,21 @@ from pathlib import Path
 import bpy
 from mathutils import Euler
 
+# Authoring coordinates are kept in Sherman-readable runtime terms:
+# X = forward/back, Y = up/down, Z = left/right. Blender is Z-up, so all
+# authored positions and dimensions are converted at object creation time.
+def P(x, y, z):
+    return (x, z, y)
+
+def S(x, y, z):
+    return (x, z, y)
+
+def R(rx, ry, rz):
+    return (rx, rz, ry)
+
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_boxmodel_v1'
-REVISION = 'v1-1-solid-armor-plates-coaxial-mg'
+REVISION = 'v1-2-blender-z-up-upright-wheels'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -39,7 +51,7 @@ def empty(name, location=(0,0,0), parent=None):
     obj = bpy.data.objects.new(name, None)
     obj.empty_display_type = 'PLAIN_AXES'
     obj.empty_display_size = 0.18
-    obj.location = location
+    obj.location = P(*location)
     bpy.context.collection.objects.link(obj)
     obj.parent = parent
     return obj
@@ -63,7 +75,7 @@ def assign_uvs(mesh):
 
 def mesh_obj(name, plate_id, verts, faces, parent, shade=False):
     mesh = bpy.data.meshes.new(name + '_mesh')
-    mesh.from_pydata(verts, [], faces)
+    mesh.from_pydata([P(*v) for v in verts], [], faces)
     mesh.update(calc_edges=True)
     mesh.materials.append(materials[plate_id])
     assign_uvs(mesh)
@@ -95,8 +107,8 @@ def box(name, plate_id, size, loc, parent, rot=(0,0,0), bevel=0.0):
     verts = [(-x,-y,-z),(x,-y,-z),(x,y,-z),(-x,y,-z),(-x,-y,z),(x,-y,z),(x,y,z),(-x,y,z)]
     faces = [(0,1,2,3),(4,7,6,5),(0,4,5,1),(3,2,6,7),(1,5,6,2),(0,3,7,4)]
     obj = mesh_obj(name, plate_id, verts, faces, parent)
-    obj.location = loc
-    obj.rotation_euler = Euler(rot, 'XYZ')
+    obj.location = P(*loc)
+    obj.rotation_euler = Euler(R(*rot), 'XYZ')
     if bevel:
         mod = obj.modifiers.new('small_box_model_bevel', 'BEVEL')
         mod.width = bevel
@@ -106,7 +118,7 @@ def box(name, plate_id, size, loc, parent, rot=(0,0,0), bevel=0.0):
     return obj
 
 def cylinder(name, plate_id, radius, depth, vertices, loc, parent, rot=(0,0,0)):
-    bpy.ops.mesh.primitive_cylinder_add(vertices=vertices, radius=radius, depth=depth, end_fill_type='NGON', location=loc, rotation=rot)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=vertices, radius=radius, depth=depth, end_fill_type='NGON', location=P(*loc), rotation=R(*rot))
     obj = bpy.context.object
     obj.name = name
     obj.data.name = name + '_mesh'
@@ -160,7 +172,7 @@ for z, side, plate in [(-0.80,'left','hull_left'), (0.80,'right','hull_right')]:
 box('driver_hatch_left__engine_deck', 'engine_deck', (0.34,0.035,0.23), (0.76,0.70,-0.23), hull_root, rot=(0,0,-0.05))
 box('driver_hatch_right__engine_deck', 'engine_deck', (0.34,0.035,0.23), (0.76,0.70,0.23), hull_root, rot=(0,0,-0.05))
 box('rear_stowage_lip__hull_rear', 'hull_rear', (0.08,0.12,0.92), (-1.62,0.62,0), hull_root)
-cylinder('turret_ring_socket__turret_top', 'turret_top', 0.52, 0.055, 40, (0.02,0.69,0), hull_root, rot=(math.pi/2,0,0))
+cylinder('turret_ring_socket__turret_top', 'turret_top', 0.52, 0.055, 40, (0.02,0.69,0), hull_root)
 box('left_sponson_weld_cover__hull_left', 'hull_left', (2.72,0.045,0.055), (-0.30,0.58,-0.615), hull_root, rot=(0,0,-0.02), bevel=0.01)
 box('right_sponson_weld_cover__hull_right', 'hull_right', (2.72,0.045,0.055), (-0.30,0.58,0.615), hull_root, rot=(0,0,-0.02), bevel=0.01)
 box('glacis_deck_weld_cover__hull_glacis', 'hull_glacis', (0.08,0.04,0.98), (0.70,0.665,0), hull_root, rot=(0,0,-0.08), bevel=0.008)
@@ -227,7 +239,7 @@ manifest = {
     'blender': bpy.app.version_string,
     'source_blend': 'assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend',
     'output_glb': 'public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb',
-    'source_policy': 'fully authored Blender box-model geometry with solidified overlapping armor plates and coaxial MG; no Meshy chassis or turret imports; rejected retopo remains prior evidence only',
+    'source_policy': 'fully authored Blender box-model geometry with Blender Z-up basis conversion, solidified overlapping armor plates and coaxial MG; no Meshy chassis or turret imports; rejected retopo remains prior evidence only',
     'uv_policy': 'box and planar UV plates, one 0-1 paintable plate per surface family; no atlas packing',
     'dalle_paintability': {
         'template_dir': 'assets/authored/authored_sherman_boxmodel_v1/texture_templates',
@@ -237,6 +249,12 @@ manifest = {
     },
     'face_plate_ids': FACE_PLATE_IDS,
     'node_contract': ['tank_root','hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','left_track_motion','right_track_motion','left_roadwheel_group','right_roadwheel_group','commander_hatch__turret_top'],
+    'orientation_contract': {
+        'authored_axes': 'X forward/back, Y up/down, Z left/right',
+        'blender_axes': 'X forward/back, Y left/right, Z up/down after P/S/R conversion helpers',
+        'threejs_axes_after_gltf': 'X forward/back, Y up/down, Z left/right',
+        'visual_regression_prevented': 'tank must not export on its side; wheels must face hull sides, not sky'
+    },
     'runtime_contract': {
         'turret_traverse': 'rotate turret_traverse_pivot around Y',
         'cannon_elevation': 'rotate cannon_elevation_pivot for barrel and coaxial MG pitch',

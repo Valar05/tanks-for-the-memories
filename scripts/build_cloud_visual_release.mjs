@@ -57,7 +57,7 @@ const releaseManifest = {
   },
   authored_boxmodel_review: {
     route: 'boxmodel-tank.html',
-    expected_build: 'tftm-authored-sherman-boxmodel-v1-1-20260704',
+    expected_build: 'tftm-authored-sherman-boxmodel-v1-2-20260704',
     asset_id: authoredBoxmodelManifest.asset_id,
     output_glb: authoredBoxmodelManifest.output_glb,
     source_blend: authoredBoxmodelManifest.source_blend,
@@ -104,7 +104,7 @@ const releaseManifest = {
     }]))
   },
   required_cloud_captures: [
-    'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-1-20260704',
+    'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-2-20260704',
     'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, and no local capture',
     'boxmodel-tank close-up review showing solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability',
     'retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-1-20260704',

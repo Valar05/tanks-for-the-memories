@@ -9,7 +9,7 @@
   },
   "authored_boxmodel_review": {
     "route": "boxmodel-tank.html",
-    "expected_build": "tftm-authored-sherman-boxmodel-v1-1-20260704",
+    "expected_build": "tftm-authored-sherman-boxmodel-v1-2-20260704",
     "asset_id": "authored_sherman_boxmodel_v1",
     "output_glb": "public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb",
     "source_blend": "assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend",
@@ -65,8 +65,8 @@
     "asset_policy": "fully authored hard-surface chassis and turret; no Meshy chassis or turret imports; split face PNG plates for DALL-E paintability",
     "acceptance": "Sense Simulation must confirm close-up chassis and turret read as usable hard-surface armor, barrel belongs to mantlet, split face texture plates map sanely, and local capture was not used."
   },
-  "generated_at": "2026-07-04T18:30:31.574Z",
-  "source_commit": "10d7dbf",
+  "generated_at": "2026-07-04T18:46:50.984Z",
+  "source_commit": "4342650",
   "dirty_status": [
     "M assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend",
     " M docs/doctrine/cloud-visual-truth.md",
@@ -74,16 +74,11 @@
     " M public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb",
     " M public/tftm/models/authored_sherman_boxmodel_v1/model_manifest.json",
     " M scripts/build_cloud_visual_release.mjs",
-    " M scripts/export_authored_sherman_boxmodel.mjs",
     " M scripts/export_authored_sherman_boxmodel.py",
     " M scripts/validate_authored_boxmodel_asset.mjs",
     " M scripts/validate_boxmodel_tank_cloud_gate.mjs",
     " M src/boxmodel-tank.ts",
-    " M src/sherman-asset-links.ts",
-    "?? assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend1",
-    "?? assets/authored/authored_sherman_boxmodel_v1/texture_templates/coaxial_mg.png",
-    "?? public/tftm/models/authored_sherman_boxmodel_v1/texture_plates/coaxial_mg.png",
-    "?? scripts/__pycache__/"
+    "?? assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend1"
   ],
   "dist": "generated/cloud-visual-truth/tftm-release/dist",
   "tank_asset": "m4a3_75_vvss_sherman_alpha_mobile",
@@ -245,7 +240,7 @@
     }
   },
   "required_cloud_captures": [
-    "boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-1-20260704",
+    "boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-2-20260704",
     "boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, and no local capture",
     "boxmodel-tank close-up review showing solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability",
     "retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-1-20260704",
