@@ -9,11 +9,11 @@
   },
   "authored_boxmodel_review": {
     "route": "boxmodel-tank.html",
-    "expected_build": "tftm-authored-sherman-boxmodel-v1-3-20260704",
+    "expected_build": "tftm-authored-sherman-boxmodel-v1-4-20260704",
     "asset_id": "authored_sherman_boxmodel_v1",
     "output_glb": "public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb",
     "source_blend": "assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend",
-    "approximate_triangles": 2810,
+    "approximate_triangles": 2838,
     "glb_hard_cap_triangles": 6000,
     "uv_policy": "box and planar UV plates, one 0-1 paintable plate per surface family; no atlas packing",
     "face_plate_ids": [
@@ -65,11 +65,10 @@
     "asset_policy": "fully authored hard-surface chassis and turret; no Meshy chassis or turret imports; split face PNG plates for DALL-E paintability",
     "acceptance": "Sense Simulation must confirm close-up chassis and turret read as usable hard-surface armor, barrel belongs to mantlet, split face texture plates map sanely, and local capture was not used."
   },
-  "generated_at": "2026-07-04T19:05:02.313Z",
-  "source_commit": "ce23610",
+  "generated_at": "2026-07-04T19:16:04.196Z",
+  "source_commit": "2c75969",
   "dirty_status": [
     "M assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend",
-    " M generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json",
     " M public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb",
     " M public/tftm/models/authored_sherman_boxmodel_v1/model_manifest.json",
     " M scripts/build_cloud_visual_release.mjs",
@@ -239,7 +238,7 @@
     }
   },
   "required_cloud_captures": [
-    "boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-3-20260704",
+    "boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-4-20260704",
     "boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, and no local capture",
     "boxmodel-tank close-up review showing solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability",
     "retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-1-20260704",

@@ -1,8 +1,8 @@
 {
   "asset_id": "authored_sherman_boxmodel_v1",
   "display_name": "Authored Sherman Boxmodel V1",
-  "silhouette_revision": "v1-3-gun-axis-skirt-occlusion",
-  "generated_at": "2026-07-04T18:53:47.264698Z",
+  "silhouette_revision": "v1-4-front-shoulder-armor-fillers",
+  "generated_at": "2026-07-04T19:14:07.201412Z",
   "generator": "scripts/export_authored_sherman_boxmodel.py",
   "blender": "4.3.2",
   "source_blend": "assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend",
@@ -53,7 +53,7 @@
     "authored_axes": "X forward/back, Y up/down, Z left/right",
     "blender_axes": "X forward/back, Y left/right, Z up/down after P/S/R conversion helpers",
     "threejs_axes_after_gltf": "X forward/back, Y up/down, Z left/right",
-    "visual_regression_prevented": "tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts instead of exposing tire backs"
+    "visual_regression_prevented": "tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front glacis shoulders must not expose triangular air gaps"
   },
   "runtime_contract": {
     "turret_traverse": "rotate turret_traverse_pivot around Y",
@@ -62,13 +62,14 @@
     "tread_motion": "scroll material maps on left_track_motion and right_track_motion",
     "wheel_motion": "rotate children of left_roadwheel_group and right_roadwheel_group",
     "side_skirt_occlusion": "roadwheel discs sit inside track skirt volume; exterior track cover hides tire backs from front and side views",
+    "front_shoulder_armor": "front shoulder filler plates close the triangular air gap between glacis wedge and track pods",
     "commander_hatch": "commander_hatch__turret_top is a named posture marker"
   },
   "budget": {
     "target_triangles": "2500-4500",
     "hard_cap_triangles": 6000,
-    "actual_triangles": 2810,
-    "mesh_count": 99
+    "actual_triangles": 2838,
+    "mesh_count": 103
   },
-  "approximate_triangles": 2810
+  "approximate_triangles": 2838
 }

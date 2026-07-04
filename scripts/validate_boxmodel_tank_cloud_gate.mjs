@@ -9,7 +9,7 @@ if (failures.length === 0) {
   const rules = JSON.stringify(manifest);
   const captures = (manifest.required_cloud_captures || []).join('\\n');
   if (!rules.includes('authored_sherman_boxmodel_v1')) fail('cloud manifest must name authored_sherman_boxmodel_v1');
-  if (!rules.includes('tftm-authored-sherman-boxmodel-v1-3-20260704')) fail('cloud manifest must require the boxmodel build token');
+  if (!rules.includes('tftm-authored-sherman-boxmodel-v1-4-20260704')) fail('cloud manifest must require the boxmodel build token');
   if (!rules.includes('Blender box-model')) fail('cloud manifest must identify Blender box-model source');
   if (!captures.includes('boxmodel-tank phone portrait')) fail('cloud captures must require boxmodel-tank phone portrait');
   if (!captures.includes('non-cube turret')) fail('cloud captures must require non-cube turret review');
