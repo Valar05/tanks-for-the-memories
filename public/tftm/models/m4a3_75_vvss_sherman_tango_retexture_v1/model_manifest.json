@@ -1,25 +1,25 @@
 {
-  "asset_id": "m4a3_75_vvss_sherman_alpha_retexture_v2",
-  "display_name": "M4A3 75mm Sherman Alpha Retexture V2",
+  "asset_id": "m4a3_75_vvss_sherman_tango_retexture_v1",
+  "display_name": "M4A3 75mm Sherman Tango Retexture V1",
   "asset_class": "meshy_retexture_on_vanilla_base_candidate",
-  "status": "accepted_enough_for_alpha_current_baseline",
-  "commander_variant": "alpha",
-  "commander_letter": "A",
-  "role": "Player Tank",
-  "recognition_color": "crimson",
-  "mood": "Reliable, recognizable, professional",
+  "status": "human_cloud_visual_review_pending",
+  "commander_variant": "tango",
+  "commander_letter": "T",
+  "role": "Human Tank",
+  "recognition_color": "green",
+  "mood": "Warm, approachable, campaign veteran",
   "traits": [
-    "least opinionated",
-    "moderate wear",
-    "balanced care",
-    "campaign history ready"
+    "lived-in upper hull",
+    "subtle good-luck symbol",
+    "varied canvas",
+    "village road dust"
   ],
-  "generated_at": "2026-07-04T06:28:34.175Z",
+  "generated_at": "2026-07-04T06:28:34.235Z",
   "endpoint": "/openapi/v1/retexture",
   "source_vanilla_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
-  "retexture_task_id": "019f2bbd-be31-7fc4-bf14-bcb6dea15284",
-  "source_manifest": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha_retexture_v2/manifest.json",
-  "glb": "public/tftm/models/m4a3_75_vvss_sherman_alpha_retexture_v2/m4a3_75_vvss_sherman_alpha_retexture_v2.glb",
+  "retexture_task_id": "019f2bcd-7268-7896-80b1-c098ad6f5054",
+  "source_manifest": "assets/generated/meshy/m4a3_75_vvss_sherman_tango_retexture_v1/manifest.json",
+  "glb": "public/tftm/models/m4a3_75_vvss_sherman_tango_retexture_v1/m4a3_75_vvss_sherman_tango_retexture_v1.glb",
   "inspection": {
     "approximate_triangles": 10216,
     "texture_count": 4,
@@ -28,7 +28,7 @@
     "mesh_count": 1,
     "primitive_count": 1,
     "material_count": 1,
-    "glb_bytes": 30192568
+    "glb_bytes": 29419140
   },
   "runtime_contract": {
     "vanilla_base_preserved": true,

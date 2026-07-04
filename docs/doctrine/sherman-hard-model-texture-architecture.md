@@ -69,3 +69,5 @@ A later image-to-3D attempt from the Alpha character-sheet reference (`019f2ba7-
 Do not repeat character-sheet image-to-3D as the Alpha texture path. It changes the model and overfits the recognition color. Alpha needs nuanced paint, wear, chalk, overpaint, and maintenance history bound to the accepted Sherman surface IDs.
 
 A valid Retexture API path now exists in the workspace Meshy CLI. The first candidate from `/openapi/v1/retexture` is `m4a3_75_vvss_sherman_alpha_retexture_v2`, based on accepted vanilla task `019f2a16-c82b-7b52-b541-c707b58c5d00` with original UV preservation, PBR, HD texture, and no character-sheet image input. It remains pending human cloud visual review, not accepted.
+
+Commander platoon variants use the same Retexture API route and the same accepted vanilla base task. Alpha, Bravo, Tango, and Delta must read as one platoon through shared olive drab, Normandy wear, and identical silhouette; their differences come only from recognition color, field paint, chalk, wear habits, stowage coloration, and maintenance personality.

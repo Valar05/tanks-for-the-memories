@@ -84,6 +84,22 @@ const requiredFiles = [
   'assets/generated/meshy/m4a3_75_vvss_sherman_alpha_retexture_v2/manifest.json',
   'public/tftm/models/m4a3_75_vvss_sherman_alpha_retexture_v2/m4a3_75_vvss_sherman_alpha_retexture_v2.glb',
   'public/tftm/models/m4a3_75_vvss_sherman_alpha_retexture_v2/model_manifest.json',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_bravo_retexture_v1/glb.glb',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_bravo_retexture_v1/fbx.fbx',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_bravo_retexture_v1/manifest.json',
+  'public/tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v1/m4a3_75_vvss_sherman_bravo_retexture_v1.glb',
+  'public/tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v1/model_manifest.json',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_tango_retexture_v1/glb.glb',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_tango_retexture_v1/fbx.fbx',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_tango_retexture_v1/manifest.json',
+  'public/tftm/models/m4a3_75_vvss_sherman_tango_retexture_v1/m4a3_75_vvss_sherman_tango_retexture_v1.glb',
+  'public/tftm/models/m4a3_75_vvss_sherman_tango_retexture_v1/model_manifest.json',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_delta_retexture_v1/glb.glb',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_delta_retexture_v1/fbx.fbx',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_delta_retexture_v1/manifest.json',
+  'public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v1/m4a3_75_vvss_sherman_delta_retexture_v1.glb',
+  'public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v1/model_manifest.json',
+  'public/tftm/models/commander_platoon_retexture_v1/model_manifest.json',
   'scripts/pack_vanilla_sherman_for_meshy.mjs',
   'scripts/pack_vanilla_sherman_textures.mjs',
   'scripts/export_vanilla_sherman_glb.mjs',
@@ -319,7 +335,7 @@ for (const buildMarker of ['assetVersion', 'TFTM_ASSET_VERSION', '.css?v=${asset
     failures.push('build script must cache-bust generated JS/CSS asset URLs: ' + buildMarker);
   }
 }
-for (const alphaAssayMarker of ['tftm-alpha-sherman-retexture-v2-20260704a', 'm4a3_75_vvss_sherman_alpha_retexture_v2.glb', 'Alpha Sherman Texture Review', 'Review the visible texture language, not the manifest.', 'visual review required', 'human visual acceptance pending']) {
+for (const alphaAssayMarker of ['tftm-commander-platoon-retexture-v1-20260704a', 'm4a3_75_vvss_sherman_alpha_retexture_v2.glb', 'm4a3_75_vvss_sherman_bravo_retexture_v1.glb', 'm4a3_75_vvss_sherman_tango_retexture_v1.glb', 'm4a3_75_vvss_sherman_delta_retexture_v1.glb', 'Sherman Commander Platoon Review', 'same base mesh', 'four different crews']) {
   if (!alphaAssaySource.includes(alphaAssayMarker)) {
     failures.push('Alpha assay missing texture review marker ' + alphaAssayMarker);
   }
@@ -475,8 +491,8 @@ if (alphaRetextureManifest.endpoint !== '/openapi/v1/retexture') {
 if (alphaRetextureManifest.source_vanilla_task_id !== '019f2a16-c82b-7b52-b541-c707b58c5d00') {
   failures.push('Alpha retexture v2 must target accepted vanilla base task');
 }
-if (alphaRetextureManifest.status !== 'human_cloud_visual_review_pending') {
-  failures.push('Alpha retexture v2 must remain pending human cloud visual review');
+if (alphaRetextureManifest.status !== 'accepted_enough_for_alpha_current_baseline') {
+  failures.push('Alpha retexture v2 must remain the accepted-enough Alpha current baseline');
 }
 if (alphaRetextureManifest.runtime_contract?.identity_from_texture_only !== true) {
   failures.push('Alpha retexture v2 must preserve identity_from_texture_only');
@@ -484,8 +500,8 @@ if (alphaRetextureManifest.runtime_contract?.identity_from_texture_only !== true
 if (alphaRetextureManifest.runtime_contract?.gameplay_animation_ready !== false) {
   failures.push('Alpha retexture v2 must not claim gameplay animation readiness');
 }
-if (!String(alphaRetextureManifest.runtime_contract?.acceptance_gate || '').includes('not red highlighter')) {
-  failures.push('Alpha retexture v2 must preserve red-highlighter acceptance gate');
+if (!String(alphaRetextureManifest.runtime_contract?.acceptance_gate || '').includes('four distinct commander personalities')) {
+  failures.push('Alpha retexture v2 must preserve commander-platoon acceptance gate');
 }
 if (alphaRetextureManifest.inspection?.approximate_triangles > 12000) {
   failures.push('Alpha retexture v2 must preserve vanilla-base phone triangle budget');
@@ -499,6 +515,42 @@ if (alphaRetextureSourceManifest.dry_run_payload?.enable_original_uv !== true) {
 }
 if (alphaRetextureSourceManifest.dry_run_payload?.input_task_id !== '019f2a16-c82b-7b52-b541-c707b58c5d00') {
   failures.push('Alpha retexture dry-run must target accepted vanilla task id');
+}
+const platoonManifest = JSON.parse(readFileSync('public/tftm/models/commander_platoon_retexture_v1/model_manifest.json', 'utf8'));
+if (platoonManifest.asset_id !== 'm4a3_75_vvss_sherman_commander_platoon_retexture_v1') {
+  failures.push('Commander platoon manifest missing asset_id');
+}
+if (!String(platoonManifest.common_language?.geometry_policy || '').includes('identical accepted vanilla base mesh')) {
+  failures.push('Commander platoon manifest must preserve identical base mesh policy');
+}
+for (const variantId of ['alpha', 'bravo', 'tango', 'delta']) {
+  if (!platoonManifest.variants?.some((variant) => variant.id === variantId)) {
+    failures.push('Commander platoon manifest missing variant ' + variantId);
+  }
+}
+for (const [variantId, expectedColor, expectedStatus] of [
+  ['alpha', 'crimson', 'accepted_enough_for_alpha_current_baseline'],
+  ['bravo', 'blue', 'human_cloud_visual_review_pending'],
+  ['tango', 'green', 'human_cloud_visual_review_pending'],
+  ['delta', 'yellow', 'human_cloud_visual_review_pending']
+]) {
+  const manifestPath = `public/tftm/models/m4a3_75_vvss_sherman_${variantId === 'alpha' ? 'alpha_retexture_v2' : variantId + '_retexture_v1'}/model_manifest.json`;
+  const commanderManifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+  if (commanderManifest.commander_variant !== variantId) {
+    failures.push('Commander manifest variant mismatch for ' + variantId);
+  }
+  if (commanderManifest.recognition_color !== expectedColor) {
+    failures.push('Commander manifest recognition color mismatch for ' + variantId);
+  }
+  if (commanderManifest.status !== expectedStatus) {
+    failures.push('Commander manifest status mismatch for ' + variantId);
+  }
+  if (commanderManifest.source_vanilla_task_id !== '019f2a16-c82b-7b52-b541-c707b58c5d00') {
+    failures.push('Commander manifest must target accepted vanilla base for ' + variantId);
+  }
+  if (commanderManifest.inspection?.approximate_triangles !== 10216) {
+    failures.push('Commander manifest must preserve base triangle count for ' + variantId);
+  }
 }
 const alphaExporter = readFileSync('scripts/export_alpha_sherman_variant.mjs', 'utf8');
 for (const marker of ['alpha_sherman_combined', 'addAlphaCharacterMarks', 'alpha_crimson_glacis_recognition_stripe', "'_A_crossbar'", 'alpha_front_chalk_A17_plate', 'alpha_dust_scratch_']) {

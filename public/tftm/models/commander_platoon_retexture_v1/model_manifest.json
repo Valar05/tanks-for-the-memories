@@ -1,0 +1,78 @@
+{
+  "asset_id": "m4a3_75_vvss_sherman_commander_platoon_retexture_v1",
+  "display_name": "M4A3 75mm Sherman Commander Platoon Retexture V1",
+  "status": "human_cloud_visual_review_pending",
+  "generated_at": "2026-07-04T06:28:34.311Z",
+  "common_language": {
+    "base_color": "US olive drab",
+    "theater": "Normandy campaign",
+    "geometry_policy": "identical accepted vanilla base mesh; texture language only",
+    "wear": [
+      "Normandy mud",
+      "dust",
+      "oil",
+      "track grime",
+      "scuffs",
+      "field repairs"
+    ],
+    "forbidden": [
+      "fantasy",
+      "chrome",
+      "polished parade finish",
+      "rust bucket",
+      "cartoon logos",
+      "geometry additions"
+    ]
+  },
+  "variants": [
+    {
+      "id": "alpha",
+      "name": "Alpha",
+      "letter": "A",
+      "role": "Player Tank",
+      "recognition_color": "crimson",
+      "mood": "Reliable, recognizable, professional",
+      "glb": "public/tftm/models/m4a3_75_vvss_sherman_alpha_retexture_v2/m4a3_75_vvss_sherman_alpha_retexture_v2.glb",
+      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_alpha_retexture_v2/model_manifest.json",
+      "retexture_task_id": "019f2bbd-be31-7fc4-bf14-bcb6dea15284",
+      "status": "accepted_enough_for_alpha_current_baseline"
+    },
+    {
+      "id": "bravo",
+      "name": "Bravo",
+      "letter": "B",
+      "role": "Aggressive Assault Tank",
+      "recognition_color": "blue",
+      "mood": "Restless, energetic, always moving",
+      "glb": "public/tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v1/m4a3_75_vvss_sherman_bravo_retexture_v1.glb",
+      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v1/model_manifest.json",
+      "retexture_task_id": "019f2bcd-721b-7895-9944-a49462214e77",
+      "status": "human_cloud_visual_review_pending"
+    },
+    {
+      "id": "tango",
+      "name": "Tango",
+      "letter": "T",
+      "role": "Human Tank",
+      "recognition_color": "green",
+      "mood": "Warm, approachable, campaign veteran",
+      "glb": "public/tftm/models/m4a3_75_vvss_sherman_tango_retexture_v1/m4a3_75_vvss_sherman_tango_retexture_v1.glb",
+      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_tango_retexture_v1/model_manifest.json",
+      "retexture_task_id": "019f2bcd-7268-7896-80b1-c098ad6f5054",
+      "status": "human_cloud_visual_review_pending"
+    },
+    {
+      "id": "delta",
+      "name": "Delta",
+      "letter": "D",
+      "role": "Planner",
+      "recognition_color": "yellow",
+      "mood": "Methodical, disciplined, controlled",
+      "glb": "public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v1/m4a3_75_vvss_sherman_delta_retexture_v1.glb",
+      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v1/model_manifest.json",
+      "retexture_task_id": "019f2bcd-721a-7184-a0bb-e0a87a62a28d",
+      "status": "human_cloud_visual_review_pending"
+    }
+  ],
+  "acceptance_gate": "Viewer should infer four different crews after a three-second glance while recognizing one platoon and one shared Sherman base."
+}
