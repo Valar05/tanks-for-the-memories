@@ -161,6 +161,11 @@ for (const doctrineMarker of ['False-Change Penalty', 'materially unchanged', 'c
     failures.push('cloud visual doctrine missing false-change penalty marker ' + doctrineMarker);
   }
 }
+for (const conquerMarker of ['Conquer Failure Loop', 'The mission is not to report failure. The mission is to conquer failure.', 'A captured red build is a work order', 'Use the cloud brain', 'Wake for acceptance only after visual QA and sense simulation pass']) {
+  if (!cloudVisualDoctrine.includes(conquerMarker)) {
+    failures.push('cloud visual doctrine missing conquer-failure marker ' + conquerMarker);
+  }
+}
 
 const kitManifest = JSON.parse(readFileSync('assets/generated/meshy/sherman_part_meshy_kit_v1/assembly_manifest.json', 'utf8'));
 if (!String(kitManifest.visual_target || '').includes('non-toy Sherman hard-surface')) {

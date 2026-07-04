@@ -26,6 +26,33 @@ The harness result is acceptance evidence only if the contact sheet and represen
 
 If the harness launches, captures frames, and still shows separated barrel or rounded/one-sided tread, the result is a captured red build. Do not wake the user for review.
 
+## Conquer Failure Loop
+
+The mission is not to report failure. The mission is to conquer failure.
+
+A captured red build is a work order, not a stopping point. After visual QA proves a relationship failure, immediately enter the breaker loop unless the next step requires a credit spend, external account action, or human design choice that cannot be inferred from repository truth.
+
+Breaker loop:
+
+1. Name the visible relationship that failed.
+2. Identify the blocker class: asset incompatibility, geometry silhouette, material read, animation pivot, camera/framing, cache/deploy, or harness blind spot.
+3. Choose the highest-leverage breaker action, not the smallest code tweak.
+4. Use the cloud brain: cloud-hosted build, fresh visual QA frames, Meshy/OpenAI assets when appropriate, repo corpus, docs, manifests, screenshots, and sense simulation together.
+5. Change the artifact.
+6. Rebuild and redeploy when the review lane is cloud-only.
+7. Run visual QA again.
+8. Inspect the contact sheet and representative frames.
+9. Repeat until the relationship passes, the artifact class is replaced, or a real external decision is required.
+
+Do not end a turn with only "red build" when there is still an obvious breaker action. A red verdict must be paired with the next action already taken, a concrete patch in progress, or a precise blocker such as "requires Meshy credit approval for a new separated mantlet/socket asset."
+
+Wake rule:
+
+- Wake for acceptance only after visual QA and sense simulation pass.
+- Wake for decision only when the breaker loop reaches a real choice or credit spend.
+- Do not wake just to show a known-failing artifact.
+- Do not let `ok: true` from the capture harness mean visual success; it only means pixels were captured.
+
 ## False-Change Penalty
 
 If a fresh cloud screenshot looks materially unchanged after a claimed visual fix, treat that as worse than a bad fix. The failure is not "the geometry needs one more tweak"; the failure is that the evidence gate allowed code churn to masquerade as visual progress.
