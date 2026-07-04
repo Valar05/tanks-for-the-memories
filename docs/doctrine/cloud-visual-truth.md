@@ -60,6 +60,15 @@ Post-deploy review rule:
 - Do not confuse review wake with acceptance wake: review wake proves the user and agent are looking at the current artifact; acceptance still requires the visible relationships to pass.
 - Do not skip review wake merely because visual QA is blocked. If visual QA is blocked, wake cloud, inspect the freshest screenshot artifact, and report the capture blocker separately.
 
+Visual-change wake rule:
+
+- Any change that affects visuals and needs user review requires a wake before the agent claims success.
+- This includes code, assets, materials, shaders, model composition, animation, camera/framing, deployment, screenshots, generated files, exported files, or any other artifact whose quality is judged by what the user sees.
+- Wake the most direct current review surface for the artifact: cloud URL, hosted viewer, browser page, Android-visible file, upload/import path, or the accepted project review lane.
+- Verification commands, source checks, GLB inspection, manifests, LFS status, tests, and media refresh are diagnostic only. They can support the wake; they cannot replace it.
+- If no trustworthy visual review surface exists yet, state that as the blocker and build or repair the review surface before claiming visual success.
+- If the agent forgets the wake after a user-review visual change, the result is a visual red build even if the files, commit, push, tests, and packaging all succeeded.
+
 ## False-Change Penalty
 
 If a fresh cloud screenshot looks materially unchanged after a claimed visual fix, treat that as worse than a bad fix. The failure is not "the geometry needs one more tweak"; the failure is that the evidence gate allowed code churn to masquerade as visual progress.
