@@ -22,9 +22,9 @@ const requiredPartIds = [
 ];
 
 if (!source.includes("query.get('tune') === '1'")) fail('boxmodel scene must expose ?tune=1 mode');
-if (!source.includes('tftm-authored-sherman-boxmodel-tuner-v5-20260704')) fail('tuner build token missing');
+if (!source.includes('tftm-authored-sherman-boxmodel-tuner-v6-20260704')) fail('tuner build token missing');
 if (!source.includes("type TuneMode = 'move' | 'rotate' | 'scale'")) fail('tuner must have move/rotate/scale modes');
-if (!source.includes("type TuneAxis = 'screen' | 'x' | 'y' | 'z'")) fail('tuner must have gesture axis locks');
+if (!source.includes("type TuneAxis = 'all' | 'screen' | 'x' | 'y' | 'z'")) fail('tuner must have gesture axis locks');
 if (!source.includes('serializeTuneParts')) fail('tuner must serialize editable part transforms');
 if (!source.includes('localStorage.setItem')) fail('tuner export must persist browser-side JSON');
 if (!source.includes('window.history.replaceState')) fail('tuner export must create recoverable URL/hash state');
@@ -44,8 +44,11 @@ if (!source.includes('aria-pressed')) fail('parts list must expose one active se
 if (!source.includes('is-collapsed')) fail('parts list must collapse by default');
 if (source.includes('data-field=')) fail('primary transform UI must not use numeric transform fields');
 if (css.includes('.tune-grid')) fail('primary tuner CSS must not include the old text-field transform grid');
-if (!source.includes('data-axis-cycle')) fail('tuner must use one axis-cycle button for Screen/X/Y/Z');
+if (!source.includes('data-axis="all"') || !source.includes('data-axis="x"') || !source.includes('data-axis="y"') || !source.includes('data-axis="z"')) fail('scale mode must expose explicit All/X/Y/Z axis buttons');
+if (source.includes('data-axis-cycle')) fail('axis selection must not be hidden behind the old ambiguous cycle button');
 if (!source.includes('cycleMode()')) fail('tapping selected object must cycle one transform mode at a time');
+if (!source.includes("currentAxis = currentMode === 'scale' ? 'all' : 'screen'")) fail('mode changes must default Scale to All and Move/Rotate to Screen');
+if (!source.includes("currentAxis === 'all' || currentAxis === 'screen'")) fail('scale mode must support explicit All/uniform scale plus X/Y/Z scale');
 if (!source.includes('data-camera-view')) fail('camera orientation widget must expose snap-view buttons');
 for (const id of requiredPartIds) {
   if (!source.includes(id)) fail('missing seeded tune part ' + id);

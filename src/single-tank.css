@@ -234,8 +234,12 @@ canvas {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.tune-axis-row {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .tune-action-row {
-  grid-template-columns: 1.4fr repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .orientation-widget {
@@ -316,10 +320,10 @@ canvas {
   }
 
   .tune-action-row {
-    grid-template-columns: 1.35fr repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .tune-action-row button:nth-child(n+4) {
+  .tune-action-row button:nth-child(n+3) {
     display: none;
   }
 

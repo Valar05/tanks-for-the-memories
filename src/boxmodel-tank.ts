@@ -11,11 +11,11 @@ if (!root) throw new Error('missing #boxmodel-tank-root');
 const query = new URLSearchParams(window.location.search);
 const isTuneMode = query.get('tune') === '1';
 const baseVisualBuild = 'tftm-authored-sherman-boxmodel-v1-7-20260704';
-const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v5-20260704';
+const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v6-20260704';
 const visualBuild = isTuneMode ? tunerVisualBuild : baseVisualBuild;
 
 type TuneMode = 'move' | 'rotate' | 'scale';
-type TuneAxis = 'screen' | 'x' | 'y' | 'z';
+type TuneAxis = 'all' | 'screen' | 'x' | 'y' | 'z';
 
 type BoxmodelTunePart = {
   id: string;
@@ -52,7 +52,8 @@ root.innerHTML = '<main class="single-tank-shell' + tuneShell + '">' +
   '<section class="tune-dock" aria-label="Gesture transform controls" data-tune-dock>' +
     '<div class="tune-active"><span data-mode-label>Move / Screen</span><button type="button" data-export-tune>Export</button></div>' +
     '<div class="tune-row tune-mode-row" data-mode-row><button type="button" data-mode="move">Move</button><button type="button" data-mode="rotate">Rotate</button><button type="button" data-mode="scale">Scale</button></div>' +
-    '<div class="tune-row tune-action-row"><button type="button" data-axis-cycle>Axis: Screen</button><button type="button" data-undo>Undo</button><button type="button" data-redo>Redo</button><button type="button" data-reset-part>Reset</button><button type="button" data-toggle-visible>Hide</button></div>' +
+    '<div class="tune-row tune-axis-row" data-axis-row><button type="button" data-axis="all">All</button><button type="button" data-axis="x">X</button><button type="button" data-axis="y">Y</button><button type="button" data-axis="z">Z</button></div>' +
+    '<div class="tune-row tune-action-row"><button type="button" data-undo>Undo</button><button type="button" data-redo>Redo</button><button type="button" data-reset-part>Reset</button><button type="button" data-toggle-visible>Hide</button></div>' +
   '</section>' +
   '<section class="orientation-widget" aria-label="Camera orientation widget" data-orientation-widget>' +
     '<button type="button" data-camera-view="front">Front</button><button type="button" data-camera-view="left">Left</button><button type="button" data-camera-view="top">Top</button><button type="button" data-camera-view="right">Right</button><button type="button" data-camera-view="back">Back</button>' +
@@ -104,7 +105,7 @@ const pointer = new THREE.Vector2();
 let selectedPart: BoxmodelTunePart | null = isTuneMode ? tuneParts[0] : null;
 if (selectedPart) selectedPart.visible = true;
 let currentMode: TuneMode = 'move';
-let currentAxis: TuneAxis = 'screen';
+let currentAxis: TuneAxis = 'all';
 let partsOpen = false;
 let gestureState: {
   pointerId: number;
@@ -219,8 +220,11 @@ function renderTuneUi() {
   root.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((button) => button.classList.toggle('is-selected', button.dataset.mode === currentMode));
   if (selectedLabelEl) selectedLabelEl.textContent = selectedPart ? selectedPart.label : 'No part';
   if (modeLabelEl) modeLabelEl.textContent = modeLabel();
-  const axisButton = root.querySelector<HTMLButtonElement>('[data-axis-cycle]');
-  if (axisButton) axisButton.textContent = 'Axis: ' + axisLabel();
+  root.querySelectorAll<HTMLButtonElement>('[data-axis]').forEach((button) => {
+    const axis = button.dataset.axis as TuneAxis;
+    button.classList.toggle('is-selected', axis === currentAxis);
+    button.hidden = currentMode !== 'scale' && axis === 'all';
+  });
   updateSelectedMaterial();
   partsPanel?.classList.toggle('is-collapsed', !partsOpen);
 }
@@ -230,13 +234,15 @@ function bindTuneUi() {
   root.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((button) => {
     button.addEventListener('click', () => {
       currentMode = button.dataset.mode as TuneMode;
+      currentAxis = currentMode === 'scale' ? 'all' : 'screen';
       renderTuneUi();
     });
   });
-  root.querySelector<HTMLButtonElement>('[data-axis-cycle]')?.addEventListener('click', () => {
-    const order: TuneAxis[] = ['screen', 'x', 'y', 'z'];
-    currentAxis = order[(order.indexOf(currentAxis) + 1) % order.length];
-    renderTuneUi();
+  root.querySelectorAll<HTMLButtonElement>('[data-axis]').forEach((button) => {
+    button.addEventListener('click', () => {
+      currentAxis = button.dataset.axis as TuneAxis;
+      renderTuneUi();
+    });
   });
   root.querySelector<HTMLButtonElement>('[data-export-tune]')?.addEventListener('click', exportTune);
   root.querySelector<HTMLButtonElement>('[data-toggle-visible]')?.addEventListener('click', () => {
@@ -394,7 +400,7 @@ function rotatePart(part: BoxmodelTunePart, degrees: number) {
 }
 
 function scalePart(part: BoxmodelTunePart, delta: number) {
-  if (currentAxis === 'screen') {
+  if (currentAxis === 'all' || currentAxis === 'screen') {
     part.scale[0] = Math.max(0.02, part.scale[0] + delta);
     part.scale[1] = Math.max(0.02, part.scale[1] + delta);
     part.scale[2] = Math.max(0.02, part.scale[2] + delta);
@@ -428,6 +434,7 @@ function selectPart(part: BoxmodelTunePart) {
 
 function cycleMode() {
   currentMode = currentMode === 'move' ? 'rotate' : currentMode === 'rotate' ? 'scale' : 'move';
+  currentAxis = currentMode === 'scale' ? 'all' : 'screen';
   renderTuneUi();
 }
 
@@ -443,6 +450,7 @@ function updateSelectedMaterial() {
 }
 
 function axisLabel() {
+  if (currentAxis === 'all') return 'All';
   return currentAxis === 'screen' ? 'Screen' : currentAxis.toUpperCase();
 }
 
