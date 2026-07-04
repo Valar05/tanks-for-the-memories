@@ -11,7 +11,7 @@ if (!root) throw new Error('missing #boxmodel-tank-root');
 const query = new URLSearchParams(window.location.search);
 const isTuneMode = query.get('tune') === '1';
 const baseVisualBuild = 'tftm-authored-sherman-boxmodel-v1-7-20260704';
-const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v8-20260704';
+const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v9-20260704';
 const visualBuild = isTuneMode ? tunerVisualBuild : baseVisualBuild;
 
 type TuneMode = 'move' | 'rotate' | 'scale';
@@ -20,7 +20,7 @@ type TuneAxis = 'all' | 'screen' | 'x' | 'y' | 'z';
 type BoxmodelTunePart = {
   id: string;
   label: string;
-  kind: 'box' | 'plate' | 'trackGapCompound';
+  kind: 'box' | 'plate' | 'trackGapPanel';
   position: [number, number, number];
   rotationDeg: [number, number, number];
   scale: [number, number, number];
@@ -31,10 +31,10 @@ type BoxmodelTunePart = {
 };
 
 const tuneParts: BoxmodelTunePart[] = [
-  { id: 'front-right-track-hole-plug', label: 'Front R plug', kind: 'trackGapCompound', position: [1.42, -0.08, -1.82], rotationDeg: [0, 0, 0], scale: [0.42, 0.88, 1.05], visible: true, locked: false, material: 0x8c8b63 },
-  { id: 'front-left-track-hole-plug', label: 'Front L plug', kind: 'trackGapCompound', position: [-1.42, -0.08, -1.82], rotationDeg: [0, 0, 0], scale: [0.42, 0.88, 1.05], visible: true, locked: false, material: 0x8c8b63 },
-  { id: 'rear-right-track-hole-plug', label: 'Rear R plug', kind: 'trackGapCompound', position: [1.42, -0.08, 1.52], rotationDeg: [0, 0, 0], scale: [0.42, 0.88, 1.05], visible: true, locked: false, material: 0x8c8b63 },
-  { id: 'rear-left-track-hole-plug', label: 'Rear L plug', kind: 'trackGapCompound', position: [-1.42, -0.08, 1.52], rotationDeg: [0, 0, 0], scale: [0.42, 0.88, 1.05], visible: true, locked: false, material: 0x8c8b63 }
+  { id: 'front-right-track-panel', label: 'Front R panel', kind: 'trackGapPanel', position: [1.48, -0.06, -1.82], rotationDeg: [0, 0, 0], scale: [0.08, 1.12, 1.22], visible: true, locked: false, material: 0x56623f },
+  { id: 'front-left-track-panel', label: 'Front L panel', kind: 'trackGapPanel', position: [-1.48, -0.06, -1.82], rotationDeg: [0, 0, 0], scale: [0.08, 1.12, 1.22], visible: true, locked: false, material: 0x56623f },
+  { id: 'rear-right-track-panel', label: 'Rear R panel', kind: 'trackGapPanel', position: [1.48, -0.06, 1.52], rotationDeg: [0, 0, 0], scale: [0.08, 1.12, 1.22], visible: true, locked: false, material: 0x56623f },
+  { id: 'rear-left-track-panel', label: 'Rear L panel', kind: 'trackGapPanel', position: [-1.48, -0.06, 1.52], rotationDeg: [0, 0, 0], scale: [0.08, 1.12, 1.22], visible: true, locked: false, material: 0x56623f }
 ];
 
 const tuneShell = isTuneMode ? ' is-tuning' : '';
@@ -144,7 +144,7 @@ if (isTuneMode) {
   bindTuneUi();
   bindGestureControls();
   applyTuneToUrl();
-  statusEl.textContent = 'gesture tuner ready: drag plugs, pinch scale, twist rotate';
+  statusEl.textContent = 'gesture tuner ready: drag armor panels, pinch scale, twist rotate';
 }
 
 new GLTFLoader().load(AUTHORED_SHERMAN_BOXMODEL_GLB_URL, (gltf) => {
@@ -169,15 +169,15 @@ new GLTFLoader().load(AUTHORED_SHERMAN_BOXMODEL_GLB_URL, (gltf) => {
 
 function createTuneMeshes() {
   for (const part of tuneParts) {
-    const geometry = part.kind === 'trackGapCompound'
-      ? createTrackGapCompoundGeometry(part.id.includes('rear'))
+    const geometry = part.kind === 'trackGapPanel'
+      ? createTrackGapPanelGeometry()
       : new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshStandardMaterial({
       color: part.material,
-      roughness: 0.86,
-      metalness: 0.08,
+      roughness: 0.82,
+      metalness: 0.14,
       transparent: true,
-      opacity: 0.72,
+      opacity: 0.88,
       emissive: 0x000000,
       depthWrite: true
     });
@@ -190,33 +190,9 @@ function createTuneMeshes() {
   }
 }
 
-function createTrackGapCompoundGeometry(reversePeak: boolean) {
-  const x0 = -0.5;
-  const x1 = 0.5;
-  const yBottom = -0.5;
-  const yShoulder = 0.08;
-  const yPeak = 0.5;
-  const z0 = -0.5;
-  const z1 = 0.5;
-  const zPeak = reversePeak ? 0.24 : -0.24;
-  const vertices = new Float32Array([
-    x0, yBottom, z0, x0, yBottom, z1, x0, yShoulder, z1, x0, yPeak, zPeak, x0, yShoulder, z0,
-    x1, yBottom, z0, x1, yBottom, z1, x1, yShoulder, z1, x1, yPeak, zPeak, x1, yShoulder, z0
-  ]);
-  const indices = [
-    0, 1, 2, 0, 2, 4, 4, 2, 3,
-    5, 7, 6, 5, 9, 7, 9, 8, 7,
-    0, 5, 6, 0, 6, 1,
-    1, 6, 7, 1, 7, 2,
-    2, 7, 8, 2, 8, 3,
-    3, 8, 9, 3, 9, 4,
-    4, 9, 5, 4, 5, 0
-  ];
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-  geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  geometry.name = reversePeak ? 'rear-track-gap-compound-plug' : 'front-track-gap-compound-plug';
+function createTrackGapPanelGeometry() {
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
+  geometry.name = 'flat-track-gap-armor-panel';
   return geometry;
 }
 
