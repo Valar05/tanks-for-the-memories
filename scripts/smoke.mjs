@@ -4,7 +4,6 @@ import { spawnSync } from 'node:child_process';
 const requiredFiles = [
   'index.html',
   'alpha-control.html',
-  'alpha-assay.html',
   'model-assay.html',
   'README.md',
   'ARCHITECTURE.md',
@@ -142,6 +141,12 @@ const requiredFiles = [
   'assets/generated/openai/sherman_runtime_pbr_v1/olive_roughness.png',
   'assets/generated/openai/sherman_runtime_pbr_v1/olive_metalness.png',
   'assets/generated/openai/sherman_runtime_pbr_v1/olive_normal.png',
+  'assets/generated/openai/sherman_default_texture_set_v1/manifest.json',
+  'assets/generated/openai/sherman_default_texture_set_v1/tread_albedo.png',
+  'assets/generated/openai/sherman_default_texture_set_v1/olive_albedo.png',
+  'scripts/validate_sherman_albedo_manifest.mjs',
+  'scripts/validate_alpha_sherman_orientation.mjs',
+  'scripts/validate_alpha_runtime_decals.mjs',
   'assets/generated/meshy/sherman_barrel_only_v1/assembly_manifest.json',
   'assets/generated/meshy/sherman_barrel_only_v1/source_barrel.png',
   'scripts/inspect_glb_contract.mjs',
@@ -151,6 +156,8 @@ const requiredFiles = [
   'public/tftm/models/m4a3_75_vvss_sherman_vanilla_mobile/model_manifest.json',
   'public/tftm/models/m4a3_75_vvss_sherman_vanilla_mobile/m4a3_75_vvss_sherman_vanilla_mobile.glb',
   'src/main.ts',
+  'src/alpha-control-model.js',
+  'src/tank-decals.ts',
   'src/model-assay.ts',
   'src/model-assay.css',
   'src/styles.css',
@@ -172,7 +179,7 @@ const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 if (packageJson.name !== 'tftm') {
   failures.push('package name should be tftm');
 }
-for (const scriptName of ['build', 'dev', 'smoke', 'bootstrap', 'cloud-visual-release', 'visual-qa:model-assay']) {
+for (const scriptName of ['build', 'dev', 'smoke', 'alpha-control-smoke', 'bootstrap', 'cloud-visual-release', 'visual-qa:model-assay', 'alpha-decal-smoke']) {
   if (!packageJson.scripts || !packageJson.scripts[scriptName]) {
     failures.push('missing npm script ' + scriptName);
   }
@@ -190,7 +197,7 @@ for (const dep of deps) {
 
 const assaySource = readFileSync('src/model-assay.ts', 'utf8');
 const cloudVisualDoctrine = readFileSync('docs/doctrine/cloud-visual-truth.md', 'utf8');
-for (const marker of ['sherman_part_meshy_kit_v1', 'sherman_mantlet_socket_v1', 'sherman_coaxial_mg_v1', 'sherman_runtime_pbr_v1', 'RED BUILD / 24-tank animated runtime proof', 'Hero proof plus 24 independently animated tanks', 'drive-stage', 'spawnTarget = 24', 'InstancedMesh', 'InstancedBufferAttribute', 'instanceTreadPhase', 'onBeforeCompile', 'MeshStandardMaterial', 'roughnessMap', 'metalnessMap', 'normalMap', 'makeTreadMaterialSet', 'makeInstancedTreadMaterialSet', 'createTreadGeometry', 'TankAnimationState', 'seedTankState', 'smoothRandomCycle', 'tankStates', 'GLTFLoader', 'WebGLRenderer', 'Hull Upper', 'Turret Shell', 'Mantlet Socket', 'Barrel Only', 'Coaxial MG', 'Mobile Gear / Wheel', 'loadMantletSocketRuntimePart', 'loadCoaxialMgRuntimePart', 'composeGunSocketMatrix', 'composeCoaxialMgMatrix', 'composeBowMgMatrix', 'Meshy mantlet socket owns the gun pivot', 'Meshy coaxial machine gun gives anti-personnel read', 'Meshy bow machine gun stays visible', 'makePbrTexture', 'makeOlivePbrMaterial', 'THREE.DoubleSide', 'tread_albedo.png', 'olive_albedo.png']) {
+for (const marker of ['sherman_part_meshy_kit_v1', 'sherman_mantlet_socket_v1', 'sherman_coaxial_mg_v1', 'sherman_default_texture_set_v1', 'RED BUILD / 24-tank animated runtime proof', 'Hero proof plus 24 independently animated tanks', 'drive-stage', 'spawnTarget = 24', 'InstancedMesh', 'InstancedBufferAttribute', 'instanceTreadPhase', 'onBeforeCompile', 'MeshStandardMaterial', 'makeTreadMaterialSet', 'makeInstancedTreadMaterialSet', 'createTreadGeometry', 'TankAnimationState', 'seedTankState', 'smoothRandomCycle', 'tankStates', 'GLTFLoader', 'WebGLRenderer', 'Hull Upper', 'Turret Shell', 'Mantlet Socket', 'Barrel Only', 'Mobile Gear / Wheel', 'loadMantletSocketRuntimePart', 'loadCoaxialMgRuntimePart', 'composeGunSocketMatrix', 'composeCannonMgMatrix', 'Meshy mantlet socket owns the gun pivot', 'Canonical anti-personnel weapon is the cannon-chain MG', 'makeAlbedoTexture', 'makeOliveAlbedoMaterial', 'THREE.DoubleSide', 'tread_albedo.png', 'olive_albedo.png']) {
   if (!assaySource.includes(marker)) {
     failures.push('model assay missing Meshy kit viewer marker ' + marker);
   }
@@ -201,17 +208,22 @@ for (const visualQaMarker of ['visualQaBuild', 'visualQaConfig', 'postVisualQaBe
   }
 }
 
+for (const forbiddenCanonicalTankMarker of ['heroBowMg', 'bowMgInstances', 'composeBowMgMatrix', 'bowMgOffset']) {
+  if (assaySource.includes(forbiddenCanonicalTankMarker)) {
+    failures.push('canonical model assay must not include fixed bow MG runtime marker ' + forbiddenCanonicalTankMarker);
+  }
+}
 for (const forbidden of ['BoxGeometry', 'CylinderGeometry', 'MeshBasicMaterial', 'createMechanicalSeed', 'hull_lower_slab']) {
   if (assaySource.includes(forbidden)) {
     failures.push('model assay must not render primitive/mesh seed in Meshy kit gate: ' + forbidden);
   }
 }
-for (const motionMarker of ['hero.position.x', 'wheel.rotation.z', 'map.offset.x', 'heroTurretPivot.rotation.y', 'heroGunPivot.rotation.z', 'setMatrixAt', 'spawnTarget', 'state.driveSpeed', 'state.drivePhase', 'state.wheelRate', 'state.wheelPhase', 'state.treadRate', 'state.treadPhase', 'state.turretRate', 'state.turretPhase', 'state.barrelRate', 'state.barrelPhase', 'updateTreadPhase(leftTreadInstances', 'updateTreadPhase(rightTreadInstances', 'composeGunSocketMatrix(mantletSocketInstances', 'composeBarrelMatrix(barrelInstances', 'composeCoaxialMgMatrix(coaxialMgInstances', 'composeBowMgMatrix(bowMgInstances']) {
+for (const motionMarker of ['hero.position.x', 'wheel.rotation.z', 'map.offset.x', 'heroTurretPivot.rotation.y', 'heroGunPivot.rotation.z', 'setMatrixAt', 'spawnTarget', 'state.driveSpeed', 'state.drivePhase', 'state.wheelRate', 'state.wheelPhase', 'state.treadRate', 'state.treadPhase', 'state.turretRate', 'state.turretPhase', 'state.barrelRate', 'state.barrelPhase', 'updateTreadPhase(leftTreadInstances', 'updateTreadPhase(rightTreadInstances', 'composeGunSocketMatrix(mantletSocketInstances', 'composeBarrelMatrix(barrelInstances', 'composeCannonMgMatrix(cannonMgInstances']) {
   if (!assaySource.includes(motionMarker)) {
     failures.push('animated 24-tank proof missing motion marker ' + motionMarker);
   }
 }
-for (const budgetMarker of ['24 tanks', '24 independently animated tanks', 'independent animation seeds', 'smoothed random cycles', 'Every turret traverses horizontally', 'Every barrel and coaxial MG elevates visibly', 'draw-call', 'fps local sample', 'shared GLB geometry/textures']) {
+for (const budgetMarker of ['24 tanks', '24 independently animated tanks', 'independent animation seeds', 'smoothed random cycles', 'Every turret traverses horizontally', 'Every barrel and cannon MG elevate visibly', 'draw-call', 'fps local sample', 'shared GLB geometry/textures']) {
   if (!assaySource.includes(budgetMarker)) {
     failures.push('animated 24-tank proof missing budget/readout marker ' + budgetMarker);
   }
@@ -226,7 +238,7 @@ for (const forbiddenTreadProof of ['addRaisedShoeGeometry', 'curved returns, rai
     failures.push('authored tread belt must not use static raised-link geometry as animation proof: ' + forbiddenTreadProof);
   }
 }
-for (const barrelQualityMarker of ['bakeBarrelGeometryWithRearPivot', 'makeBarrelMaterial', 'gunPivotSocket', 'barrelRearOffset', 'coaxialMgOffset', 'bowMgOffset', 'composeBarrelMatrix', 'composeCoaxialMgMatrix', 'olive gunmetal PBR']) {
+for (const barrelQualityMarker of ['bakeBarrelGeometryWithRearPivot', 'makeBarrelMaterial', 'gunPivotSocket', 'barrelRearOffset', 'coaxialMgOffset', 'composeBarrelMatrix', 'painted olive albedo']) {
   if (!assaySource.includes(barrelQualityMarker)) {
     failures.push('barrel proof missing quality marker ' + barrelQualityMarker);
   }
@@ -355,54 +367,79 @@ if (!String(kitManifest.animation_proof?.barrel_quality_gate || '').includes('re
 
 const main = readFileSync('src/main.ts', 'utf8');
 const alphaControlSource = readFileSync('src/alpha-control.ts', 'utf8');
-const alphaAssaySource = readFileSync('src/alpha-assay.ts', 'utf8');
+const alphaControlModelSource = readFileSync('src/alpha-control-model.js', 'utf8');
 const buildScript = readFileSync('scripts/build.mjs', 'utf8');
 for (const buildMarker of ['assetVersion', 'TFTM_ASSET_VERSION', '.css?v=${assetVersion}', '.js?v=${assetVersion}']) {
   if (!buildScript.includes(buildMarker)) {
     failures.push('build script must cache-bust generated JS/CSS asset URLs: ' + buildMarker);
   }
 }
-for (const alphaAssayMarker of ['tftm-commander-platoon-alpha-style-v1-20260704a', 'm4a3_75_vvss_sherman_alpha_retexture_v2.glb', 'm4a3_75_vvss_sherman_bravo_alpha_style_v1.glb', 'm4a3_75_vvss_sherman_tango_alpha_style_v1.glb', 'm4a3_75_vvss_sherman_delta_alpha_style_v1.glb', 'Sherman Commander Platoon Review', 'same base mesh', 'four different crews']) {
-  if (!alphaAssaySource.includes(alphaAssayMarker)) {
-    failures.push('Alpha assay missing texture review marker ' + alphaAssayMarker);
+for (const [label, source] of [['alpha control', alphaControlSource], ['build', buildScript], ['package scripts', JSON.stringify(packageJson.scripts)]]) {
+  for (const forbidden of ['alphaTextureCandidate', 'alpha-constrained', 'alpha_constrained_albedo', 'sherman_alpha_constrained_albedo_v1', 'm4a3_75_vvss_sherman_alpha_constrained_albedo_v1']) {
+    if (source.includes(forbidden)) {
+      failures.push(label + ' must not retain constrained texture candidate marker ' + forbidden);
+    }
   }
 }
-if (alphaAssaySource.includes('alpha_sherman_meshy_single_file.glb')) {
-  failures.push('Alpha assay must not load the rejected decal single-file GLB');
+for (const forbiddenSceneMarker of ['alpha-assay.ts', 'alpha-assay.html']) {
+  if (buildScript.includes(forbiddenSceneMarker)) {
+    failures.push('build script must not include deleted Alpha assay scene marker ' + forbiddenSceneMarker);
+  }
 }
-if (alphaAssaySource.includes('alpha_sherman_player_character_from_reference_v1.glb')) {
-  failures.push('Alpha assay must not load the rejected character-sheet image-to-3D GLB');
-}
-for (const alphaBuildMarker of ['alpha-assay.ts', 'alpha-assay.html', 'alpha-control.ts', 'alpha-control.html']) {
+for (const alphaBuildMarker of ['alpha-control.ts', 'alpha-control.html']) {
   if (!buildScript.includes(alphaBuildMarker)) {
     failures.push('build script must include Alpha assay marker ' + alphaBuildMarker);
   }
 }
 for (const alphaControlMarker of [
-  'tftm-alpha-control-simulation-v1-20260704a',
+  'tftm-alpha-control-parade-clone-20260704q',
   'alpha_player_sherman',
   'left-stick-real-tank-control-simulation',
   'm4a3_75_vvss_sherman_alpha_retexture_v2.glb',
-  'targetThrottle',
-  'targetSteer',
-  'cameraForward',
-  'desiredYaw',
-  'headingError',
+  'alpha_parade_source_tank_with_controller',
+  'alpha-parade-cloned-scene-retexture-v2',
+  'applyTankDecalProfile',
+  'decalDebug',
+  'runtimeDecals',
+  'bindTankMotionParts',
+  'map.offset.x',
+  'wheel.rotation.z',
   'wrapAngle',
   'camera-relative commander intent',
-  'hull_forward_movement_vector_arrow',
-  'camera_relative_stick_intent_vector_arrow',
   'formatDegrees',
-  'updateVectorArrows',
   'leftTrack',
   'rightTrack',
-  'differential',
   'cameraZone',
   'cameraState.yaw',
-  'driver order'
+  'left stick: driver order',
+  'right side: camera'
 ]) {
   if (!alphaControlSource.includes(alphaControlMarker)) {
     failures.push('Alpha control simulation missing marker ' + alphaControlMarker);
+  }
+}
+for (const forbiddenAlphaControlMarker of ['GridHelper', 'ArrowHelper', 'hedges', 'addVisibleTreadMotionBands', 'left_visible_tread_motion_band', 'right_visible_tread_motion_band', 'alpha_sherman_combined/alpha_sherman.glb', 'alpha_combined_kit_with_controller_named_treads', 'alpha-combined-kit-not-fused-retexture', 'makeTreadMaterialSet', 'sherman_default_texture_set_v1']) {
+  if (alphaControlSource.includes(forbiddenAlphaControlMarker)) {
+    failures.push('Alpha control must not drift back to failed combined-kit scene marker ' + forbiddenAlphaControlMarker);
+  }
+}
+for (const alphaControlModelMarker of [
+  'droobiedoo-touch-halves-camera-relative-v1',
+  'sampleCameraRelativeStick',
+  'cameraForward',
+  'cameraRight',
+  'stepAlphaTankControl',
+  'targetThrottle',
+  'targetSteer',
+  'leftTrack',
+  'rightTrack',
+  'differential',
+  'turretYaw',
+  'pivot hull toward camera order',
+  'drive hull toward camera order'
+]) {
+  if (!alphaControlModelSource.includes(alphaControlModelMarker)) {
+    failures.push('Alpha control model missing marker ' + alphaControlModelMarker);
   }
 }
 const requiredSnippets = [
@@ -613,7 +650,7 @@ for (const [variantId, expectedColor, expectedStatus] of [
   }
 }
 const alphaExporter = readFileSync('scripts/export_alpha_sherman_variant.mjs', 'utf8');
-for (const marker of ['alpha_sherman_combined', 'addAlphaCharacterMarks', 'alpha_crimson_glacis_recognition_stripe', "'_A_crossbar'", 'alpha_front_chalk_A17_plate', 'alpha_dust_scratch_']) {
+for (const marker of ['alpha_sherman_combined', 'addAlphaCharacterMarks', 'alpha_crimson_glacis_recognition_stripe', "'_A_crossbar'", 'alpha_front_chalk_A17_plate', 'alpha_dust_scratch_', 'bakeBarrelGeometryWithRearPivot', 'barrel_rear_pivot_bake', 'coaxial_mg_meshy', 'bow_mg_meshy', 'anti_personnel_visibility_tune']) {
   if (!alphaExporter.includes(marker)) {
     failures.push('Alpha exporter missing character marker ' + marker);
   }
@@ -640,7 +677,7 @@ for (const packMarker of ['vanilla_sherman_packed', 'textures', 'olive_albedo.pn
 }
 
 const vanillaExporter = readFileSync('scripts/export_vanilla_sherman_glb.mjs', 'utf8');
-for (const exporterMarker of ['vanilla_sherman_combined', 'SimplifyModifier', 'left_tread_system_authored_trapezoid_ribbon', 'right_tread_system_authored_trapezoid_ribbon', 'bow_mg_meshy']) {
+for (const exporterMarker of ['vanilla_sherman_combined', 'SimplifyModifier', 'left_tread_system_authored_trapezoid_ribbon', 'right_tread_system_authored_trapezoid_ribbon', 'coaxial_mg_meshy', 'bow_mg_meshy']) {
   if (!vanillaExporter.includes(exporterMarker)) {
     failures.push('vanilla combined exporter missing marker ' + exporterMarker);
   }
@@ -707,6 +744,14 @@ if (vanillaTankManifest.runtime?.identity_overlay !== 'none') {
 }
 if (!vanillaTankManifest.runtime?.glb || !existsSync(vanillaTankManifest.runtime.glb.replace(/^\/+/, 'public/'))) {
   failures.push('vanilla tank baseline must reference an existing GLB');
+}
+
+for (const [label, source] of [['alpha control', alphaControlSource], ['model assay', assaySource]]) {
+  for (const forbidden of ['roughnessMap', 'metalnessMap', 'normalMap', 'tread_roughness.png', 'tread_metalness.png', 'tread_normal.png', 'olive_roughness.png', 'olive_metalness.png', 'olive_normal.png']) {
+    if (source.includes(forbidden)) {
+      failures.push(label + ' active albedo-only review path must not require PBR texture maps: ' + forbidden);
+    }
+  }
 }
 
 if (failures.length > 0) {

@@ -49,6 +49,7 @@ function localFsResolver() {
     setup(build) {
       build.onResolve({ filter: /^three$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'build', 'three.module.js') }));
       build.onResolve({ filter: /^three\/examples\/jsm\/loaders\/GLTFLoader\.js$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'examples', 'jsm', 'loaders', 'GLTFLoader.js') }));
+      build.onResolve({ filter: /^three\/examples\/jsm\/geometries\/DecalGeometry\.js$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'examples', 'jsm', 'geometries', 'DecalGeometry.js') }));
       build.onResolve({ filter: /^\.|^\// }, (args) => {
         const resolved = resolveImport(args.path, args.resolveDir);
         if (!resolved) {
@@ -94,12 +95,10 @@ function writeBundledHtml(sourceName, outputName, bundleName) {
 
 await buildEntry('main.ts', 'index');
 await buildEntry('model-assay.ts', 'model-assay');
-await buildEntry('alpha-assay.ts', 'alpha-assay');
 await buildEntry('alpha-control.ts', 'alpha-control');
 
 writeBundledHtml('index.html', 'index.html', 'index');
 writeBundledHtml('model-assay.html', 'model-assay.html', 'model-assay');
-writeBundledHtml('alpha-assay.html', 'alpha-assay.html', 'alpha-assay');
 writeBundledHtml('alpha-control.html', 'alpha-control.html', 'alpha-control');
 copyRecursive(publicDir, distDir);
 copyRecursive(
@@ -137,6 +136,14 @@ copyRecursive(
 copyRecursive(
   path.join(root, 'assets', 'generated', 'openai', 'sherman_runtime_pbr_v1'),
   path.join(distDir, 'model-assay', 'sherman_runtime_pbr_v1')
+);
+copyRecursive(
+  path.join(root, 'assets', 'generated', 'openai', 'sherman_albedo_only_v1'),
+  path.join(distDir, 'model-assay', 'sherman_albedo_only_v1')
+);
+copyRecursive(
+  path.join(root, 'assets', 'generated', 'openai', 'sherman_default_texture_set_v1'),
+  path.join(distDir, 'model-assay', 'sherman_default_texture_set_v1')
 );
 copyRecursive(
   path.join(root, 'assets', 'authored'),

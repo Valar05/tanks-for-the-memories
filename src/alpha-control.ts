@@ -1,45 +1,46 @@
 import './alpha-control.css';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { applyTankDecalProfile } from './tank-decals';
 
 const root = document.querySelector<HTMLDivElement>('#alpha-control-root');
 if (!root) throw new Error('missing #alpha-control-root');
 
-const visualQaBuild = 'tftm-alpha-control-simulation-v1-20260704a';
+const visualQaBuild = 'tftm-alpha-control-parade-clone-20260704q';
 const alphaModelUrl = './tftm/models/m4a3_75_vvss_sherman_alpha_retexture_v2/m4a3_75_vvss_sherman_alpha_retexture_v2.glb';
+const params = new URLSearchParams(window.location.search);
+const decalDebug = params.get('decalDebug') === '1';
 
-root.innerHTML = `
-  <main class="control-shell">
-    <div class="stage"><canvas aria-label="Alpha Sherman left-stick movement simulation"></canvas></div>
-    <div class="hud">
-      <section class="readout">
-        <p class="kicker">Alpha player character</p>
-        <h1>Tank-control input simulation</h1>
-        <p>Left stick is camera-relative commander intent. The driver simulation turns that into throttle plus differential steering. Right side drags the camera.</p>
-        <div class="meters">
-          <div class="meter"><b>left track</b><span data-left-track>0.00</span></div>
-          <div class="meter"><b>right track</b><span data-right-track>0.00</span></div>
-          <div class="meter"><b>order</b><span data-order>neutral</span></div>
-          <div class="meter"><b>heading</b><span data-heading>0 deg</span></div>
-          <div class="meter"><b>intent</b><span data-intent>0 deg</span></div>
-          <div class="meter"><b>error</b><span data-error>0 deg</span></div>
-        </div>
-      </section>
-      <section class="status">
-        <p class="kicker">cloud build</p>
-        <h1>${visualQaBuild}</h1>
-        <p data-status>loading Alpha</p>
-      </section>
-    </div>
-    <div class="stick-zone" data-stick-zone>
-      <div class="stick-base"><div class="stick-knob" data-stick-knob></div></div>
-      <span class="zone-label">left stick: driver order</span>
-    </div>
-    <div class="camera-zone" data-camera-zone>
-      <span class="zone-label">right side: camera</span>
-    </div>
-  </main>
-`;
+root.innerHTML = '<main class="control-shell">' +
+  '<div class="stage"><canvas aria-label="Alpha Sherman parade-source left-stick movement simulation"></canvas></div>' +
+  '<div class="hud">' +
+    '<section class="readout">' +
+      '<p class="kicker">Alpha player character</p>' +
+      '<h1>Tank-control input simulation</h1>' +
+      '<p>Left stick is camera-relative commander intent. The driver simulation turns that into throttle plus differential steering. Right side drags the camera.</p>' +
+      '<div class="meters">' +
+        '<div class="meter"><b>left track</b><span data-left-track>0.00</span></div>' +
+        '<div class="meter"><b>right track</b><span data-right-track>0.00</span></div>' +
+        '<div class="meter"><b>order</b><span data-order>neutral</span></div>' +
+        '<div class="meter"><b>heading</b><span data-heading>0 deg</span></div>' +
+        '<div class="meter"><b>intent</b><span data-intent>0 deg</span></div>' +
+        '<div class="meter"><b>error</b><span data-error>0 deg</span></div>' +
+      '</div>' +
+    '</section>' +
+    '<section class="status">' +
+      '<p class="kicker">parade source</p>' +
+      '<h1>' + visualQaBuild + '</h1>' +
+      '<p data-status>loading accepted Alpha parade tank with runtime decals</p>' +
+    '</section>' +
+  '</div>' +
+  '<div class="stick-zone" data-stick-zone>' +
+    '<div class="stick-base"><div class="stick-knob" data-stick-knob></div></div>' +
+    '<span class="zone-label">left stick: driver order</span>' +
+  '</div>' +
+  '<div class="camera-zone" data-camera-zone>' +
+    '<span class="zone-label">right side: camera</span>' +
+  '</div>' +
+'</main>';
 
 const canvas = root.querySelector<HTMLCanvasElement>('canvas')!;
 const stickZone = root.querySelector<HTMLDivElement>('[data-stick-zone]')!;
@@ -57,18 +58,22 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPrefere
 renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.0;
+renderer.toneMappingExposure = 1.08;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x161912);
-scene.fog = new THREE.Fog(0x161912, 12, 34);
+scene.background = new THREE.Color(0x181a15);
+scene.fog = new THREE.Fog(0x181a15, 14, 36);
 
-const camera = new THREE.PerspectiveCamera(46, 1, 0.08, 80);
+const camera = new THREE.PerspectiveCamera(32, 1, 0.05, 100);
 const tankRoot = new THREE.Group();
 scene.add(tankRoot);
 
-const target = new THREE.Vector3();
-const cameraState = { yaw: -0.75, pitch: 0.34, distance: 7.5 };
+const cameraState = { yaw: 0, pitch: 0.42, distance: 9.8 };
+const paradeTankYaw = -Math.PI / 2 - 0.18;
+const runtimeTreadMaps: THREE.Texture[] = [];
+const runtimeWheelObjects: THREE.Object3D[] = [];
+let runtimeTurretPivot: THREE.Object3D | null = null;
+let runtimeGunPivot: THREE.Object3D | null = null;
 const drive = {
   x: 0,
   y: 0,
@@ -86,62 +91,79 @@ const drive = {
   loaded: false
 };
 
-const hemi = new THREE.HemisphereLight(0xf2ead6, 0x293027, 1.85);
-scene.add(hemi);
-const sun = new THREE.DirectionalLight(0xffe6bd, 3.5);
-sun.position.set(4, 7, 4);
-scene.add(sun);
-const rim = new THREE.DirectionalLight(0x9ebcff, 1.1);
-rim.position.set(-5, 3, -4);
+scene.add(new THREE.HemisphereLight(0xf3ead7, 0x2f352c, 2.0));
+const key = new THREE.DirectionalLight(0xfff4dd, 3.2);
+key.position.set(4, 5, 3);
+scene.add(key);
+const rim = new THREE.DirectionalLight(0x9bb6ff, 1.4);
+rim.position.set(-3, 2, -4);
 scene.add(rim);
 
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(80, 80, 28, 28),
-  new THREE.MeshStandardMaterial({ color: 0x373624, roughness: 0.95, metalness: 0.0 })
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(15, 8),
+  new THREE.MeshStandardMaterial({ color: 0x353224, roughness: 0.92, metalness: 0.0 })
 );
-ground.rotation.x = -Math.PI * 0.5;
-scene.add(ground);
+floor.rotation.x = -Math.PI * 0.5;
+floor.position.y = -0.43;
+scene.add(floor);
 
-const grid = new THREE.GridHelper(80, 40, 0x6a633f, 0x3e3a29);
-grid.position.y = 0.012;
-scene.add(grid);
-
-const hullForwardArrow = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1.15, 0), 2.2, 0xb83b37, 0.5, 0.28);
-hullForwardArrow.name = 'hull_forward_movement_vector_arrow';
-tankRoot.add(hullForwardArrow);
-
-const intentArrow = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0.08, 0), 2.8, 0xd5b35d, 0.55, 0.32);
-intentArrow.name = 'camera_relative_stick_intent_vector_arrow';
-scene.add(intentArrow);
-
-const hedges = new THREE.Group();
-for (let i = 0; i < 34; i += 1) {
-  const block = new THREE.Mesh(
-    new THREE.BoxGeometry(1.8 + Math.random() * 1.4, 1.1 + Math.random() * 0.8, 0.75 + Math.random() * 0.5),
-    new THREE.MeshStandardMaterial({ color: new THREE.Color().setHSL(0.23 + Math.random() * 0.04, 0.24, 0.18 + Math.random() * 0.08), roughness: 1 })
-  );
-  const side = i % 2 === 0 ? -1 : 1;
-  block.position.set(side * (5.4 + Math.random() * 3.4), block.geometry.parameters.height * 0.5, -24 + i * 1.7);
-  block.rotation.y = (Math.random() - 0.5) * 0.45;
-  hedges.add(block);
+function bindTankMotionParts(tank: THREE.Object3D) {
+  const wheels: THREE.Object3D[] = [];
+  const treadMaps: THREE.Texture[] = [];
+  tank.traverse((object) => {
+    const name = object.name.toLowerCase();
+    if (name.includes('mobile_gear_wheel') || name.includes('sprocket') || name.includes('idler') || name.includes('wheel')) {
+      wheels.push(object);
+    }
+    if ((name.includes('turret_traverse_pivot') || name.includes('turret')) && runtimeTurretPivot === null) {
+      runtimeTurretPivot = object;
+    }
+    if ((name.includes('cannon_elevation_pivot') || name.includes('barrel') || name.includes('gun')) && runtimeGunPivot === null) {
+      runtimeGunPivot = object;
+    }
+    const mesh = object as THREE.Mesh;
+    if (name.includes('tread_system') && mesh.isMesh) {
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      for (const material of materials) {
+        const map = (material as THREE.MeshStandardMaterial).map;
+        if (map) {
+          map.wrapS = THREE.RepeatWrapping;
+          map.wrapT = THREE.RepeatWrapping;
+          treadMaps.push(map);
+        }
+      }
+    }
+  });
+  return { wheels, treadMaps };
 }
-scene.add(hedges);
 
 new GLTFLoader().load(alphaModelUrl, (gltf) => {
   const model = gltf.scene;
+  model.name = 'alpha_parade_source_tank_with_controller';
   const box = new THREE.Box3().setFromObject(model);
   const center = new THREE.Vector3();
   const size = new THREE.Vector3();
   box.getCenter(center);
   box.getSize(size);
   model.position.sub(center);
-  model.position.y += size.y * 0.5;
+  model.position.y += size.y * 0.5 - 0.43;
+  const decalResult = applyTankDecalProfile(model, 'alpha', { debug: decalDebug });
+  model.rotation.y = paradeTankYaw;
+  const motionParts = bindTankMotionParts(model);
+  runtimeTreadMaps.push(...motionParts.treadMaps);
+  runtimeWheelObjects.push(...motionParts.wheels);
   tankRoot.add(model);
+  tankRoot.rotation.y = drive.hullYaw;
   drive.loaded = true;
-  statusEl.textContent = 'Alpha loaded';
-  postVisualQaBeacon('loaded');
+  statusEl.textContent = 'accepted Alpha parade GLB loaded with runtime decals';
+  postVisualQaBeacon('loaded', {
+    treadMotionBands: runtimeTreadMaps.length,
+    wheelMotionObjects: runtimeWheelObjects.length,
+    runtimeDecals: decalResult.decalCount,
+    visualSource: 'alpha-parade-cloned-scene-retexture-v2-runtime-decals'
+  });
 }, undefined, (error) => {
-  statusEl.textContent = 'Alpha load failed';
+  statusEl.textContent = 'Alpha parade source load failed';
   postVisualQaBeacon('load-failed', { message: error instanceof Error ? error.message : String(error) });
 });
 
@@ -188,7 +210,7 @@ cameraZone.addEventListener('pointermove', (event) => {
   lastCameraX = event.clientX;
   lastCameraY = event.clientY;
   cameraState.yaw -= dx * 0.006;
-  cameraState.pitch = THREE.MathUtils.clamp(cameraState.pitch + dy * 0.0045, 0.12, 0.82);
+  cameraState.pitch = THREE.MathUtils.clamp(cameraState.pitch + dy * 0.0045, 0.18, 0.86);
 });
 
 function releaseCamera(event: PointerEvent) {
@@ -211,7 +233,7 @@ function updateStick(event: PointerEvent) {
   drive.x = rawX * scale;
   drive.y = rawY * scale;
   drive.magnitude = THREE.MathUtils.clamp(len, 0, 1);
-  stickKnob.style.transform = `translate(calc(-50% + ${drive.x * radius * 0.56}px), calc(-50% + ${drive.y * radius * 0.56}px))`;
+  stickKnob.style.transform = 'translate(calc(-50% + ' + (drive.x * radius * 0.56) + 'px), calc(-50% + ' + (drive.y * radius * 0.56) + 'px))';
 }
 
 function postVisualQaBeacon(stage: string, extra: Record<string, string | number> = {}) {
@@ -246,7 +268,7 @@ function updateDrive(delta: number) {
   const desiredMagnitude = Math.min(1, desiredMove.length());
   if (desiredMagnitude > 0.001) {
     desiredMove.normalize();
-    drive.desiredYaw = Math.atan2(desiredMove.x, desiredMove.z);
+    drive.desiredYaw = Math.atan2(-desiredMove.z, desiredMove.x);
   }
   const headingError = wrapAngle(drive.desiredYaw - drive.hullYaw);
   drive.headingError = headingError;
@@ -261,7 +283,6 @@ function updateDrive(delta: number) {
 
   // Camera-relative commander intent becomes a real tank-style driver order:
   // desired heading -> throttle plus differential left/right track demand.
-  // Large heading error produces a pivot before the hull commits forward.
   const steerMix = drive.steer * (0.46 + turnInPlaceBias * 0.42 + Math.abs(drive.throttle) * 0.22);
   drive.leftTrack = THREE.MathUtils.clamp(drive.throttle + steerMix, -1, 1);
   drive.rightTrack = THREE.MathUtils.clamp(drive.throttle - steerMix, -1, 1);
@@ -271,8 +292,8 @@ function updateDrive(delta: number) {
   drive.speed += ((forward * 3.0) - drive.speed) * (1 - Math.exp(-delta * 2.8));
   drive.hullYaw += differential * delta * 1.15;
   tankRoot.rotation.y = drive.hullYaw;
-  tankRoot.position.x += Math.sin(drive.hullYaw) * drive.speed * delta;
-  tankRoot.position.z += Math.cos(drive.hullYaw) * drive.speed * delta;
+  tankRoot.position.x += Math.cos(drive.hullYaw) * drive.speed * delta;
+  tankRoot.position.z += -Math.sin(drive.hullYaw) * drive.speed * delta;
 
   const limit = 25;
   tankRoot.position.x = THREE.MathUtils.clamp(tankRoot.position.x, -limit, limit);
@@ -288,7 +309,18 @@ function updateDrive(delta: number) {
   headingEl.textContent = formatDegrees(drive.hullYaw);
   intentEl.textContent = desiredMagnitude < 0.06 ? '-' : formatDegrees(drive.desiredYaw);
   errorEl.textContent = desiredMagnitude < 0.06 ? '-' : formatDegrees(drive.headingError);
-  updateVectorArrows(desiredMove, desiredMagnitude);
+  const motionSign = drive.speed === 0 ? 1 : Math.sign(drive.speed);
+  for (const wheel of runtimeWheelObjects) {
+    wheel.rotation.z -= delta * 6.2 * motionSign;
+  }
+  for (const map of runtimeTreadMaps) {
+    map.offset.x -= delta * 2.4 * motionSign;
+    map.needsUpdate = true;
+  }
+  if (runtimeTurretPivot && runtimeTurretPivot.parent !== tankRoot) runtimeTurretPivot.rotation.y = Math.sin(performance.now() * 0.00065) * 0.05;
+  if (runtimeGunPivot && runtimeGunPivot.parent !== tankRoot) runtimeGunPivot.rotation.z = Math.sin(performance.now() * 0.00105) * 0.035;
+  void desiredMove;
+  void desiredMagnitude;
 }
 
 function wrapAngle(angle: number) {
@@ -299,25 +331,12 @@ function formatDegrees(radians: number) {
   return String(Math.round(THREE.MathUtils.radToDeg(wrapAngle(radians)))) + ' deg';
 }
 
-function updateVectorArrows(desiredMove: THREE.Vector3, desiredMagnitude: number) {
-  hullForwardArrow.setDirection(new THREE.Vector3(0, 0, 1));
-  intentArrow.position.copy(tankRoot.position);
-  intentArrow.position.y = 0.12;
-  if (desiredMagnitude > 0.06) {
-    intentArrow.visible = true;
-    intentArrow.setDirection(desiredMove.clone().normalize());
-    intentArrow.setLength(1.4 + desiredMagnitude * 2.2, 0.55, 0.32);
-  } else {
-    intentArrow.visible = false;
-  }
-}
-
 function updateCamera() {
-  target.copy(tankRoot.position);
-  target.y += 0.65;
+  const target = tankRoot.position.clone();
+  target.y += 0.25;
   const orbit = new THREE.Vector3(
     Math.sin(cameraState.yaw) * Math.cos(cameraState.pitch) * cameraState.distance,
-    Math.sin(cameraState.pitch) * cameraState.distance + 1.2,
+    Math.sin(cameraState.pitch) * cameraState.distance + 0.95,
     Math.cos(cameraState.yaw) * Math.cos(cameraState.pitch) * cameraState.distance
   );
   camera.position.copy(target).add(orbit);

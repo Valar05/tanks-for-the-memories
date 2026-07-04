@@ -15,6 +15,8 @@ declare module 'three' {
     set(x: number, y: number, z: number): this;
     distanceTo(v: Vector3): number;
     sub(v: Vector3): this;
+    add(v: Vector3): this;
+    multiplyScalar(value: number): this;
     addScaledVector(v: Vector3, s: number): this;
     normalize(): this;
     length(): number;
@@ -41,6 +43,8 @@ declare module 'three' {
     castShadow: boolean;
     receiveShadow: boolean;
     children: Object3D[];
+    userData: any;
+    renderOrder: number;
     traverse(callback: (object: Object3D) => void): void;
     updateMatrix(): void;
     updateWorldMatrix(updateParents?: boolean, updateChildren?: boolean): void;
@@ -98,7 +102,10 @@ declare module 'three' {
     constructor(...args: any[]);
     domElement: HTMLCanvasElement;
     setPixelRatio(value: number): void;
+    getPixelRatio(): number;
     outputColorSpace: any;
+    toneMapping: any;
+    toneMappingExposure: number;
     shadowMap: { enabled: boolean; type: any };
     setSize(width: number, height: number, updateStyle?: boolean): void;
     setClearColor(color: any, alpha?: number): void;
@@ -110,7 +117,7 @@ declare module 'three' {
     aspect: number;
     fov: number;
     updateProjectionMatrix(): void;
-    lookAt(x: number, y: number, z: number): void;
+    lookAt(x: number | Vector3, y?: number, z?: number): void;
   }
 
   export class OrthographicCamera extends Object3D {
@@ -201,11 +208,12 @@ declare module 'three' {
   }
 
   export const SRGBColorSpace: any;
+  export const ACESFilmicToneMapping: any;
   export const NoColorSpace: any;
   export const PCFSoftShadowMap: any;
   export const DoubleSide: any;
   export const RepeatWrapping: any;
-  export const MathUtils: { clamp(value: number, min: number, max: number): number };
+  export const MathUtils: { clamp(value: number, min: number, max: number): number; smoothstep(value: number, min: number, max: number): number; radToDeg(value: number): number };
 
   export type Material = any;
   export type Camera = PerspectiveCamera | OrthographicCamera;
@@ -217,6 +225,13 @@ declare module 'three/examples/jsm/loaders/GLTFLoader.js' {
     constructor(...args: any[]);
     load(url: string, onLoad: (gltf: any) => void, onProgress?: (event: ProgressEvent) => void, onError?: (error: unknown) => void): void;
     loadAsync(url: string): Promise<any>;
+  }
+}
+
+declare module 'three/examples/jsm/geometries/DecalGeometry.js' {
+  import { BufferGeometry, Euler, Mesh, Vector3 } from 'three';
+  export class DecalGeometry extends BufferGeometry {
+    constructor(mesh: Mesh, position: Vector3, orientation: Euler, size: Vector3);
   }
 }
 

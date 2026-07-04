@@ -220,21 +220,61 @@ h1 {
 @media (max-width: 720px) {
   .hud {
     align-items: flex-start;
+    gap: 6px;
+    top: max(6px, env(safe-area-inset-top));
+    left: 6px;
+    right: 6px;
   }
 
   .readout {
-    width: 64vw;
+    width: min(430px, 58vw);
+    padding: 7px;
   }
 
   .status {
-    width: 31vw;
+    width: min(230px, 38vw);
+    padding: 7px;
+  }
+
+  .readout p {
+    display: none;
+  }
+
+  h1 {
+    font-size: clamp(15px, 4.2vw, 22px);
+  }
+
+  .kicker {
+    font-size: 9px;
   }
 
   .meters {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    margin-top: 6px;
+  }
+
+  .meter {
+    padding: 4px;
+  }
+
+  .meter b {
+    font-size: 8px;
+  }
+
+  .meter span {
+    font-size: 11px;
   }
 
   .status p {
     display: none;
+  }
+
+  .stick-base {
+    width: min(24vw, 118px);
+  }
+
+  .stick-zone .zone-label {
+    left: max(128px, 28vw);
   }
 }
