@@ -127,6 +127,10 @@ copyRecursive(
   path.join(distDir, 'model-assay', 'sherman_mantlet_socket_v1')
 );
 copyRecursive(
+  path.join(root, 'assets', 'generated', 'meshy', 'sherman_coaxial_mg_v1'),
+  path.join(distDir, 'model-assay', 'sherman_coaxial_mg_v1')
+);
+copyRecursive(
   path.join(root, 'assets', 'generated', 'openai', 'sherman_runtime_pbr_v1'),
   path.join(distDir, 'model-assay', 'sherman_runtime_pbr_v1')
 );

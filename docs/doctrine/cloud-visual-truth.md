@@ -50,8 +50,15 @@ Wake rule:
 
 - Wake for acceptance only after visual QA and sense simulation pass.
 - Wake for decision only when the breaker loop reaches a real choice or credit spend.
-- Do not wake just to show a known-failing artifact.
 - Do not let `ok: true` from the capture harness mean visual success; it only means pixels were captured.
+
+Post-deploy review rule:
+
+- Any time a visual build is deployed and the agent is about to report on that build, wake the browser to the exact cloud URL with a fresh cache-bust token first.
+- After waking, inspect the freshest available Android screenshot or visual QA capture before final reporting.
+- If the screenshot/capture shows a red build, say so and continue the breaker loop when a next action is available.
+- Do not confuse review wake with acceptance wake: review wake proves the user and agent are looking at the current artifact; acceptance still requires the visible relationships to pass.
+- Do not skip review wake merely because visual QA is blocked. If visual QA is blocked, wake cloud, inspect the freshest screenshot artifact, and report the capture blocker separately.
 
 ## False-Change Penalty
 

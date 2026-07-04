@@ -59,6 +59,10 @@ const requiredFiles = [
   'assets/generated/meshy/sherman_mantlet_socket_v1/glb.glb',
   'assets/generated/meshy/sherman_mantlet_socket_v1/fbx.fbx',
   'assets/generated/meshy/sherman_mantlet_socket_v1/manifest.json',
+  'assets/generated/meshy/sherman_coaxial_mg_v1/sherman_coaxial_mg_v1_concept.png',
+  'assets/generated/meshy/sherman_coaxial_mg_v1/glb.glb',
+  'assets/generated/meshy/sherman_coaxial_mg_v1/fbx.fbx',
+  'assets/generated/meshy/sherman_coaxial_mg_v1/manifest.json',
   'assets/generated/meshy/sherman_runtime_tread_pbr_v1/sherman_runtime_tread_pbr_v1_concept.png',
   'assets/generated/meshy/sherman_runtime_tread_pbr_v1/manifest.json',
   'assets/generated/openai/sherman_runtime_pbr_v1/manifest.json',
@@ -118,7 +122,7 @@ for (const dep of deps) {
 
 const assaySource = readFileSync('src/model-assay.ts', 'utf8');
 const cloudVisualDoctrine = readFileSync('docs/doctrine/cloud-visual-truth.md', 'utf8');
-for (const marker of ['sherman_part_meshy_kit_v1', 'sherman_mantlet_socket_v1', 'sherman_runtime_pbr_v1', 'RED BUILD / 24-tank animated runtime proof', 'Hero proof plus 24 independently animated tanks', 'drive-stage', 'spawnTarget = 24', 'InstancedMesh', 'InstancedBufferAttribute', 'instanceTreadPhase', 'onBeforeCompile', 'MeshStandardMaterial', 'roughnessMap', 'metalnessMap', 'normalMap', 'makeTreadMaterialSet', 'makeInstancedTreadMaterialSet', 'createTreadGeometry', 'TankAnimationState', 'seedTankState', 'smoothRandomCycle', 'tankStates', 'GLTFLoader', 'WebGLRenderer', 'Hull Upper', 'Turret Shell', 'Mantlet Socket', 'Barrel Only', 'Mobile Gear / Wheel', 'loadMantletSocketRuntimePart', 'composeGunSocketMatrix', 'Meshy mantlet socket owns the gun pivot', 'makePbrTexture', 'makeOlivePbrMaterial', 'THREE.DoubleSide', 'tread_albedo.png', 'olive_albedo.png']) {
+for (const marker of ['sherman_part_meshy_kit_v1', 'sherman_mantlet_socket_v1', 'sherman_coaxial_mg_v1', 'sherman_runtime_pbr_v1', 'RED BUILD / 24-tank animated runtime proof', 'Hero proof plus 24 independently animated tanks', 'drive-stage', 'spawnTarget = 24', 'InstancedMesh', 'InstancedBufferAttribute', 'instanceTreadPhase', 'onBeforeCompile', 'MeshStandardMaterial', 'roughnessMap', 'metalnessMap', 'normalMap', 'makeTreadMaterialSet', 'makeInstancedTreadMaterialSet', 'createTreadGeometry', 'TankAnimationState', 'seedTankState', 'smoothRandomCycle', 'tankStates', 'GLTFLoader', 'WebGLRenderer', 'Hull Upper', 'Turret Shell', 'Mantlet Socket', 'Barrel Only', 'Coaxial MG', 'Mobile Gear / Wheel', 'loadMantletSocketRuntimePart', 'loadCoaxialMgRuntimePart', 'composeGunSocketMatrix', 'composeCoaxialMgMatrix', 'composeBowMgMatrix', 'Meshy mantlet socket owns the gun pivot', 'Meshy coaxial machine gun gives anti-personnel read', 'Meshy bow machine gun stays visible', 'makePbrTexture', 'makeOlivePbrMaterial', 'THREE.DoubleSide', 'tread_albedo.png', 'olive_albedo.png']) {
   if (!assaySource.includes(marker)) {
     failures.push('model assay missing Meshy kit viewer marker ' + marker);
   }
@@ -134,17 +138,17 @@ for (const forbidden of ['BoxGeometry', 'CylinderGeometry', 'MeshBasicMaterial',
     failures.push('model assay must not render primitive/mesh seed in Meshy kit gate: ' + forbidden);
   }
 }
-for (const motionMarker of ['hero.position.x', 'wheel.rotation.z', 'map.offset.x', 'heroTurretPivot.rotation.y', 'heroGunPivot.rotation.z', 'setMatrixAt', 'spawnTarget', 'state.driveSpeed', 'state.drivePhase', 'state.wheelRate', 'state.wheelPhase', 'state.treadRate', 'state.treadPhase', 'state.turretRate', 'state.turretPhase', 'state.barrelRate', 'state.barrelPhase', 'updateTreadPhase(leftTreadInstances', 'updateTreadPhase(rightTreadInstances', 'composeGunSocketMatrix(mantletSocketInstances', 'composeBarrelMatrix(barrelInstances']) {
+for (const motionMarker of ['hero.position.x', 'wheel.rotation.z', 'map.offset.x', 'heroTurretPivot.rotation.y', 'heroGunPivot.rotation.z', 'setMatrixAt', 'spawnTarget', 'state.driveSpeed', 'state.drivePhase', 'state.wheelRate', 'state.wheelPhase', 'state.treadRate', 'state.treadPhase', 'state.turretRate', 'state.turretPhase', 'state.barrelRate', 'state.barrelPhase', 'updateTreadPhase(leftTreadInstances', 'updateTreadPhase(rightTreadInstances', 'composeGunSocketMatrix(mantletSocketInstances', 'composeBarrelMatrix(barrelInstances', 'composeCoaxialMgMatrix(coaxialMgInstances', 'composeBowMgMatrix(bowMgInstances']) {
   if (!assaySource.includes(motionMarker)) {
     failures.push('animated 24-tank proof missing motion marker ' + motionMarker);
   }
 }
-for (const budgetMarker of ['24 tanks', '24 independently animated tanks', 'independent animation seeds', 'smoothed random cycles', 'Every turret traverses horizontally', 'Every barrel elevates visibly', 'draw-call', 'fps local sample', 'shared GLB geometry/textures']) {
+for (const budgetMarker of ['24 tanks', '24 independently animated tanks', 'independent animation seeds', 'smoothed random cycles', 'Every turret traverses horizontally', 'Every barrel and coaxial MG elevates visibly', 'draw-call', 'fps local sample', 'shared GLB geometry/textures']) {
   if (!assaySource.includes(budgetMarker)) {
     failures.push('animated 24-tank proof missing budget/readout marker ' + budgetMarker);
   }
 }
-for (const treadQualityMarker of ['outerBeltSurface', 'innerBeltSurface', 'outerSidewall', 'innerSidewall', 'topRun', 'bottomRun', 'frontReturn', 'rearReturn', 'shermanTrapezoidProfile', 'upperRunUnderSponson', 'longGroundedBottomRun', 'angledFrontReturn', 'angledRearReturn', 'animatedMaterialLane', 'staticRaisedLinksRejected']) {
+for (const treadQualityMarker of ['outerBeltSurface', 'innerBeltSurface', 'outerSidewall', 'innerSidewall', 'addUpperSidewall', 'topRun', 'bottomRun', 'frontReturn', 'rearReturn', 'shermanTrapezoidProfile', 'upperRunUnderSponson', 'longGroundedBottomRun', 'angledFrontReturn', 'angledRearReturn', 'animatedMaterialLane', 'staticRaisedLinksRejected']) {
   if (!assaySource.includes(treadQualityMarker)) {
     failures.push('authored tread belt missing quality marker ' + treadQualityMarker);
   }
@@ -154,7 +158,7 @@ for (const forbiddenTreadProof of ['addRaisedShoeGeometry', 'curved returns, rai
     failures.push('authored tread belt must not use static raised-link geometry as animation proof: ' + forbiddenTreadProof);
   }
 }
-for (const barrelQualityMarker of ['bakeBarrelGeometryWithRearPivot', 'makeBarrelMaterial', 'gunPivotSocket', 'barrelRearOffset', 'composeBarrelMatrix', 'olive gunmetal PBR']) {
+for (const barrelQualityMarker of ['bakeBarrelGeometryWithRearPivot', 'makeBarrelMaterial', 'gunPivotSocket', 'barrelRearOffset', 'coaxialMgOffset', 'bowMgOffset', 'composeBarrelMatrix', 'composeCoaxialMgMatrix', 'olive gunmetal PBR']) {
   if (!assaySource.includes(barrelQualityMarker)) {
     failures.push('barrel proof missing quality marker ' + barrelQualityMarker);
   }
@@ -179,6 +183,11 @@ for (const doctrineMarker of ['False-Change Penalty', 'materially unchanged', 'c
 for (const conquerMarker of ['Conquer Failure Loop', 'The mission is not to report failure. The mission is to conquer failure.', 'A captured red build is a work order', 'Use the cloud brain', 'Wake for acceptance only after visual QA and sense simulation pass']) {
   if (!cloudVisualDoctrine.includes(conquerMarker)) {
     failures.push('cloud visual doctrine missing conquer-failure marker ' + conquerMarker);
+  }
+}
+for (const reviewWakeMarker of ['Post-deploy review rule', 'wake the browser to the exact cloud URL with a fresh cache-bust token first', 'inspect the freshest available Android screenshot or visual QA capture before final reporting', 'Do not confuse review wake with acceptance wake', 'Do not skip review wake merely because visual QA is blocked']) {
+  if (!cloudVisualDoctrine.includes(reviewWakeMarker)) {
+    failures.push('cloud visual doctrine missing post-deploy review wake marker ' + reviewWakeMarker);
   }
 }
 
