@@ -1,8 +1,8 @@
 {
   "asset_id": "authored_sherman_boxmodel_v1",
   "display_name": "Authored Sherman Boxmodel V1",
-  "silhouette_revision": "v1-8-integrated-front-gap-coverage",
-  "generated_at": "2026-07-04T23:21:21.020938Z",
+  "silhouette_revision": "v1-9-exterior-front-gap-coverage",
+  "generated_at": "2026-07-04T23:33:03.851442Z",
   "generator": "scripts/export_authored_sherman_boxmodel.py",
   "blender": "4.3.2",
   "source_blend": "assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend",
@@ -53,7 +53,7 @@
     "authored_axes": "X forward/back, Y up/down, Z left/right",
     "blender_axes": "X forward/back, Y left/right, Z up/down after P/S/R conversion helpers",
     "threejs_axes_after_gltf": "X forward/back, Y up/down, Z left/right",
-    "visual_regression_prevented": "tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front glacis shoulders must have visible slot walls plus integrated front gap coverage closing the dark triangular and lower rectangular air gaps, without wing plates or runtime overlays"
+    "visual_regression_prevented": "tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front glacis shoulders must have visible slot walls plus exterior front gap coverage on the outside side-plane closing the dark triangular and lower rectangular air gaps, without wing plates or runtime overlays"
   },
   "runtime_contract": {
     "turret_traverse": "rotate turret_traverse_pivot around Y",
@@ -62,14 +62,14 @@
     "tread_motion": "scroll material maps on left_track_motion and right_track_motion",
     "wheel_motion": "rotate children of left_roadwheel_group and right_roadwheel_group",
     "side_skirt_occlusion": "roadwheel discs sit inside track skirt volume; exterior track cover hides tire backs from front and side views",
-    "front_shoulder_armor": "flush glacis shoulder plates, visible slot walls, and integrated front gap upper/lower covers close the triangular top void and lower rectangular void between front wedge and track pods without standing up as side wings or relying on runtime overlays",
+    "front_shoulder_armor": "flush glacis shoulder plates, visible slot walls, and exterior front gap covers sit at the outside track-skirt side plane to close the triangular top void and lower rectangular void between front wedge and track pods without standing up as side wings or relying on runtime overlays",
     "commander_hatch": "commander_hatch__turret_top is a named posture marker"
   },
   "budget": {
     "target_triangles": "2500-4500",
     "hard_cap_triangles": 6000,
-    "actual_triangles": 2854,
-    "mesh_count": 111
+    "actual_triangles": 2852,
+    "mesh_count": 109
   },
-  "approximate_triangles": 2854
+  "approximate_triangles": 2852
 }

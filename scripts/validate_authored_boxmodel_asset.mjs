@@ -9,7 +9,7 @@ const blendPath = 'assets/authored/authored_sherman_boxmodel_v1/authored_sherman
 const blenderScriptPath = 'scripts/export_authored_sherman_boxmodel.py';
 const wrapperPath = 'scripts/export_authored_sherman_boxmodel.mjs';
 const facePlateIds = ['hull_glacis','hull_left','hull_right','hull_rear','engine_deck','turret_front','turret_left','turret_right','turret_top','turret_bustle','mantlet','barrel_strip','coaxial_mg','track_outer','track_inner_top_bottom','wheel_disc','bogie_side'];
-const requiredNodes = ['tank_root','hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','left_track_motion','right_track_motion','left_roadwheel_group','right_roadwheel_group','commander_hatch__turret_top','left_flush_glacis_shoulder__hull_left','right_flush_glacis_shoulder__hull_right','left_low_front_track_cheek__hull_left','right_low_front_track_cheek__hull_right','left_vertical_shoulder_gap_web__hull_left','right_vertical_shoulder_gap_web__hull_right','left_visible_glacis_slot_wall__hull_left','right_visible_glacis_slot_wall__hull_right','left_integrated_front_gap_upper_cover__hull_left','right_integrated_front_gap_upper_cover__hull_right','left_integrated_front_gap_lower_cover__hull_left','right_integrated_front_gap_lower_cover__hull_right'];
+const requiredNodes = ['tank_root','hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','left_track_motion','right_track_motion','left_roadwheel_group','right_roadwheel_group','commander_hatch__turret_top','left_flush_glacis_shoulder__hull_left','right_flush_glacis_shoulder__hull_right','left_low_front_track_cheek__hull_left','right_low_front_track_cheek__hull_right','left_vertical_shoulder_gap_web__hull_left','right_vertical_shoulder_gap_web__hull_right','left_visible_glacis_slot_wall__hull_left','right_visible_glacis_slot_wall__hull_right','left_exterior_front_gap_cover__hull_left','right_exterior_front_gap_cover__hull_right'];
 function fail(message) { failures.push(message); }
 function read(file) { return readFileSync(file, 'utf8'); }
 function parseGlbJson(file) {
@@ -161,8 +161,8 @@ if (failures.length === 0) {
   if (!String(manifest.source_policy || '').includes('Blender Z-up basis conversion')) fail('manifest must identify Blender Z-up basis conversion');
   if (!manifest.orientation_contract || !String(manifest.orientation_contract.visual_regression_prevented || '').includes('wheels must sit inside side skirts')) fail('manifest must preserve upright/gun/skirt orientation contract');
   if (!manifest.runtime_contract?.side_skirt_occlusion) fail('manifest must preserve side skirt occlusion contract');
-  if (!String(manifest.silhouette_revision || '').includes('v1-8-integrated-front-gap-coverage')) fail('manifest must record integrated front gap coverage revision');
-  if (!String(manifest.runtime_contract?.front_shoulder_armor || '').includes('integrated front gap upper/lower covers')) fail('manifest must describe integrated front gap upper/lower covers');
+  if (!String(manifest.silhouette_revision || '').includes('v1-9-exterior-front-gap-coverage')) fail('manifest must record exterior front gap coverage revision');
+  if (!String(manifest.runtime_contract?.front_shoulder_armor || '').includes('outside track-skirt side plane')) fail('manifest must describe exterior front gap covers on the outside side plane');
   if (!String(manifest.source_policy || '').includes('no Meshy chassis or turret')) fail('manifest must reject Meshy chassis/turret imports');
   if (!String(manifest.uv_policy || '').includes('box and planar UV plates')) fail('manifest must use box/planar UV plate policy');
   if (triangleCount > 6000) fail('GLB must stay below 6000 triangles, saw ' + triangleCount);
@@ -172,6 +172,11 @@ if (failures.length === 0) {
   if (!barrelBounds || !(barrelBounds.size[0] > 1.0 && barrelBounds.size[0] > barrelBounds.size[1] * 6 && barrelBounds.size[0] > barrelBounds.size[2] * 6)) fail('barrel mesh must be long on X, not vertical/perpendicular; saw ' + axisString(barrelBounds));
   if (!coaxBounds || !(coaxBounds.size[0] > 0.45 && coaxBounds.size[0] > coaxBounds.size[1] * 6 && coaxBounds.size[0] > coaxBounds.size[2] * 6)) fail('coaxial MG mesh must be visible and long on X; saw ' + axisString(coaxBounds));
   if (!roadwheelBounds || !(roadwheelBounds.size[2] < roadwheelBounds.size[0] * 0.45 && roadwheelBounds.size[2] < roadwheelBounds.size[1] * 0.45)) fail('roadwheel disc must be thin on Z so it faces the hull side; saw ' + axisString(roadwheelBounds));
+
+  const leftExteriorCover = nodeWorldBoundsByName(json, 'left_exterior_front_gap_cover__hull_left');
+  const rightExteriorCover = nodeWorldBoundsByName(json, 'right_exterior_front_gap_cover__hull_right');
+  if (!leftExteriorCover || !(leftExteriorCover.min[2] > 1.0 && leftExteriorCover.size[0] > 0.9 && leftExteriorCover.size[1] > 0.8)) fail('left exterior front gap cover must sit outside the exported positive-Z skirt and visibly cover front/vertical gap; saw ' + axisString(leftExteriorCover));
+  if (!rightExteriorCover || !(rightExteriorCover.max[2] < -1.0 && rightExteriorCover.size[0] > 0.9 && rightExteriorCover.size[1] > 0.8)) fail('right exterior front gap cover must sit outside the exported negative-Z skirt and visibly cover front/vertical gap; saw ' + axisString(rightExteriorCover));
   for (const id of facePlateIds) {
     if (!manifest.face_plate_ids?.includes(id)) fail('manifest missing face plate id ' + id);
     if (!materialNames.has(id)) fail('GLB missing material slot ' + id);
@@ -186,10 +191,11 @@ if (failures.length === 0) {
     if (blenderScript.includes(forbidden) || wrapper.includes(forbidden)) fail('boxmodel exporter must not use rejected/import marker ' + forbidden);
   }
   if (!blenderScript.includes('def P(') || !blenderScript.includes('Blender is Z-up')) fail('boxmodel exporter must declare Blender basis conversion helpers');
-  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-8-20260704']) {
+  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-9-20260704']) {
     if (!runtime.includes(marker)) fail('boxmodel runtime missing marker ' + marker);
   }
   if (!build.includes("buildEntry('boxmodel-tank.ts', 'boxmodel-tank')")) fail('build must bundle boxmodel-tank.ts');
+  if (!runtime.includes('authored_sherman_boxmodel_v1.glb?v=v1-9-front-gap-exterior-cover')) fail('runtime must version the authored boxmodel GLB URL so asset caching cannot hide geometry changes');
   if (!build.includes("writeBundledHtml('boxmodel-tank.html', 'boxmodel-tank.html', 'boxmodel-tank')")) fail('build must write boxmodel-tank.html');
 }
 

@@ -19,7 +19,7 @@ def R(rx, ry, rz):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_boxmodel_v1'
-REVISION = 'v1-8-integrated-front-gap-coverage'
+REVISION = 'v1-9-exterior-front-gap-coverage'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -98,6 +98,18 @@ def quad(name, plate_id, verts, parent, thickness=0.04):
     bevel.width = min(thickness * 0.22, 0.012)
     bevel.segments = 1
     obj.modifiers.new('weighted_plate_normals', 'WEIGHTED_NORMAL')
+    obj['armor_plate_thickness'] = thickness
+    return obj
+
+def armor_face(name, plate_id, verts, parent, thickness=0.05):
+    obj = mesh_obj(name, plate_id, verts, [tuple(range(len(verts)))], parent)
+    solid = obj.modifiers.new('armor_skin_thickness', 'SOLIDIFY')
+    solid.thickness = thickness
+    solid.offset = 0
+    bevel = obj.modifiers.new('welded_skin_edge_softener', 'BEVEL')
+    bevel.width = min(thickness * 0.20, 0.012)
+    bevel.segments = 1
+    obj.modifiers.new('weighted_skin_normals', 'WEIGHTED_NORMAL')
     obj['armor_plate_thickness'] = thickness
     return obj
 
@@ -191,14 +203,12 @@ quad('right_vertical_shoulder_gap_web__hull_right', 'hull_right', [(0.76,0.52,0.
 quad('left_visible_glacis_slot_wall__hull_left', 'hull_left', [(1.54,0.16,-0.610),(0.58,0.66,-0.585),(0.62,0.30,-0.675),(1.54,-0.04,-0.690)], hull_root, thickness=0.065)
 quad('right_visible_glacis_slot_wall__hull_right', 'hull_right', [(0.58,0.66,0.585),(1.54,0.16,0.610),(1.54,-0.04,0.690),(0.62,0.30,0.675)], hull_root, thickness=0.065)
 
-# Integrated side coverage for the front track/glacis gap. These are authored
-# armor skins, not runtime overlay tools: broad enough to cover the visible
-# triangular top void and rectangular lower void while staying parallel to the
-# track line and nearly flush with the side armor.
-quad('left_integrated_front_gap_upper_cover__hull_left', 'hull_left', [(1.58,0.18,-0.805),(0.62,0.64,-0.720),(0.58,0.26,-0.792),(1.58,-0.16,-0.835)], hull_root, thickness=0.06)
-quad('right_integrated_front_gap_upper_cover__hull_right', 'hull_right', [(0.62,0.64,0.720),(1.58,0.18,0.805),(1.58,-0.16,0.835),(0.58,0.26,0.792)], hull_root, thickness=0.06)
-quad('left_integrated_front_gap_lower_cover__hull_left', 'hull_left', [(1.58,-0.12,-0.835),(0.58,0.22,-0.792),(0.58,-0.38,-0.850),(1.58,-0.42,-0.850)], hull_root, thickness=0.065)
-quad('right_integrated_front_gap_lower_cover__hull_right', 'hull_right', [(0.58,0.22,0.792),(1.58,-0.12,0.835),(1.58,-0.42,0.850),(0.58,-0.38,0.850)], hull_root, thickness=0.065)
+# Exterior side-plane coverage for the front track/glacis gap. v1-8 placed
+# coverage inboard and produced no visible change; these v1-9 armor skins sit
+# at the outside skirt plane so the visible triangular and lower rectangular
+# air pockets are covered by attached hull-colored metal.
+armor_face('left_exterior_front_gap_cover__hull_left', 'hull_left', [(1.64,-0.44,-1.045),(0.52,-0.44,-1.045),(0.52,0.30,-1.045),(0.66,0.66,-1.045),(1.64,0.22,-1.045)], hull_root, thickness=0.055)
+armor_face('right_exterior_front_gap_cover__hull_right', 'hull_right', [(0.52,-0.44,1.045),(1.64,-0.44,1.045),(1.64,0.22,1.045),(0.66,0.66,1.045),(0.52,0.30,1.045)], hull_root, thickness=0.055)
 
 for z, side, wheel_parent in [(-0.83,'left',left_wheels),(0.83,'right',right_wheels)]:
     sign = -1 if z < 0 else 1
@@ -276,7 +286,7 @@ manifest = {
         'authored_axes': 'X forward/back, Y up/down, Z left/right',
         'blender_axes': 'X forward/back, Y left/right, Z up/down after P/S/R conversion helpers',
         'threejs_axes_after_gltf': 'X forward/back, Y up/down, Z left/right',
-        'visual_regression_prevented': 'tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front glacis shoulders must have visible slot walls plus integrated front gap coverage closing the dark triangular and lower rectangular air gaps, without wing plates or runtime overlays'
+        'visual_regression_prevented': 'tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front glacis shoulders must have visible slot walls plus exterior front gap coverage on the outside side-plane closing the dark triangular and lower rectangular air gaps, without wing plates or runtime overlays'
     },
     'runtime_contract': {
         'turret_traverse': 'rotate turret_traverse_pivot around Y',
@@ -285,7 +295,7 @@ manifest = {
         'tread_motion': 'scroll material maps on left_track_motion and right_track_motion',
         'wheel_motion': 'rotate children of left_roadwheel_group and right_roadwheel_group',
         'side_skirt_occlusion': 'roadwheel discs sit inside track skirt volume; exterior track cover hides tire backs from front and side views',
-        'front_shoulder_armor': 'flush glacis shoulder plates, visible slot walls, and integrated front gap upper/lower covers close the triangular top void and lower rectangular void between front wedge and track pods without standing up as side wings or relying on runtime overlays',
+        'front_shoulder_armor': 'flush glacis shoulder plates, visible slot walls, and exterior front gap covers sit at the outside track-skirt side plane to close the triangular top void and lower rectangular void between front wedge and track pods without standing up as side wings or relying on runtime overlays',
         'commander_hatch': 'commander_hatch__turret_top is a named posture marker'
     },
     'budget': {'target_triangles': '2500-4500', 'hard_cap_triangles': 6000, 'actual_triangles': triangles, 'mesh_count': mesh_count},
