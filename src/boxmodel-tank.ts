@@ -7,7 +7,7 @@ import { applyAuthoredBoxmodelTexturePlates } from './sherman-runtime-materials'
 const root = document.querySelector<HTMLDivElement>('#boxmodel-tank-root');
 if (!root) throw new Error('missing #boxmodel-tank-root');
 
-const visualBuild = 'tftm-authored-sherman-boxmodel-v1-6-20260704';
+const visualBuild = 'tftm-authored-sherman-boxmodel-v1-7-20260704';
 
 root.innerHTML = '<main class="single-tank-shell">' +
   '<div class="single-tank-stage"><canvas aria-label="Blender Sherman boxmodel scene"></canvas></div>' +
