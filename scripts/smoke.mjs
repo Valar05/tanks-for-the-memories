@@ -102,6 +102,7 @@ for (const dep of deps) {
 }
 
 const assaySource = readFileSync('src/model-assay.ts', 'utf8');
+const cloudVisualDoctrine = readFileSync('docs/doctrine/cloud-visual-truth.md', 'utf8');
 for (const marker of ['sherman_part_meshy_kit_v1', 'RED BUILD / 24-tank animated runtime proof', 'Hero proof plus 24 independently animated tanks', 'drive-stage', 'spawnTarget = 24', 'InstancedMesh', 'InstancedBufferAttribute', 'instanceTreadPhase', 'onBeforeCompile', 'MeshStandardMaterial', 'roughnessMap', 'metalnessMap', 'normalMap', 'makeTreadMaterialSet', 'makeInstancedTreadMaterialSet', 'createTreadGeometry', 'TankAnimationState', 'seedTankState', 'smoothRandomCycle', 'tankStates', 'GLTFLoader', 'WebGLRenderer', 'Hull Upper', 'Turret Shell', 'Barrel Only', 'Mobile Gear / Wheel']) {
   if (!assaySource.includes(marker)) {
     failures.push('model assay missing Meshy kit viewer marker ' + marker);
@@ -144,6 +145,11 @@ if (assaySource.includes('animatedTextureSets = [treadHeroLeft, treadHeroRight, 
 }
 if (!assaySource.includes('const animatedTextureSets = [treadHeroLeft, treadHeroRight]')) {
   failures.push('only hero treads may use material-wide map.offset.x animation');
+}
+for (const doctrineMarker of ['False-Change Penalty', 'materially unchanged', 'code churn to masquerade as visual progress', 'visible change from the prior rejected screenshot']) {
+  if (!cloudVisualDoctrine.includes(doctrineMarker)) {
+    failures.push('cloud visual doctrine missing false-change penalty marker ' + doctrineMarker);
+  }
 }
 
 const kitManifest = JSON.parse(readFileSync('assets/generated/meshy/sherman_part_meshy_kit_v1/assembly_manifest.json', 'utf8'));

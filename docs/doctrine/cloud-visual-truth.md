@@ -10,6 +10,25 @@ The proof is not "24 instanced GPU tanks." The proof is 24 independently animate
 
 Do not accept source variables as visual proof. If the barrel still reads as an ugly black tube, or if vertical barrel motion is not visible around the turret front/socket, the build is red even when `barrelPitch` exists in code.
 
+## False-Change Penalty
+
+If a fresh cloud screenshot looks materially unchanged after a claimed visual fix, treat that as worse than a bad fix. The failure is not "the geometry needs one more tweak"; the failure is that the evidence gate allowed code churn to masquerade as visual progress.
+
+Penalty rule:
+
+- Do not make another success claim from source markers, manifests, or deploy logs.
+- State the screenshot read first, including what did not change.
+- Name the failed visible relationship in the next commit/deploy notes.
+- Add or strengthen a guard that forbids the exact false-change path.
+- Do not report "fixed" until a fresh cloud screenshot or time-separated cloud capture shows a visible delta that addresses the named relationship.
+
+For the current red build, the named false-change relationships are:
+
+- tread still reads as side/background treatment rather than a convincing track volume
+- barrel still reads as an ugly black tube
+- barrel verticality is not perceptible
+- proof UI text claims more than the visible artifact proves
+
 ## Target Artifact
 
 The current tank target is the phone-runtime Meshy Sherman:
@@ -46,6 +65,7 @@ Observed experience checklist:
 - Does the cannon appear attached to the mantlet?
 - Does the barrel use a Sherman-compatible material instead of black tube read?
 - Does the barrel visibly elevate around a rear/socket pivot?
+- Is there visible change from the prior rejected screenshot, not merely changed source?
 - Is the Meshy body visible as the main tank?
 - Is the procedural kitbash tank hidden from the player-facing preview?
 - Does the tank avoid a toy/primitive assembly read?

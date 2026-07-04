@@ -67,6 +67,11 @@ const releaseManifest = {
     'model-assay three-quarter capture showing top/bottom/front/rear tread volume rather than side-facade tread',
     'model-assay desktop medium viewport showing FPS, draw-call estimate, and 24-tank budget readout'
   ],
+  false_change_penalty: {
+    status: 'active',
+    reason: 'Fresh cloud screenshots showed no material visual delta after source-level tread/barrel changes.',
+    required_next_evidence: 'Next tank visual pass must show a fresh cloud screenshot or time-separated cloud capture with visible delta for tread volume, barrel material, and barrel verticality.'
+  },
   sense_simulation_questions: [
     'Does each candidate read as Sherman hard-surface rather than toy, pillow, primitive assembly, or soft sculpture?',
     'Are hull candidates actually hull shells without tracks, wheels, turret, barrel, or complete running gear?',
