@@ -2,7 +2,7 @@
   "ok": true,
   "failure": null,
   "project": "tanks-for-the-memories",
-  "url": "http://127.0.0.1:10228/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay.html?beacon=1&capture=1&captureFrames=8&captureIntervalMs=500&visualQaExpectedBuild=tftm-model-assay-coaxial-mg-20260704a",
+  "url": "http://127.0.0.1:9972/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay.html?beacon=1&capture=1&captureFrames=8&captureIntervalMs=500&visualQaExpectedBuild=tftm-model-assay-canonical-coaxial-mg-20260704t",
   "outDir": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/model-assay-latest",
   "report": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/model-assay-latest/visual_qa_report.json",
   "sheet": {
@@ -12,8 +12,8 @@
     "stdout": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/model-assay-latest/contact_sheet.jpg",
     "stderr": ""
   },
-  "expectedBuild": "tftm-model-assay-coaxial-mg-20260704a",
-  "loadedBuild": "tftm-model-assay-coaxial-mg-20260704a",
+  "expectedBuild": "tftm-model-assay-canonical-coaxial-mg-20260704t",
+  "loadedBuild": "tftm-model-assay-canonical-coaxial-mg-20260704t",
   "buildInfo": {
     "runtimeBuild": "",
     "indexPath": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay.html",
@@ -36,7 +36,7 @@
       "code": 0,
       "denied": true,
       "summary": [
-        "Permission Denial: can't dump PowerManagerService from from pid=29903, uid=10624 due to missing android.permission.DUMP permission"
+        "Permission Denial: can't dump PowerManagerService from from pid=29427, uid=10624 due to missing android.permission.DUMP permission"
       ]
     },
     "cmdPowerWakeup": {
@@ -54,7 +54,7 @@
   "beacons": [
     {
       "stage": "rendered",
-      "build": "tftm-model-assay-coaxial-mg-20260704a",
+      "build": "tftm-model-assay-canonical-coaxial-mg-20260704t",
       "actor": "sherman_part_meshy_kit_v1",
       "clip": "24 independent tank runtime proof",
       "clipKey": "model-assay",
@@ -63,89 +63,89 @@
       "target": "24",
       "heroGunPivotSocketX": "0.38",
       "heroGunPivotSocketY": "0.09",
-      "coaxialMgOffsetZ": "0.42",
-      "bowMgOffsetZ": "0.36"
+      "antiPersonnelWeapon": "cannon_chain_mg",
+      "cannonMgOffsetZ": "0.42"
     }
   ],
   "captures": [
     {
       "frame": "0",
-      "build": "tftm-model-assay-coaxial-mg-20260704a",
+      "build": "tftm-model-assay-canonical-coaxial-mg-20260704t",
       "actor": "sherman_part_meshy_kit_v1",
       "clip": "24 independent tank runtime proof",
       "clipKey": "model-assay",
       "frameMode": "cloud-visual-truth",
-      "bytes": 413212,
+      "bytes": 421400,
       "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/model-assay-latest/frame_000.png"
     },
     {
       "frame": "1",
-      "build": "tftm-model-assay-coaxial-mg-20260704a",
+      "build": "tftm-model-assay-canonical-coaxial-mg-20260704t",
       "actor": "sherman_part_meshy_kit_v1",
       "clip": "24 independent tank runtime proof",
       "clipKey": "model-assay",
       "frameMode": "cloud-visual-truth",
-      "bytes": 409692,
+      "bytes": 414860,
       "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/model-assay-latest/frame_001.png"
     },
     {
       "frame": "2",
-      "build": "tftm-model-assay-coaxial-mg-20260704a",
+      "build": "tftm-model-assay-canonical-coaxial-mg-20260704t",
       "actor": "sherman_part_meshy_kit_v1",
       "clip": "24 independent tank runtime proof",
       "clipKey": "model-assay",
       "frameMode": "cloud-visual-truth",
-      "bytes": 486915,
+      "bytes": 466172,
       "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/model-assay-latest/frame_002.png"
     },
     {
       "frame": "3",
-      "build": "tftm-model-assay-coaxial-mg-20260704a",
+      "build": "tftm-model-assay-canonical-coaxial-mg-20260704t",
       "actor": "sherman_part_meshy_kit_v1",
       "clip": "24 independent tank runtime proof",
       "clipKey": "model-assay",
       "frameMode": "cloud-visual-truth",
-      "bytes": 495036,
+      "bytes": 480665,
       "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/model-assay-latest/frame_003.png"
     },
     {
       "frame": "4",
-      "build": "tftm-model-assay-coaxial-mg-20260704a",
+      "build": "tftm-model-assay-canonical-coaxial-mg-20260704t",
       "actor": "sherman_part_meshy_kit_v1",
       "clip": "24 independent tank runtime proof",
       "clipKey": "model-assay",
       "frameMode": "cloud-visual-truth",
-      "bytes": 471731,
+      "bytes": 489282,
       "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/model-assay-latest/frame_004.png"
     },
     {
       "frame": "5",
-      "build": "tftm-model-assay-coaxial-mg-20260704a",
+      "build": "tftm-model-assay-canonical-coaxial-mg-20260704t",
       "actor": "sherman_part_meshy_kit_v1",
       "clip": "24 independent tank runtime proof",
       "clipKey": "model-assay",
       "frameMode": "cloud-visual-truth",
-      "bytes": 471304,
+      "bytes": 466791,
       "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/model-assay-latest/frame_005.png"
     },
     {
       "frame": "6",
-      "build": "tftm-model-assay-coaxial-mg-20260704a",
+      "build": "tftm-model-assay-canonical-coaxial-mg-20260704t",
       "actor": "sherman_part_meshy_kit_v1",
       "clip": "24 independent tank runtime proof",
       "clipKey": "model-assay",
       "frameMode": "cloud-visual-truth",
-      "bytes": 460392,
+      "bytes": 467499,
       "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/model-assay-latest/frame_006.png"
     },
     {
       "frame": "7",
-      "build": "tftm-model-assay-coaxial-mg-20260704a",
+      "build": "tftm-model-assay-canonical-coaxial-mg-20260704t",
       "actor": "sherman_part_meshy_kit_v1",
       "clip": "24 independent tank runtime proof",
       "clipKey": "model-assay",
       "frameMode": "cloud-visual-truth",
-      "bytes": 457777,
+      "bytes": 455354,
       "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/model-assay-latest/frame_007.png"
     }
   ],
@@ -153,222 +153,186 @@
   "requestedFrames": 8,
   "newestScreenshots": [
     {
-      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260703-233634.png",
-      "mtimeMs": 1783139795478.1055,
-      "mtime": "2026-07-04T04:36:35.478Z",
-      "bytes": 1035774
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-103327.png",
+      "mtimeMs": 1783179208007.8765,
+      "mtime": "2026-07-04T15:33:28.008Z",
+      "bytes": 394321
     },
     {
-      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260703-232458.png",
-      "mtimeMs": 1783139099358.105,
-      "mtime": "2026-07-04T04:24:59.358Z",
-      "bytes": 959495
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-103156.png",
+      "mtimeMs": 1783179117191.8762,
+      "mtime": "2026-07-04T15:31:57.192Z",
+      "bytes": 170483
     },
     {
-      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260703-231259.png",
-      "mtimeMs": 1783138380202.1045,
-      "mtime": "2026-07-04T04:13:00.202Z",
-      "bytes": 925578
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-103151.png",
+      "mtimeMs": 1783179111855.8762,
+      "mtime": "2026-07-04T15:31:51.856Z",
+      "bytes": 259268
     },
     {
-      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260703-231257.png",
-      "mtimeMs": 1783138377582.1045,
-      "mtime": "2026-07-04T04:12:57.582Z",
-      "bytes": 868760
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-101154.png",
+      "mtimeMs": 1783177915067.4998,
+      "mtime": "2026-07-04T15:11:55.067Z",
+      "bytes": 986972
     },
     {
-      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260703-225227.png",
-      "mtimeMs": 1783137147854.1035,
-      "mtime": "2026-07-04T03:52:27.854Z",
-      "bytes": 388921
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-100722.png",
+      "mtimeMs": 1783177642499.4995,
+      "mtime": "2026-07-04T15:07:22.499Z",
+      "bytes": 572664
     },
     {
-      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260703-224404.png",
-      "mtimeMs": 1783136644746.103,
-      "mtime": "2026-07-04T03:44:04.746Z",
-      "bytes": 360188
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-100435.png",
+      "mtimeMs": 1783177475867.4995,
+      "mtime": "2026-07-04T15:04:35.867Z",
+      "bytes": 486894
     },
     {
-      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260703-224313.png",
-      "mtimeMs": 1783136593594.103,
-      "mtime": "2026-07-04T03:43:13.594Z",
-      "bytes": 388287
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-095717.png",
+      "mtimeMs": 1783177037343.499,
+      "mtime": "2026-07-04T14:57:17.343Z",
+      "bytes": 619242
     },
     {
-      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260703-223924.png",
-      "mtimeMs": 1783136364950.1028,
-      "mtime": "2026-07-04T03:39:24.950Z",
-      "bytes": 913603
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-094136.png",
+      "mtimeMs": 1783176096651.4983,
+      "mtime": "2026-07-04T14:41:36.651Z",
+      "bytes": 528408
     }
   ],
   "recentRequests": [
     {
       "method": "GET",
       "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay.html",
-      "query": "?beacon=1&capture=1&captureFrames=8&captureIntervalMs=500&visualQaExpectedBuild=tftm-model-assay-coaxial-mg-20260704a",
-      "t": 1783140463110
+      "query": "?beacon=1&capture=1&captureFrames=8&captureIntervalMs=500&visualQaExpectedBuild=tftm-model-assay-canonical-coaxial-mg-20260704t",
+      "t": 1783179461009
     },
     {
       "method": "GET",
       "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/assets/model-assay.css",
-      "query": "?v=1783140434596",
-      "t": 1783140463243
+      "query": "?v=1783179408060",
+      "t": 1783179461103
     },
     {
       "method": "GET",
       "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/assets/model-assay.js",
-      "query": "?v=1783140434596",
-      "t": 1783140463249
+      "query": "?v=1783179408060",
+      "t": 1783179461105
     },
     {
       "method": "GET",
       "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_part_meshy_kit_v1/assembly_manifest.json",
       "query": "",
-      "t": 1783140463341
-    },
-    {
-      "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_part_meshy_kit_v1/hull.glb",
-      "query": "",
-      "t": 1783140463495
-    },
-    {
-      "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_part_meshy_kit_v1/turret.glb",
-      "query": "",
-      "t": 1783140463537
-    },
-    {
-      "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_mantlet_socket_v1/glb.glb",
-      "query": "",
-      "t": 1783140463546
-    },
-    {
-      "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_part_meshy_kit_v1/barrel_only.glb",
-      "query": "",
-      "t": 1783140463553
-    },
-    {
-      "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_coaxial_mg_v1/glb.glb",
-      "query": "",
-      "t": 1783140463557
-    },
-    {
-      "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_part_meshy_kit_v1/gear_mobile.glb",
-      "query": "",
-      "t": 1783140463610
+      "t": 1783179461166
     },
     {
       "method": "GET",
       "path": "/favicon.ico",
       "query": "",
-      "t": 1783140463974
+      "t": 1783179461192
     },
     {
       "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_runtime_pbr_v1/olive_albedo.png",
+      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_part_meshy_kit_v1/hull.glb",
       "query": "",
-      "t": 1783140464454
+      "t": 1783179461219
     },
     {
       "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_runtime_pbr_v1/olive_roughness.png",
+      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_part_meshy_kit_v1/turret.glb",
       "query": "",
-      "t": 1783140464461
+      "t": 1783179461233
     },
     {
       "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_runtime_pbr_v1/olive_metalness.png",
+      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_mantlet_socket_v1/glb.glb",
       "query": "",
-      "t": 1783140464462
+      "t": 1783179461236
     },
     {
       "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_runtime_pbr_v1/olive_normal.png",
+      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_part_meshy_kit_v1/barrel_only.glb",
       "query": "",
-      "t": 1783140464466
+      "t": 1783179461241
     },
     {
       "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_runtime_pbr_v1/tread_albedo.png",
+      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_coaxial_mg_v1/glb.glb",
       "query": "",
-      "t": 1783140464729
+      "t": 1783179461245
     },
     {
       "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_runtime_pbr_v1/tread_roughness.png",
+      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_part_meshy_kit_v1/gear_mobile.glb",
       "query": "",
-      "t": 1783140464732
+      "t": 1783179461252
     },
     {
       "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_runtime_pbr_v1/tread_metalness.png",
+      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_default_texture_set_v1/olive_albedo.png",
       "query": "",
-      "t": 1783140464732
+      "t": 1783179462010
     },
     {
       "method": "GET",
-      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_runtime_pbr_v1/tread_normal.png",
+      "path": "/tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay/sherman_default_texture_set_v1/tread_albedo.png",
       "query": "",
-      "t": 1783140464733
+      "t": 1783179462150
     },
     {
       "method": "POST",
       "path": "/__visual_qa_smoke",
-      "query": "?stage=rendered&build=tftm-model-assay-coaxial-mg-20260704a&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth&sourceName=tanks-for-the-memories&target=24&heroGunPivotSocketX=0.38&heroGunPivotSocketY=0.09&coaxialMgOffsetZ=0.42&bowMgOffsetZ=0.36",
-      "t": 1783140465229
+      "query": "?stage=rendered&build=tftm-model-assay-canonical-coaxial-mg-20260704t&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth&sourceName=tanks-for-the-memories&target=24&heroGunPivotSocketX=0.38&heroGunPivotSocketY=0.09&antiPersonnelWeapon=cannon_chain_mg&cannonMgOffsetZ=0.42",
+      "t": 1783179462609
     },
     {
       "method": "POST",
       "path": "/__visual_qa_capture",
-      "query": "?frame=0&build=tftm-model-assay-coaxial-mg-20260704a&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
-      "t": 1783140465528
+      "query": "?frame=0&build=tftm-model-assay-canonical-coaxial-mg-20260704t&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
+      "t": 1783179462790
     },
     {
       "method": "POST",
       "path": "/__visual_qa_capture",
-      "query": "?frame=1&build=tftm-model-assay-coaxial-mg-20260704a&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
-      "t": 1783140465614
+      "query": "?frame=1&build=tftm-model-assay-canonical-coaxial-mg-20260704t&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
+      "t": 1783179462825
     },
     {
       "method": "POST",
       "path": "/__visual_qa_capture",
-      "query": "?frame=2&build=tftm-model-assay-coaxial-mg-20260704a&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
-      "t": 1783140465870
+      "query": "?frame=2&build=tftm-model-assay-canonical-coaxial-mg-20260704t&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
+      "t": 1783179463257
     },
     {
       "method": "POST",
       "path": "/__visual_qa_capture",
-      "query": "?frame=3&build=tftm-model-assay-coaxial-mg-20260704a&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
-      "t": 1783140466383
+      "query": "?frame=3&build=tftm-model-assay-canonical-coaxial-mg-20260704t&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
+      "t": 1783179463790
     },
     {
       "method": "POST",
       "path": "/__visual_qa_capture",
-      "query": "?frame=4&build=tftm-model-assay-coaxial-mg-20260704a&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
-      "t": 1783140466888
+      "query": "?frame=4&build=tftm-model-assay-canonical-coaxial-mg-20260704t&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
+      "t": 1783179464255
     },
     {
       "method": "POST",
       "path": "/__visual_qa_capture",
-      "query": "?frame=5&build=tftm-model-assay-coaxial-mg-20260704a&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
-      "t": 1783140467388
+      "query": "?frame=5&build=tftm-model-assay-canonical-coaxial-mg-20260704t&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
+      "t": 1783179464763
     },
     {
       "method": "POST",
       "path": "/__visual_qa_capture",
-      "query": "?frame=6&build=tftm-model-assay-coaxial-mg-20260704a&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
-      "t": 1783140467914
+      "query": "?frame=6&build=tftm-model-assay-canonical-coaxial-mg-20260704t&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
+      "t": 1783179465299
     },
     {
       "method": "POST",
       "path": "/__visual_qa_capture",
-      "query": "?frame=7&build=tftm-model-assay-coaxial-mg-20260704a&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
-      "t": 1783140468393
+      "query": "?frame=7&build=tftm-model-assay-canonical-coaxial-mg-20260704t&actor=sherman_part_meshy_kit_v1&clip=24+independent+tank+runtime+proof&clipKey=model-assay&frameMode=cloud-visual-truth",
+      "t": 1783179465770
     }
   ]
 }

@@ -1,0 +1,114 @@
+{
+  "ok": false,
+  "failure": {
+    "code": "page-loaded-no-rendered-beacon",
+    "message": "The page loaded but did not publish a rendered visual QA beacon."
+  },
+  "project": "tanks-for-the-memories",
+  "url": "http://127.0.0.1:10435/tanks-for-the-memories/dist/alpha-assay.html?beacon=1&capture=1&captureFrames=6&captureIntervalMs=500&visualQaExpectedBuild=tftm-commander-platoon-nose-treads-20260704b",
+  "outDir": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/alpha-assay-latest",
+  "report": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/generated/visual_qa/alpha-assay-latest/visual_qa_report.json",
+  "sheet": null,
+  "expectedBuild": "tftm-commander-platoon-nose-treads-20260704b",
+  "loadedBuild": "",
+  "buildInfo": {
+    "runtimeBuild": "",
+    "indexPath": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/dist/alpha-assay.html",
+    "cacheTokens": []
+  },
+  "launch": {
+    "code": 0,
+    "signal": null,
+    "stdout": "",
+    "stderr": ""
+  },
+  "wakeLock": {
+    "code": 0,
+    "signal": null,
+    "stdout": "",
+    "stderr": ""
+  },
+  "androidState": {
+    "dumpsysPower": {
+      "code": 0,
+      "denied": true,
+      "summary": [
+        "Permission Denial: can't dump PowerManagerService from from pid=25026, uid=10624 due to missing android.permission.DUMP permission"
+      ]
+    },
+    "cmdPowerWakeup": {
+      "code": 255,
+      "permitted": false,
+      "output": "Error: java.lang.SecurityException: Neither user 10624 nor current process has android.permission.DEVICE_POWER."
+    }
+  },
+  "readyBroadcast": null,
+  "beacons": [],
+  "captures": [],
+  "captureComplete": false,
+  "requestedFrames": 6,
+  "newestScreenshots": [
+    {
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-020118.png",
+      "mtimeMs": 1783148478646.112,
+      "mtime": "2026-07-04T07:01:18.646Z",
+      "bytes": 384557
+    },
+    {
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-015029.png",
+      "mtimeMs": 1783147829346.1116,
+      "mtime": "2026-07-04T06:50:29.346Z",
+      "bytes": 399111
+    },
+    {
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-015023.png",
+      "mtimeMs": 1783147823842.1116,
+      "mtime": "2026-07-04T06:50:23.842Z",
+      "bytes": 160848
+    },
+    {
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-014048.png",
+      "mtimeMs": 1783147248466.111,
+      "mtime": "2026-07-04T06:40:48.466Z",
+      "bytes": 384307
+    },
+    {
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-013805.png",
+      "mtimeMs": 1783147085774.111,
+      "mtime": "2026-07-04T06:38:05.774Z",
+      "bytes": 367699
+    },
+    {
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-012627.png",
+      "mtimeMs": 1783146387434.1106,
+      "mtime": "2026-07-04T06:26:27.434Z",
+      "bytes": 367470
+    },
+    {
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-012616.png",
+      "mtimeMs": 1783146376606.1106,
+      "mtime": "2026-07-04T06:26:16.606Z",
+      "bytes": 161876
+    },
+    {
+      "path": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-011933.png",
+      "mtimeMs": 1783145974138.11,
+      "mtime": "2026-07-04T06:19:34.138Z",
+      "bytes": 640650
+    }
+  ],
+  "recentRequests": [
+    {
+      "method": "GET",
+      "path": "/tanks-for-the-memories/dist/alpha-assay.html",
+      "query": "?beacon=1&capture=1&captureFrames=6&captureIntervalMs=500&visualQaExpectedBuild=tftm-commander-platoon-nose-treads-20260704b",
+      "t": 1783150922572
+    },
+    {
+      "method": "GET",
+      "path": "/favicon.ico",
+      "query": "",
+      "t": 1783150922872
+    }
+  ]
+}
