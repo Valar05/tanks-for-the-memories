@@ -69,9 +69,15 @@ const requiredFiles = [
   'public/tftm/models/vanilla_sherman_packed/model_manifest.json',
   'public/tftm/models/vanilla_sherman_meshy_single_file/vanilla_sherman_meshy_single_file.glb',
   'public/tftm/models/vanilla_sherman_meshy_single_file/model_manifest.json',
+  'public/tftm/models/alpha_sherman_combined/alpha_sherman.glb',
+  'public/tftm/models/alpha_sherman_combined/model_manifest.json',
+  'public/tftm/models/alpha_sherman_meshy_single_file/alpha_sherman_meshy_single_file.glb',
+  'public/tftm/models/alpha_sherman_meshy_single_file/model_manifest.json',
   'scripts/pack_vanilla_sherman_for_meshy.mjs',
   'scripts/pack_vanilla_sherman_textures.mjs',
   'scripts/export_vanilla_sherman_glb.mjs',
+  'scripts/export_alpha_sherman_variant.mjs',
+  'scripts/pack_alpha_sherman_for_meshy.mjs',
   'assets/generated/meshy/sherman_runtime_tread_pbr_v1/sherman_runtime_tread_pbr_v1_concept.png',
   'assets/generated/meshy/sherman_runtime_tread_pbr_v1/manifest.json',
   'assets/generated/openai/sherman_runtime_pbr_v1/manifest.json',
@@ -368,6 +374,51 @@ const vanillaMeshyPacker = readFileSync('scripts/pack_vanilla_sherman_for_meshy.
 for (const meshyPackMarker of ['vanilla_sherman_meshy_single_file', 'data:${source.mimeType};base64', 'baseColorFactor', 'meshyCompatibility']) {
   if (!vanillaMeshyPacker.includes(meshyPackMarker)) {
     failures.push('vanilla Meshy packer missing marker ' + meshyPackMarker);
+  }
+}
+
+const alphaCombinedManifest = JSON.parse(readFileSync('public/tftm/models/alpha_sherman_combined/model_manifest.json', 'utf8'));
+if (alphaCombinedManifest.asset_id !== 'alpha_sherman_combined') {
+  failures.push('Alpha combined Sherman manifest missing asset_id');
+}
+if (alphaCombinedManifest.runtime_contract?.vanilla_identity !== false) {
+  failures.push('Alpha combined Sherman must not claim vanilla identity');
+}
+if (alphaCombinedManifest.runtime_contract?.character_identity !== 'alpha_player_sherman') {
+  failures.push('Alpha combined Sherman must declare alpha_player_sherman identity');
+}
+for (const motif of ['crimson recognition stripe', 'white A turret mark', 'chalk crew marks', 'field dirt']) {
+  if (!alphaCombinedManifest.runtime_contract?.visual_motifs?.includes(motif)) {
+    failures.push('Alpha combined Sherman missing visual motif ' + motif);
+  }
+}
+if (!String(alphaCombinedManifest.runtime_contract?.reference_image || '').includes('/storage/emulated/0/Download/file_00000000544c720ca6775c5f5fb2a678 (1).png')) {
+  failures.push('Alpha combined Sherman must preserve newest Downloads reference image path');
+}
+if (alphaCombinedManifest.approximate_triangles > 20000) {
+  failures.push('Alpha combined Sherman exceeds phone gate target triangles');
+}
+
+const alphaMeshyManifest = JSON.parse(readFileSync('public/tftm/models/alpha_sherman_meshy_single_file/model_manifest.json', 'utf8'));
+if (alphaMeshyManifest.asset_id !== 'alpha_sherman_meshy_single_file') {
+  failures.push('Alpha Meshy single-file manifest missing asset_id');
+}
+if (!String(alphaMeshyManifest.texture_pack_mode || '').includes('data-uri')) {
+  failures.push('Alpha Meshy single-file GLB must declare data-uri texture mode');
+}
+if (!String(alphaMeshyManifest.note || '').includes('geometry decals preserve identity')) {
+  failures.push('Alpha Meshy single-file manifest must preserve geometry-decal fallback note');
+}
+const alphaExporter = readFileSync('scripts/export_alpha_sherman_variant.mjs', 'utf8');
+for (const marker of ['alpha_sherman_combined', 'addAlphaCharacterMarks', 'alpha_crimson_glacis_recognition_stripe', "'_A_crossbar'", 'alpha_front_chalk_A17_plate', 'alpha_dust_scratch_']) {
+  if (!alphaExporter.includes(marker)) {
+    failures.push('Alpha exporter missing character marker ' + marker);
+  }
+}
+const alphaMeshyPacker = readFileSync('scripts/pack_alpha_sherman_for_meshy.mjs', 'utf8');
+for (const marker of ['alpha_sherman_meshy_single_file', 'data:${source.mimeType};base64', 'alphaCrimsonRecognitionPaint', 'alphaChalkMarking', 'alphaDustScratches', 'baseColorFactor', 'meshyCompatibility']) {
+  if (!alphaMeshyPacker.includes(marker)) {
+    failures.push('Alpha Meshy packer missing marker ' + marker);
   }
 }
 

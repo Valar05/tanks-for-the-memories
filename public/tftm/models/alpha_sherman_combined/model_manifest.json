@@ -1,0 +1,41 @@
+{
+  "asset_id": "alpha_sherman_combined",
+  "display_name": "Alpha Sherman Combined",
+  "generated_at": "2026-07-04T05:24:51.495Z",
+  "generator": "scripts/export_alpha_sherman_variant.mjs",
+  "output_glb": "public/tftm/models/alpha_sherman_combined/alpha_sherman.glb",
+  "source_components": {
+    "hull": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_meshy_kit_v1/hull.glb",
+    "turret": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_meshy_kit_v1/turret.glb",
+    "barrel": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_meshy_kit_v1/barrel_only.glb",
+    "gear": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_meshy_kit_v1/gear_mobile.glb",
+    "mantletSocket": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_mantlet_socket_v1/glb.glb",
+    "machineGun": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_coaxial_mg_v1/glb.glb"
+  },
+  "composition": [
+    "Meshy hull upper",
+    "Meshy turret shell",
+    "Meshy mantlet socket",
+    "Meshy barrel only",
+    "Meshy bow anti-personnel MG module; separated coaxial component included for runtime assembly",
+    "Alpha player-character markings based on newest Downloads reference image",
+    "Meshy mobile gear wheels",
+    "authored closed Sherman-like trapezoid tread ribbons with sidewall blockers"
+  ],
+  "runtime_contract": {
+    "static_combined_asset": true,
+    "phone_gate_target_triangles": 20000,
+    "export_decimation": "SimplifyModifier applied to combined static GLB only; source Meshy component GLBs are unchanged and included in component zip.",
+    "animation_source": "Use separated source components for turret traverse, barrel elevation, wheel spin, and tread material animation.",
+    "vanilla_identity": false,
+    "character_identity": "alpha_player_sherman",
+    "reference_image": "/storage/emulated/0/Download/file_00000000544c720ca6775c5f5fb2a678 (1).png",
+    "visual_motifs": [
+      "crimson recognition stripe",
+      "white A turret mark",
+      "chalk crew marks",
+      "field dirt"
+    ]
+  },
+  "approximate_triangles": 14431
+}

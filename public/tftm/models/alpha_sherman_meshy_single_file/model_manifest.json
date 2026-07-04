@@ -1,0 +1,18 @@
+{
+  "asset_id": "alpha_sherman_meshy_single_file",
+  "display_name": "Alpha Sherman Meshy Single File GLB",
+  "generated_at": "2026-07-04T05:24:57.579Z",
+  "generator": "scripts/pack_alpha_sherman_for_meshy.mjs",
+  "source_glb": "public/tftm/models/alpha_sherman_combined/alpha_sherman.glb",
+  "alpha_reference_image": "/storage/emulated/0/Download/file_00000000544c720ca6775c5f5fb2a678 (1).png",
+  "output_glb": "public/tftm/models/alpha_sherman_meshy_single_file/alpha_sherman_meshy_single_file.glb",
+  "texture_pack_mode": "data-uri images embedded in GLB JSON for Meshy importer compatibility",
+  "embedded_textures": [
+    "assets/generated/openai/sherman_runtime_pbr_v1/olive_albedo.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/olive_normal.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/tread_albedo.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/tread_normal.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/tread_roughness.png"
+  ],
+  "note": "Player-character Alpha Sherman. Use this file for Meshy upload; data-uri textures plus geometry decals preserve identity if importer drops PBR."
+}
