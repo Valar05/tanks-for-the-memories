@@ -17,6 +17,8 @@ Required pre-wake commands use the cloud release lane only. Choose the target su
 ```sh
 npm run visual-qa:model-assay
 npm run visual-qa:single-tank
+npm run visual-qa:boxmodel-tank
+npm run boxmodel-tuner-smoke
 ```
 
 The command result is not visual acceptance by itself. Acceptance requires cloud-hosted Sense Simulation review showing:
@@ -168,6 +170,12 @@ The `authored_sherman_retopo_v1` asset now carries silhouette revision `v1.1-she
 The current cloud-first visual candidate is `authored_sherman_boxmodel_v1`, not the rejected high-poly retopo. Acceptance requires Sense Simulation on `boxmodel-tank.html` to confirm the silhouette moved toward a Sherman, the turret no longer reads as a cube, the barrel/mantlet relationship is coherent, and the box UV plates are paintable without local capture evidence.
 
 The boxmodel v1.1 repair requires solidified overlapping armor plates and a named coaxial MG on the cannon elevation assembly; zero-thickness separated planes are a red build.
+
+### Boxmodel Gesture Tuner Gate
+
+When a cloud screenshot disproves a boxmodel armor fix and the remaining problem is coordinate placement, stop blind exporter edits and use the hosted gesture-only tuner at `boxmodel-tank.html?tune=1`. The tuner is the required authoring surface for one-part-at-a-time location, rotation, and scale edits. It must show a parts list, one selected highlighted part, move/rotate/scale controls, right-side camera rotation, exportable tuning JSON or URL state, and no 3D gizmo.
+
+Acceptance still requires cloud/Sense review. Local screenshots, localhost inspection, Android `screencap`, and local visual-harness frames remain forbidden. Bake only a cloud-reviewed tuning snapshot back into the exporter or model source.
 ## Boxmodel Red-Build Axis Rule - 2026-07-04
 
 For `boxmodel-tank.html`, the cloud/Sense review must explicitly reject any build where the tank lies on its side, wheels face vertically, hatches appear on side armor, or armor plates read as detached cardboard planes. Local capture remains forbidden; however, source validators must still prove the GLB runtime bounds are X length, Y height, Z width before deployment.
