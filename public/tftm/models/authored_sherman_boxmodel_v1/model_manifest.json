@@ -1,13 +1,13 @@
 {
   "asset_id": "authored_sherman_boxmodel_v1",
   "display_name": "Authored Sherman Boxmodel V1",
-  "silhouette_revision": "v1-blender-boxmodel-sherman-silhouette",
-  "generated_at": "2026-07-04T18:09:29.715294Z",
+  "silhouette_revision": "v1-1-solid-armor-plates-coaxial-mg",
+  "generated_at": "2026-07-04T18:27:13.602283Z",
   "generator": "scripts/export_authored_sherman_boxmodel.py",
   "blender": "4.3.2",
   "source_blend": "assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend",
   "output_glb": "public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb",
-  "source_policy": "fully authored Blender box-model geometry; no Meshy chassis or turret imports; rejected retopo remains prior evidence only",
+  "source_policy": "fully authored Blender box-model geometry with solidified overlapping armor plates and coaxial MG; no Meshy chassis or turret imports; rejected retopo remains prior evidence only",
   "uv_policy": "box and planar UV plates, one 0-1 paintable plate per surface family; no atlas packing",
   "dalle_paintability": {
     "template_dir": "assets/authored/authored_sherman_boxmodel_v1/texture_templates",
@@ -28,6 +28,7 @@
     "turret_bustle",
     "mantlet",
     "barrel_strip",
+    "coaxial_mg",
     "track_outer",
     "track_inner_top_bottom",
     "wheel_disc",
@@ -41,6 +42,7 @@
     "cannon_elevation_pivot",
     "mantlet",
     "barrel",
+    "coaxial_mg",
     "left_track_motion",
     "right_track_motion",
     "left_roadwheel_group",
@@ -49,7 +51,8 @@
   ],
   "runtime_contract": {
     "turret_traverse": "rotate turret_traverse_pivot around Y",
-    "cannon_elevation": "rotate cannon_elevation_pivot for barrel pitch",
+    "cannon_elevation": "rotate cannon_elevation_pivot for barrel and coaxial MG pitch",
+    "coaxial_mg": "coaxial_mg is parented to cannon_elevation_pivot and must move with the barrel",
     "tread_motion": "scroll material maps on left_track_motion and right_track_motion",
     "wheel_motion": "rotate children of left_roadwheel_group and right_roadwheel_group",
     "commander_hatch": "commander_hatch__turret_top is a named posture marker"
@@ -57,8 +60,8 @@
   "budget": {
     "target_triangles": "2500-4500",
     "hard_cap_triangles": 6000,
-    "actual_triangles": 2618,
-    "mesh_count": 91
+    "actual_triangles": 2786,
+    "mesh_count": 97
   },
-  "approximate_triangles": 2618
+  "approximate_triangles": 2786
 }

@@ -7,11 +7,11 @@ const assetId = 'authored_sherman_boxmodel_v1';
 const blenderScript = path.join(root, 'scripts', 'export_authored_sherman_boxmodel.py');
 const templateDir = path.join(root, 'assets', 'authored', assetId, 'texture_templates');
 const runtimePlateDir = path.join(root, 'public', 'tftm', 'models', assetId, 'texture_plates');
-const facePlateIds = ['hull_glacis','hull_left','hull_right','hull_rear','engine_deck','turret_front','turret_left','turret_right','turret_top','turret_bustle','mantlet','barrel_strip','track_outer','track_inner_top_bottom','wheel_disc','bogie_side'];
+const facePlateIds = ['hull_glacis','hull_left','hull_right','hull_rear','engine_deck','turret_front','turret_left','turret_right','turret_top','turret_bustle','mantlet','barrel_strip','coaxial_mg','track_outer','track_inner_top_bottom','wheel_disc','bogie_side'];
 const plateColors = {
   hull_glacis: '#5f6b43', hull_left: '#59643f', hull_right: '#59643f', hull_rear: '#4d5737', engine_deck: '#56623f',
   turret_front: '#626d45', turret_left: '#5c6742', turret_right: '#5c6742', turret_top: '#657049', turret_bustle: '#56623f',
-  mantlet: '#4b4e3b', barrel_strip: '#414438', track_outer: '#2e2c24', track_inner_top_bottom: '#373329',
+  mantlet: '#4b4e3b', barrel_strip: '#414438', coaxial_mg: '#151612', track_outer: '#2e2c24', track_inner_top_bottom: '#373329',
   wheel_disc: '#4c4635', bogie_side: '#514a38'
 };
 

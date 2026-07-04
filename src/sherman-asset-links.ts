@@ -40,6 +40,7 @@ export const AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES = [
   'turret_bustle',
   'mantlet',
   'barrel_strip',
+  'coaxial_mg',
   'track_outer',
   'track_inner_top_bottom',
   'wheel_disc',

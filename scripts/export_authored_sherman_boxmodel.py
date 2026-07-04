@@ -7,17 +7,17 @@ from mathutils import Euler
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_boxmodel_v1'
-REVISION = 'v1-blender-boxmodel-sherman-silhouette'
+REVISION = 'v1-1-solid-armor-plates-coaxial-mg'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
 GLB_PATH = PUBLIC_DIR / (ASSET_ID + '.glb')
 MANIFEST_PATH = PUBLIC_DIR / 'model_manifest.json'
-FACE_PLATE_IDS = ['hull_glacis','hull_left','hull_right','hull_rear','engine_deck','turret_front','turret_left','turret_right','turret_top','turret_bustle','mantlet','barrel_strip','track_outer','track_inner_top_bottom','wheel_disc','bogie_side']
+FACE_PLATE_IDS = ['hull_glacis','hull_left','hull_right','hull_rear','engine_deck','turret_front','turret_left','turret_right','turret_top','turret_bustle','mantlet','barrel_strip','coaxial_mg','track_outer','track_inner_top_bottom','wheel_disc','bogie_side']
 COLORS = {
     'hull_glacis': (0.37,0.42,0.26,1), 'hull_left': (0.34,0.39,0.24,1), 'hull_right': (0.34,0.39,0.24,1), 'hull_rear': (0.29,0.33,0.21,1), 'engine_deck': (0.32,0.38,0.24,1),
     'turret_front': (0.38,0.43,0.27,1), 'turret_left': (0.36,0.40,0.25,1), 'turret_right': (0.36,0.40,0.25,1), 'turret_top': (0.39,0.44,0.29,1), 'turret_bustle': (0.34,0.39,0.25,1),
-    'mantlet': (0.29,0.30,0.23,1), 'barrel_strip': (0.25,0.26,0.22,1), 'track_outer': (0.18,0.17,0.14,1), 'track_inner_top_bottom': (0.21,0.20,0.16,1), 'wheel_disc': (0.30,0.27,0.21,1), 'bogie_side': (0.31,0.28,0.22,1)
+    'mantlet': (0.29,0.30,0.23,1), 'barrel_strip': (0.25,0.26,0.22,1), 'coaxial_mg': (0.08,0.085,0.075,1), 'track_outer': (0.18,0.17,0.14,1), 'track_inner_top_bottom': (0.21,0.20,0.16,1), 'wheel_disc': (0.30,0.27,0.21,1), 'bogie_side': (0.31,0.28,0.22,1)
 }
 
 bpy.ops.object.select_all(action='SELECT')
@@ -77,8 +77,17 @@ def mesh_obj(name, plate_id, verts, faces, parent, shade=False):
         obj.modifiers.new('weighted_armor_normals', 'WEIGHTED_NORMAL')
     return obj
 
-def quad(name, plate_id, verts, parent):
-    return mesh_obj(name, plate_id, verts, [(0,1,2,3)], parent)
+def quad(name, plate_id, verts, parent, thickness=0.04):
+    obj = mesh_obj(name, plate_id, verts, [(0,1,2,3)], parent)
+    solid = obj.modifiers.new('armor_plate_thickness', 'SOLIDIFY')
+    solid.thickness = thickness
+    solid.offset = 0
+    bevel = obj.modifiers.new('welded_plate_edge_softener', 'BEVEL')
+    bevel.width = min(thickness * 0.22, 0.012)
+    bevel.segments = 1
+    obj.modifiers.new('weighted_plate_normals', 'WEIGHTED_NORMAL')
+    obj['armor_plate_thickness'] = thickness
+    return obj
 
 def box(name, plate_id, size, loc, parent, rot=(0,0,0), bevel=0.0):
     sx, sy, sz = size
@@ -140,11 +149,11 @@ def turret_cast_mesh():
 
 box('hull_lower_tub__hull_left', 'hull_left', (3.48,0.42,1.16), (-0.08,-0.11,0), hull_root, bevel=0.015)
 box('rounded_transmission_cover__hull_glacis', 'hull_glacis', (0.28,0.36,1.02), (1.62,0.05,0), hull_root, bevel=0.055)
-quad('hull_glacis_slope__hull_glacis', 'hull_glacis', [(1.50,0.16,-0.56),(0.70,0.66,-0.48),(0.70,0.66,0.48),(1.50,0.16,0.56)], hull_root)
-quad('engine_deck_flat__engine_deck', 'engine_deck', [(0.66,0.66,-0.52),(-1.54,0.62,-0.56),(-1.54,0.62,0.56),(0.66,0.66,0.52)], hull_root)
-quad('left_sloped_sponson__hull_left', 'hull_left', [(1.42,0.05,-0.74),(-1.56,0.06,-0.74),(-1.42,0.56,-0.60),(0.74,0.63,-0.52)], hull_root)
-quad('right_sloped_sponson__hull_right', 'hull_right', [(-1.56,0.06,0.74),(1.42,0.05,0.74),(0.74,0.63,0.52),(-1.42,0.56,0.60)], hull_root)
-quad('rear_armor_plate__hull_rear', 'hull_rear', [(-1.66,-0.28,0.60),(-1.66,-0.28,-0.60),(-1.50,0.56,-0.54),(-1.50,0.56,0.54)], hull_root)
+quad('hull_glacis_slope__hull_glacis', 'hull_glacis', [(1.56,0.13,-0.59),(0.66,0.685,-0.515),(0.66,0.685,0.515),(1.56,0.13,0.59)], hull_root)
+quad('engine_deck_flat__engine_deck', 'engine_deck', [(0.72,0.675,-0.55),(-1.58,0.635,-0.59),(-1.58,0.635,0.59),(0.72,0.675,0.55)], hull_root)
+quad('left_sloped_sponson__hull_left', 'hull_left', [(1.48,0.035,-0.765),(-1.62,0.045,-0.765),(-1.46,0.585,-0.625),(0.78,0.655,-0.545)], hull_root)
+quad('right_sloped_sponson__hull_right', 'hull_right', [(-1.62,0.045,0.765),(1.48,0.035,0.765),(0.78,0.655,0.545),(-1.46,0.585,0.625)], hull_root)
+quad('rear_armor_plate__hull_rear', 'hull_rear', [(-1.69,-0.30,0.63),(-1.69,-0.30,-0.63),(-1.49,0.585,-0.57),(-1.49,0.585,0.57)], hull_root)
 for z, side, plate in [(-0.80,'left','hull_left'), (0.80,'right','hull_right')]:
     box(f'{side}_front_fender__{plate}', plate, (0.54,0.035,0.14), (1.34,0.20,z), hull_root, rot=(0,0,-0.16))
     box(f'{side}_rear_fender__{plate}', plate, (0.56,0.032,0.14), (-1.34,0.15,z), hull_root, rot=(0,0,0.08))
@@ -152,6 +161,10 @@ box('driver_hatch_left__engine_deck', 'engine_deck', (0.34,0.035,0.23), (0.76,0.
 box('driver_hatch_right__engine_deck', 'engine_deck', (0.34,0.035,0.23), (0.76,0.70,0.23), hull_root, rot=(0,0,-0.05))
 box('rear_stowage_lip__hull_rear', 'hull_rear', (0.08,0.12,0.92), (-1.62,0.62,0), hull_root)
 cylinder('turret_ring_socket__turret_top', 'turret_top', 0.52, 0.055, 40, (0.02,0.69,0), hull_root, rot=(math.pi/2,0,0))
+box('left_sponson_weld_cover__hull_left', 'hull_left', (2.72,0.045,0.055), (-0.30,0.58,-0.615), hull_root, rot=(0,0,-0.02), bevel=0.01)
+box('right_sponson_weld_cover__hull_right', 'hull_right', (2.72,0.045,0.055), (-0.30,0.58,0.615), hull_root, rot=(0,0,-0.02), bevel=0.01)
+box('glacis_deck_weld_cover__hull_glacis', 'hull_glacis', (0.08,0.04,0.98), (0.70,0.665,0), hull_root, rot=(0,0,-0.08), bevel=0.008)
+box('rear_deck_weld_cover__hull_rear', 'hull_rear', (0.06,0.05,1.02), (-1.52,0.60,0), hull_root, bevel=0.008)
 
 for z, side, wheel_parent in [(-0.83,'left',left_wheels),(0.83,'right',right_wheels)]:
     sign = -1 if z < 0 else 1
@@ -173,16 +186,18 @@ for z, side, wheel_parent in [(-0.83,'left',left_wheels),(0.83,'right',right_whe
 
 turret_cast_mesh()
 box('turret_rear_bustle__turret_bustle', 'turret_bustle', (0.48,0.26,0.58), (-0.50,0.18,0), turret_shell, bevel=0.045)
-quad('turret_front_cheek__turret_front', 'turret_front', [(0.45,0.02,-0.36),(0.73,0.18,-0.26),(0.73,0.18,0.26),(0.45,0.02,0.36)], turret_shell)
-quad('turret_left_side_skin__turret_left', 'turret_left', [(0.42,0.02,-0.36),(-0.48,0.06,-0.43),(-0.30,0.40,-0.30),(0.58,0.34,-0.24)], turret_shell)
-quad('turret_right_side_skin__turret_right', 'turret_right', [(-0.48,0.06,0.43),(0.42,0.02,0.36),(0.58,0.34,0.24),(-0.30,0.40,0.30)], turret_shell)
-quad('turret_roof_flat_panel__turret_top', 'turret_top', [(0.54,0.43,-0.22),(-0.30,0.48,-0.26),(-0.30,0.48,0.26),(0.54,0.43,0.22)], turret_shell)
+quad('turret_front_cheek__turret_front', 'turret_front', [(0.43,0.005,-0.39),(0.755,0.18,-0.285),(0.755,0.18,0.285),(0.43,0.005,0.39)], turret_shell)
+quad('turret_left_side_skin__turret_left', 'turret_left', [(0.47,0.0,-0.39),(-0.52,0.045,-0.455),(-0.33,0.425,-0.325),(0.62,0.36,-0.265)], turret_shell)
+quad('turret_right_side_skin__turret_right', 'turret_right', [(-0.52,0.045,0.455),(0.47,0.0,0.39),(0.62,0.36,0.265),(-0.33,0.425,0.325)], turret_shell)
+quad('turret_roof_flat_panel__turret_top', 'turret_top', [(0.58,0.45,-0.245),(-0.34,0.505,-0.285),(-0.34,0.505,0.285),(0.58,0.45,0.245)], turret_shell)
 cylinder('commander_hatch__turret_top', 'turret_top', 0.19, 0.07, 24, (-0.23,0.56,-0.18), turret_shell)
 cylinder('loader_hatch__turret_top', 'turret_top', 0.145, 0.055, 20, (0.16,0.53,0.22), turret_shell)
 box('turret_periscope_left__turret_top', 'turret_top', (0.18,0.055,0.08), (0.18,0.55,-0.17), turret_shell)
 box('turret_periscope_right__turret_top', 'turret_top', (0.18,0.055,0.08), (0.27,0.53,0.17), turret_shell)
 box('mantlet', 'mantlet', (0.23,0.32,0.44), (0.0,0,0), gun_pivot, bevel=0.05)
 cylinder('barrel', 'barrel_strip', 0.055, 1.38, 20, (0.76,0,0), gun_pivot, rot=(0,math.pi/2,0))
+cylinder('coaxial_mg', 'coaxial_mg', 0.024, 0.72, 16, (0.46,-0.005,-0.145), gun_pivot, rot=(0,math.pi/2,0))
+cylinder('coaxial_mg_muzzle__coaxial_mg', 'coaxial_mg', 0.032, 0.045, 16, (0.84,-0.005,-0.145), gun_pivot, rot=(0,math.pi/2,0))
 cylinder('muzzle_ring__barrel_strip', 'barrel_strip', 0.07, 0.075, 20, (1.48,0,0), gun_pivot, rot=(0,math.pi/2,0))
 box('antenna_mount__turret_top', 'turret_top', (0.035,0.32,0.035), (-0.42,1.08,0.28), tank_root, rot=(0.15,0,0.1))
 
@@ -212,7 +227,7 @@ manifest = {
     'blender': bpy.app.version_string,
     'source_blend': 'assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend',
     'output_glb': 'public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb',
-    'source_policy': 'fully authored Blender box-model geometry; no Meshy chassis or turret imports; rejected retopo remains prior evidence only',
+    'source_policy': 'fully authored Blender box-model geometry with solidified overlapping armor plates and coaxial MG; no Meshy chassis or turret imports; rejected retopo remains prior evidence only',
     'uv_policy': 'box and planar UV plates, one 0-1 paintable plate per surface family; no atlas packing',
     'dalle_paintability': {
         'template_dir': 'assets/authored/authored_sherman_boxmodel_v1/texture_templates',
@@ -221,10 +236,11 @@ manifest = {
         'first_pass': 'runtime albedo plates avoid guide seams; authoring templates retain safe-area guides.'
     },
     'face_plate_ids': FACE_PLATE_IDS,
-    'node_contract': ['tank_root','hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','left_track_motion','right_track_motion','left_roadwheel_group','right_roadwheel_group','commander_hatch__turret_top'],
+    'node_contract': ['tank_root','hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','left_track_motion','right_track_motion','left_roadwheel_group','right_roadwheel_group','commander_hatch__turret_top'],
     'runtime_contract': {
         'turret_traverse': 'rotate turret_traverse_pivot around Y',
-        'cannon_elevation': 'rotate cannon_elevation_pivot for barrel pitch',
+        'cannon_elevation': 'rotate cannon_elevation_pivot for barrel and coaxial MG pitch',
+        'coaxial_mg': 'coaxial_mg is parented to cannon_elevation_pivot and must move with the barrel',
         'tread_motion': 'scroll material maps on left_track_motion and right_track_motion',
         'wheel_motion': 'rotate children of left_roadwheel_group and right_roadwheel_group',
         'commander_hatch': 'commander_hatch__turret_top is a named posture marker'

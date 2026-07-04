@@ -8,8 +8,8 @@ const manifestPath = 'public/tftm/models/authored_sherman_boxmodel_v1/model_mani
 const blendPath = 'assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend';
 const blenderScriptPath = 'scripts/export_authored_sherman_boxmodel.py';
 const wrapperPath = 'scripts/export_authored_sherman_boxmodel.mjs';
-const facePlateIds = ['hull_glacis','hull_left','hull_right','hull_rear','engine_deck','turret_front','turret_left','turret_right','turret_top','turret_bustle','mantlet','barrel_strip','track_outer','track_inner_top_bottom','wheel_disc','bogie_side'];
-const requiredNodes = ['tank_root','hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','left_track_motion','right_track_motion','left_roadwheel_group','right_roadwheel_group','commander_hatch__turret_top'];
+const facePlateIds = ['hull_glacis','hull_left','hull_right','hull_rear','engine_deck','turret_front','turret_left','turret_right','turret_top','turret_bustle','mantlet','barrel_strip','coaxial_mg','track_outer','track_inner_top_bottom','wheel_disc','bogie_side'];
+const requiredNodes = ['tank_root','hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','left_track_motion','right_track_motion','left_roadwheel_group','right_roadwheel_group','commander_hatch__turret_top'];
 function fail(message) { failures.push(message); }
 function read(file) { return readFileSync(file, 'utf8'); }
 function parseGlbJson(file) {
@@ -62,6 +62,8 @@ if (failures.length === 0) {
   if (!String(manifest.generator || '').includes('export_authored_sherman_boxmodel.py')) fail('manifest must name Blender generator');
   if (!String(manifest.source_blend || '').includes('.blend')) fail('manifest must name source .blend');
   if (!String(manifest.source_policy || '').includes('fully authored Blender box-model')) fail('manifest must identify authored Blender box-model geometry');
+  if (!String(manifest.source_policy || '').includes('solidified overlapping armor plates')) fail('manifest must identify solidified overlapping armor plates');
+  if (!String(manifest.source_policy || '').includes('coaxial MG')) fail('manifest must identify coaxial MG');
   if (!String(manifest.source_policy || '').includes('no Meshy chassis or turret')) fail('manifest must reject Meshy chassis/turret imports');
   if (!String(manifest.uv_policy || '').includes('box and planar UV plates')) fail('manifest must use box/planar UV plate policy');
   if (triangleCount > 6000) fail('GLB must stay below 6000 triangles, saw ' + triangleCount);
@@ -77,7 +79,7 @@ if (failures.length === 0) {
   for (const forbidden of ['sherman_part_meshy_kit_v1', 'hull.glb', 'turret.glb', 'SimplifyModifier', 'RoundedBoxGeometry']) {
     if (blenderScript.includes(forbidden) || wrapper.includes(forbidden)) fail('boxmodel exporter must not use rejected/import marker ' + forbidden);
   }
-  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-20260704']) {
+  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-1-20260704']) {
     if (!runtime.includes(marker)) fail('boxmodel runtime missing marker ' + marker);
   }
   if (!build.includes("buildEntry('boxmodel-tank.ts', 'boxmodel-tank')")) fail('build must bundle boxmodel-tank.ts');
