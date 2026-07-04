@@ -25,17 +25,24 @@ if (!existsSync(shermanSourceManifestPath)) {
   process.exit(1);
 }
 
-rmSync(releaseRoot, { recursive: true, force: true });
-mkdirSync(releaseRoot, { recursive: true });
-cpSync('dist', distRoot, { recursive: true });
-
 const tankManifest = JSON.parse(readFileSync(tankManifestPath, 'utf8'));
 const shermanSourceManifest = JSON.parse(readFileSync(shermanSourceManifestPath, 'utf8'));
 const gitHead = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8' });
 const gitStatus = spawnSync('git', ['status', '--short'], { encoding: 'utf8' });
 
+rmSync(releaseRoot, { recursive: true, force: true });
+mkdirSync(releaseRoot, { recursive: true });
+cpSync('dist', distRoot, { recursive: true });
+
 const releaseManifest = {
   artifact: 'tftm-sherman-24-tank-runtime-proof-red-review',
+  visual_evidence_rule: 'local capture forbidden; acceptance requires cloud-hosted build plus Sense Simulation review',
+  single_tank_review: {
+    route: 'single-tank.html',
+    expected_build: 'tftm-single-linked-sherman-textured-v1-20260704',
+    asset_policy: 'one linked vanilla Sherman GLB; existing constrained albedo texture set linked at runtime; no copied model or texture variant',
+    acceptance: 'Sense Simulation must confirm one Sherman with visible olive armor albedo, visible tread albedo, no fused/parade/assay scene, and right-side camera interaction.'
+  },
   generated_at: new Date().toISOString(),
   source_commit: gitHead.status === 0 ? gitHead.stdout.trim() : null,
   dirty_status: gitStatus.status === 0 ? gitStatus.stdout.trim().split('\n').filter(Boolean) : [],
@@ -61,6 +68,9 @@ const releaseManifest = {
     }]))
   },
   required_cloud_captures: [
+    'single-tank phone portrait showing one linked textured Sherman and build token tftm-single-linked-sherman-textured-v1-20260704',
+    'single-tank phone landscape showing olive armor albedo and tread albedo on the linked Sherman',
+    'single-tank cloud interaction evidence showing right-side camera rotation without local capture',
     'model-assay phone portrait showing hero proof plus 24 independently animated tanks',
     'model-assay phone landscape showing canonical body, cannon-chain MG, readable closed 3D tread belt volume, wheel orientation, and non-black barrel material',
     'model-assay time-separated capture showing unsynchronized horizontal turret traverse, vertical barrel elevation, cannon-chain MG, and no fixed bow MG across the 24 tanks',
@@ -103,8 +113,8 @@ writeFileSync(join(releaseRoot, 'firebase.json'), JSON.stringify({
 }, null, 2) + '\n');
 writeFileSync(join(releaseRoot, 'README.md'), `# TFTM Cloud Visual Truth Release
 
-Upload or host the \`dist/\` folder from this directory, then capture the views listed in \`cloud_visual_truth_manifest.json\`.
+Upload or host the \`dist/\` folder from this directory, then review the cloud/Sense views listed in \`cloud_visual_truth_manifest.json\`.
 
-This packet exists because local screenshot/browser capture is not authoritative for the current tank visual pass.
+This packet exists because local capture is forbidden for the current tank visual pass. Do not use local screenshots, Android screencap, localhost browser capture, or local visual harness frames as acceptance evidence; deploy this packet and use Sense Simulation review on the cloud-hosted artifact.
 `);
 console.log('Cloud visual truth packet written to ' + releaseRoot);

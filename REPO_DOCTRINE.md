@@ -24,6 +24,10 @@ The first scope is D-Day plus a few days inland. The beach can matter later, but
 
 The current browser prototype is a commander-station probe, not the full product.
 
+## Visual Evidence Rule
+
+Tank visual work in this repository is cloud-gated. Local screenshots, Android `screencap`, localhost browser capture, and local visual harness frames are forbidden for visual validation and must not be used as acceptance proof. Visual success requires the cloud visual truth release lane plus Sense Simulation review of the named visible relationship. If cloud review is blocked, repair the cloud review surface or report that blocker; do not substitute local capture.
+
 ## Commander Identity
 
 Tanks For The Memories is a tank commander operation game about managing uncertainty from inside and around a crewed machine.

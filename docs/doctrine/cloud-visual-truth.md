@@ -1,24 +1,25 @@
 # Cloud Visual Truth Gate
 
-Local screenshots and local browser capture are not authoritative for the tank visual pass when device capture is failing. The accepted visual lane is a cloud-hosted build plus Sense Simulation review.
+Local screenshots, Android `screencap`, localhost browser capture, and local visual harness frames are forbidden as acceptance evidence for the tank visual workflow. The accepted visual lane is a cloud-hosted build plus Sense Simulation review.
 
 ## Cloud-Only Attention Rule
 
-Do not present a local browser, localhost URL, local screenshot, or stale capture as proof for this tank visual pass. When the user needs to see the tank, deploy the current release packet to cloud hosting, then run the project visual QA harness before waking the browser for attention. Browser wake is blocked unless the visual QA report contains fresh captured frames/contact sheet evidence and a sense-simulation read says the named visible relationships pass.
+Do not present a local browser, localhost URL, local screenshot, Android `screencap`, temporary-server capture, or stale capture as proof for this tank visual pass. When the user needs to see the tank, deploy the current release packet to cloud hosting, then use the cloud review surface and Sense Simulation before waking the browser for attention. Browser wake is blocked unless the cloud-hosted artifact is current and Sense Simulation says the named visible relationships pass.
 
-Do not use `screencap`, local Android screenshots, local browser screenshots, or localhost inspection as a fallback after waking the user. On this project they are deprecated evidence paths. If cloud visual QA cannot inspect the artifact, report the cloud-review blocker and repair the cloud review surface; do not substitute local capture.
+Do not use `screencap`, local Android screenshots, local browser screenshots, temporary-server frames, or localhost inspection as a fallback after waking the user. On this project they are forbidden acceptance paths. If Sense Simulation cannot inspect the cloud artifact, report the cloud-review blocker and repair the cloud review surface; do not substitute local capture.
 
 The proof is not "24 instanced GPU tanks." The proof is 24 independently animated tanks rendered within the phone budget. Shared geometry is acceptable only as a rendering optimization; every visible tank must have its own smoothed animation state for drive phase, wheel spin, tread phase, turret horizontal traverse, and barrel vertical elevation.
 
 Do not accept source variables as visual proof. If the barrel still reads as an ugly black tube, or if vertical barrel motion is not visible around the turret front/socket, the build is red even when `barrelPitch` exists in code.
 
-Required pre-wake command:
+Required pre-wake commands use the cloud release lane only. Choose the target surface:
 
 ```sh
 npm run visual-qa:model-assay
+npm run visual-qa:single-tank
 ```
 
-The harness result is acceptance evidence only if the contact sheet and representative full frames show:
+The command result is not visual acceptance by itself. Acceptance requires cloud-hosted Sense Simulation review showing:
 
 - cannon visually seated in the turret/mantlet area, not separated from it
 - barrel vertical motion readable around the socket/pivot
@@ -26,7 +27,7 @@ The harness result is acceptance evidence only if the contact sheet and represen
 - tread motion reads as belt/material travel rather than a rounded static ribbon
 - 24 tanks remain independently animated and plausible on phone
 
-If the harness launches, captures frames, and still shows separated barrel or rounded/one-sided tread, the result is a captured red build. Do not wake the user for review.
+If cloud/Sense review still shows separated barrel, rounded/one-sided tread, or an untextured single tank, the result is a cloud red build. Do not wake the user for acceptance.
 
 ## Conquer Failure Loop
 
@@ -42,25 +43,25 @@ Breaker loop:
 4. Use the cloud brain: cloud-hosted build, fresh visual QA frames, Meshy/OpenAI assets when appropriate, repo corpus, docs, manifests, screenshots, and sense simulation together.
 5. Change the artifact.
 6. Rebuild and redeploy when the review lane is cloud-only.
-7. Run visual QA again.
-8. Inspect the contact sheet and representative frames.
+7. Run the cloud review gate again.
+8. Inspect the cloud/Sense result for the named visible relationship.
 9. Repeat until the relationship passes, the artifact class is replaced, or a real external decision is required.
 
 Do not end a turn with only "red build" when there is still an obvious breaker action. A red verdict must be paired with the next action already taken, a concrete patch in progress, or a precise blocker such as "requires Meshy credit approval for a new separated mantlet/socket asset."
 
 Wake rule:
 
-- Wake for acceptance only after visual QA and sense simulation pass.
+- Wake for acceptance only after the cloud review gate and Sense Simulation pass.
 - Wake for decision only when the breaker loop reaches a real choice or credit spend.
 - Do not let `ok: true` from the capture harness mean visual success; it only means pixels were captured.
 
 Post-deploy review rule:
 
 - Any time a visual build is deployed and the agent is about to report on that build, wake the browser to the exact cloud URL with a fresh cache-bust token first.
-- After waking, inspect the freshest available Android screenshot or visual QA capture before final reporting.
+- After waking, inspect the freshest available cloud/Sense review artifact before final reporting.
 - If the screenshot/capture shows a red build, say so and continue the breaker loop when a next action is available.
 - Do not confuse review wake with acceptance wake: review wake proves the user and agent are looking at the current artifact; acceptance still requires the visible relationships to pass.
-- Do not skip review wake merely because visual QA is blocked. If visual QA is blocked, wake cloud, inspect the freshest screenshot artifact, and report the capture blocker separately.
+- Do not skip review wake merely because local visual QA is blocked. If cloud/Sense review is blocked, wake the cloud artifact only for review, report the cloud-review blocker, and do not claim acceptance.
 
 Visual-change wake rule:
 
@@ -105,6 +106,9 @@ The current tank target is the phone-runtime Meshy Sherman:
 
 Capture the hosted build at phone proportions first, then desktop only as a secondary reference.
 
+- single-tank phone portrait, first loaded frame after GLB settles, showing one linked textured Sherman
+- single-tank phone landscape, first loaded frame after GLB settles, showing olive armor albedo and tread albedo
+- single-tank right-side camera interaction evidence from the cloud route
 - phone portrait, first loaded frame after GLB settles
 - phone landscape, first loaded frame after GLB settles
 - phone portrait after at least five seconds of runtime motion

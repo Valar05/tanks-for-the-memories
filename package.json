@@ -12,10 +12,12 @@
     "awareness-smoke": "node scripts/awareness-smoke.mjs",
     "bootstrap": "sh scripts/bootstrap.sh",
     "cloud-visual-release": "node scripts/build_cloud_visual_release.mjs",
-    "visual-qa:model-assay": "node ../tools/visual_qa.mjs --project tanks-for-the-memories --url /tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay.html --frames 8 --interval-ms 500 --timeout-ms 45000 --expected-build tftm-model-assay-canonical-coaxial-mg-20260704t --launcher termux-open-url --persist-to tanks-for-the-memories/generated/visual_qa/model-assay-latest",
+    "visual-qa:model-assay": "node scripts/validate_model_assay_cloud_gate.mjs",
     "albedo-manifest-smoke": "node scripts/validate_sherman_albedo_manifest.mjs",
     "alpha-orientation-smoke": "node scripts/validate_alpha_sherman_orientation.mjs",
-    "alpha-decal-smoke": "node scripts/validate_alpha_runtime_decals.mjs"
+    "alpha-decal-smoke": "node scripts/validate_alpha_runtime_decals.mjs",
+    "single-tank-smoke": "node scripts/validate_single_tank_scene.mjs",
+    "visual-qa:single-tank": "node scripts/validate_single_tank_cloud_gate.mjs"
   },
   "dependencies": {
     "three": "^0.166.1"

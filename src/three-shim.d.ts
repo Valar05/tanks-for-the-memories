@@ -128,13 +128,26 @@ declare module 'three' {
 
   export class MeshStandardMaterial {
     constructor(...args: any[]);
+    name: string;
     roughness: number;
     metalness: number;
     map: any;
     roughnessMap: any;
     metalnessMap: any;
     normalMap: any;
+    color: any;
+    side: any;
+    transparent: boolean;
+    opacity: number;
+    depthWrite: boolean;
+    depthTest: boolean;
+    needsUpdate: boolean;
     clone(): MeshStandardMaterial;
+  }
+
+  export class TextureLoader {
+    constructor(...args: any[]);
+    load(url: string): Texture;
   }
 
   export class BufferGeometry {

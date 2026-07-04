@@ -50,6 +50,10 @@ Alpha uses the fixed base without geometry changes:
 
 The old Pillow proof remains only as discarded reference ore. It is not the Alpha production path. Alpha must be produced as a Meshy retexture/model-texture asset or another UV-aware texture workflow that changes the tank material itself, not runtime planes.
 
+## Runtime Baseline Albedo
+
+The single-tank inspection scene may link the existing constrained default albedo set at runtime to prove baseline material readability: olive armor albedo for the body and tread albedo for track/tread surfaces. This is not a named-tank texture variant and must not copy the Sherman model or fork the texture set. Named commander identity still requires UV-aware texture/decal work; runtime baseline albedo only prevents the linked Sherman from appearing untextured.
+
 ## Vanilla Baseline Preservation
 
 The first accepted phone Meshy Sherman is preserved as `public/tftm/models/m4a3_75_vvss_sherman_vanilla_mobile/`. This baseline has `identity_id: vanilla` and no Alpha/Tango/Whiskey overlay. Keep it as the comparison asset for future recognition-language work.

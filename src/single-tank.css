@@ -1,0 +1,113 @@
+:root {
+  color-scheme: dark;
+  --ink: #f2ead8;
+  --muted: rgba(242, 234, 216, 0.68);
+  --panel: rgba(12, 14, 11, 0.7);
+  --line: rgba(242, 234, 216, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #11130f;
+  color: var(--ink);
+  touch-action: none;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+#single-tank-root,
+.single-tank-shell,
+.single-tank-stage,
+canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.single-tank-shell {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(43, 50, 38, 0.74), rgba(14, 16, 13, 0.97)),
+    radial-gradient(circle at 50% 22%, rgba(160, 139, 90, 0.16), transparent 46%);
+}
+
+.single-tank-stage canvas {
+  display: block;
+}
+
+.single-tank-readout {
+  position: absolute;
+  top: max(10px, env(safe-area-inset-top));
+  left: max(10px, env(safe-area-inset-left));
+  width: min(320px, calc(100vw - 20px));
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  backdrop-filter: blur(10px);
+  padding: 10px 11px;
+  pointer-events: none;
+}
+
+.single-tank-readout p {
+  margin: 0;
+}
+
+.single-tank-kicker {
+  color: #d5b46f;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.single-tank-title {
+  margin-top: 3px;
+  font-size: clamp(18px, 4vw, 28px);
+  font-weight: 750;
+  line-height: 1;
+}
+
+.single-tank-status {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.camera-zone {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 52%;
+  touch-action: none;
+}
+
+.camera-zone span {
+  position: absolute;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  color: rgba(242, 234, 216, 0.64);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+@media (max-width: 720px) {
+  .single-tank-readout {
+    width: min(280px, 68vw);
+    padding: 8px;
+  }
+
+  .single-tank-status {
+    font-size: 12px;
+  }
+}

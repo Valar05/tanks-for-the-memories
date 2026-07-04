@@ -9,3 +9,4 @@
 - [Original Heavy Tank Model Request Packet](./original-heavy-tank-model-request.md)
 - [Minimal Animatable Tank Model Request](./minimal-animatable-tank-model-request.md)
 - [Tank Generation Red-Build Credit Gate](./tank-generation-red-build-credit-gate.md)
+- [Cloud Visual Truth Gate](./cloud-visual-truth.md)

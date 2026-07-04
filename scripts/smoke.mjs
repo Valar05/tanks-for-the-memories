@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 const requiredFiles = [
   'index.html',
   'alpha-control.html',
+  'single-tank.html',
   'model-assay.html',
   'README.md',
   'ARCHITECTURE.md',
@@ -147,6 +148,9 @@ const requiredFiles = [
   'scripts/validate_sherman_albedo_manifest.mjs',
   'scripts/validate_alpha_sherman_orientation.mjs',
   'scripts/validate_alpha_runtime_decals.mjs',
+  'scripts/validate_single_tank_scene.mjs',
+  'scripts/validate_single_tank_cloud_gate.mjs',
+  'scripts/validate_model_assay_cloud_gate.mjs',
   'assets/generated/meshy/sherman_barrel_only_v1/assembly_manifest.json',
   'assets/generated/meshy/sherman_barrel_only_v1/source_barrel.png',
   'scripts/inspect_glb_contract.mjs',
@@ -158,6 +162,10 @@ const requiredFiles = [
   'src/main.ts',
   'src/alpha-control-model.js',
   'src/tank-decals.ts',
+  'src/sherman-asset-links.ts',
+  'src/sherman-runtime-materials.ts',
+  'src/single-tank.ts',
+  'src/single-tank.css',
   'src/model-assay.ts',
   'src/model-assay.css',
   'src/styles.css',
@@ -179,9 +187,14 @@ const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 if (packageJson.name !== 'tftm') {
   failures.push('package name should be tftm');
 }
-for (const scriptName of ['build', 'dev', 'smoke', 'alpha-control-smoke', 'bootstrap', 'cloud-visual-release', 'visual-qa:model-assay', 'alpha-decal-smoke']) {
+for (const scriptName of ['build', 'dev', 'smoke', 'alpha-control-smoke', 'bootstrap', 'cloud-visual-release', 'visual-qa:model-assay', 'visual-qa:single-tank', 'alpha-decal-smoke', 'single-tank-smoke']) {
   if (!packageJson.scripts || !packageJson.scripts[scriptName]) {
     failures.push('missing npm script ' + scriptName);
+  }
+}
+for (const visualScriptName of ['visual-qa:model-assay', 'visual-qa:single-tank']) {
+  if (String(packageJson.scripts?.[visualScriptName] || '').includes('../tools/visual_qa.mjs')) {
+    failures.push('visual QA scripts must not invoke the localhost capture harness: ' + visualScriptName);
   }
 }
 
@@ -260,12 +273,12 @@ for (const doctrineMarker of ['False-Change Penalty', 'materially unchanged', 'c
     failures.push('cloud visual doctrine missing false-change penalty marker ' + doctrineMarker);
   }
 }
-for (const conquerMarker of ['Conquer Failure Loop', 'The mission is not to report failure. The mission is to conquer failure.', 'A captured red build is a work order', 'Use the cloud brain', 'Wake for acceptance only after visual QA and sense simulation pass']) {
+for (const conquerMarker of ['Conquer Failure Loop', 'The mission is not to report failure. The mission is to conquer failure.', 'A captured red build is a work order', 'Use the cloud brain', 'Wake for acceptance only after the cloud review gate and Sense Simulation pass']) {
   if (!cloudVisualDoctrine.includes(conquerMarker)) {
     failures.push('cloud visual doctrine missing conquer-failure marker ' + conquerMarker);
   }
 }
-for (const reviewWakeMarker of ['Post-deploy review rule', 'wake the browser to the exact cloud URL with a fresh cache-bust token first', 'inspect the freshest available Android screenshot or visual QA capture before final reporting', 'Do not confuse review wake with acceptance wake', 'Do not skip review wake merely because visual QA is blocked']) {
+for (const reviewWakeMarker of ['Post-deploy review rule', 'wake the browser to the exact cloud URL with a fresh cache-bust token first', 'inspect the freshest available cloud/Sense review artifact before final reporting', 'Do not confuse review wake with acceptance wake', 'Do not skip review wake merely because local visual QA is blocked']) {
   if (!cloudVisualDoctrine.includes(reviewWakeMarker)) {
     failures.push('cloud visual doctrine missing post-deploy review wake marker ' + reviewWakeMarker);
   }
@@ -386,9 +399,35 @@ for (const forbiddenSceneMarker of ['alpha-assay.ts', 'alpha-assay.html']) {
     failures.push('build script must not include deleted Alpha assay scene marker ' + forbiddenSceneMarker);
   }
 }
-for (const alphaBuildMarker of ['alpha-control.ts', 'alpha-control.html']) {
+for (const alphaBuildMarker of ['alpha-control.ts', 'alpha-control.html', 'single-tank.ts', 'single-tank.html']) {
   if (!buildScript.includes(alphaBuildMarker)) {
     failures.push('build script must include Alpha assay marker ' + alphaBuildMarker);
+  }
+}
+const singleTankSource = readFileSync('src/single-tank.ts', 'utf8');
+const shermanAssetLinks = readFileSync('src/sherman-asset-links.ts', 'utf8');
+const shermanRuntimeMaterials = readFileSync('src/sherman-runtime-materials.ts', 'utf8');
+for (const singleTankMarker of ['single_linked_vanilla_sherman', 'camera-zone', 'cameraState.yaw', 'cameraState.pitch', 'right-side camera orbit', 'VANILLA_SHERMAN_GLB_URL', 'applyDefaultShermanTextureSet(model)']) {
+  if (!singleTankSource.includes(singleTankMarker)) {
+    failures.push('single tank scene missing marker ' + singleTankMarker);
+  }
+}
+if (singleTankSource.includes('vanilla_sherman_combined/vanilla_sherman.glb')) {
+  failures.push('single tank scene must import shared Sherman asset links instead of hardcoding the GLB URL');
+}
+for (const assetLinkMarker of ['vanilla_sherman_combined/vanilla_sherman.glb', 'sherman_default_texture_set_v1', 'olive_albedo.png', 'tread_albedo.png']) {
+  if (!shermanAssetLinks.includes(assetLinkMarker)) {
+    failures.push('Sherman asset links missing marker ' + assetLinkMarker);
+  }
+}
+for (const materialMarker of ['makeAlbedoTexture', 'classifyMaterialTarget', 'SHERMAN_DEFAULT_OLIVE_ALBEDO_URL', 'SHERMAN_DEFAULT_TREAD_ALBEDO_URL']) {
+  if (!shermanRuntimeMaterials.includes(materialMarker)) {
+    failures.push('Sherman runtime material helper missing marker ' + materialMarker);
+  }
+}
+for (const forbiddenSingleTankMarker of ['alpha-assay', 'commander_platoon', 'm4a3_75_vvss_sherman_alpha_retexture_v2', 'sherman_alpha_constrained_albedo_v1', 'applyTankDecalProfile']) {
+  if (singleTankSource.includes(forbiddenSingleTankMarker)) {
+    failures.push('single tank scene must not reference rejected/variant marker ' + forbiddenSingleTankMarker);
   }
 }
 for (const alphaControlMarker of [
