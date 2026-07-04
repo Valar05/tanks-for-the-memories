@@ -79,6 +79,11 @@ const requiredFiles = [
   'assets/generated/meshy/alpha_sherman_player_character_from_reference_v1/manifest.json',
   'public/tftm/models/alpha_sherman_player_character_from_reference_v1/alpha_sherman_player_character_from_reference_v1.glb',
   'public/tftm/models/alpha_sherman_player_character_from_reference_v1/model_manifest.json',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_alpha_retexture_v2/glb.glb',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_alpha_retexture_v2/fbx.fbx',
+  'assets/generated/meshy/m4a3_75_vvss_sherman_alpha_retexture_v2/manifest.json',
+  'public/tftm/models/m4a3_75_vvss_sherman_alpha_retexture_v2/m4a3_75_vvss_sherman_alpha_retexture_v2.glb',
+  'public/tftm/models/m4a3_75_vvss_sherman_alpha_retexture_v2/model_manifest.json',
   'scripts/pack_vanilla_sherman_for_meshy.mjs',
   'scripts/pack_vanilla_sherman_textures.mjs',
   'scripts/export_vanilla_sherman_glb.mjs',
@@ -314,13 +319,16 @@ for (const buildMarker of ['assetVersion', 'TFTM_ASSET_VERSION', '.css?v=${asset
     failures.push('build script must cache-bust generated JS/CSS asset URLs: ' + buildMarker);
   }
 }
-for (const alphaAssayMarker of ['tftm-alpha-sherman-meshy-reference-20260704a', 'alpha_sherman_player_character_from_reference_v1.glb', 'Alpha Sherman Texture Review', 'Review the visible texture language, not the manifest.', 'red build rejected', 'REJECTED: reads as red highlighter']) {
+for (const alphaAssayMarker of ['tftm-alpha-sherman-retexture-v2-20260704a', 'm4a3_75_vvss_sherman_alpha_retexture_v2.glb', 'Alpha Sherman Texture Review', 'Review the visible texture language, not the manifest.', 'visual review required', 'human visual acceptance pending']) {
   if (!alphaAssaySource.includes(alphaAssayMarker)) {
     failures.push('Alpha assay missing texture review marker ' + alphaAssayMarker);
   }
 }
 if (alphaAssaySource.includes('alpha_sherman_meshy_single_file.glb')) {
   failures.push('Alpha assay must not load the rejected decal single-file GLB');
+}
+if (alphaAssaySource.includes('alpha_sherman_player_character_from_reference_v1.glb')) {
+  failures.push('Alpha assay must not load the rejected character-sheet image-to-3D GLB');
 }
 for (const alphaBuildMarker of ['alpha-assay.ts', 'alpha-assay.html']) {
   if (!buildScript.includes(alphaBuildMarker)) {
@@ -456,6 +464,41 @@ if (!String(alphaReferenceManifest.runtime_contract?.acceptance_gate || '').incl
 }
 if (alphaReferenceManifest.inspection?.approximate_triangles > 20000) {
   failures.push('Alpha reference Meshy candidate exceeds static visual phone triangle budget');
+}
+const alphaRetextureManifest = JSON.parse(readFileSync('public/tftm/models/m4a3_75_vvss_sherman_alpha_retexture_v2/model_manifest.json', 'utf8'));
+if (alphaRetextureManifest.asset_id !== 'm4a3_75_vvss_sherman_alpha_retexture_v2') {
+  failures.push('Alpha retexture v2 manifest missing asset_id');
+}
+if (alphaRetextureManifest.endpoint !== '/openapi/v1/retexture') {
+  failures.push('Alpha retexture v2 must come from Meshy retexture endpoint');
+}
+if (alphaRetextureManifest.source_vanilla_task_id !== '019f2a16-c82b-7b52-b541-c707b58c5d00') {
+  failures.push('Alpha retexture v2 must target accepted vanilla base task');
+}
+if (alphaRetextureManifest.status !== 'human_cloud_visual_review_pending') {
+  failures.push('Alpha retexture v2 must remain pending human cloud visual review');
+}
+if (alphaRetextureManifest.runtime_contract?.identity_from_texture_only !== true) {
+  failures.push('Alpha retexture v2 must preserve identity_from_texture_only');
+}
+if (alphaRetextureManifest.runtime_contract?.gameplay_animation_ready !== false) {
+  failures.push('Alpha retexture v2 must not claim gameplay animation readiness');
+}
+if (!String(alphaRetextureManifest.runtime_contract?.acceptance_gate || '').includes('not red highlighter')) {
+  failures.push('Alpha retexture v2 must preserve red-highlighter acceptance gate');
+}
+if (alphaRetextureManifest.inspection?.approximate_triangles > 12000) {
+  failures.push('Alpha retexture v2 must preserve vanilla-base phone triangle budget');
+}
+const alphaRetextureSourceManifest = JSON.parse(readFileSync('assets/generated/meshy/m4a3_75_vvss_sherman_alpha_retexture_v2/manifest.json', 'utf8'));
+if (alphaRetextureSourceManifest.endpoint !== '/openapi/v1/retexture') {
+  failures.push('Alpha retexture source manifest must record /openapi/v1/retexture endpoint');
+}
+if (alphaRetextureSourceManifest.dry_run_payload?.enable_original_uv !== true) {
+  failures.push('Alpha retexture dry-run must preserve original UVs');
+}
+if (alphaRetextureSourceManifest.dry_run_payload?.input_task_id !== '019f2a16-c82b-7b52-b541-c707b58c5d00') {
+  failures.push('Alpha retexture dry-run must target accepted vanilla task id');
 }
 const alphaExporter = readFileSync('scripts/export_alpha_sherman_variant.mjs', 'utf8');
 for (const marker of ['alpha_sherman_combined', 'addAlphaCharacterMarks', 'alpha_crimson_glacis_recognition_stripe', "'_A_crossbar'", 'alpha_front_chalk_A17_plate', 'alpha_dust_scratch_']) {

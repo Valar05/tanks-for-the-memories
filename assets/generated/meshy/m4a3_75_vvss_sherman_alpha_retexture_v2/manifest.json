@@ -1,0 +1,99 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T06:07:51+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "alpha_thumbnail": true,
+    "enable_original_uv": true,
+    "enable_pbr": true,
+    "hd_texture": true,
+    "input_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+    "remove_lighting": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "text_style_prompt": "Alpha M4A3 Sherman texture on existing model: olive drab WWII field paint, restrained deep crimson field-painted recognition stripe on glacis and turret, hand-painted white A, chalk maintenance notes, ghosted old numbers, subtle chips, hatch boot wear, localized oil/fuel stains, low mud only, disciplined veteran crew, no toy colors, no highlighter band, no fantasy markings."
+  },
+  "endpoint": "/openapi/v1/retexture",
+  "files": [
+    {
+      "bytes": 29540524,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/m4a3_75_vvss_sherman_alpha_retexture_v2/fbx.fbx"
+    },
+    {
+      "bytes": 30192568,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/m4a3_75_vvss_sherman_alpha_retexture_v2/glb.glb"
+    }
+  ],
+  "last_retexture_task": {
+    "alpha_thumbnail_url": "<expiring-url-redacted>",
+    "art_style": "realistic",
+    "consumed_credits": 10,
+    "created_at": 1783145284612,
+    "expires_at": 1783404613987,
+    "finished_at": 1783145413987,
+    "hd_texture": true,
+    "id": "019f2bbd-be31-7fc4-bf14-bcb6dea15284",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783145284647,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "Alpha M4A3 Sherman texture on existing model: olive drab WWII field paint, restrained deep crimson field-painted recognition stripe on glacis and turret, hand-painted white A, chalk maintenance notes, ghosted old numbers, subtle chips, hatch boot wear, localized oil/fuel stains, low mud only, disciplined veteran crew, no toy colors, no highlighter band, no fantasy markings.",
+    "texture_image_url": "",
+    "texture_prompt": "",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "retexture"
+  },
+  "name": "m4a3_75_vvss_sherman_alpha_retexture_v2",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T06:08:04+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "alpha_thumbnail": true,
+        "enable_original_uv": true,
+        "enable_pbr": true,
+        "hd_texture": true,
+        "input_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+        "remove_lighting": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "text_style_prompt": "Alpha M4A3 Sherman texture on existing model: olive drab WWII field paint, restrained deep crimson field-painted recognition stripe on glacis and turret, hand-painted white A, chalk maintenance notes, ghosted old numbers, subtle chips, hatch boot wear, localized oil/fuel stains, low mud only, disciplined veteran crew, no toy colors, no highlighter band, no fantasy markings."
+      },
+      "provider": "meshy",
+      "step": "retexture",
+      "task_id": "019f2bbd-be31-7fc4-bf14-bcb6dea15284"
+    }
+  ],
+  "tasks": {
+    "retexture": "019f2bbd-be31-7fc4-bf14-bcb6dea15284"
+  },
+  "updated_at": "2026-07-04T06:10:34+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

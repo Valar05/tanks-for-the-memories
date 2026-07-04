@@ -67,3 +67,5 @@ Do not work around this by adding runtime color planes. The next valid route is 
 A later image-to-3D attempt from the Alpha character-sheet reference (`019f2ba7-4ad8-7bd1-a094-8469439725e3`) is also rejected. Human visual review read it as a red highlighter on a beige generated tank, not as Alpha personality. Preserve it as evidence only: `assets/generated/meshy/alpha_sherman_player_character_from_reference_v1/manifest.json`.
 
 Do not repeat character-sheet image-to-3D as the Alpha texture path. It changes the model and overfits the recognition color. Alpha needs nuanced paint, wear, chalk, overpaint, and maintenance history bound to the accepted Sherman surface IDs.
+
+A valid Retexture API path now exists in the workspace Meshy CLI. The first candidate from `/openapi/v1/retexture` is `m4a3_75_vvss_sherman_alpha_retexture_v2`, based on accepted vanilla task `019f2a16-c82b-7b52-b541-c707b58c5d00` with original UV preservation, PBR, HD texture, and no character-sheet image input. It remains pending human cloud visual review, not accepted.
