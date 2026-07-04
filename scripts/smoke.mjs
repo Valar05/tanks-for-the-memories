@@ -63,6 +63,9 @@ const requiredFiles = [
   'assets/generated/meshy/sherman_coaxial_mg_v1/glb.glb',
   'assets/generated/meshy/sherman_coaxial_mg_v1/fbx.fbx',
   'assets/generated/meshy/sherman_coaxial_mg_v1/manifest.json',
+  'public/tftm/models/vanilla_sherman_combined/vanilla_sherman.glb',
+  'public/tftm/models/vanilla_sherman_combined/model_manifest.json',
+  'scripts/export_vanilla_sherman_glb.mjs',
   'assets/generated/meshy/sherman_runtime_tread_pbr_v1/sherman_runtime_tread_pbr_v1_concept.png',
   'assets/generated/meshy/sherman_runtime_tread_pbr_v1/manifest.json',
   'assets/generated/openai/sherman_runtime_pbr_v1/manifest.json',
@@ -335,6 +338,24 @@ for (const forbidden of ['Halo copy', 'War Thunder copy', 'single fused sculptur
     failures.push('minimal tank request negative prompt missing ' + forbidden);
   }
 }
+
+const vanillaCombinedManifest = JSON.parse(readFileSync('public/tftm/models/vanilla_sherman_combined/model_manifest.json', 'utf8'));
+if (vanillaCombinedManifest.asset_id !== 'vanilla_sherman_combined') {
+  failures.push('vanilla combined Sherman manifest missing asset_id');
+}
+if (vanillaCombinedManifest.runtime_contract?.static_combined_asset !== true) {
+  failures.push('vanilla combined Sherman must declare static_combined_asset');
+}
+if (!String(vanillaCombinedManifest.runtime_contract?.animation_source || '').includes('separated source components')) {
+  failures.push('vanilla combined Sherman must point animation back to separated components');
+}
+const vanillaExporter = readFileSync('scripts/export_vanilla_sherman_glb.mjs', 'utf8');
+for (const exporterMarker of ['vanilla_sherman_combined', 'SimplifyModifier', 'left_tread_system_authored_trapezoid_ribbon', 'right_tread_system_authored_trapezoid_ribbon', 'bow_mg_meshy']) {
+  if (!vanillaExporter.includes(exporterMarker)) {
+    failures.push('vanilla combined exporter missing marker ' + exporterMarker);
+  }
+}
+
 const inspectorSource = readFileSync('scripts/inspect_glb_contract.mjs', 'utf8');
 for (const marker of ['requiredSystems', 'systemBindings', 'missingSystems', 'left_tread_system', 'right_tread_system']) {
   if (!inspectorSource.includes(marker)) {
