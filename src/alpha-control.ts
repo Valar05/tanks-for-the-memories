@@ -20,6 +20,9 @@ root.innerHTML = `
           <div class="meter"><b>left track</b><span data-left-track>0.00</span></div>
           <div class="meter"><b>right track</b><span data-right-track>0.00</span></div>
           <div class="meter"><b>order</b><span data-order>neutral</span></div>
+          <div class="meter"><b>heading</b><span data-heading>0 deg</span></div>
+          <div class="meter"><b>intent</b><span data-intent>0 deg</span></div>
+          <div class="meter"><b>error</b><span data-error>0 deg</span></div>
         </div>
       </section>
       <section class="status">
@@ -45,6 +48,9 @@ const stickKnob = root.querySelector<HTMLDivElement>('[data-stick-knob]')!;
 const leftTrackEl = root.querySelector<HTMLElement>('[data-left-track]')!;
 const rightTrackEl = root.querySelector<HTMLElement>('[data-right-track]')!;
 const orderEl = root.querySelector<HTMLElement>('[data-order]')!;
+const headingEl = root.querySelector<HTMLElement>('[data-heading]')!;
+const intentEl = root.querySelector<HTMLElement>('[data-intent]')!;
+const errorEl = root.querySelector<HTMLElement>('[data-error]')!;
 const statusEl = root.querySelector<HTMLElement>('[data-status]')!;
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
@@ -100,6 +106,14 @@ const grid = new THREE.GridHelper(80, 40, 0x6a633f, 0x3e3a29);
 grid.position.y = 0.012;
 scene.add(grid);
 
+const hullForwardArrow = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1.15, 0), 2.2, 0xb83b37, 0.5, 0.28);
+hullForwardArrow.name = 'hull_forward_movement_vector_arrow';
+tankRoot.add(hullForwardArrow);
+
+const intentArrow = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0.08, 0), 2.8, 0xd5b35d, 0.55, 0.32);
+intentArrow.name = 'camera_relative_stick_intent_vector_arrow';
+scene.add(intentArrow);
+
 const hedges = new THREE.Group();
 for (let i = 0; i < 34; i += 1) {
   const block = new THREE.Mesh(
@@ -122,7 +136,6 @@ new GLTFLoader().load(alphaModelUrl, (gltf) => {
   box.getSize(size);
   model.position.sub(center);
   model.position.y += size.y * 0.5;
-  model.rotation.y = Math.PI;
   tankRoot.add(model);
   drive.loaded = true;
   statusEl.textContent = 'Alpha loaded';
@@ -254,7 +267,7 @@ function updateDrive(delta: number) {
   drive.rightTrack = THREE.MathUtils.clamp(drive.throttle - steerMix, -1, 1);
 
   const forward = (drive.leftTrack + drive.rightTrack) * 0.5;
-  const differential = drive.rightTrack - drive.leftTrack;
+  const differential = drive.leftTrack - drive.rightTrack;
   drive.speed += ((forward * 3.0) - drive.speed) * (1 - Math.exp(-delta * 2.8));
   drive.hullYaw += differential * delta * 1.15;
   tankRoot.rotation.y = drive.hullYaw;
@@ -272,10 +285,31 @@ function updateDrive(delta: number) {
   leftTrackEl.textContent = drive.leftTrack.toFixed(2);
   rightTrackEl.textContent = drive.rightTrack.toFixed(2);
   orderEl.textContent = order;
+  headingEl.textContent = formatDegrees(drive.hullYaw);
+  intentEl.textContent = desiredMagnitude < 0.06 ? '-' : formatDegrees(drive.desiredYaw);
+  errorEl.textContent = desiredMagnitude < 0.06 ? '-' : formatDegrees(drive.headingError);
+  updateVectorArrows(desiredMove, desiredMagnitude);
 }
 
 function wrapAngle(angle: number) {
   return Math.atan2(Math.sin(angle), Math.cos(angle));
+}
+
+function formatDegrees(radians: number) {
+  return String(Math.round(THREE.MathUtils.radToDeg(wrapAngle(radians)))) + ' deg';
+}
+
+function updateVectorArrows(desiredMove: THREE.Vector3, desiredMagnitude: number) {
+  hullForwardArrow.setDirection(new THREE.Vector3(0, 0, 1));
+  intentArrow.position.copy(tankRoot.position);
+  intentArrow.position.y = 0.12;
+  if (desiredMagnitude > 0.06) {
+    intentArrow.visible = true;
+    intentArrow.setDirection(desiredMove.clone().normalize());
+    intentArrow.setLength(1.4 + desiredMagnitude * 2.2, 0.55, 0.32);
+  } else {
+    intentArrow.visible = false;
+  }
 }
 
 function updateCamera() {
