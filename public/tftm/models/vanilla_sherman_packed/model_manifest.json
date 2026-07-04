@@ -1,0 +1,16 @@
+{
+  "asset_id": "vanilla_sherman_packed",
+  "display_name": "Vanilla Sherman Packed GLB",
+  "generated_at": "2026-07-04T05:04:26.293Z",
+  "generator": "scripts/pack_vanilla_sherman_textures.mjs",
+  "source_glb": "public/tftm/models/vanilla_sherman_combined/vanilla_sherman.glb",
+  "output_glb": "public/tftm/models/vanilla_sherman_packed/vanilla_sherman_packed.glb",
+  "embedded_textures": [
+    "assets/generated/openai/sherman_runtime_pbr_v1/olive_albedo.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/olive_normal.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/tread_albedo.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/tread_normal.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/tread_roughness.png"
+  ],
+  "note": "Single GLB with embedded PNG texture images. Source component GLBs remain separate for animation/runtime work."
+}

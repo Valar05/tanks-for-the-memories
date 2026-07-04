@@ -65,6 +65,9 @@ const requiredFiles = [
   'assets/generated/meshy/sherman_coaxial_mg_v1/manifest.json',
   'public/tftm/models/vanilla_sherman_combined/vanilla_sherman.glb',
   'public/tftm/models/vanilla_sherman_combined/model_manifest.json',
+  'public/tftm/models/vanilla_sherman_packed/vanilla_sherman_packed.glb',
+  'public/tftm/models/vanilla_sherman_packed/model_manifest.json',
+  'scripts/pack_vanilla_sherman_textures.mjs',
   'scripts/export_vanilla_sherman_glb.mjs',
   'assets/generated/meshy/sherman_runtime_tread_pbr_v1/sherman_runtime_tread_pbr_v1_concept.png',
   'assets/generated/meshy/sherman_runtime_tread_pbr_v1/manifest.json',
@@ -349,6 +352,21 @@ if (vanillaCombinedManifest.runtime_contract?.static_combined_asset !== true) {
 if (!String(vanillaCombinedManifest.runtime_contract?.animation_source || '').includes('separated source components')) {
   failures.push('vanilla combined Sherman must point animation back to separated components');
 }
+
+const vanillaPackedManifest = JSON.parse(readFileSync('public/tftm/models/vanilla_sherman_packed/model_manifest.json', 'utf8'));
+if (vanillaPackedManifest.asset_id !== 'vanilla_sherman_packed') {
+  failures.push('vanilla packed Sherman manifest missing asset_id');
+}
+if (!Array.isArray(vanillaPackedManifest.embedded_textures) || vanillaPackedManifest.embedded_textures.length < 5) {
+  failures.push('vanilla packed Sherman must record embedded textures');
+}
+const vanillaPackedExporter = readFileSync('scripts/pack_vanilla_sherman_textures.mjs', 'utf8');
+for (const packMarker of ['vanilla_sherman_packed', 'textures', 'olive_albedo.png', 'tread_albedo.png', 'bufferView']) {
+  if (!vanillaPackedExporter.includes(packMarker)) {
+    failures.push('vanilla texture packer missing marker ' + packMarker);
+  }
+}
+
 const vanillaExporter = readFileSync('scripts/export_vanilla_sherman_glb.mjs', 'utf8');
 for (const exporterMarker of ['vanilla_sherman_combined', 'SimplifyModifier', 'left_tread_system_authored_trapezoid_ribbon', 'right_tread_system_authored_trapezoid_ribbon', 'bow_mg_meshy']) {
   if (!vanillaExporter.includes(exporterMarker)) {
