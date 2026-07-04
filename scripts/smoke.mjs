@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 
 const requiredFiles = [
   'index.html',
+  'alpha-control.html',
   'alpha-assay.html',
   'model-assay.html',
   'README.md',
@@ -353,6 +354,7 @@ if (!String(kitManifest.animation_proof?.barrel_quality_gate || '').includes('re
 }
 
 const main = readFileSync('src/main.ts', 'utf8');
+const alphaControlSource = readFileSync('src/alpha-control.ts', 'utf8');
 const alphaAssaySource = readFileSync('src/alpha-assay.ts', 'utf8');
 const buildScript = readFileSync('scripts/build.mjs', 'utf8');
 for (const buildMarker of ['assetVersion', 'TFTM_ASSET_VERSION', '.css?v=${assetVersion}', '.js?v=${assetVersion}']) {
@@ -371,9 +373,32 @@ if (alphaAssaySource.includes('alpha_sherman_meshy_single_file.glb')) {
 if (alphaAssaySource.includes('alpha_sherman_player_character_from_reference_v1.glb')) {
   failures.push('Alpha assay must not load the rejected character-sheet image-to-3D GLB');
 }
-for (const alphaBuildMarker of ['alpha-assay.ts', 'alpha-assay.html']) {
+for (const alphaBuildMarker of ['alpha-assay.ts', 'alpha-assay.html', 'alpha-control.ts', 'alpha-control.html']) {
   if (!buildScript.includes(alphaBuildMarker)) {
     failures.push('build script must include Alpha assay marker ' + alphaBuildMarker);
+  }
+}
+for (const alphaControlMarker of [
+  'tftm-alpha-control-simulation-v1-20260704a',
+  'alpha_player_sherman',
+  'left-stick-real-tank-control-simulation',
+  'm4a3_75_vvss_sherman_alpha_retexture_v2.glb',
+  'targetThrottle',
+  'targetSteer',
+  'cameraForward',
+  'desiredYaw',
+  'headingError',
+  'wrapAngle',
+  'camera-relative commander intent',
+  'leftTrack',
+  'rightTrack',
+  'differential',
+  'cameraZone',
+  'cameraState.yaw',
+  'driver order'
+]) {
+  if (!alphaControlSource.includes(alphaControlMarker)) {
+    failures.push('Alpha control simulation missing marker ' + alphaControlMarker);
   }
 }
 const requiredSnippets = [

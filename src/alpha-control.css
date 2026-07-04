@@ -1,0 +1,240 @@
+:root {
+  color-scheme: dark;
+  --ink: #f1ead9;
+  --muted: #b7b19f;
+  --panel: rgba(12, 14, 12, 0.72);
+  --line: rgba(241, 234, 217, 0.16);
+  --accent: #b83b37;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #11130f;
+  color: var(--ink);
+  touch-action: none;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+#alpha-control-root,
+.control-shell,
+.stage,
+canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.control-shell {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(40, 46, 36, 0.72), rgba(16, 18, 14, 0.96)),
+    radial-gradient(circle at 50% 20%, rgba(168, 145, 88, 0.2), transparent 45%);
+}
+
+.stage canvas {
+  display: block;
+}
+
+.hud {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.readout,
+.status {
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 9px 10px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+}
+
+.readout {
+  width: min(430px, 64vw);
+}
+
+.status {
+  width: min(250px, 34vw);
+  text-align: right;
+}
+
+.kicker {
+  margin: 0 0 3px;
+  color: #d4b46f;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(18px, 3.7vw, 31px);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.readout p,
+.status p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: clamp(11px, 2.3vw, 14px);
+  line-height: 1.25;
+}
+
+.meters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.meter {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.045);
+  border-radius: 6px;
+  padding: 6px;
+  min-width: 0;
+}
+
+.meter b,
+.meter span {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.meter b {
+  color: #e3d3aa;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.meter span {
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+}
+
+.stick-zone,
+.camera-zone {
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  touch-action: none;
+}
+
+.stick-zone {
+  left: 0;
+  width: 48%;
+}
+
+.camera-zone {
+  right: 0;
+  width: 52%;
+}
+
+.stick-base {
+  position: absolute;
+  left: max(18px, env(safe-area-inset-left));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  width: min(34vw, 150px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(241, 234, 217, 0.22);
+  background:
+    radial-gradient(circle, rgba(241, 234, 217, 0.08), rgba(0, 0, 0, 0.34)),
+    rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+.stick-base::before,
+.stick-base::after {
+  content: "";
+  position: absolute;
+  background: rgba(241, 234, 217, 0.16);
+}
+
+.stick-base::before {
+  left: 50%;
+  top: 10%;
+  bottom: 10%;
+  width: 1px;
+}
+
+.stick-base::after {
+  left: 10%;
+  right: 10%;
+  top: 50%;
+  height: 1px;
+}
+
+.stick-knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 42%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(255, 255, 255, 0.32);
+  background: radial-gradient(circle at 35% 28%, #d9cba3, #7d4639 58%, #2b1715);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.46);
+}
+
+.zone-label {
+  position: absolute;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  color: rgba(241, 234, 217, 0.62);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  pointer-events: none;
+}
+
+.stick-zone .zone-label {
+  left: max(185px, 39vw);
+}
+
+.camera-zone .zone-label {
+  right: max(18px, env(safe-area-inset-right));
+}
+
+@media (max-width: 720px) {
+  .hud {
+    align-items: flex-start;
+  }
+
+  .readout {
+    width: 64vw;
+  }
+
+  .status {
+    width: 31vw;
+  }
+
+  .meters {
+    grid-template-columns: 1fr;
+  }
+
+  .status p {
+    display: none;
+  }
+}
