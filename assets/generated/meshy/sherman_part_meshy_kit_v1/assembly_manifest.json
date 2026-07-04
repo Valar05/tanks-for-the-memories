@@ -104,7 +104,7 @@
     "turret": "child of turret_traverse_pivot on hull ring",
     "mantlet_barrel": "REJECTED: overmodeled block assembly; replaced by barrel_only candidate for barrel geometry, but socket/mantlet still unsolved",
     "gear_mobile": "duplicate sparingly or instance; rotate visible wheels; pair with authored tread ribbon texture animation",
-    "tread_ribbon": "only hand-authored mesh, but not a side facade: must read as a closed 3D tread belt volume with outer/inner sidewalls, top run, bottom run, front return, rear return, raised shoes/grousers, rails, and PBR UV motion while staying phone-budget instanced geometry",
+    "tread_ribbon": "only hand-authored mesh, but not a side facade or generic rounded belt: must read as a closed 3D Sherman-like trapezoid track volume with outer/inner sidewalls, top run tucked under hull, long grounded bottom run, angled front/rear returns, guide bands, side/back thickness, and animated PBR material lanes while staying phone-budget instanced geometry. Static raised link blocks are rejected as the primary motion proof.",
     "barrel_only": "candidate replacement for rejected mantlet_barrel; bake Meshy barrel geometry with rear socket pivot at local origin, use Sherman-compatible olive/gunmetal PBR material override, and parent/compose it from turret socket so visible pitch reads as cannon elevation"
   },
   "reject_if_cloud_visual": [
@@ -154,7 +154,8 @@
       "turret",
       "barrel_only",
       "gear_mobile",
-      "authored_closed_3d_tread_belt_volume"
+      "authored_closed_3d_tread_belt_volume",
+      "authored_sherman_trapezoid_tread_volume"
     ],
     "motion": [
       "forward_world_motion",
@@ -182,7 +183,7 @@
     ],
     "tread_phase_mode": "instanced_shader_attribute",
     "cycle_policy": "smoothed_random_per_tank_rates_and_phases_not_synchronized",
-    "authored_tread_quality_gate": "rejected_flat_ribbon; rejected_side_facade_tread; require phone_budget_closed_3d_tread_belt_volume_with_outer_inner_sidewalls_top_bottom_front_rear_returns_raised_shoes_and_pbr_uvs",
+    "authored_tread_quality_gate": "rejected_flat_ribbon; rejected_side_facade_tread; rejected_generic_rounded_belt; rejected_static_raised_link_motion; require phone_budget_sherman_trapezoid_track_volume_with_outer_inner_sidewalls_tucked_top_run_long_grounded_bottom_run_angled_front_rear_returns_guide_bands_side_back_thickness_and_animated_pbr_material_lanes",
     "barrel_pivot_mode": "rear_socket_pivot_geometry",
     "barrel_material_mode": "sherman_compatible_olive_gunmetal_pbr_override",
     "barrel_quality_gate": "rejected_black_center_pivot_barrel; require visible rear-socket vertical elevation and non-black Sherman-compatible PBR material"

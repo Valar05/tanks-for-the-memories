@@ -124,9 +124,14 @@ for (const budgetMarker of ['24 tanks', '24 independently animated tanks', 'inde
     failures.push('animated 24-tank proof missing budget/readout marker ' + budgetMarker);
   }
 }
-for (const treadQualityMarker of ['outerBeltSurface', 'innerBeltSurface', 'outerSidewall', 'innerSidewall', 'topRun', 'bottomRun', 'frontReturn', 'rearReturn', 'addRaisedShoeGeometry']) {
+for (const treadQualityMarker of ['outerBeltSurface', 'innerBeltSurface', 'outerSidewall', 'innerSidewall', 'topRun', 'bottomRun', 'frontReturn', 'rearReturn', 'shermanTrapezoidProfile', 'upperRunUnderSponson', 'longGroundedBottomRun', 'angledFrontReturn', 'angledRearReturn', 'animatedMaterialLane', 'staticRaisedLinksRejected']) {
   if (!assaySource.includes(treadQualityMarker)) {
     failures.push('authored tread belt missing quality marker ' + treadQualityMarker);
+  }
+}
+for (const forbiddenTreadProof of ['addRaisedShoeGeometry', 'curved returns, raised shoes', 'raised shoes/grousers across belt width']) {
+  if (assaySource.includes(forbiddenTreadProof)) {
+    failures.push('authored tread belt must not use static raised-link geometry as animation proof: ' + forbiddenTreadProof);
   }
 }
 for (const barrelQualityMarker of ['bakeBarrelGeometryWithRearPivot', 'makeBarrelMaterial', 'barrelSocket', 'composeBarrelMatrix', 'olive gunmetal PBR']) {
@@ -229,6 +234,15 @@ if (!kitManifest.animation_proof?.composition?.includes('authored_closed_3d_trea
 }
 if (!String(kitManifest.animation_proof?.authored_tread_quality_gate || '').includes('rejected_side_facade_tread')) {
   failures.push('Meshy kit animation proof must remember side-facade tread rejection');
+}
+if (!String(kitManifest.animation_proof?.authored_tread_quality_gate || '').includes('rejected_generic_rounded_belt')) {
+  failures.push('Meshy kit animation proof must remember generic rounded belt rejection');
+}
+if (!String(kitManifest.animation_proof?.authored_tread_quality_gate || '').includes('rejected_static_raised_link_motion')) {
+  failures.push('Meshy kit animation proof must remember static raised link motion rejection');
+}
+if (!String(kitManifest.animation_proof?.authored_tread_quality_gate || '').includes('sherman_trapezoid_track_volume')) {
+  failures.push('Meshy kit animation proof must require Sherman trapezoid track volume');
 }
 if (kitManifest.animation_proof?.barrel_pivot_mode !== 'rear_socket_pivot_geometry') {
   failures.push('Meshy kit animation proof must require rear socket barrel pivot geometry');

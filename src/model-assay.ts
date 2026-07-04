@@ -59,6 +59,7 @@ const spawnTarget = 24;
 const wheelsPerTank = 10;
 const treadTrianglesPerTank = 1400;
 const barrelSocket = new THREE.Vector3(0.58, 0.82, 0);
+const heroBarrelSocket = new THREE.Vector3(0.53, 0.08, 0);
 const matrixScratch = {
   root: new THREE.Matrix4(),
   yaw: new THREE.Matrix4(),
@@ -124,59 +125,61 @@ function makeMap(kind: 'albedo' | 'roughness' | 'metalness' | 'normal') {
   textureCanvas.height = 96;
   const ctx = textureCanvas.getContext('2d')!;
   if (kind === 'albedo') {
-    ctx.fillStyle = '#242620';
+    ctx.fillStyle = '#1d201d';
     ctx.fillRect(0, 0, 512, 96);
-    ctx.fillStyle = '#11130f';
-    ctx.fillRect(0, 0, 512, 10);
-    ctx.fillRect(0, 86, 512, 10);
-    for (let x = 0; x < 512; x += 28) {
-      ctx.fillStyle = '#4f4c3f';
-      ctx.fillRect(x + 2, 12, 20, 72);
-      ctx.fillStyle = '#79715d';
-      ctx.fillRect(x + 3, 13, 2, 70);
-      ctx.fillRect(x + 18, 13, 2, 70);
-      ctx.fillStyle = '#171813';
-      ctx.fillRect(x + 23, 10, 4, 76);
-      ctx.fillStyle = 'rgba(158, 142, 101, 0.42)';
-      ctx.fillRect(x + 7, 18, 10, 12);
-      ctx.fillStyle = 'rgba(37, 31, 22, 0.48)';
-      ctx.fillRect(x + 6, 64, 13, 16);
+    ctx.fillStyle = '#2c2d25';
+    ctx.fillRect(0, 6, 512, 8);
+    ctx.fillRect(0, 82, 512, 8);
+    ctx.fillStyle = '#131511';
+    ctx.fillRect(0, 0, 512, 5);
+    ctx.fillRect(0, 91, 512, 5);
+    for (let x = 0; x < 512; x += 24) {
+      ctx.fillStyle = 'rgba(79, 76, 60, 0.42)';
+      ctx.fillRect(x + 2, 15, 17, 66);
+      ctx.fillStyle = 'rgba(158, 149, 112, 0.16)';
+      ctx.fillRect(x + 4, 18, 2, 57);
+      ctx.fillStyle = 'rgba(15, 16, 13, 0.48)';
+      ctx.fillRect(x + 20, 11, 3, 74);
+      ctx.fillStyle = 'rgba(129, 116, 82, 0.18)';
+      ctx.fillRect(x + 7, 61, 9, 12);
     }
-    ctx.fillStyle = 'rgba(176, 164, 123, 0.24)';
-    for (let y = 18; y < 86; y += 18) ctx.fillRect(0, y, 512, 1);
+    ctx.fillStyle = 'rgba(99, 88, 61, 0.34)';
+    for (let x = 0; x < 512; x += 73) ctx.fillRect(x, 68 + (x % 3), 46, 4);
+    ctx.fillStyle = 'rgba(175, 164, 122, 0.12)';
+    for (let y = 20; y < 82; y += 20) ctx.fillRect(0, y, 512, 1);
   } else if (kind === 'roughness') {
-    ctx.fillStyle = '#d4d4d4';
+    ctx.fillStyle = '#d9d9d9';
     ctx.fillRect(0, 0, 512, 96);
-    for (let x = 0; x < 512; x += 28) {
-      ctx.fillStyle = '#a8a8a8';
-      ctx.fillRect(x + 2, 12, 20, 72);
+    for (let x = 0; x < 512; x += 24) {
+      ctx.fillStyle = '#b8b8b8';
+      ctx.fillRect(x + 2, 15, 17, 66);
       ctx.fillStyle = '#eeeeee';
-      ctx.fillRect(x + 7, 62, 12, 14);
+      ctx.fillRect(x + 7, 61, 9, 12);
     }
   } else if (kind === 'metalness') {
     ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(0, 0, 512, 96);
-    ctx.fillStyle = '#666666';
-    for (let x = 0; x < 512; x += 28) {
-      ctx.fillRect(x + 23, 12, 4, 72);
-      ctx.fillRect(x + 2, 12, 2, 72);
+    ctx.fillStyle = '#4a4a4a';
+    for (let x = 0; x < 512; x += 24) {
+      ctx.fillRect(x + 20, 12, 3, 72);
+      ctx.fillRect(x + 2, 15, 2, 66);
     }
   } else {
     ctx.fillStyle = '#8080ff';
     ctx.fillRect(0, 0, 512, 96);
-    for (let x = 0; x < 512; x += 28) {
-      ctx.fillStyle = '#9b9bff';
-      ctx.fillRect(x + 2, 12, 4, 72);
-      ctx.fillStyle = '#6767e0';
-      ctx.fillRect(x + 23, 12, 4, 72);
-      ctx.fillStyle = '#8888ff';
-      ctx.fillRect(x + 7, 16, 12, 56);
+    for (let x = 0; x < 512; x += 24) {
+      ctx.fillStyle = '#8d8dff';
+      ctx.fillRect(x + 2, 15, 3, 66);
+      ctx.fillStyle = '#7474ee';
+      ctx.fillRect(x + 20, 12, 3, 72);
+      ctx.fillStyle = '#8585ff';
+      ctx.fillRect(x + 7, 18, 9, 54);
     }
   }
   const texture = new THREE.CanvasTexture(textureCanvas);
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(5, 1);
+  texture.repeat.set(7, 1);
   texture.colorSpace = kind === 'albedo' ? THREE.SRGBColorSpace : THREE.NoColorSpace;
   return texture;
 }
@@ -191,9 +194,9 @@ function makeTreadMaterialSet() {
     roughnessMap,
     metalnessMap,
     normalMap,
-    color: 0xbbb18e,
-    roughness: 0.78,
-    metalness: 0.28
+    color: 0x80795f,
+    roughness: 0.88,
+    metalness: 0.2
   });
   return { material, maps: [albedo, roughnessMap, metalnessMap, normalMap] };
 }
@@ -222,17 +225,6 @@ function createTreadGeometry() {
   const indices: number[] = [];
   const outerSide = 0.13;
   const innerSide = -0.13;
-  const topRun = 0.16;
-  const bottomRun = -0.39;
-  const frontReturnX = 1.36;
-  const rearReturnX = -1.36;
-  const returnRadiusX = 0.25;
-  const beltThickness = 0.075;
-  const shoeHeight = 0.045;
-  const shoeLength = 0.115;
-  const shoeInset = 0.015;
-  const shoeSegments = 38;
-
   const outerBeltSurface = 'outerBeltSurface';
   const innerBeltSurface = 'innerBeltSurface';
   const outerSidewall = 'outerSidewall';
@@ -241,67 +233,53 @@ function createTreadGeometry() {
   const bottomRunMarker = 'bottomRun';
   const frontReturnMarker = 'frontReturn';
   const rearReturnMarker = 'rearReturn';
-  void [outerBeltSurface, innerBeltSurface, outerSidewall, innerSidewall, topRunMarker, bottomRunMarker, frontReturnMarker, rearReturnMarker];
+  const shermanTrapezoidProfile = 'shermanTrapezoidProfile';
+  const upperRunUnderSponson = 'upperRunUnderSponson';
+  const longGroundedBottomRun = 'longGroundedBottomRun';
+  const angledFrontReturn = 'angledFrontReturn';
+  const angledRearReturn = 'angledRearReturn';
+  const animatedMaterialLane = 'animatedMaterialLane';
+  const staticRaisedLinksRejected = 'staticRaisedLinksRejected';
+  void [
+    outerBeltSurface,
+    innerBeltSurface,
+    outerSidewall,
+    innerSidewall,
+    topRunMarker,
+    bottomRunMarker,
+    frontReturnMarker,
+    rearReturnMarker,
+    shermanTrapezoidProfile,
+    upperRunUnderSponson,
+    longGroundedBottomRun,
+    angledFrontReturn,
+    angledRearReturn,
+    animatedMaterialLane,
+    staticRaisedLinksRejected
+  ];
 
-  type BeltPoint = {
+  type ProfilePoint = {
     x: number;
     y: number;
-    nx: number;
-    ny: number;
-    tx: number;
-    ty: number;
     u: number;
   };
 
-  const ring: BeltPoint[] = [];
-
-  function pushPoint(point: BeltPoint) {
-    ring.push(point);
-  }
-
-  function pushStraight(count: number, x0: number, y0: number, x1: number, y1: number, nx: number, ny: number, u0: number, u1: number) {
-    const tx = x1 >= x0 ? 1 : -1;
-    for (let i = 0; i < count; i += 1) {
-      const k = i / count;
-      pushPoint({
-        x: x0 + (x1 - x0) * k,
-        y: y0 + (y1 - y0) * k,
-        nx,
-        ny,
-        tx,
-        ty: 0,
-        u: u0 + (u1 - u0) * k
-      });
-    }
-  }
-
-  function pushReturn(count: number, cx: number, cy: number, rx: number, ry: number, a0: number, a1: number, u0: number, u1: number) {
-    for (let i = 0; i < count; i += 1) {
-      const k = i / count;
-      const angle = a0 + (a1 - a0) * k;
-      const nx = Math.cos(angle);
-      const ny = Math.sin(angle);
-      const tangentSign = a1 > a0 ? 1 : -1;
-      const tx = -Math.sin(angle) * tangentSign;
-      const ty = Math.cos(angle) * tangentSign;
-      pushPoint({
-        x: cx + nx * rx,
-        y: cy + ny * ry,
-        nx,
-        ny,
-        tx,
-        ty,
-        u: u0 + (u1 - u0) * k
-      });
-    }
-  }
-
-  const centerY = (topRun + bottomRun) * 0.5;
-  const returnRadiusY = (topRun - bottomRun) * 0.5;
-  pushStraight(24, rearReturnX, topRun, frontReturnX, topRun, 0, 1, 0, 4.2);
-  pushReturn(12, frontReturnX, centerY, returnRadiusX, returnRadiusY, Math.PI * 0.5, -Math.PI * 0.5, 4.2, 5.45);
-  pushStraight(24, frontReturnX, bottomRun, rearReturnX, bottomRun, 0, -1, 5.45, 9.65);
-  pushReturn(12, rearReturnX, centerY, returnRadiusX, returnRadiusY, -Math.PI * 0.5, -Math.PI * 1.5, 9.65, 10.9);
+  const outerProfile: ProfilePoint[] = [
+    { x: -1.48, y: 0.1, u: 0 },
+    { x: 1.16, y: 0.1, u: 4.2 },
+    { x: 1.53, y: -0.08, u: 4.9 },
+    { x: 1.28, y: -0.36, u: 5.65 },
+    { x: -1.3, y: -0.36, u: 9.75 },
+    { x: -1.53, y: -0.11, u: 10.45 }
+  ];
+  const innerProfile: ProfilePoint[] = [
+    { x: -1.3, y: 0.035, u: 0 },
+    { x: 1.04, y: 0.035, u: 4.2 },
+    { x: 1.35, y: -0.08, u: 4.9 },
+    { x: 1.13, y: -0.27, u: 5.65 },
+    { x: -1.16, y: -0.27, u: 9.75 },
+    { x: -1.35, y: -0.105, u: 10.45 }
+  ];
 
   function addVertex(x: number, y: number, z: number, u: number, v: number) {
     positions.push(x, y, z);
@@ -318,65 +296,43 @@ function createTreadGeometry() {
     indices.push(start, start + 1, start + 2, start, start + 2, start + 3);
   }
 
-  function outerPoint(point: BeltPoint, z: number): [number, number, number, number, number] {
-    return [point.x, point.y, z, point.u, z > 0 ? 0.05 : 0.95];
+  function point(profile: ProfilePoint[], index: number, z: number, v: number): [number, number, number, number, number] {
+    const item = profile[index % profile.length];
+    return [item.x, item.y, z, item.u, v];
   }
 
-  function innerPoint(point: BeltPoint, z: number): [number, number, number, number, number] {
-    return [point.x - point.nx * beltThickness, point.y - point.ny * beltThickness, z, point.u, z > 0 ? 0.28 : 0.72];
+  function insetPoint(profile: ProfilePoint[], index: number, z: number, v: number): [number, number, number, number, number] {
+    const item = profile[index % profile.length];
+    return [item.x, item.y, z, item.u, v];
   }
 
-  for (let i = 0; i < ring.length; i += 1) {
-    const a = ring[i];
-    const b = ring[(i + 1) % ring.length];
-    addQuad(outerPoint(a, outerSide), outerPoint(b, outerSide), outerPoint(b, innerSide), outerPoint(a, innerSide));
-    addQuad(innerPoint(a, innerSide), innerPoint(b, innerSide), innerPoint(b, outerSide), innerPoint(a, outerSide));
-    addQuad(outerPoint(a, outerSide), innerPoint(a, outerSide), innerPoint(b, outerSide), outerPoint(b, outerSide));
-    addQuad(outerPoint(b, innerSide), innerPoint(b, innerSide), innerPoint(a, innerSide), outerPoint(a, innerSide));
+  for (let i = 0; i < outerProfile.length; i += 1) {
+    const next = (i + 1) % outerProfile.length;
+    addQuad(point(outerProfile, i, outerSide, 0.05), point(outerProfile, next, outerSide, 0.05), insetPoint(innerProfile, next, outerSide, 0.95), insetPoint(innerProfile, i, outerSide, 0.95));
+    addQuad(point(outerProfile, next, innerSide, 0.05), point(outerProfile, i, innerSide, 0.05), insetPoint(innerProfile, i, innerSide, 0.95), insetPoint(innerProfile, next, innerSide, 0.95));
+    addQuad(point(outerProfile, i, outerSide, 0.04), point(outerProfile, i, innerSide, 0.96), point(outerProfile, next, innerSide, 0.96), point(outerProfile, next, outerSide, 0.04));
+    addQuad(insetPoint(innerProfile, next, outerSide, 0.2), insetPoint(innerProfile, next, innerSide, 0.8), insetPoint(innerProfile, i, innerSide, 0.8), insetPoint(innerProfile, i, outerSide, 0.2));
   }
 
-  function pointAt(progress: number) {
-    const scaled = ((progress % 1) + 1) % 1 * ring.length;
-    const index = Math.floor(scaled) % ring.length;
-    return ring[index];
+  function addOuterBand(x0: number, y0: number, x1: number, y1: number, band: number, u0: number, u1: number) {
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+    const length = Math.hypot(dx, dy) || 1;
+    const nx = -dy / length;
+    const ny = dx / length;
+    const z = outerSide + 0.006;
+    addQuad(
+      [x0 + nx * band, y0 + ny * band, z, u0, 0.22],
+      [x1 + nx * band, y1 + ny * band, z, u1, 0.22],
+      [x1 - nx * band, y1 - ny * band, z, u1, 0.34],
+      [x0 - nx * band, y0 - ny * band, z, u0, 0.34]
+    );
   }
 
-  function addRaisedShoeGeometry(point: BeltPoint) {
-    const widthOuter = outerSide - shoeInset;
-    const widthInner = innerSide + shoeInset;
-    const nx = point.nx;
-    const ny = point.ny;
-    const tx = point.tx;
-    const ty = point.ty;
-    const cx = point.x + nx * shoeHeight * 0.5;
-    const cy = point.y + ny * shoeHeight * 0.5;
-    const hx = tx * shoeLength * 0.5;
-    const hy = ty * shoeLength * 0.5;
-    const ox = nx * shoeHeight;
-    const oy = ny * shoeHeight;
-    const u0 = point.u;
-    const u1 = point.u + 0.22;
-
-    const p0: [number, number, number, number, number] = [cx - hx, cy - hy, widthOuter, u0, 0.12];
-    const p1: [number, number, number, number, number] = [cx + hx, cy + hy, widthOuter, u1, 0.12];
-    const p2: [number, number, number, number, number] = [cx + hx, cy + hy, widthInner, u1, 0.88];
-    const p3: [number, number, number, number, number] = [cx - hx, cy - hy, widthInner, u0, 0.88];
-    const q0: [number, number, number, number, number] = [p0[0] + ox, p0[1] + oy, widthOuter, u0, 0.2];
-    const q1: [number, number, number, number, number] = [p1[0] + ox, p1[1] + oy, widthOuter, u1, 0.2];
-    const q2: [number, number, number, number, number] = [p2[0] + ox, p2[1] + oy, widthInner, u1, 0.8];
-    const q3: [number, number, number, number, number] = [p3[0] + ox, p3[1] + oy, widthInner, u0, 0.8];
-
-    addQuad(q0, q1, q2, q3);
-    addQuad(p0, p3, p2, p1);
-    addQuad(p0, p1, q1, q0);
-    addQuad(p3, q3, q2, p2);
-    addQuad(p1, p2, q2, q1);
-    addQuad(p0, q0, q3, p3);
-  }
-
-  for (let i = 0; i < shoeSegments; i += 1) {
-    addRaisedShoeGeometry(pointAt(i / shoeSegments));
-  }
+  addOuterBand(-1.18, 0.07, 1.02, 0.07, 0.016, 0.5, 4.05);
+  addOuterBand(-1.16, -0.325, 1.08, -0.325, 0.018, 6.0, 9.35);
+  addOuterBand(1.23, -0.285, 1.43, -0.09, 0.015, 5.35, 5.75);
+  addOuterBand(-1.42, -0.12, -1.22, -0.305, 0.015, 9.65, 10.15);
 
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
   geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
@@ -522,11 +478,56 @@ function bakeGeometryFromObject(object: THREE.Object3D) {
   return { geometry, material };
 }
 
+function makeBarrelTexture(kind: 'albedo' | 'roughness' | 'metalness') {
+  const textureCanvas = document.createElement('canvas');
+  textureCanvas.width = 384;
+  textureCanvas.height = 64;
+  const ctx = textureCanvas.getContext('2d')!;
+  if (kind === 'albedo') {
+    ctx.fillStyle = '#555947';
+    ctx.fillRect(0, 0, 384, 64);
+    ctx.fillStyle = '#73745f';
+    for (let x = 0; x < 384; x += 42) {
+      ctx.fillRect(x + 3, 9, 4, 46);
+      ctx.fillRect(x + 29, 12, 2, 40);
+    }
+    ctx.fillStyle = 'rgba(31, 31, 26, 0.5)';
+    for (let x = 0; x < 384; x += 17) ctx.fillRect(x, 42 + ((x / 17) % 3), 9, 2);
+    ctx.fillStyle = 'rgba(166, 158, 112, 0.22)';
+    ctx.fillRect(0, 11, 384, 4);
+    ctx.fillStyle = '#252823';
+    ctx.fillRect(332, 0, 52, 64);
+    ctx.fillStyle = '#0e0f0d';
+    ctx.fillRect(362, 0, 22, 64);
+  } else if (kind === 'roughness') {
+    ctx.fillStyle = '#bdbdbd';
+    ctx.fillRect(0, 0, 384, 64);
+    ctx.fillStyle = '#e1e1e1';
+    ctx.fillRect(0, 10, 384, 8);
+    ctx.fillStyle = '#8a8a8a';
+    ctx.fillRect(332, 0, 52, 64);
+  } else {
+    ctx.fillStyle = '#575757';
+    ctx.fillRect(0, 0, 384, 64);
+    ctx.fillStyle = '#777777';
+    ctx.fillRect(332, 0, 52, 64);
+  }
+  const texture = new THREE.CanvasTexture(textureCanvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(1.8, 1);
+  texture.colorSpace = kind === 'albedo' ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+  return texture;
+}
+
 function makeBarrelMaterial() {
   return new THREE.MeshStandardMaterial({
-    color: 0x5d604c,
-    roughness: 0.62,
-    metalness: 0.36
+    map: makeBarrelTexture('albedo'),
+    roughnessMap: makeBarrelTexture('roughness'),
+    metalnessMap: makeBarrelTexture('metalness'),
+    color: 0x8a8668,
+    roughness: 0.68,
+    metalness: 0.42
   });
 }
 
@@ -669,7 +670,7 @@ async function boot() {
     'Hero tank validates visible part relationship up close',
     'Spawn proof renders exactly 24 independently animated tanks',
     'Treads use MeshStandardMaterial with albedo, roughness, metalness, and normal maps',
-    'Authored tread belt uses sidewall thickness, curved returns, raised shoes, rails, and PBR UV motion',
+    'Authored tread belt uses Sherman trapezoid silhouette, closed side/back volume, guide bands, and animated PBR material lanes',
     'Spawn treads use InstancedBufferAttribute tread phase instead of a shared material-wide texture offset',
     'Drive, wheel, turret, barrel, and tread motion are seeded per tank with smoothed random cycles',
     'Every turret traverses horizontally on its own yaw cycle',
@@ -720,7 +721,7 @@ async function boot() {
   const heroTurret = turret.object.clone(true);
   heroTurretPivot.add(heroTurret);
   const heroBarrelPivot = new THREE.Group();
-  heroBarrelPivot.position.copy(barrelSocket);
+  heroBarrelPivot.position.copy(heroBarrelSocket);
   heroTurretPivot.add(heroBarrelPivot);
   const heroBarrel = new THREE.Mesh(barrel.geometry, barrel.material);
   heroBarrelPivot.add(heroBarrel);
@@ -773,7 +774,7 @@ async function boot() {
     hero.position.x = -5.1 + ((t * 0.48 + 1.6) % 3.2);
     heroWheels.forEach((wheel) => { wheel.rotation.z -= dt * 5.8; });
     heroTurretPivot.rotation.y = Math.sin(t * 0.65) * 0.14;
-    heroBarrelPivot.rotation.z = Math.sin(t * 1.05) * 0.03;
+    heroBarrelPivot.rotation.z = Math.sin(t * 1.05) * 0.08;
 
     let gearIndex = 0;
     for (let i = 0; i < spawnTarget; i += 1) {
