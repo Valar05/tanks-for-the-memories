@@ -23,7 +23,8 @@
     "visual-qa:retopo-tank": "node scripts/validate_retopo_tank_cloud_gate.mjs",
     "export:authored-boxmodel": "node scripts/export_authored_sherman_boxmodel.mjs",
     "authored-boxmodel-smoke": "node scripts/validate_authored_boxmodel_asset.mjs",
-    "visual-qa:boxmodel-tank": "node scripts/validate_boxmodel_tank_cloud_gate.mjs"
+    "visual-qa:boxmodel-tank": "node scripts/validate_boxmodel_tank_cloud_gate.mjs",
+    "boxmodel-tuner-smoke": "node scripts/validate_boxmodel_tuner.mjs"
   },
   "dependencies": {
     "three": "^0.166.1"

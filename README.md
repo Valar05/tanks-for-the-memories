@@ -47,6 +47,7 @@ The current browser slice is a commander-station sketch, not the whole intended 
 - Physical evidence carriers for scout, radio, visual, and HQ claims
 - After-action memory sheets with original report, reality, consequence, and lesson
 - Runtime-generated tank preview beside the commander station
+- Cloud-reviewed Sherman boxmodel part tuner at `boxmodel-tank.html?tune=1` for gesture-only location, rotation, and scale edits before baking geometry fixes
 
 ## Commands
 

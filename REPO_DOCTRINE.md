@@ -28,6 +28,8 @@ The current browser prototype is a commander-station probe, not the full product
 
 Tank visual work in this repository is cloud-gated. Local screenshots, Android `screencap`, localhost browser capture, and local visual harness frames are forbidden for visual validation and must not be used as acceptance proof. Visual success requires the cloud visual truth release lane plus Sense Simulation review of the named visible relationship. If cloud review is blocked, repair the cloud review surface or report that blocker; do not substitute local capture.
 
+Boxmodel geometry tuning must use the hosted gesture-only tuner (`boxmodel-tank.html?tune=1`) when coordinate placement is uncertain. Do not continue blind mesh edits after a cloud screenshot disproves the visible relationship. Select one named part, adjust location/rotation/scale through the tuner, export the tuning JSON or share URL, then bake only an accepted cloud-reviewed tuning snapshot into source assets.
+
 ## Commander Identity
 
 Tanks For The Memories is a tank commander operation game about managing uncertainty from inside and around a crewed machine.
