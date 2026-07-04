@@ -19,7 +19,7 @@ def R(rx, ry, rz):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_boxmodel_v1'
-REVISION = 'v1-4-front-shoulder-armor-fillers'
+REVISION = 'v1-5-flush-glacis-shoulder-fill'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -180,10 +180,12 @@ box('left_sponson_weld_cover__hull_left', 'hull_left', (2.72,0.045,0.055), (-0.3
 box('right_sponson_weld_cover__hull_right', 'hull_right', (2.72,0.045,0.055), (-0.30,0.58,0.615), hull_root, rot=(0,0,-0.02), bevel=0.01)
 box('glacis_deck_weld_cover__hull_glacis', 'hull_glacis', (0.08,0.04,0.98), (0.70,0.665,0), hull_root, rot=(0,0,-0.08), bevel=0.008)
 box('rear_deck_weld_cover__hull_rear', 'hull_rear', (0.06,0.05,1.02), (-1.52,0.60,0), hull_root, bevel=0.008)
-for z, side, plate in [(-0.675,'left','hull_left'), (0.675,'right','hull_right')]:
-    sign = -1 if z < 0 else 1
-    quad(f'{side}_front_shoulder_armor_filler__{plate}', plate, [(1.56,0.12,z),(0.74,0.61,z),(0.76,0.52,z+sign*0.25),(1.50,0.02,z+sign*0.25)], hull_root, thickness=0.055)
-    box(f'{side}_front_track_to_glacis_cover__{plate}', plate, (0.82,0.12,0.12), (1.10,0.11,z+sign*0.18), hull_root, rot=(0,0,-0.34), bevel=0.012)
+# Flush glacis shoulder plates: close the visible air triangles beside the front wedge.
+# These share the glacis slope instead of standing up as side wings.
+quad('left_flush_glacis_shoulder__hull_left', 'hull_left', [(1.56,0.128,-0.590),(0.66,0.685,-0.515),(0.64,0.655,-0.725),(1.54,0.095,-0.805)], hull_root, thickness=0.05)
+quad('right_flush_glacis_shoulder__hull_right', 'hull_right', [(0.66,0.685,0.515),(1.56,0.128,0.590),(1.54,0.095,0.805),(0.64,0.655,0.725)], hull_root, thickness=0.05)
+box('left_low_front_track_cheek__hull_left', 'hull_left', (0.58,0.08,0.10), (1.27,0.11,-0.755), hull_root, rot=(0,0,-0.25), bevel=0.01)
+box('right_low_front_track_cheek__hull_right', 'hull_right', (0.58,0.08,0.10), (1.27,0.11,0.755), hull_root, rot=(0,0,-0.25), bevel=0.01)
 
 for z, side, wheel_parent in [(-0.83,'left',left_wheels),(0.83,'right',right_wheels)]:
     sign = -1 if z < 0 else 1
@@ -261,7 +263,7 @@ manifest = {
         'authored_axes': 'X forward/back, Y up/down, Z left/right',
         'blender_axes': 'X forward/back, Y left/right, Z up/down after P/S/R conversion helpers',
         'threejs_axes_after_gltf': 'X forward/back, Y up/down, Z left/right',
-        'visual_regression_prevented': 'tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front glacis shoulders must not expose triangular air gaps'
+        'visual_regression_prevented': 'tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front glacis shoulders must be flush sloped armor without triangular air gaps or wing plates'
     },
     'runtime_contract': {
         'turret_traverse': 'rotate turret_traverse_pivot around Y',
@@ -270,7 +272,7 @@ manifest = {
         'tread_motion': 'scroll material maps on left_track_motion and right_track_motion',
         'wheel_motion': 'rotate children of left_roadwheel_group and right_roadwheel_group',
         'side_skirt_occlusion': 'roadwheel discs sit inside track skirt volume; exterior track cover hides tire backs from front and side views',
-        'front_shoulder_armor': 'front shoulder filler plates close the triangular air gap between glacis wedge and track pods',
+        'front_shoulder_armor': 'flush glacis shoulder plates close the triangular air gap between front wedge and track pods without standing up as side wings',
         'commander_hatch': 'commander_hatch__turret_top is a named posture marker'
     },
     'budget': {'target_triangles': '2500-4500', 'hard_cap_triangles': 6000, 'actual_triangles': triangles, 'mesh_count': mesh_count},
