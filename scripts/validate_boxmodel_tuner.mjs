@@ -22,7 +22,7 @@ const requiredPartIds = [
 ];
 
 if (!source.includes("query.get('tune') === '1'")) fail('boxmodel scene must expose ?tune=1 mode');
-if (!source.includes('tftm-authored-sherman-boxmodel-tuner-v4-20260704')) fail('tuner build token missing');
+if (!source.includes('tftm-authored-sherman-boxmodel-tuner-v5-20260704')) fail('tuner build token missing');
 if (!source.includes("type TuneMode = 'move' | 'rotate' | 'scale'")) fail('tuner must have move/rotate/scale modes');
 if (!source.includes("type TuneAxis = 'screen' | 'x' | 'y' | 'z'")) fail('tuner must have gesture axis locks');
 if (!source.includes('serializeTuneParts')) fail('tuner must serialize editable part transforms');
@@ -37,6 +37,9 @@ if (!source.includes('mesh.visible = part.visible')) fail('placed plugs must rem
 if (!source.includes('0x8c8b63')) fail('plug material must default to hull-compatible armor color');
 if (!source.includes('scale: [0.34, 0.62, 0.92]')) fail('plug defaults must be narrow across hull and long parallel to tracks');
 if (!source.includes('rotationDeg: [0, 0, 0]')) fail('plug defaults must not start wide-rotated or angled across tracks');
+if (source.includes('model.rotation.y = -Math.PI / 2 - 0.18')) fail('tank model must not keep the old extra presentation yaw');
+if (!source.includes('model.rotation.y = -Math.PI / 2;')) fail('tank model must use only the required axis correction yaw');
+if (!source.includes('camera.position.set(0, 3.5, -6.2)')) fail('initial tuner camera must start square to the model frame');
 if (!source.includes('aria-pressed')) fail('parts list must expose one active selected row');
 if (!source.includes('is-collapsed')) fail('parts list must collapse by default');
 if (source.includes('data-field=')) fail('primary transform UI must not use numeric transform fields');

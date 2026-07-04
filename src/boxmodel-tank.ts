@@ -11,7 +11,7 @@ if (!root) throw new Error('missing #boxmodel-tank-root');
 const query = new URLSearchParams(window.location.search);
 const isTuneMode = query.get('tune') === '1';
 const baseVisualBuild = 'tftm-authored-sherman-boxmodel-v1-7-20260704';
-const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v4-20260704';
+const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v5-20260704';
 const visualBuild = isTuneMode ? tunerVisualBuild : baseVisualBuild;
 
 type TuneMode = 'move' | 'rotate' | 'scale';
@@ -81,7 +81,7 @@ scene.background = new THREE.Color(0x171a14);
 scene.fog = new THREE.Fog(0x171a14, 12, 32);
 
 const camera = new THREE.PerspectiveCamera(33, 1, 0.05, 100);
-camera.position.set(-4.1, 3.5, 5.5);
+camera.position.set(0, 3.5, -6.2);
 const controls = new OrbitControls(camera, canvas);
 controls.target.set(0, 0.36, 0);
 controls.enableDamping = true;
@@ -157,7 +157,7 @@ new GLTFLoader().load(AUTHORED_SHERMAN_BOXMODEL_GLB_URL, (gltf) => {
   box.getSize(size);
   model.position.sub(center);
   model.position.y += size.y * 0.5 - 0.52;
-  model.rotation.y = -Math.PI / 2 - 0.18;
+  model.rotation.y = -Math.PI / 2;
   tankRoot.add(model);
   statusEl.textContent = isTuneMode ? 'loaded boxmodel; gesture-only tuner active' : 'loaded Blender boxmodel with box UV plates';
   postVisualBeacon('loaded', isTuneMode ? { tuneParts: tuneParts.length } : {});

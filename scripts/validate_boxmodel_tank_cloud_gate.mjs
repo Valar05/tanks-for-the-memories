@@ -10,7 +10,7 @@ if (failures.length === 0) {
   const captures = (manifest.required_cloud_captures || []).join('\\n');
   if (!rules.includes('authored_sherman_boxmodel_v1')) fail('cloud manifest must name authored_sherman_boxmodel_v1');
   if (!rules.includes('tftm-authored-sherman-boxmodel-v1-7-20260704')) fail('cloud manifest must require the boxmodel build token');
-  if (!rules.includes('tftm-authored-sherman-boxmodel-tuner-v4-20260704')) fail('cloud manifest must require the boxmodel tuner build token');
+  if (!rules.includes('tftm-authored-sherman-boxmodel-tuner-v5-20260704')) fail('cloud manifest must require the boxmodel tuner build token');
   if (!rules.includes('boxmodel-tank.html?tune=1')) fail('cloud manifest must require hosted tuner route review');
   if (!rules.includes('Blender box-model')) fail('cloud manifest must identify Blender box-model source');
   if (!captures.includes('boxmodel-tank phone portrait')) fail('cloud captures must require boxmodel-tank phone portrait');

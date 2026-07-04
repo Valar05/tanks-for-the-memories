@@ -59,7 +59,7 @@ const releaseManifest = {
     route: 'boxmodel-tank.html',
     expected_build: 'tftm-authored-sherman-boxmodel-v1-7-20260704',
     tuner_route: 'boxmodel-tank.html?tune=1',
-    tuner_expected_build: 'tftm-authored-sherman-boxmodel-tuner-v4-20260704',
+    tuner_expected_build: 'tftm-authored-sherman-boxmodel-tuner-v5-20260704',
     asset_id: authoredBoxmodelManifest.asset_id,
     output_glb: authoredBoxmodelManifest.output_glb,
     source_blend: authoredBoxmodelManifest.source_blend,
@@ -69,7 +69,7 @@ const releaseManifest = {
     face_plate_ids: authoredBoxmodelManifest.face_plate_ids,
     asset_policy: 'fully authored Blender box-model chassis with solidified overlapping armor plates, non-cube cast turret silhouette, and coaxial MG; no Meshy chassis or turret imports; box UV PNG plates for DALL-E paintability',
     acceptance: 'Sense Simulation must confirm Sherman silhouette, non-cube turret massing, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.',
-    tuner_acceptance: 'Sense Simulation must review boxmodel-tank.html?tune=1 as a gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored plug instances are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected plug is highlighted for editing, already enabled plugs remain visible, Move/Rotate/Scale are one active mode at a time, drag/pinch/twist gestures visibly change the selected plug, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps views, no object transform handles appear, and local capture was not used.'
+    tuner_acceptance: 'Sense Simulation must review boxmodel-tank.html?tune=1 as a gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored plug instances are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected plug is highlighted for editing, already enabled plugs remain visible, Move/Rotate/Scale are one active mode at a time, drag/pinch/twist gestures visibly change the selected plug, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and plugs share the same unskewed model frame, no object transform handles appear, and local capture was not used.'
   },
   authored_retopo_review: {
     route: 'retopo-tank.html',
@@ -110,8 +110,8 @@ const releaseManifest = {
     'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-7-20260704',
     'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, and no local capture',
     'boxmodel-tank close-up review showing solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability',
-    'boxmodel-tank.html?tune=1 phone portrait showing gesture-only part tuner with collapsed parts drawer, front-right/front-left/rear-right/rear-left hull-colored plug parts aligned parallel to the tracks, selected plug highlight, camera orientation widget, and build token tftm-authored-sherman-boxmodel-tuner-v4-20260704',
-    'boxmodel-tank.html?tune=1 cloud interaction evidence showing one selected plug visibly move/rotate/scale through drag/pinch/twist while other enabled plugs remain placed, OrbitControls camera orbit/dolly/pan preserved, and no object transform handles',
+    'boxmodel-tank.html?tune=1 phone portrait showing gesture-only part tuner with collapsed parts drawer, front-right/front-left/rear-right/rear-left hull-colored plug parts aligned parallel to the tracks, selected plug highlight, camera orientation widget, square unskewed tank frame, and build token tftm-authored-sherman-boxmodel-tuner-v5-20260704',
+    'boxmodel-tank.html?tune=1 cloud interaction evidence showing one selected plug visibly move/rotate/scale through drag/pinch/twist while other enabled plugs remain placed, OrbitControls camera orbit/dolly/pan preserved from an unskewed model frame, and no object transform handles',
     'retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-1-20260704',
     'retopo-tank phone landscape showing split face texture plates with sane UV mapping and no local capture',
     'retopo-tank close-up chassis and turret review showing hard-surface authored form, usable turret ring, and barrel/mantlet ownership',
