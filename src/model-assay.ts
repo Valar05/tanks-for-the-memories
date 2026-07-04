@@ -57,7 +57,16 @@ type TankAnimationState = {
 
 const spawnTarget = 24;
 const wheelsPerTank = 10;
-const treadTrianglesPerTank = 520;
+const treadTrianglesPerTank = 1400;
+const barrelSocket = new THREE.Vector3(0.58, 0.82, 0);
+const matrixScratch = {
+  root: new THREE.Matrix4(),
+  yaw: new THREE.Matrix4(),
+  socket: new THREE.Matrix4(),
+  pitch: new THREE.Matrix4(),
+  scale: new THREE.Matrix4(),
+  composed: new THREE.Matrix4()
+};
 const root = document.querySelector<HTMLDivElement>('#assay-root');
 if (!root) throw new Error('missing #assay-root');
 
@@ -211,6 +220,177 @@ function createTreadGeometry() {
   const positions: number[] = [];
   const uvs: number[] = [];
   const indices: number[] = [];
+  const outerSide = 0.13;
+  const innerSide = -0.13;
+  const topRun = 0.16;
+  const bottomRun = -0.39;
+  const frontReturnX = 1.36;
+  const rearReturnX = -1.36;
+  const returnRadiusX = 0.25;
+  const beltThickness = 0.075;
+  const shoeHeight = 0.045;
+  const shoeLength = 0.115;
+  const shoeInset = 0.015;
+  const shoeSegments = 38;
+
+  const outerBeltSurface = 'outerBeltSurface';
+  const innerBeltSurface = 'innerBeltSurface';
+  const outerSidewall = 'outerSidewall';
+  const innerSidewall = 'innerSidewall';
+  const topRunMarker = 'topRun';
+  const bottomRunMarker = 'bottomRun';
+  const frontReturnMarker = 'frontReturn';
+  const rearReturnMarker = 'rearReturn';
+  void [outerBeltSurface, innerBeltSurface, outerSidewall, innerSidewall, topRunMarker, bottomRunMarker, frontReturnMarker, rearReturnMarker];
+
+  type BeltPoint = {
+    x: number;
+    y: number;
+    nx: number;
+    ny: number;
+    tx: number;
+    ty: number;
+    u: number;
+  };
+
+  const ring: BeltPoint[] = [];
+
+  function pushPoint(point: BeltPoint) {
+    ring.push(point);
+  }
+
+  function pushStraight(count: number, x0: number, y0: number, x1: number, y1: number, nx: number, ny: number, u0: number, u1: number) {
+    const tx = x1 >= x0 ? 1 : -1;
+    for (let i = 0; i < count; i += 1) {
+      const k = i / count;
+      pushPoint({
+        x: x0 + (x1 - x0) * k,
+        y: y0 + (y1 - y0) * k,
+        nx,
+        ny,
+        tx,
+        ty: 0,
+        u: u0 + (u1 - u0) * k
+      });
+    }
+  }
+
+  function pushReturn(count: number, cx: number, cy: number, rx: number, ry: number, a0: number, a1: number, u0: number, u1: number) {
+    for (let i = 0; i < count; i += 1) {
+      const k = i / count;
+      const angle = a0 + (a1 - a0) * k;
+      const nx = Math.cos(angle);
+      const ny = Math.sin(angle);
+      const tangentSign = a1 > a0 ? 1 : -1;
+      const tx = -Math.sin(angle) * tangentSign;
+      const ty = Math.cos(angle) * tangentSign;
+      pushPoint({
+        x: cx + nx * rx,
+        y: cy + ny * ry,
+        nx,
+        ny,
+        tx,
+        ty,
+        u: u0 + (u1 - u0) * k
+      });
+    }
+  }
+
+  const centerY = (topRun + bottomRun) * 0.5;
+  const returnRadiusY = (topRun - bottomRun) * 0.5;
+  pushStraight(24, rearReturnX, topRun, frontReturnX, topRun, 0, 1, 0, 4.2);
+  pushReturn(12, frontReturnX, centerY, returnRadiusX, returnRadiusY, Math.PI * 0.5, -Math.PI * 0.5, 4.2, 5.45);
+  pushStraight(24, frontReturnX, bottomRun, rearReturnX, bottomRun, 0, -1, 5.45, 9.65);
+  pushReturn(12, rearReturnX, centerY, returnRadiusX, returnRadiusY, -Math.PI * 0.5, -Math.PI * 1.5, 9.65, 10.9);
+
+  function addVertex(x: number, y: number, z: number, u: number, v: number) {
+    positions.push(x, y, z);
+    uvs.push(u, v);
+    return positions.length / 3 - 1;
+  }
+
+  function addQuad(a: [number, number, number, number, number], b: [number, number, number, number, number], c: [number, number, number, number, number], d: [number, number, number, number, number]) {
+    const start = positions.length / 3;
+    addVertex(...a);
+    addVertex(...b);
+    addVertex(...c);
+    addVertex(...d);
+    indices.push(start, start + 1, start + 2, start, start + 2, start + 3);
+  }
+
+  function outerPoint(point: BeltPoint, z: number): [number, number, number, number, number] {
+    return [point.x, point.y, z, point.u, z > 0 ? 0.05 : 0.95];
+  }
+
+  function innerPoint(point: BeltPoint, z: number): [number, number, number, number, number] {
+    return [point.x - point.nx * beltThickness, point.y - point.ny * beltThickness, z, point.u, z > 0 ? 0.28 : 0.72];
+  }
+
+  for (let i = 0; i < ring.length; i += 1) {
+    const a = ring[i];
+    const b = ring[(i + 1) % ring.length];
+    addQuad(outerPoint(a, outerSide), outerPoint(b, outerSide), outerPoint(b, innerSide), outerPoint(a, innerSide));
+    addQuad(innerPoint(a, innerSide), innerPoint(b, innerSide), innerPoint(b, outerSide), innerPoint(a, outerSide));
+    addQuad(outerPoint(a, outerSide), innerPoint(a, outerSide), innerPoint(b, outerSide), outerPoint(b, outerSide));
+    addQuad(outerPoint(b, innerSide), innerPoint(b, innerSide), innerPoint(a, innerSide), outerPoint(a, innerSide));
+  }
+
+  function pointAt(progress: number) {
+    const scaled = ((progress % 1) + 1) % 1 * ring.length;
+    const index = Math.floor(scaled) % ring.length;
+    return ring[index];
+  }
+
+  function addRaisedShoeGeometry(point: BeltPoint) {
+    const widthOuter = outerSide - shoeInset;
+    const widthInner = innerSide + shoeInset;
+    const nx = point.nx;
+    const ny = point.ny;
+    const tx = point.tx;
+    const ty = point.ty;
+    const cx = point.x + nx * shoeHeight * 0.5;
+    const cy = point.y + ny * shoeHeight * 0.5;
+    const hx = tx * shoeLength * 0.5;
+    const hy = ty * shoeLength * 0.5;
+    const ox = nx * shoeHeight;
+    const oy = ny * shoeHeight;
+    const u0 = point.u;
+    const u1 = point.u + 0.22;
+
+    const p0: [number, number, number, number, number] = [cx - hx, cy - hy, widthOuter, u0, 0.12];
+    const p1: [number, number, number, number, number] = [cx + hx, cy + hy, widthOuter, u1, 0.12];
+    const p2: [number, number, number, number, number] = [cx + hx, cy + hy, widthInner, u1, 0.88];
+    const p3: [number, number, number, number, number] = [cx - hx, cy - hy, widthInner, u0, 0.88];
+    const q0: [number, number, number, number, number] = [p0[0] + ox, p0[1] + oy, widthOuter, u0, 0.2];
+    const q1: [number, number, number, number, number] = [p1[0] + ox, p1[1] + oy, widthOuter, u1, 0.2];
+    const q2: [number, number, number, number, number] = [p2[0] + ox, p2[1] + oy, widthInner, u1, 0.8];
+    const q3: [number, number, number, number, number] = [p3[0] + ox, p3[1] + oy, widthInner, u0, 0.8];
+
+    addQuad(q0, q1, q2, q3);
+    addQuad(p0, p3, p2, p1);
+    addQuad(p0, p1, q1, q0);
+    addQuad(p3, q3, q2, p2);
+    addQuad(p1, p2, q2, q1);
+    addQuad(p0, q0, q3, p3);
+  }
+
+  for (let i = 0; i < shoeSegments; i += 1) {
+    addRaisedShoeGeometry(pointAt(i / shoeSegments));
+  }
+
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  geometry.computeBoundingSphere();
+  return geometry;
+}
+
+function createLegacyRejectedSideFacadeTreadGeometry() {
+  const geometry = new THREE.BufferGeometry();
+  const positions: number[] = [];
+  const uvs: number[] = [];
+  const indices: number[] = [];
   const zOuter = 0.085;
   const zInner = -0.085;
   const zShoe = 0.12;
@@ -342,12 +522,50 @@ function bakeGeometryFromObject(object: THREE.Object3D) {
   return { geometry, material };
 }
 
+function makeBarrelMaterial() {
+  return new THREE.MeshStandardMaterial({
+    color: 0x5d604c,
+    roughness: 0.62,
+    metalness: 0.36
+  });
+}
+
+function bakeBarrelGeometryWithRearPivot(object: THREE.Object3D) {
+  object.updateWorldMatrix(true, true);
+  const mesh = findFirstMesh(object);
+  const geometry = mesh.geometry.clone();
+  geometry.applyMatrix4(mesh.matrixWorld);
+  const box = new THREE.Box3().setFromBufferAttribute(geometry.getAttribute('position') as THREE.BufferAttribute);
+  const center = new THREE.Vector3();
+  box.getCenter(center);
+  geometry.translate(-box.min.x, -center.y, -center.z);
+  geometry.computeVertexNormals();
+  geometry.computeBoundingSphere();
+  return {
+    geometry,
+    material: makeBarrelMaterial()
+  };
+}
+
 function loadRuntimePart(loader: GLTFLoader, url: string, targetMaxAxis: number, align?: (object: THREE.Object3D) => THREE.Object3D) {
   return new Promise<RuntimePart>((resolve, reject) => {
     loader.load(url, (gltf) => {
       const object = normalizeObject(gltf.scene, targetMaxAxis);
       if (align) align(object);
       const baked = bakeGeometryFromObject(object);
+      const mesh = findFirstMesh(object);
+      const primitive = mesh.geometry.getIndex()?.count || mesh.geometry.getAttribute('position').count;
+      resolve({ object, geometry: baked.geometry, material: baked.material, triangles: Math.floor(primitive / 3) });
+    }, undefined, reject);
+  });
+}
+
+function loadBarrelRuntimePart(loader: GLTFLoader, url: string, targetMaxAxis: number) {
+  return new Promise<RuntimePart>((resolve, reject) => {
+    loader.load(url, (gltf) => {
+      const object = normalizeObject(gltf.scene, targetMaxAxis);
+      alignLongestAxisToX(object);
+      const baked = bakeBarrelGeometryWithRearPivot(object);
       const mesh = findFirstMesh(object);
       const primitive = mesh.geometry.getIndex()?.count || mesh.geometry.getAttribute('position').count;
       resolve({ object, geometry: baked.geometry, material: baked.material, triangles: Math.floor(primitive / 3) });
@@ -362,6 +580,21 @@ function setInstance(mesh: THREE.InstancedMesh, index: number, x: number, y: num
   dummy.scale.setScalar(scale);
   dummy.updateMatrix();
   mesh.setMatrixAt(index, dummy.matrix);
+}
+
+function composeBarrelMatrix(mesh: THREE.InstancedMesh, index: number, x: number, z: number, yaw: number, barrelPitch: number, scale: number) {
+  matrixScratch.root.makeTranslation(x, 0, z);
+  matrixScratch.yaw.makeRotationY(yaw);
+  matrixScratch.socket.makeTranslation(barrelSocket.x, barrelSocket.y, barrelSocket.z);
+  matrixScratch.pitch.makeRotationZ(barrelPitch);
+  matrixScratch.scale.makeScale(scale, scale, scale);
+  matrixScratch.composed
+    .copy(matrixScratch.root)
+    .multiply(matrixScratch.yaw)
+    .multiply(matrixScratch.socket)
+    .multiply(matrixScratch.pitch)
+    .multiply(matrixScratch.scale);
+  mesh.setMatrixAt(index, matrixScratch.composed);
 }
 
 function makeInstancedMesh(part: RuntimePart, count: number) {
@@ -405,8 +638,8 @@ function seedTankState(index: number): TankAnimationState {
     turretRate: 0.18 + seedUnit(index + 59) * 0.42,
     turretAmplitude: 0.1 + seedUnit(index + 61) * 0.16,
     barrelPhase: seedUnit(index + 67) * Math.PI * 2,
-    barrelRate: 0.28 + seedUnit(index + 71) * 0.52,
-    barrelAmplitude: 0.04 + seedUnit(index + 73) * 0.045
+    barrelRate: 0.22 + seedUnit(index + 71) * 0.45,
+    barrelAmplitude: 0.09 + seedUnit(index + 73) * 0.08
   };
 }
 
@@ -421,7 +654,7 @@ async function boot() {
   const [hull, turret, barrel, gear] = await Promise.all([
     loadRuntimePart(loader, glbSrc(manifest.parts.hull.glb), 2.9),
     loadRuntimePart(loader, glbSrc(manifest.parts.turret.glb), 1.25),
-    loadRuntimePart(loader, glbSrc(manifest.parts.barrel_only.glb), 1.18, alignLongestAxisToX),
+    loadBarrelRuntimePart(loader, glbSrc(manifest.parts.barrel_only.glb), 1.18),
     loadRuntimePart(loader, glbSrc(manifest.parts.gear_mobile.glb), 0.34, alignWheelFaceToTankSide)
   ]);
 
@@ -440,7 +673,8 @@ async function boot() {
     'Spawn treads use InstancedBufferAttribute tread phase instead of a shared material-wide texture offset',
     'Drive, wheel, turret, barrel, and tread motion are seeded per tank with smoothed random cycles',
     'Every turret traverses horizontally on its own yaw cycle',
-    'Every barrel elevates vertically on its own pitch cycle',
+    'Every barrel elevates visibly from a rear socket pivot on its own pitch cycle',
+    'Barrel material is Sherman-compatible olive gunmetal PBR, not inherited black GLB material',
     'Wheels face tank sides and spin around the axle',
     'Barrel aligns forward from the turret instead of standing perpendicular',
     '24-tank target uses InstancedMesh; no deep-cloned GLB object trees'
@@ -486,10 +720,9 @@ async function boot() {
   const heroTurret = turret.object.clone(true);
   heroTurretPivot.add(heroTurret);
   const heroBarrelPivot = new THREE.Group();
-  heroBarrelPivot.position.set(0.66, 0.08, 0);
+  heroBarrelPivot.position.copy(barrelSocket);
   heroTurretPivot.add(heroBarrelPivot);
-  const heroBarrel = barrel.object.clone(true);
-  heroBarrel.position.set(0.72, 0, 0);
+  const heroBarrel = new THREE.Mesh(barrel.geometry, barrel.material);
   heroBarrelPivot.add(heroBarrel);
   const heroLeftTread = new THREE.Mesh(createTreadGeometry(), treadHeroLeft.material);
   heroLeftTread.position.z = -0.72;
@@ -554,7 +787,7 @@ async function boot() {
       const barrelPitch = smoothRandomCycle(t, state.barrelRate, state.barrelPhase, state.barrelAmplitude);
       setInstance(hullInstances, i, x, 0.22, z, yaw, 0, 0, 0.72);
       setInstance(turretInstances, i, x + 0.04, 0.76, z, yaw + turretYaw, 0, 0, 0.72);
-      setInstance(barrelInstances, i, x + 0.62, 0.82, z, yaw + turretYaw, 0, barrelPitch, 0.72);
+      composeBarrelMatrix(barrelInstances, i, x, z, yaw + turretYaw, barrelPitch, 0.72);
       setInstance(leftTreadInstances, i, x, 0, z - 0.52, yaw, 0, 0, 0.72);
       setInstance(rightTreadInstances, i, x, 0, z + 0.52, yaw, 0, 0, 0.72);
       updateTreadPhase(leftTreadInstances, i, treadPhase);

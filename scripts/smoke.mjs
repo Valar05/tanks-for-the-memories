@@ -113,20 +113,28 @@ for (const forbidden of ['BoxGeometry', 'CylinderGeometry', 'MeshBasicMaterial',
     failures.push('model assay must not render primitive/mesh seed in Meshy kit gate: ' + forbidden);
   }
 }
-for (const motionMarker of ['hero.position.x', 'wheel.rotation.z', 'map.offset.x', 'heroTurretPivot.rotation.y', 'heroBarrelPivot.rotation.z', 'setMatrixAt', 'spawnTarget', 'state.driveSpeed', 'state.drivePhase', 'state.wheelRate', 'state.wheelPhase', 'state.treadRate', 'state.treadPhase', 'state.turretRate', 'state.turretPhase', 'state.barrelRate', 'state.barrelPhase', 'updateTreadPhase(leftTreadInstances', 'updateTreadPhase(rightTreadInstances']) {
+for (const motionMarker of ['hero.position.x', 'wheel.rotation.z', 'map.offset.x', 'heroTurretPivot.rotation.y', 'heroBarrelPivot.rotation.z', 'setMatrixAt', 'spawnTarget', 'state.driveSpeed', 'state.drivePhase', 'state.wheelRate', 'state.wheelPhase', 'state.treadRate', 'state.treadPhase', 'state.turretRate', 'state.turretPhase', 'state.barrelRate', 'state.barrelPhase', 'updateTreadPhase(leftTreadInstances', 'updateTreadPhase(rightTreadInstances', 'composeBarrelMatrix(barrelInstances']) {
   if (!assaySource.includes(motionMarker)) {
     failures.push('animated 24-tank proof missing motion marker ' + motionMarker);
   }
 }
-for (const budgetMarker of ['24 tanks', '24 independently animated tanks', 'independent animation seeds', 'smoothed random cycles', 'Every turret traverses horizontally', 'Every barrel elevates vertically', 'draw-call', 'fps local sample', 'shared GLB geometry/textures']) {
+for (const budgetMarker of ['24 tanks', '24 independently animated tanks', 'independent animation seeds', 'smoothed random cycles', 'Every turret traverses horizontally', 'Every barrel elevates visibly', 'draw-call', 'fps local sample', 'shared GLB geometry/textures']) {
   if (!assaySource.includes(budgetMarker)) {
     failures.push('animated 24-tank proof missing budget/readout marker ' + budgetMarker);
   }
 }
-for (const treadQualityMarker of ['zShoe', 'zOuter', 'zInner', 'sidewall', 'raised shoes', 'curved returns']) {
+for (const treadQualityMarker of ['outerBeltSurface', 'innerBeltSurface', 'outerSidewall', 'innerSidewall', 'topRun', 'bottomRun', 'frontReturn', 'rearReturn', 'addRaisedShoeGeometry']) {
   if (!assaySource.includes(treadQualityMarker)) {
     failures.push('authored tread belt missing quality marker ' + treadQualityMarker);
   }
+}
+for (const barrelQualityMarker of ['bakeBarrelGeometryWithRearPivot', 'makeBarrelMaterial', 'barrelSocket', 'composeBarrelMatrix', 'olive gunmetal PBR']) {
+  if (!assaySource.includes(barrelQualityMarker)) {
+    failures.push('barrel proof missing quality marker ' + barrelQualityMarker);
+  }
+}
+if (assaySource.includes('setInstance(barrelInstances, i, x + 0.62')) {
+  failures.push('spawned barrels must not use old fixed centered placement');
 }
 if (/const\s+drive\s*=/.test(assaySource)) {
   failures.push('animated 24-tank proof must not use one global drive phase for spawned tanks');
@@ -210,8 +218,17 @@ if (kitManifest.animation_proof?.cycle_policy !== 'smoothed_random_per_tank_rate
 if (!String(kitManifest.animation_proof?.authored_tread_quality_gate || '').includes('rejected_flat_ribbon')) {
   failures.push('Meshy kit animation proof must remember flat tread ribbon rejection');
 }
-if (!kitManifest.animation_proof?.composition?.includes('authored_detailed_tread_belt')) {
-  failures.push('Meshy kit animation proof must require authored detailed tread belt');
+if (!kitManifest.animation_proof?.composition?.includes('authored_closed_3d_tread_belt_volume')) {
+  failures.push('Meshy kit animation proof must require authored closed 3D tread belt volume');
+}
+if (!String(kitManifest.animation_proof?.authored_tread_quality_gate || '').includes('rejected_side_facade_tread')) {
+  failures.push('Meshy kit animation proof must remember side-facade tread rejection');
+}
+if (kitManifest.animation_proof?.barrel_pivot_mode !== 'rear_socket_pivot_geometry') {
+  failures.push('Meshy kit animation proof must require rear socket barrel pivot geometry');
+}
+if (!String(kitManifest.animation_proof?.barrel_quality_gate || '').includes('rejected_black_center_pivot_barrel')) {
+  failures.push('Meshy kit animation proof must remember black centered barrel rejection');
 }
 
 const main = readFileSync('src/main.ts', 'utf8');

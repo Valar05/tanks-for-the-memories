@@ -104,8 +104,8 @@
     "turret": "child of turret_traverse_pivot on hull ring",
     "mantlet_barrel": "REJECTED: overmodeled block assembly; replaced by barrel_only candidate for barrel geometry, but socket/mantlet still unsolved",
     "gear_mobile": "duplicate sparingly or instance; rotate visible wheels; pair with authored tread ribbon texture animation",
-    "tread_ribbon": "only hand-authored mesh, but not a flat ribbon: must read as a detailed tread belt with sidewall thickness, curved returns, raised shoes/grousers, rails, and PBR UV motion while staying phone-budget instanced geometry",
-    "barrel_only": "candidate replacement for rejected mantlet_barrel; parent rear of barrel to a future compatible mantlet/socket pivot; do not use until socket exists and human review accepts it"
+    "tread_ribbon": "only hand-authored mesh, but not a side facade: must read as a closed 3D tread belt volume with outer/inner sidewalls, top run, bottom run, front return, rear return, raised shoes/grousers, rails, and PBR UV motion while staying phone-budget instanced geometry",
+    "barrel_only": "candidate replacement for rejected mantlet_barrel; bake Meshy barrel geometry with rear socket pivot at local origin, use Sherman-compatible olive/gunmetal PBR material override, and parent/compose it from turret socket so visible pitch reads as cannon elevation"
   },
   "reject_if_cloud_visual": [
     "barrel grows mantlet block, turret body, hull, or any housing geometry",
@@ -115,7 +115,9 @@
     "hull includes baked tracks/wheels that prevent tread animation",
     "turret cannot visually separate for traversal",
     "mantlet/barrel cannot plausibly pitch vertically",
-    "gear is too detailed to duplicate on phone or reads as a full track assembly"
+    "gear is too detailed to duplicate on phone or reads as a full track assembly",
+    "tread reads as a side card, wheel background, or facade instead of a closed track volume",
+    "barrel reads as black tube or does not visibly elevate around the turret front/socket"
   ],
   "next_runtime_use_allowed": false,
   "red_build": {
@@ -152,7 +154,7 @@
       "turret",
       "barrel_only",
       "gear_mobile",
-      "authored_detailed_tread_belt"
+      "authored_closed_3d_tread_belt_volume"
     ],
     "motion": [
       "forward_world_motion",
@@ -168,7 +170,7 @@
       "normal_map"
     ],
     "runtime_strategy": "shared geometry/material extraction plus InstancedMesh for 24-tank spawn proof; every spawned tank has independent drive, wheel, tread, turret, and barrel animation state; no deep-cloned GLB object trees",
-    "explicit_red_condition": "human visual review must accept tread readability, wheel orientation, barrel orientation, turret/barrel ownership, independent 24-tank motion, and phone performance from the cloud page",
+    "explicit_red_condition": "human visual review must accept closed 3D tread volume, wheel orientation, non-black rear-pivot barrel verticality, turret/barrel ownership, independent 24-tank motion, and phone performance from the cloud page",
     "authored_mesh_scope": "tread_ribbon_only",
     "independent_animation_target": 24,
     "per_tank_state": [
@@ -180,6 +182,9 @@
     ],
     "tread_phase_mode": "instanced_shader_attribute",
     "cycle_policy": "smoothed_random_per_tank_rates_and_phases_not_synchronized",
-    "authored_tread_quality_gate": "rejected_flat_ribbon; require phone_budget_detailed_belt_mesh_with_sidewall_returns_raised_shoes_and_pbr_uvs"
+    "authored_tread_quality_gate": "rejected_flat_ribbon; rejected_side_facade_tread; require phone_budget_closed_3d_tread_belt_volume_with_outer_inner_sidewalls_top_bottom_front_rear_returns_raised_shoes_and_pbr_uvs",
+    "barrel_pivot_mode": "rear_socket_pivot_geometry",
+    "barrel_material_mode": "sherman_compatible_olive_gunmetal_pbr_override",
+    "barrel_quality_gate": "rejected_black_center_pivot_barrel; require visible rear-socket vertical elevation and non-black Sherman-compatible PBR material"
   }
 }

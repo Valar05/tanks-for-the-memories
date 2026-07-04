@@ -1,37 +1,16 @@
 {
   "artifact": "tftm-sherman-24-tank-runtime-proof-red-review",
-  "generated_at": "2026-07-04T02:30:23.410Z",
-  "source_commit": "a1f7ed1",
+  "generated_at": "2026-07-04T02:47:13.221Z",
+  "source_commit": "eb3cc42",
   "dirty_status": [
-    "M ARCHITECTURE.md",
-    " M README.md",
-    " M REPO_DOCTRINE.md",
-    " M docs/doctrine/README.md",
-    " M package.json",
-    " M scripts/build.mjs",
+    "M assets/generated/meshy/sherman_part_meshy_kit_v1/assembly_manifest.json",
+    " M docs/doctrine/cloud-visual-truth.md",
+    " D generated/cloud-visual-truth/tftm-release/README.md",
+    " D generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json",
+    " D generated/cloud-visual-truth/tftm-release/firebase.json",
+    " M scripts/build_cloud_visual_release.mjs",
     " M scripts/smoke.mjs",
-    " M src/main.ts",
-    " M src/styles.css",
-    " M src/three-shim.d.ts",
-    "?? STEERING.md",
-    "?? assets/",
-    "?? docs/doctrine/cloud-visual-truth.md",
-    "?? docs/doctrine/game-shape.md",
-    "?? docs/doctrine/minimal-animatable-tank-model-request.md",
-    "?? docs/doctrine/original-heavy-tank-model-request.md",
-    "?? docs/doctrine/scorpion-informed-heavy-tank-systems-contract.md",
-    "?? docs/doctrine/sherman-hard-model-texture-architecture.md",
-    "?? docs/doctrine/tank-generation-red-build-credit-gate.md",
-    "?? docs/doctrine/vehicle-animation-workflow-contract.md",
-    "?? model-assay.html",
-    "?? public/tftm/models/",
-    "?? public/tftm/tanks/",
-    "?? research/",
-    "?? scripts/build_cloud_visual_release.mjs",
-    "?? scripts/generate_alpha_texture_proof.py",
-    "?? scripts/inspect_glb_contract.mjs",
-    "?? src/model-assay.css",
-    "?? src/model-assay.ts"
+    " M src/model-assay.ts"
   ],
   "dist": "generated/cloud-visual-truth/tftm-release/dist",
   "tank_asset": "m4a3_75_vvss_sherman_alpha_mobile",
@@ -113,7 +92,7 @@
         "turret",
         "barrel_only",
         "gear_mobile",
-        "authored_detailed_tread_belt"
+        "authored_closed_3d_tread_belt_volume"
       ],
       "motion": [
         "forward_world_motion",
@@ -129,7 +108,7 @@
         "normal_map"
       ],
       "runtime_strategy": "shared geometry/material extraction plus InstancedMesh for 24-tank spawn proof; every spawned tank has independent drive, wheel, tread, turret, and barrel animation state; no deep-cloned GLB object trees",
-      "explicit_red_condition": "human visual review must accept tread readability, wheel orientation, barrel orientation, turret/barrel ownership, independent 24-tank motion, and phone performance from the cloud page",
+      "explicit_red_condition": "human visual review must accept closed 3D tread volume, wheel orientation, non-black rear-pivot barrel verticality, turret/barrel ownership, independent 24-tank motion, and phone performance from the cloud page",
       "authored_mesh_scope": "tread_ribbon_only",
       "independent_animation_target": 24,
       "per_tank_state": [
@@ -141,7 +120,10 @@
       ],
       "tread_phase_mode": "instanced_shader_attribute",
       "cycle_policy": "smoothed_random_per_tank_rates_and_phases_not_synchronized",
-      "authored_tread_quality_gate": "rejected_flat_ribbon; require phone_budget_detailed_belt_mesh_with_sidewall_returns_raised_shoes_and_pbr_uvs"
+      "authored_tread_quality_gate": "rejected_flat_ribbon; rejected_side_facade_tread; require phone_budget_closed_3d_tread_belt_volume_with_outer_inner_sidewalls_top_bottom_front_rear_returns_raised_shoes_and_pbr_uvs",
+      "barrel_pivot_mode": "rear_socket_pivot_geometry",
+      "barrel_material_mode": "sherman_compatible_olive_gunmetal_pbr_override",
+      "barrel_quality_gate": "rejected_black_center_pivot_barrel; require visible rear-socket vertical elevation and non-black Sherman-compatible PBR material"
     },
     "parts": {
       "hull": {
@@ -184,8 +166,9 @@
   },
   "required_cloud_captures": [
     "model-assay phone portrait showing hero proof plus 24 independently animated tanks",
-    "model-assay phone landscape showing readable PBR-style tread material, wheel orientation, and barrel orientation",
+    "model-assay phone landscape showing readable closed 3D tread belt volume, wheel orientation, and non-black barrel material",
     "model-assay time-separated capture showing unsynchronized horizontal turret traverse and vertical barrel elevation across the 24 tanks",
+    "model-assay three-quarter capture showing top/bottom/front/rear tread volume rather than side-facade tread",
     "model-assay desktop medium viewport showing FPS, draw-call estimate, and 24-tank budget readout"
   ],
   "sense_simulation_questions": [
@@ -196,5 +179,5 @@
     "Is the gear/wheel candidate a reusable wheel or sprocket module, not a belt or whole suspension?",
     "Is the material atlas free of text, labels, logos, and complete vehicle objects?"
   ],
-  "acceptance": "RED BUILD: Animated 24-tank runtime proof is deployed for human visual review. It passes only if treads read as PBR material rather than black/white slabs, wheels face the hull sides, barrels point forward while elevating vertically, every turret traverses horizontally on unsynchronized smooth cycles, every tank has independent motion state, and 24 tanks are plausible on phone."
+  "acceptance": "RED BUILD: Animated 24-tank runtime proof is deployed for human visual review. It passes only if treads read as closed 3D tread belt volumes rather than side facades, wheels face the hull sides, barrels use non-black Sherman-compatible PBR material and visibly elevate from a rear/socket pivot, every turret traverses horizontally on unsynchronized smooth cycles, every tank has independent motion state, and 24 tanks are plausible on phone."
 }

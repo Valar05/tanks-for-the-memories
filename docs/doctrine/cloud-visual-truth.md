@@ -8,6 +8,8 @@ Do not present a local browser, localhost URL, local screenshot, or stale captur
 
 The proof is not "24 instanced GPU tanks." The proof is 24 independently animated tanks rendered within the phone budget. Shared geometry is acceptable only as a rendering optimization; every visible tank must have its own smoothed animation state for drive phase, wheel spin, tread phase, turret horizontal traverse, and barrel vertical elevation.
 
+Do not accept source variables as visual proof. If the barrel still reads as an ugly black tube, or if vertical barrel motion is not visible around the turret front/socket, the build is red even when `barrelPitch` exists in code.
+
 ## Target Artifact
 
 The current tank target is the phone-runtime Meshy Sherman:
@@ -42,6 +44,8 @@ Observed experience checklist:
 - Does the hull read first, before decoration?
 - Does the turret belong to the turret ring?
 - Does the cannon appear attached to the mantlet?
+- Does the barrel use a Sherman-compatible material instead of black tube read?
+- Does the barrel visibly elevate around a rear/socket pivot?
 - Is the Meshy body visible as the main tank?
 - Is the procedural kitbash tank hidden from the player-facing preview?
 - Does the tank avoid a toy/primitive assembly read?
@@ -61,4 +65,4 @@ Tread animation can return only through one of these methods:
 - flat overlay/marker loop that does not rotate the background-facing side surface
 - another cloud-reviewed method that reads as belt travel instead of fan sweep
 
-The current approved authored mesh exception is `tread_ribbon_only`: a trapezoid/ribbon tread mesh may be hand-authored, but hull, turret, barrel, and wheel/gear visual assets remain Meshy-generated unless a later doctrine explicitly changes that.
+The current approved authored mesh exception is `tread_ribbon_only`, but "ribbon" means a closed 3D tread belt volume, not a side facade. It must include outer and inner sidewalls, top run, bottom run, front return, rear return, and raised shoes/grousers across belt width. Hull, turret, barrel, and wheel/gear visual assets remain Meshy-generated unless a later doctrine explicitly changes that.
