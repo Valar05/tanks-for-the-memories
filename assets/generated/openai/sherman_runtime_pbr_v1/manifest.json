@@ -1,0 +1,23 @@
+{
+  "asset_class": "openai_generated_pbr_material",
+  "created_at": "2026-07-04T04:17:36.378120+00:00",
+  "source_image": "assets/generated/meshy/sherman_runtime_tread_pbr_v1/sherman_runtime_tread_pbr_v1_concept.png",
+  "generator": "OpenAI image generation via tools/meshy_asset_workflow.py openai-image",
+  "processing": "Pillow crops, rotation, grayscale-derived roughness/metalness, and height-derived normal maps",
+  "target_use": "Three.js model assay tread, barrel, and mantlet/socket authored material matching",
+  "outputs": {
+    "tread_albedo": "assets/generated/openai/sherman_runtime_pbr_v1/tread_albedo.png",
+    "tread_roughness": "assets/generated/openai/sherman_runtime_pbr_v1/tread_roughness.png",
+    "tread_metalness": "assets/generated/openai/sherman_runtime_pbr_v1/tread_metalness.png",
+    "tread_normal": "assets/generated/openai/sherman_runtime_pbr_v1/tread_normal.png",
+    "olive_albedo": "assets/generated/openai/sherman_runtime_pbr_v1/olive_albedo.png",
+    "olive_roughness": "assets/generated/openai/sherman_runtime_pbr_v1/olive_roughness.png",
+    "olive_metalness": "assets/generated/openai/sherman_runtime_pbr_v1/olive_metalness.png",
+    "olive_normal": "assets/generated/openai/sherman_runtime_pbr_v1/olive_normal.png"
+  },
+  "notes": [
+    "tread_albedo is rotated from the generated vertical track run so pads repeat along shader-scrolled U",
+    "olive maps come from the same OpenAI source image to match authored barrel/socket color language",
+    "derived normal/roughness/metalness maps are runtime approximations, not scanned physical measurements"
+  ]
+}

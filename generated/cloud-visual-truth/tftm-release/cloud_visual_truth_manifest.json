@@ -1,17 +1,18 @@
 {
   "artifact": "tftm-sherman-24-tank-runtime-proof-red-review",
-  "generated_at": "2026-07-04T04:09:44.500Z",
-  "source_commit": "ac921fc",
+  "generated_at": "2026-07-04T04:20:49.872Z",
+  "source_commit": "609b278",
   "dirty_status": [
     "D generated/cloud-visual-truth/tftm-release/README.md",
     " D generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json",
     " D generated/cloud-visual-truth/tftm-release/firebase.json",
-    " M generated/visual_qa/model-assay-latest/sense_simulation_verdict.md",
     " M package.json",
     " M scripts/build.mjs",
     " M scripts/smoke.mjs",
     " M src/model-assay.ts",
-    "?? assets/generated/meshy/sherman_mantlet_socket_v1/"
+    "?? assets/generated/meshy/sherman_runtime_tread_pbr_v1/",
+    "?? assets/generated/openai/",
+    "?? scripts/build_openai_pbr_maps.py"
   ],
   "dist": "generated/cloud-visual-truth/tftm-release/dist",
   "tank_asset": "m4a3_75_vvss_sherman_alpha_mobile",

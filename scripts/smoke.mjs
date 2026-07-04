@@ -59,6 +59,17 @@ const requiredFiles = [
   'assets/generated/meshy/sherman_mantlet_socket_v1/glb.glb',
   'assets/generated/meshy/sherman_mantlet_socket_v1/fbx.fbx',
   'assets/generated/meshy/sherman_mantlet_socket_v1/manifest.json',
+  'assets/generated/meshy/sherman_runtime_tread_pbr_v1/sherman_runtime_tread_pbr_v1_concept.png',
+  'assets/generated/meshy/sherman_runtime_tread_pbr_v1/manifest.json',
+  'assets/generated/openai/sherman_runtime_pbr_v1/manifest.json',
+  'assets/generated/openai/sherman_runtime_pbr_v1/tread_albedo.png',
+  'assets/generated/openai/sherman_runtime_pbr_v1/tread_roughness.png',
+  'assets/generated/openai/sherman_runtime_pbr_v1/tread_metalness.png',
+  'assets/generated/openai/sherman_runtime_pbr_v1/tread_normal.png',
+  'assets/generated/openai/sherman_runtime_pbr_v1/olive_albedo.png',
+  'assets/generated/openai/sherman_runtime_pbr_v1/olive_roughness.png',
+  'assets/generated/openai/sherman_runtime_pbr_v1/olive_metalness.png',
+  'assets/generated/openai/sherman_runtime_pbr_v1/olive_normal.png',
   'assets/generated/meshy/sherman_barrel_only_v1/assembly_manifest.json',
   'assets/generated/meshy/sherman_barrel_only_v1/source_barrel.png',
   'scripts/inspect_glb_contract.mjs',
@@ -107,7 +118,7 @@ for (const dep of deps) {
 
 const assaySource = readFileSync('src/model-assay.ts', 'utf8');
 const cloudVisualDoctrine = readFileSync('docs/doctrine/cloud-visual-truth.md', 'utf8');
-for (const marker of ['sherman_part_meshy_kit_v1', 'sherman_mantlet_socket_v1', 'RED BUILD / 24-tank animated runtime proof', 'Hero proof plus 24 independently animated tanks', 'drive-stage', 'spawnTarget = 24', 'InstancedMesh', 'InstancedBufferAttribute', 'instanceTreadPhase', 'onBeforeCompile', 'MeshStandardMaterial', 'roughnessMap', 'metalnessMap', 'normalMap', 'makeTreadMaterialSet', 'makeInstancedTreadMaterialSet', 'createTreadGeometry', 'TankAnimationState', 'seedTankState', 'smoothRandomCycle', 'tankStates', 'GLTFLoader', 'WebGLRenderer', 'Hull Upper', 'Turret Shell', 'Mantlet Socket', 'Barrel Only', 'Mobile Gear / Wheel', 'loadMantletSocketRuntimePart', 'composeGunSocketMatrix', 'Meshy mantlet socket owns the gun pivot']) {
+for (const marker of ['sherman_part_meshy_kit_v1', 'sherman_mantlet_socket_v1', 'sherman_runtime_pbr_v1', 'RED BUILD / 24-tank animated runtime proof', 'Hero proof plus 24 independently animated tanks', 'drive-stage', 'spawnTarget = 24', 'InstancedMesh', 'InstancedBufferAttribute', 'instanceTreadPhase', 'onBeforeCompile', 'MeshStandardMaterial', 'roughnessMap', 'metalnessMap', 'normalMap', 'makeTreadMaterialSet', 'makeInstancedTreadMaterialSet', 'createTreadGeometry', 'TankAnimationState', 'seedTankState', 'smoothRandomCycle', 'tankStates', 'GLTFLoader', 'WebGLRenderer', 'Hull Upper', 'Turret Shell', 'Mantlet Socket', 'Barrel Only', 'Mobile Gear / Wheel', 'loadMantletSocketRuntimePart', 'composeGunSocketMatrix', 'Meshy mantlet socket owns the gun pivot', 'makePbrTexture', 'makeOlivePbrMaterial', 'THREE.DoubleSide', 'tread_albedo.png', 'olive_albedo.png']) {
   if (!assaySource.includes(marker)) {
     failures.push('model assay missing Meshy kit viewer marker ' + marker);
   }

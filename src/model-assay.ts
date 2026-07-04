@@ -58,7 +58,7 @@ type TankAnimationState = {
 const spawnTarget = 24;
 const wheelsPerTank = 10;
 const treadTrianglesPerTank = 1400;
-const visualQaBuild = 'tftm-model-assay-socketed-trapezoid-20260704a';
+const visualQaBuild = 'tftm-model-assay-openai-pbr-20260704b';
 const gunPivotSocket = new THREE.Vector3(0.43, 0.83, 0);
 const heroGunPivotSocket = new THREE.Vector3(0.38, 0.09, 0);
 const barrelRearOffset = new THREE.Vector3(-0.08, 0, 0);
@@ -73,6 +73,8 @@ const matrixScratch = {
 };
 const root = document.querySelector<HTMLDivElement>('#assay-root');
 if (!root) throw new Error('missing #assay-root');
+const materialTextureLoader = new THREE.TextureLoader();
+const materialBase = './model-assay/sherman_runtime_pbr_v1/';
 
 const compositionSlots = [
   { id: 'hull', label: 'Hull Upper' },
@@ -167,69 +169,18 @@ function postVisualQaFrame(canvas: HTMLCanvasElement, frame: number) {
   }, 'image/png');
 }
 
-function makeMap(kind: 'albedo' | 'roughness' | 'metalness' | 'normal') {
-  const textureCanvas = document.createElement('canvas');
-  textureCanvas.width = 512;
-  textureCanvas.height = 96;
-  const ctx = textureCanvas.getContext('2d')!;
-  if (kind === 'albedo') {
-    ctx.fillStyle = '#292922';
-    ctx.fillRect(0, 0, 512, 96);
-    ctx.fillStyle = '#3c392e';
-    ctx.fillRect(0, 6, 512, 8);
-    ctx.fillRect(0, 82, 512, 8);
-    ctx.fillStyle = '#1c1d18';
-    ctx.fillRect(0, 0, 512, 5);
-    ctx.fillRect(0, 91, 512, 5);
-    for (let x = 0; x < 512; x += 24) {
-      ctx.fillStyle = 'rgba(101, 94, 72, 0.46)';
-      ctx.fillRect(x + 2, 15, 17, 66);
-      ctx.fillStyle = 'rgba(158, 149, 112, 0.16)';
-      ctx.fillRect(x + 4, 18, 2, 57);
-      ctx.fillStyle = 'rgba(24, 23, 19, 0.48)';
-      ctx.fillRect(x + 20, 11, 3, 74);
-      ctx.fillStyle = 'rgba(129, 116, 82, 0.18)';
-      ctx.fillRect(x + 7, 61, 9, 12);
-    }
-    ctx.fillStyle = 'rgba(99, 88, 61, 0.34)';
-    for (let x = 0; x < 512; x += 73) ctx.fillRect(x, 68 + (x % 3), 46, 4);
-    ctx.fillStyle = 'rgba(175, 164, 122, 0.12)';
-    for (let y = 20; y < 82; y += 20) ctx.fillRect(0, y, 512, 1);
-  } else if (kind === 'roughness') {
-    ctx.fillStyle = '#d9d9d9';
-    ctx.fillRect(0, 0, 512, 96);
-    for (let x = 0; x < 512; x += 24) {
-      ctx.fillStyle = '#b8b8b8';
-      ctx.fillRect(x + 2, 15, 17, 66);
-      ctx.fillStyle = '#eeeeee';
-      ctx.fillRect(x + 7, 61, 9, 12);
-    }
-  } else if (kind === 'metalness') {
-    ctx.fillStyle = '#1a1a1a';
-    ctx.fillRect(0, 0, 512, 96);
-    ctx.fillStyle = '#4a4a4a';
-    for (let x = 0; x < 512; x += 24) {
-      ctx.fillRect(x + 20, 12, 3, 72);
-      ctx.fillRect(x + 2, 15, 2, 66);
-    }
-  } else {
-    ctx.fillStyle = '#8080ff';
-    ctx.fillRect(0, 0, 512, 96);
-    for (let x = 0; x < 512; x += 24) {
-      ctx.fillStyle = '#8d8dff';
-      ctx.fillRect(x + 2, 15, 3, 66);
-      ctx.fillStyle = '#7474ee';
-      ctx.fillRect(x + 20, 12, 3, 72);
-      ctx.fillStyle = '#8585ff';
-      ctx.fillRect(x + 7, 18, 9, 54);
-    }
-  }
-  const texture = new THREE.CanvasTexture(textureCanvas);
+function makePbrTexture(path: string, color: boolean, repeatX = 1, repeatY = 1) {
+  const texture = materialTextureLoader.load(path);
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(7, 1);
-  texture.colorSpace = kind === 'albedo' ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+  texture.repeat.set(repeatX, repeatY);
+  texture.colorSpace = color ? THREE.SRGBColorSpace : THREE.NoColorSpace;
   return texture;
+}
+
+function makeMap(kind: 'albedo' | 'roughness' | 'metalness' | 'normal') {
+  const file = kind === 'albedo' ? 'tread_albedo.png' : kind === 'roughness' ? 'tread_roughness.png' : kind === 'metalness' ? 'tread_metalness.png' : 'tread_normal.png';
+  return makePbrTexture(materialBase + file, kind === 'albedo');
 }
 
 function makeTreadMaterialSet() {
@@ -242,9 +193,10 @@ function makeTreadMaterialSet() {
     roughnessMap,
     metalnessMap,
     normalMap,
-    color: 0x9b9271,
-    roughness: 0.86,
-    metalness: 0.2
+    color: 0xffffff,
+    roughness: 0.82,
+    metalness: 0.28,
+    side: THREE.DoubleSide
   });
   return { material, maps: [albedo, roughnessMap, metalnessMap, normalMap] };
 }
@@ -530,57 +482,20 @@ function bakeGeometryFromObject(object: THREE.Object3D) {
   return { geometry, material };
 }
 
-function makeBarrelTexture(kind: 'albedo' | 'roughness' | 'metalness') {
-  const textureCanvas = document.createElement('canvas');
-  textureCanvas.width = 384;
-  textureCanvas.height = 64;
-  const ctx = textureCanvas.getContext('2d')!;
-  if (kind === 'albedo') {
-    ctx.fillStyle = '#555947';
-    ctx.fillRect(0, 0, 384, 64);
-    ctx.fillStyle = '#73745f';
-    for (let x = 0; x < 384; x += 42) {
-      ctx.fillRect(x + 3, 9, 4, 46);
-      ctx.fillRect(x + 29, 12, 2, 40);
-    }
-    ctx.fillStyle = 'rgba(31, 31, 26, 0.5)';
-    for (let x = 0; x < 384; x += 17) ctx.fillRect(x, 42 + ((x / 17) % 3), 9, 2);
-    ctx.fillStyle = 'rgba(166, 158, 112, 0.22)';
-    ctx.fillRect(0, 11, 384, 4);
-    ctx.fillStyle = '#252823';
-    ctx.fillRect(332, 0, 52, 64);
-    ctx.fillStyle = '#0e0f0d';
-    ctx.fillRect(362, 0, 22, 64);
-  } else if (kind === 'roughness') {
-    ctx.fillStyle = '#bdbdbd';
-    ctx.fillRect(0, 0, 384, 64);
-    ctx.fillStyle = '#e1e1e1';
-    ctx.fillRect(0, 10, 384, 8);
-    ctx.fillStyle = '#8a8a8a';
-    ctx.fillRect(332, 0, 52, 64);
-  } else {
-    ctx.fillStyle = '#575757';
-    ctx.fillRect(0, 0, 384, 64);
-    ctx.fillStyle = '#777777';
-    ctx.fillRect(332, 0, 52, 64);
-  }
-  const texture = new THREE.CanvasTexture(textureCanvas);
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(1.8, 1);
-  texture.colorSpace = kind === 'albedo' ? THREE.SRGBColorSpace : THREE.NoColorSpace;
-  return texture;
+function makeOlivePbrMaterial() {
+  return new THREE.MeshStandardMaterial({
+    map: makePbrTexture(materialBase + 'olive_albedo.png', true, 1.2, 1.2),
+    roughnessMap: makePbrTexture(materialBase + 'olive_roughness.png', false, 1.2, 1.2),
+    metalnessMap: makePbrTexture(materialBase + 'olive_metalness.png', false, 1.2, 1.2),
+    normalMap: makePbrTexture(materialBase + 'olive_normal.png', false, 1.2, 1.2),
+    color: 0xffffff,
+    roughness: 0.78,
+    metalness: 0.32
+  });
 }
 
 function makeBarrelMaterial() {
-  return new THREE.MeshStandardMaterial({
-    map: makeBarrelTexture('albedo'),
-    roughnessMap: makeBarrelTexture('roughness'),
-    metalnessMap: makeBarrelTexture('metalness'),
-    color: 0x8a8668,
-    roughness: 0.68,
-    metalness: 0.42
-  });
+  return makeOlivePbrMaterial();
 }
 
 function bakeBarrelGeometryWithRearPivot(object: THREE.Object3D) {
@@ -634,7 +549,7 @@ function loadMantletSocketRuntimePart(loader: GLTFLoader, url: string, targetMax
       const baked = bakeGeometryFromObject(object);
       const mesh = findFirstMesh(object);
       const primitive = mesh.geometry.getIndex()?.count || mesh.geometry.getAttribute('position').count;
-      resolve({ object, geometry: baked.geometry, material: baked.material, triangles: Math.floor(primitive / 3) });
+      resolve({ object, geometry: baked.geometry, material: makeOlivePbrMaterial(), triangles: Math.floor(primitive / 3) });
     }, undefined, reject);
   });
 }

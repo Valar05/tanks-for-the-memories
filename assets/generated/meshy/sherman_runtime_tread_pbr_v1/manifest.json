@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T04:16:08+00:00",
+  "files": [],
+  "name": "sherman_runtime_tread_pbr_v1",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T04:16:08+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Seamless square PBR source texture for WWII M4 Sherman tank track and gun metal: olive drab painted steel, dark rubber pads, worn exposed steel edges, Normandy dust, subtle mud, no object silhouette, no perspective, no text, no labels, no logos. Texture atlas style, evenly lit, tileable, game-ready, realistic hard-surface material matching weathered olive Sherman armor.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_runtime_tread_pbr_v1/sherman_runtime_tread_pbr_v1_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T04:16:08+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}
