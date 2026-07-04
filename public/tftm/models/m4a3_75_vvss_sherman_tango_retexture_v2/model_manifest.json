@@ -2,7 +2,7 @@
   "asset_id": "m4a3_75_vvss_sherman_tango_retexture_v2",
   "display_name": "M4A3 75mm Sherman Tango Retexture V2",
   "asset_class": "meshy_retexture_on_vanilla_base_candidate",
-  "status": "human_cloud_visual_review_pending",
+  "status": "red_rejected_visual_build_still_shitty_tanks",
   "commander_variant": "tango",
   "commander_letter": "T",
   "role": "Human Tank",
@@ -39,5 +39,10 @@
     "gameplay_animation_ready": false,
     "rejection_reason_for_gameplay_animation": "Fused static Meshy sculpture; same vanilla-base animation limitations remain.",
     "acceptance_gate": "Human cloud visual review must confirm a clear commander personality without pseudo-lettering, harsh font texture, or decorative typography."
+  },
+  "red_build": {
+    "observed": "Human visual review still read the prompt-only variants as one acceptable ninja-shell tank plus lesser rejected tanks.",
+    "replacement": "m4a3_75_vvss_sherman_tango_alpha_style_v1",
+    "doctrine": "When one generated texture family works, derive variants from that accepted family instead of prompting Meshy to invent unrelated commander skins."
   }
 }

@@ -1,7 +1,7 @@
 {
   "asset_id": "m4a3_75_vvss_sherman_commander_platoon_retexture_v1",
   "display_name": "M4A3 75mm Sherman Commander Platoon Retexture V1",
-  "status": "human_cloud_visual_review_pending_font_noise_repair_v2",
+  "status": "human_cloud_visual_review_pending_alpha_style_derivatives",
   "generated_at": "2026-07-04T06:28:34.311Z",
   "common_language": {
     "base_color": "US olive drab",
@@ -44,11 +44,10 @@
       "role": "Aggressive Assault Tank",
       "recognition_color": "blue",
       "mood": "Restless, energetic, always moving",
-      "glb": "public/tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v2/m4a3_75_vvss_sherman_bravo_retexture_v2.glb",
-      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v2/model_manifest.json",
-      "retexture_task_id": "019f2bde-e9a8-779a-95fe-4af07c87a97c",
+      "glb": "public/tftm/models/m4a3_75_vvss_sherman_bravo_alpha_style_v1/m4a3_75_vvss_sherman_bravo_alpha_style_v1.glb",
+      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_bravo_alpha_style_v1/model_manifest.json",
       "status": "human_cloud_visual_review_pending",
-      "repair": "v2 no-text recognition-stripe repair"
+      "repair": "alpha-style deterministic texture derivative"
     },
     {
       "id": "tango",
@@ -57,11 +56,10 @@
       "role": "Human Tank",
       "recognition_color": "green",
       "mood": "Warm, approachable, campaign veteran",
-      "glb": "public/tftm/models/m4a3_75_vvss_sherman_tango_retexture_v2/m4a3_75_vvss_sherman_tango_retexture_v2.glb",
-      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_tango_retexture_v2/model_manifest.json",
-      "retexture_task_id": "019f2be1-f1fe-781f-8541-1fd8a9e073cc",
+      "glb": "public/tftm/models/m4a3_75_vvss_sherman_tango_alpha_style_v1/m4a3_75_vvss_sherman_tango_alpha_style_v1.glb",
+      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_tango_alpha_style_v1/model_manifest.json",
       "status": "human_cloud_visual_review_pending",
-      "repair": "v2 no-text recognition-stripe repair"
+      "repair": "alpha-style deterministic texture derivative"
     },
     {
       "id": "delta",
@@ -70,13 +68,12 @@
       "role": "Planner",
       "recognition_color": "yellow",
       "mood": "Methodical, disciplined, controlled",
-      "glb": "public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v2/m4a3_75_vvss_sherman_delta_retexture_v2.glb",
-      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v2/model_manifest.json",
-      "retexture_task_id": "019f2be4-7152-7ca7-8f52-a0899bd331be",
+      "glb": "public/tftm/models/m4a3_75_vvss_sherman_delta_alpha_style_v1/m4a3_75_vvss_sherman_delta_alpha_style_v1.glb",
+      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_delta_alpha_style_v1/model_manifest.json",
       "status": "human_cloud_visual_review_pending",
-      "repair": "v2 no-text recognition-stripe repair"
+      "repair": "alpha-style deterministic texture derivative"
     }
   ],
-  "acceptance_gate": "Viewer should infer four different crews after a three-second glance while recognizing one platoon and one shared Sherman base; Bravo/Tango/Delta must not read as harsh font texture or pseudo-lettering.",
-  "repair_note": "Bravo/Tango/Delta v1 were rejected by visual read as pseudo-font marking noise. V2 variants remove letters and chalk text from Meshy prompts and use one recognition stripe plus restrained wear/personality per tank."
+  "acceptance_gate": "Viewer should read Alpha/Bravo/Tango/Delta as the same successful Alpha graphic shell in commander colors, not as one good tank plus unrelated rejected tanks.",
+  "repair_note": "Prompt-only Meshy retexture variants failed twice: v1 read as pseudo-font marking noise and v2 still read as one acceptable ninja-shell tank plus lesser independent tanks. Current route derives Bravo/Tango/Delta from the accepted Alpha texture language by recoloring Alpha recognition pixels only."
 }

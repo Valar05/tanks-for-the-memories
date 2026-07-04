@@ -1,0 +1,29 @@
+{
+  "asset_class": "deterministic_texture_derivative_set",
+  "source_alpha_glb": "public/tftm/models/m4a3_75_vvss_sherman_alpha_retexture_v2/m4a3_75_vvss_sherman_alpha_retexture_v2.glb",
+  "source_alpha_task_id": "019f2bbd-be31-7fc4-bf14-bcb6dea15284",
+  "source_vanilla_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+  "variants": [
+    {
+      "id": "bravo",
+      "slug": "m4a3_75_vvss_sherman_bravo_alpha_style_v1",
+      "changed_base_color_pixels": 792980,
+      "public_glb": "public/tftm/models/m4a3_75_vvss_sherman_bravo_alpha_style_v1/m4a3_75_vvss_sherman_bravo_alpha_style_v1.glb",
+      "source_glb": "assets/generated/derived/commander_alpha_style_texture_v1/m4a3_75_vvss_sherman_bravo_alpha_style_v1.glb"
+    },
+    {
+      "id": "tango",
+      "slug": "m4a3_75_vvss_sherman_tango_alpha_style_v1",
+      "changed_base_color_pixels": 792980,
+      "public_glb": "public/tftm/models/m4a3_75_vvss_sherman_tango_alpha_style_v1/m4a3_75_vvss_sherman_tango_alpha_style_v1.glb",
+      "source_glb": "assets/generated/derived/commander_alpha_style_texture_v1/m4a3_75_vvss_sherman_tango_alpha_style_v1.glb"
+    },
+    {
+      "id": "delta",
+      "slug": "m4a3_75_vvss_sherman_delta_alpha_style_v1",
+      "changed_base_color_pixels": 792980,
+      "public_glb": "public/tftm/models/m4a3_75_vvss_sherman_delta_alpha_style_v1/m4a3_75_vvss_sherman_delta_alpha_style_v1.glb",
+      "source_glb": "assets/generated/derived/commander_alpha_style_texture_v1/m4a3_75_vvss_sherman_delta_alpha_style_v1.glb"
+    }
+  ]
+}

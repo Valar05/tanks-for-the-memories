@@ -75,3 +75,7 @@ Commander platoon variants use the same Retexture API route and the same accepte
 ## Commander Font-Noise Failure
 
 Bravo/Tango/Delta v1 proved that Meshy Retexture should not be asked to write commander identity through letters, chalk notes, route marks, range math, road-sign text, or symbol piles. Human visual review read those variants as harsh pseudo-font texture rather than crew personality. The v2 route treats each tank individually: one recognition stripe, one restraint-focused wear language, no text burden. If readable letters are required later, author them through a controlled UV/decal texture pass rather than asking Meshy to improvise typography.
+
+## Alpha-Style Derivative Route
+
+If human visual review says only one commander tank has the right graphic shell, do not keep asking Meshy to generate unrelated variants. Use the accepted texture as the source family and derive other commander colors deterministically from its base-color map. This preserves the successful read and avoids the one-good-tank plus rejected-tanks failure.

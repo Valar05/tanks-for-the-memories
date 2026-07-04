@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 const root = document.querySelector<HTMLDivElement>('#alpha-assay-root');
 if (!root) throw new Error('missing #alpha-assay-root');
 
-const visualQaBuild = 'tftm-commander-platoon-retexture-v2-20260704a';
+const visualQaBuild = 'tftm-commander-platoon-alpha-style-v1-20260704a';
 const variants = [
   {
     id: 'alpha',
@@ -22,7 +22,7 @@ const variants = [
     label: 'Bravo',
     role: 'Assault',
     mood: 'restless / fast',
-    url: './tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v2/m4a3_75_vvss_sherman_bravo_retexture_v2.glb',
+    url: './tftm/models/m4a3_75_vvss_sherman_bravo_alpha_style_v1/m4a3_75_vvss_sherman_bravo_alpha_style_v1.glb',
     x: -1.7,
     z: -0.15,
     yaw: -0.28
@@ -32,7 +32,7 @@ const variants = [
     label: 'Tango',
     role: 'Human',
     mood: 'warm / lived-in',
-    url: './tftm/models/m4a3_75_vvss_sherman_tango_retexture_v2/m4a3_75_vvss_sherman_tango_retexture_v2.glb',
+    url: './tftm/models/m4a3_75_vvss_sherman_tango_alpha_style_v1/m4a3_75_vvss_sherman_tango_alpha_style_v1.glb',
     x: 1.7,
     z: -0.15,
     yaw: 0.28
@@ -42,7 +42,7 @@ const variants = [
     label: 'Delta',
     role: 'Planner',
     mood: 'disciplined / controlled',
-    url: './tftm/models/m4a3_75_vvss_sherman_delta_retexture_v2/m4a3_75_vvss_sherman_delta_retexture_v2.glb',
+    url: './tftm/models/m4a3_75_vvss_sherman_delta_alpha_style_v1/m4a3_75_vvss_sherman_delta_alpha_style_v1.glb',
     x: 5.1,
     z: 0.35,
     yaw: 0.5
@@ -53,7 +53,7 @@ root.innerHTML = '<main class="alpha-shell">' +
   '<header class="alpha-head">' +
     '<div class="alpha-title">' +
       '<h1>Sherman Commander Platoon Review</h1>' +
-      '<p>Four commander texture variants. V2 removes pseudo-font noise from Bravo/Tango/Delta.</p>' +
+      '<p>Four commander texture variants derived from the accepted Alpha graphic language.</p>' +
     '</div>' +
     '<div class="alpha-badge">visual review required</div>' +
   '</header>' +

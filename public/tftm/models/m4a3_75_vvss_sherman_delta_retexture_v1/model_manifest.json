@@ -40,7 +40,7 @@
   },
   "red_build": {
     "observed": "Human visual review read the markings as harsh pseudo-font texture / reject font noise rather than commander personality.",
-    "replacement": "m4a3_75_vvss_sherman_delta_retexture_v2",
-    "doctrine": "Do not ask Meshy Retexture to carry complex text, chalk notes, route marks, numbers, or lettering as personality. Use one clear recognition color and restrained non-text wear language."
+    "replacement": "m4a3_75_vvss_sherman_delta_alpha_style_v1",
+    "doctrine": "When one generated texture family works, derive variants from that accepted family instead of prompting Meshy to invent unrelated commander skins."
   }
 }

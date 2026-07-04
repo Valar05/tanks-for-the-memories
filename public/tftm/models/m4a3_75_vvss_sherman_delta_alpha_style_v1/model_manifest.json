@@ -1,0 +1,40 @@
+{
+  "asset_id": "m4a3_75_vvss_sherman_delta_alpha_style_v1",
+  "display_name": "M4A3 75mm Sherman Delta Alpha-Style Texture V1",
+  "asset_class": "deterministic_texture_derivative_from_alpha",
+  "status": "human_cloud_visual_review_pending",
+  "commander_variant": "delta",
+  "role": "Planner",
+  "recognition_color": "yellow",
+  "mood": "Methodical, disciplined, controlled",
+  "generated_at": "2026-07-04T07:08:00.000Z",
+  "source_alpha_task_id": "019f2bbd-be31-7fc4-bf14-bcb6dea15284",
+  "source_vanilla_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+  "source_alpha_glb": "public/tftm/models/m4a3_75_vvss_sherman_alpha_retexture_v2/m4a3_75_vvss_sherman_alpha_retexture_v2.glb",
+  "glb": "public/tftm/models/m4a3_75_vvss_sherman_delta_alpha_style_v1/m4a3_75_vvss_sherman_delta_alpha_style_v1.glb",
+  "processing": {
+    "method": "recolored Alpha accepted base-color texture red recognition pixels to target commander color",
+    "changed_base_color_pixels": 792980,
+    "mesh_geometry_changed": false,
+    "uvs_changed": false,
+    "non_color_pbr_maps_changed": false
+  },
+  "inspection": {
+    "approximate_triangles": 10216,
+    "texture_count": 4,
+    "image_count": 4,
+    "node_count": 1,
+    "mesh_count": 1,
+    "primitive_count": 1,
+    "material_count": 1,
+    "glb_bytes": 21913152
+  },
+  "runtime_contract": {
+    "vanilla_base_preserved": true,
+    "alpha_graphic_language_preserved": true,
+    "identity_from_texture_only": true,
+    "visual_texture_candidate": true,
+    "gameplay_animation_ready": false,
+    "acceptance_gate": "Human cloud visual review must confirm these read like the same successful Alpha/ninja-shell graphic language in commander colors, not like independent rejected Meshy font-noise tanks."
+  }
+}

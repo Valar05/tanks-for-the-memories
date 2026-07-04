@@ -114,6 +114,16 @@ const requiredFiles = [
   'assets/generated/meshy/m4a3_75_vvss_sherman_delta_retexture_v2/manifest.json',
   'public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v2/m4a3_75_vvss_sherman_delta_retexture_v2.glb',
   'public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v2/model_manifest.json',
+  'assets/generated/derived/commander_alpha_style_texture_v1/manifest.json',
+  'assets/generated/derived/commander_alpha_style_texture_v1/m4a3_75_vvss_sherman_bravo_alpha_style_v1.glb',
+  'assets/generated/derived/commander_alpha_style_texture_v1/m4a3_75_vvss_sherman_tango_alpha_style_v1.glb',
+  'assets/generated/derived/commander_alpha_style_texture_v1/m4a3_75_vvss_sherman_delta_alpha_style_v1.glb',
+  'public/tftm/models/m4a3_75_vvss_sherman_bravo_alpha_style_v1/m4a3_75_vvss_sherman_bravo_alpha_style_v1.glb',
+  'public/tftm/models/m4a3_75_vvss_sherman_bravo_alpha_style_v1/model_manifest.json',
+  'public/tftm/models/m4a3_75_vvss_sherman_tango_alpha_style_v1/m4a3_75_vvss_sherman_tango_alpha_style_v1.glb',
+  'public/tftm/models/m4a3_75_vvss_sherman_tango_alpha_style_v1/model_manifest.json',
+  'public/tftm/models/m4a3_75_vvss_sherman_delta_alpha_style_v1/m4a3_75_vvss_sherman_delta_alpha_style_v1.glb',
+  'public/tftm/models/m4a3_75_vvss_sherman_delta_alpha_style_v1/model_manifest.json',
   'public/tftm/models/commander_platoon_retexture_v1/model_manifest.json',
   'scripts/pack_vanilla_sherman_for_meshy.mjs',
   'scripts/pack_vanilla_sherman_textures.mjs',
@@ -350,7 +360,7 @@ for (const buildMarker of ['assetVersion', 'TFTM_ASSET_VERSION', '.css?v=${asset
     failures.push('build script must cache-bust generated JS/CSS asset URLs: ' + buildMarker);
   }
 }
-for (const alphaAssayMarker of ['tftm-commander-platoon-retexture-v2-20260704a', 'm4a3_75_vvss_sherman_alpha_retexture_v2.glb', 'm4a3_75_vvss_sherman_bravo_retexture_v2.glb', 'm4a3_75_vvss_sherman_tango_retexture_v2.glb', 'm4a3_75_vvss_sherman_delta_retexture_v2.glb', 'Sherman Commander Platoon Review', 'same base mesh', 'four different crews']) {
+for (const alphaAssayMarker of ['tftm-commander-platoon-alpha-style-v1-20260704a', 'm4a3_75_vvss_sherman_alpha_retexture_v2.glb', 'm4a3_75_vvss_sherman_bravo_alpha_style_v1.glb', 'm4a3_75_vvss_sherman_tango_alpha_style_v1.glb', 'm4a3_75_vvss_sherman_delta_alpha_style_v1.glb', 'Sherman Commander Platoon Review', 'same base mesh', 'four different crews']) {
   if (!alphaAssaySource.includes(alphaAssayMarker)) {
     failures.push('Alpha assay missing texture review marker ' + alphaAssayMarker);
   }
@@ -549,7 +559,7 @@ for (const [variantId, expectedColor, expectedStatus] of [
   ['tango', 'green', 'human_cloud_visual_review_pending'],
   ['delta', 'yellow', 'human_cloud_visual_review_pending']
 ]) {
-  const manifestPath = `public/tftm/models/m4a3_75_vvss_sherman_${variantId === 'alpha' ? 'alpha_retexture_v2' : variantId + '_retexture_v2'}/model_manifest.json`;
+  const manifestPath = `public/tftm/models/m4a3_75_vvss_sherman_${variantId === 'alpha' ? 'alpha_retexture_v2' : variantId + '_alpha_style_v1'}/model_manifest.json`;
   const commanderManifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   if (commanderManifest.commander_variant !== variantId) {
     failures.push('Commander manifest variant mismatch for ' + variantId);
@@ -563,8 +573,11 @@ for (const [variantId, expectedColor, expectedStatus] of [
   if (commanderManifest.source_vanilla_task_id !== '019f2a16-c82b-7b52-b541-c707b58c5d00') {
     failures.push('Commander manifest must target accepted vanilla base for ' + variantId);
   }
-  if (variantId !== 'alpha' && !String(commanderManifest.repair_reason || '').includes('pseudo-font')) {
-    failures.push('Commander v2 manifest must preserve font-noise repair reason for ' + variantId);
+  if (variantId !== 'alpha' && commanderManifest.asset_class !== 'deterministic_texture_derivative_from_alpha') {
+    failures.push('Commander manifest must use Alpha-style deterministic derivative route for ' + variantId);
+  }
+  if (variantId !== 'alpha' && commanderManifest.runtime_contract?.alpha_graphic_language_preserved !== true) {
+    failures.push('Commander manifest must preserve Alpha graphic language for ' + variantId);
   }
   if (commanderManifest.inspection?.approximate_triangles !== 10216) {
     failures.push('Commander manifest must preserve base triangle count for ' + variantId);
