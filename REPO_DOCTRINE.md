@@ -30,6 +30,8 @@ Tank visual work in this repository is cloud-gated. Local screenshots, Android `
 
 Boxmodel geometry tuning must use the hosted gesture-only tuner (`boxmodel-tank.html?tune=1`) when coordinate placement is uncertain. Do not continue blind mesh edits after a cloud screenshot disproves the visible relationship. Select one named part, adjust location/rotation/scale through the tuner, export the tuning JSON or share URL, then bake only an accepted cloud-reviewed tuning snapshot into source assets.
 
+The authored boxmodel v1.8 front track/glacis gap is a structural coverage problem, not a manual-positioning task. Preserve the tuner for future part authoring, but do not ask the user to place runtime panels to cover that known gap; add narrow integrated coverage in the exporter and validate it through cloud/Sense review.
+
 ## Commander Identity
 
 Tanks For The Memories is a tank commander operation game about managing uncertainty from inside and around a crewed machine.

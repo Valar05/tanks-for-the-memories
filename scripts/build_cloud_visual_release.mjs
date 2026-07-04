@@ -57,7 +57,7 @@ const releaseManifest = {
   },
   authored_boxmodel_review: {
     route: 'boxmodel-tank.html',
-    expected_build: 'tftm-authored-sherman-boxmodel-v1-7-20260704',
+    expected_build: 'tftm-authored-sherman-boxmodel-v1-8-20260704',
     tuner_route: 'boxmodel-tank.html?tune=1',
     tuner_expected_build: 'tftm-authored-sherman-boxmodel-tuner-v9-20260704',
     asset_id: authoredBoxmodelManifest.asset_id,
@@ -68,8 +68,8 @@ const releaseManifest = {
     uv_policy: authoredBoxmodelManifest.uv_policy,
     face_plate_ids: authoredBoxmodelManifest.face_plate_ids,
     asset_policy: 'fully authored Blender box-model chassis with solidified overlapping armor plates, non-cube cast turret silhouette, and coaxial MG; no Meshy chassis or turret imports; box UV PNG plates for DALL-E paintability',
-    acceptance: 'Sense Simulation must confirm Sherman silhouette, non-cube turret massing, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.',
-    tuner_acceptance: 'Sense Simulation must review boxmodel-tank.html?tune=1 as a gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored flat armor panels are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected panel is highlighted for editing, already enabled panels remain visible, Move/Rotate/Scale are one active mode at a time, Scale exposes explicit All/X/Y/Z axis buttons, drag/pinch/twist gestures visibly change the selected panel, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and panels share the same unskewed model frame, no object transform handles appear, and local capture was not used.'
+    acceptance: 'Sense Simulation must confirm Sherman silhouette, non-cube turret massing, integrated front gap coverage closes the triangular top void and lower rectangular void beside the front track/glacis area without floating boxes or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.',
+    tuner_acceptance: 'Sense Simulation must review boxmodel-tank.html?tune=1 as a preserved future-use gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored flat armor panels are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected panel is highlighted for editing, already enabled panels remain visible, Move/Rotate/Scale are one active mode at a time, Scale exposes explicit All/X/Y/Z axis buttons, drag/pinch/twist gestures visibly change the selected panel, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and panels share the same unskewed model frame, no object transform handles appear, and local capture was not used.'
   },
   authored_retopo_review: {
     route: 'retopo-tank.html',
@@ -107,9 +107,9 @@ const releaseManifest = {
     }]))
   },
   required_cloud_captures: [
-    'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-7-20260704',
-    'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, and no local capture',
-    'boxmodel-tank close-up review showing solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability',
+    'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-8-20260704',
+    'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, integrated front track/glacis gap coverage, and no local capture',
+    'boxmodel-tank close-up review showing integrated front gap coverage as attached armor, solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability',
     'boxmodel-tank.html?tune=1 phone portrait showing gesture-only part tuner with collapsed parts drawer, front-right/front-left/rear-right/rear-left hull-colored flat armor panel parts aligned parallel to the tracks, flush to the side plane, and not protruding like blocks, selected panel highlight, camera orientation widget, explicit All/X/Y/Z scale axis buttons, square unskewed tank frame, and build token tftm-authored-sherman-boxmodel-tuner-v9-20260704',
     'boxmodel-tank.html?tune=1 cloud interaction evidence showing one selected flat armor panel visibly move/rotate/scale through drag/pinch/twist while other enabled panels remain placed, OrbitControls camera orbit/dolly/pan preserved from an unskewed model frame, and no object transform handles',
     'retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-1-20260704',
@@ -130,9 +130,10 @@ const releaseManifest = {
     required_next_evidence: 'Next tank visual pass must show a fresh cloud screenshot or time-separated cloud capture with visible delta for tread volume, barrel material, and barrel verticality.'
   },
   sense_simulation_questions: [
-    'Does authored_sherman_boxmodel_v1 read closer to a real Sherman silhouette than the rejected high-poly box retopo?',
+    'Does authored_sherman_boxmodel_v1 build v1-8 preserve the Sherman silhouette while adding only integrated front track/glacis gap coverage?',
     'On boxmodel-tank.html?tune=1, does the gesture-only parts workflow provide four hull-colored front-right/front-left/rear-right/rear-left flat armor panels aligned parallel to the tracks and reading like armor skin, not blocks while using a collapsed drawer, one active transform mode, explicit All/X/Y/Z scale axes, direct gestures, OrbitControls camera, and a camera orientation widget without object transform handles?',
     'Does the turret read as a non-cube cast turret form with cheek mass, roof flattening, and rear bustle?',
+    'Do the new front gap covers read as joined metal armor that closes the triangular top void and lower rectangular void, not as floating boxes or runtime overlays?',
     'Do the armor plates read as joined metal mass rather than separated cardboard planes?',
     'Is the coaxial MG visible and owned by the mantlet/gun assembly?' ,
     'Do the box UV plates stay paintable without obvious runtime guide seams or DALL-E-unpaintable UV spaghetti?',

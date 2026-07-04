@@ -9,12 +9,14 @@ if (failures.length === 0) {
   const rules = JSON.stringify(manifest);
   const captures = (manifest.required_cloud_captures || []).join('\\n');
   if (!rules.includes('authored_sherman_boxmodel_v1')) fail('cloud manifest must name authored_sherman_boxmodel_v1');
-  if (!rules.includes('tftm-authored-sherman-boxmodel-v1-7-20260704')) fail('cloud manifest must require the boxmodel build token');
+  if (!rules.includes('tftm-authored-sherman-boxmodel-v1-8-20260704')) fail('cloud manifest must require the boxmodel build token');
   if (!rules.includes('tftm-authored-sherman-boxmodel-tuner-v9-20260704')) fail('cloud manifest must require the boxmodel tuner build token');
   if (!rules.includes('boxmodel-tank.html?tune=1')) fail('cloud manifest must require hosted tuner route review');
   if (!rules.includes('Blender box-model')) fail('cloud manifest must identify Blender box-model source');
   if (!captures.includes('boxmodel-tank phone portrait')) fail('cloud captures must require boxmodel-tank phone portrait');
   if (!captures.includes('non-cube turret')) fail('cloud captures must require non-cube turret review');
+  if (!rules.includes('integrated front gap coverage')) fail('cloud manifest must require integrated front gap coverage review');
+  if (!rules.includes('without floating boxes or runtime overlays')) fail('cloud manifest must reject floating boxes/runtime overlays as the coverage fix');
   if (!captures.includes('box UV')) fail('cloud captures must require box UV review');
   if (!captures.includes('gesture-only part tuner')) fail('cloud captures must require gesture-only tuner review');
   if (!rules.includes('flat armor panels')) fail('cloud manifest must require flat armor panels, not rejected plug geometry');
