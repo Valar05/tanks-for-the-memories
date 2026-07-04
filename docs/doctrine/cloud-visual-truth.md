@@ -92,9 +92,15 @@ For the current red build, the named false-change relationships are:
 - proof UI text claims more than the visible artifact proves
 - page-level cache bust is insufficient if bundled JS/CSS asset URLs are stable
 
+## Authored Retopo Replacement Gate
+
+Close-up review has rejected the current Meshy chassis/turret as production geometry. The next replacement target is `authored_sherman_retopo_v1`: fully authored hard-surface hull and turret geometry, separable turret/barrel/tread/wheel nodes, and split face PNG texture plates for DALL-E-friendly paint passes. The old Meshy chassis/turret remain reference ore and red-build evidence, not the production base.
+
+Acceptance requires cloud/Sense review of `retopo-tank.html` showing usable close-up chassis and turret form, a barrel visually owned by the mantlet, sane face-plate texture mapping, and no local capture evidence.
+
 ## Target Artifact
 
-The current tank target is the phone-runtime Meshy Sherman:
+The legacy tank target is the phone-runtime Meshy Sherman:
 
 - runtime manifest: `public/tftm/models/m4a3_75_vvss_sherman_alpha_mobile/model_manifest.json`
 - runtime GLB: `public/tftm/models/m4a3_75_vvss_sherman_alpha_mobile/m4a3_75_vvss_sherman_alpha_mobile.glb`

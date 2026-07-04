@@ -6,6 +6,7 @@ const releaseRoot = join('generated', 'cloud-visual-truth', 'tftm-release');
 const distRoot = join(releaseRoot, 'dist');
 const tankManifestPath = 'public/tftm/models/m4a3_75_vvss_sherman_alpha_mobile/model_manifest.json';
 const shermanSourceManifestPath = 'assets/generated/meshy/sherman_part_meshy_kit_v1/assembly_manifest.json';
+const authoredRetopoManifestPath = 'public/tftm/models/authored_sherman_retopo_v1/model_manifest.json';
 
 const build = spawnSync('npm', ['run', 'build'], { stdio: 'inherit' });
 if ((build.status ?? 1) !== 0) {
@@ -24,9 +25,14 @@ if (!existsSync(shermanSourceManifestPath)) {
   console.error('missing Sherman source manifest ' + shermanSourceManifestPath);
   process.exit(1);
 }
+if (!existsSync(authoredRetopoManifestPath)) {
+  console.error('missing authored retopo manifest ' + authoredRetopoManifestPath);
+  process.exit(1);
+}
 
 const tankManifest = JSON.parse(readFileSync(tankManifestPath, 'utf8'));
 const shermanSourceManifest = JSON.parse(readFileSync(shermanSourceManifestPath, 'utf8'));
+const authoredRetopoManifest = JSON.parse(readFileSync(authoredRetopoManifestPath, 'utf8'));
 const gitHead = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8' });
 const gitStatus = spawnSync('git', ['status', '--short'], { encoding: 'utf8' });
 
@@ -42,6 +48,17 @@ const releaseManifest = {
     expected_build: 'tftm-single-linked-sherman-textured-v1-20260704',
     asset_policy: 'one linked vanilla Sherman GLB; existing constrained albedo texture set linked at runtime; no copied model or texture variant',
     acceptance: 'Sense Simulation must confirm one Sherman with visible olive armor albedo, visible tread albedo, no fused/parade/assay scene, and right-side camera interaction.'
+  },
+  authored_retopo_review: {
+    route: 'retopo-tank.html',
+    expected_build: 'tftm-authored-sherman-retopo-v1-20260704',
+    asset_id: authoredRetopoManifest.asset_id,
+    output_glb: authoredRetopoManifest.output_glb,
+    approximate_triangles: authoredRetopoManifest.approximate_triangles,
+    uv_policy: authoredRetopoManifest.uv_policy,
+    face_plate_ids: authoredRetopoManifest.face_plate_ids,
+    asset_policy: 'fully authored hard-surface chassis and turret; no Meshy chassis or turret imports; split face PNG plates for DALL-E paintability',
+    acceptance: 'Sense Simulation must confirm close-up chassis and turret read as usable hard-surface armor, barrel belongs to mantlet, split face texture plates map sanely, and local capture was not used.'
   },
   generated_at: new Date().toISOString(),
   source_commit: gitHead.status === 0 ? gitHead.stdout.trim() : null,
@@ -68,6 +85,9 @@ const releaseManifest = {
     }]))
   },
   required_cloud_captures: [
+    'retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-20260704',
+    'retopo-tank phone landscape showing split face texture plates with sane UV mapping and no local capture',
+    'retopo-tank close-up chassis and turret review showing hard-surface authored form, usable turret ring, and barrel/mantlet ownership',
     'single-tank phone portrait showing one linked textured Sherman and build token tftm-single-linked-sherman-textured-v1-20260704',
     'single-tank phone landscape showing olive armor albedo and tread albedo on the linked Sherman',
     'single-tank cloud interaction evidence showing right-side camera rotation without local capture',
@@ -83,6 +103,8 @@ const releaseManifest = {
     required_next_evidence: 'Next tank visual pass must show a fresh cloud screenshot or time-separated cloud capture with visible delta for tread volume, barrel material, and barrel verticality.'
   },
   sense_simulation_questions: [
+    'Does authored_sherman_retopo_v1 read as a usable hard-surface chassis and turret at close-up distance?',
+    'Do the split face texture plates map sanely without stretching, seams across the wrong surfaces, or DALL-E-unpaintable UV spaghetti?',
     'Does each candidate read as Sherman hard-surface rather than toy, pillow, primitive assembly, or soft sculpture?',
     'Are hull candidates actually hull shells without tracks, wheels, turret, barrel, or complete running gear?',
     'Are turret candidates separate turret shells without hull, tracks, wheels, chassis, or long barrel?',

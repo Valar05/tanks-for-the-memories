@@ -5,6 +5,15 @@ const requiredFiles = [
   'index.html',
   'alpha-control.html',
   'single-tank.html',
+  'src/retopo-tank.ts',
+  'public/tftm/models/authored_sherman_retopo_v1/texture_plates/hull_glacis.png',
+  'assets/authored/authored_sherman_retopo_v1/texture_templates/hull_glacis.png',
+  'public/tftm/models/authored_sherman_retopo_v1/model_manifest.json',
+  'public/tftm/models/authored_sherman_retopo_v1/authored_sherman_retopo_v1.glb',
+  'scripts/validate_retopo_tank_cloud_gate.mjs',
+  'scripts/validate_authored_retopo_asset.mjs',
+  'scripts/export_authored_sherman_retopo.mjs',
+  'retopo-tank.html',
   'model-assay.html',
   'README.md',
   'ARCHITECTURE.md',
@@ -187,7 +196,7 @@ const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 if (packageJson.name !== 'tftm') {
   failures.push('package name should be tftm');
 }
-for (const scriptName of ['build', 'dev', 'smoke', 'alpha-control-smoke', 'bootstrap', 'cloud-visual-release', 'visual-qa:model-assay', 'visual-qa:single-tank', 'alpha-decal-smoke', 'single-tank-smoke']) {
+for (const scriptName of ['build', 'dev', 'smoke', 'alpha-control-smoke', 'bootstrap', 'cloud-visual-release', 'visual-qa:model-assay', 'visual-qa:single-tank', 'visual-qa:retopo-tank', 'alpha-decal-smoke', 'single-tank-smoke', 'authored-retopo-smoke', 'export:authored-retopo']) {
   if (!packageJson.scripts || !packageJson.scripts[scriptName]) {
     failures.push('missing npm script ' + scriptName);
   }

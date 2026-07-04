@@ -54,6 +54,12 @@ The old Pillow proof remains only as discarded reference ore. It is not the Alph
 
 The single-tank inspection scene may link the existing constrained default albedo set at runtime to prove baseline material readability: olive armor albedo for the body and tread albedo for track/tread surfaces. This is not a named-tank texture variant and must not copy the Sherman model or fork the texture set. Named commander identity still requires UV-aware texture/decal work; runtime baseline albedo only prevents the linked Sherman from appearing untextured.
 
+## Authored Retopo Face Plates
+
+The close-up retopo path is `authored_sherman_retopo_v1`. It replaces the unusable Meshy chassis/turret with authored hard-surface geometry and split face texture plates. Each plate is a large 0-1 rectangular PNG target so DALL-E can paint one surface family at a time: glacis, hull sides, rear, engine deck, turret front/sides/top, mantlet, barrel strip, tracks, wheels, and bogies. Do not pack these into an atlas until cloud/Sense accepts silhouette and paint language.
+
+DALL-E prompt rule: name the surface in the prompt and keep labels out of the image itself. Text, letters, chalk notes, and fine symbols remain a later controlled decal pass.
+
 ## Vanilla Baseline Preservation
 
 The first accepted phone Meshy Sherman is preserved as `public/tftm/models/m4a3_75_vvss_sherman_vanilla_mobile/`. This baseline has `identity_id: vanilla` and no Alpha/Tango/Whiskey overlay. Keep it as the comparison asset for future recognition-language work.

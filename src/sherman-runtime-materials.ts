@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { SHERMAN_DEFAULT_OLIVE_ALBEDO_URL, SHERMAN_DEFAULT_TREAD_ALBEDO_URL } from './sherman-asset-links';
+import { AUTHORED_SHERMAN_RETOPO_FACE_PLATES, AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL, SHERMAN_DEFAULT_OLIVE_ALBEDO_URL, SHERMAN_DEFAULT_TREAD_ALBEDO_URL } from './sherman-asset-links';
 
 type MaterialTarget = 'olive' | 'tread';
 
@@ -66,5 +66,49 @@ export function applyDefaultShermanTextureSet(root: THREE.Object3D) {
     tread: SHERMAN_DEFAULT_TREAD_ALBEDO_URL,
     texturedMaterials,
     treadMaterials
+  };
+}
+
+function normalizeSurfaceId(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9_]+/g, '_');
+}
+
+function surfaceIdForMesh(mesh: THREE.Object3D, material: THREE.Material) {
+  const fromUserData = typeof mesh.userData?.surface_id === 'string' ? mesh.userData.surface_id : '';
+  const source = fromUserData || material.name || mesh.name;
+  const normalized = normalizeSurfaceId(source);
+  for (const plateId of AUTHORED_SHERMAN_RETOPO_FACE_PLATES) {
+    if (normalized.includes(plateId)) return plateId;
+  }
+  return 'hull_left';
+}
+
+export function applyAuthoredRetopoTexturePlates(root: THREE.Object3D) {
+  const textureByPlate = new Map<string, THREE.Texture>();
+  for (const plateId of AUTHORED_SHERMAN_RETOPO_FACE_PLATES) {
+    textureByPlate.set(plateId, makeAlbedoTexture(AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL + plateId + '.png', 1, 1));
+  }
+  let texturedMaterials = 0;
+  const usedPlateIds = new Set<string>();
+
+  root.traverse((object) => {
+    const mesh = object as THREE.Mesh;
+    if (!mesh.isMesh || !mesh.material) return;
+    const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    const nextMaterials = materials.map((sourceMaterial) => {
+      const plateId = surfaceIdForMesh(mesh, sourceMaterial);
+      const map = textureByPlate.get(plateId) || textureByPlate.get('hull_left')!;
+      usedPlateIds.add(plateId);
+      texturedMaterials += 1;
+      return standardizeMaterial(sourceMaterial, map, plateId.includes('track') ? 'tread' : 'olive');
+    });
+    mesh.material = Array.isArray(mesh.material) ? nextMaterials : nextMaterials[0];
+  });
+
+  root.userData.authoredRetopoTextureSet = {
+    source: 'authored_sherman_retopo_v1',
+    base: AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL,
+    texturedMaterials,
+    usedPlateIds: Array.from(usedPlateIds).sort()
   };
 }

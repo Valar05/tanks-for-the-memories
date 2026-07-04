@@ -17,7 +17,10 @@
     "alpha-orientation-smoke": "node scripts/validate_alpha_sherman_orientation.mjs",
     "alpha-decal-smoke": "node scripts/validate_alpha_runtime_decals.mjs",
     "single-tank-smoke": "node scripts/validate_single_tank_scene.mjs",
-    "visual-qa:single-tank": "node scripts/validate_single_tank_cloud_gate.mjs"
+    "visual-qa:single-tank": "node scripts/validate_single_tank_cloud_gate.mjs",
+    "export:authored-retopo": "node scripts/export_authored_sherman_retopo.mjs",
+    "authored-retopo-smoke": "node scripts/validate_authored_retopo_asset.mjs",
+    "visual-qa:retopo-tank": "node scripts/validate_retopo_tank_cloud_gate.mjs"
   },
   "dependencies": {
     "three": "^0.166.1"

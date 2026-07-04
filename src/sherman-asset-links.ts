@@ -4,3 +4,23 @@ export const SHERMAN_DEFAULT_TEXTURE_BASE_URL = './model-assay/sherman_default_t
 
 export const SHERMAN_DEFAULT_OLIVE_ALBEDO_URL = SHERMAN_DEFAULT_TEXTURE_BASE_URL + 'olive_albedo.png';
 export const SHERMAN_DEFAULT_TREAD_ALBEDO_URL = SHERMAN_DEFAULT_TEXTURE_BASE_URL + 'tread_albedo.png';
+
+export const AUTHORED_SHERMAN_RETOPO_GLB_URL = './tftm/models/authored_sherman_retopo_v1/authored_sherman_retopo_v1.glb';
+export const AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL = './tftm/models/authored_sherman_retopo_v1/texture_plates/';
+export const AUTHORED_SHERMAN_RETOPO_FACE_PLATES = [
+  'hull_glacis',
+  'hull_left',
+  'hull_right',
+  'hull_rear',
+  'engine_deck',
+  'turret_front',
+  'turret_left',
+  'turret_right',
+  'turret_top',
+  'mantlet',
+  'barrel_strip',
+  'track_outer',
+  'track_inner_top_bottom',
+  'wheel_disc',
+  'bogie_side'
+] as const;
