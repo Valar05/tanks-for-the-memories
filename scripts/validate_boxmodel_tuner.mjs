@@ -22,7 +22,7 @@ const requiredPartIds = [
 ];
 
 if (!source.includes("query.get('tune') === '1'")) fail('boxmodel scene must expose ?tune=1 mode');
-if (!source.includes('tftm-authored-sherman-boxmodel-tuner-v7-20260704')) fail('tuner build token missing');
+if (!source.includes('tftm-authored-sherman-boxmodel-tuner-v8-20260704')) fail('tuner build token missing');
 if (!source.includes("type TuneMode = 'move' | 'rotate' | 'scale'")) fail('tuner must have move/rotate/scale modes');
 if (!source.includes("type TuneAxis = 'all' | 'screen' | 'x' | 'y' | 'z'")) fail('tuner must have gesture axis locks');
 if (!source.includes('serializeTuneParts')) fail('tuner must serialize editable part transforms');
@@ -35,10 +35,11 @@ if (!source.includes('pointermove')) fail('tuner must use pointer gesture moveme
 if (!source.includes('raycaster.intersectObjects')) fail('tuner must select parts by touch/raycast');
 if (!source.includes('mesh.visible = part.visible')) fail('placed plugs must remain visible while one plug is selected for editing');
 if (!source.includes('0x8c8b63')) fail('plug material must default to hull-compatible armor color');
-if (!source.includes('scale: [0.34, 0.62, 0.92]')) fail('plug defaults must be narrow across hull and long parallel to tracks');
-if (!source.includes("kind: 'trackGapTrapezoid'")) fail('track-hole plugs must use trapezoid geometry, not rectangular box primitives');
-if (!source.includes('createTrackGapTrapezoidGeometry')) fail('tuner must build a sloped trapezoid plug primitive');
-if (!source.includes("part.id.includes('rear')")) fail('rear plugs must mirror the trapezoid slope from front plugs');
+if (!source.includes('scale: [0.42, 0.88, 1.05]')) fail('plug defaults must be narrow across hull and long parallel to tracks');
+if (!source.includes("kind: 'trackGapCompound'")) fail('track-hole plugs must use compound rectangular-plus-triangular geometry, not rectangular box primitives');
+if (!source.includes('createTrackGapCompoundGeometry')) fail('tuner must build a compound lower-rectangle plus upper-triangle plug primitive');
+if (!source.includes('yShoulder') || !source.includes('yPeak') || !source.includes('zPeak')) fail('compound plug must include lower rectangular shoulder and upper triangular peak');
+if (!source.includes("part.id.includes('rear')")) fail('rear plugs must mirror the upper triangular cap from front plugs');
 if (!source.includes('rotationDeg: [0, 0, 0]')) fail('plug defaults must not start wide-rotated or angled across tracks');
 if (source.includes('model.rotation.y = -Math.PI / 2 - 0.18')) fail('tank model must not keep the old extra presentation yaw');
 if (!source.includes('model.rotation.y = -Math.PI / 2;')) fail('tank model must use only the required axis correction yaw');
