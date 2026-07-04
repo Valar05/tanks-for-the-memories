@@ -49,6 +49,7 @@ function localFsResolver() {
     setup(build) {
       build.onResolve({ filter: /^three$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'build', 'three.module.js') }));
       build.onResolve({ filter: /^three\/examples\/jsm\/loaders\/GLTFLoader\.js$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'examples', 'jsm', 'loaders', 'GLTFLoader.js') }));
+      build.onResolve({ filter: /^three\/examples\/jsm\/controls\/OrbitControls\.js$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'examples', 'jsm', 'controls', 'OrbitControls.js') }));
       build.onResolve({ filter: /^three\/examples\/jsm\/geometries\/DecalGeometry\.js$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'examples', 'jsm', 'geometries', 'DecalGeometry.js') }));
       build.onResolve({ filter: /^\.|^\// }, (args) => {
         const resolved = resolveImport(args.path, args.resolveDir);

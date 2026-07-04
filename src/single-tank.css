@@ -116,6 +116,7 @@ canvas {
 
 .tune-parts-panel,
 .tune-dock,
+.orientation-widget,
 .tune-export {
   position: absolute;
   z-index: 4;
@@ -124,44 +125,63 @@ canvas {
   background: rgba(11, 13, 10, 0.78);
   backdrop-filter: blur(12px);
   box-shadow: 0 12px 34px rgba(0, 0, 0, 0.32);
+  pointer-events: auto;
+}
+
+.is-tuning .camera-zone {
+  display: none;
 }
 
 .tune-parts-panel {
   left: max(10px, env(safe-area-inset-left));
   bottom: max(10px, env(safe-area-inset-bottom));
-  width: min(210px, 42vw);
-  max-height: 42vh;
-  padding: 8px;
+  width: min(230px, 54vw);
+  padding: 7px;
   overflow: hidden;
 }
 
-.tune-panel-title {
-  color: #d5b46f;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-
-.tune-parts-list {
-  display: grid;
-  gap: 5px;
-  max-height: calc(42vh - 34px);
-  overflow-y: auto;
-  padding-right: 2px;
-}
-
+.tune-parts-toggle,
 .tune-part-row,
-.tune-dock button {
-  min-height: 32px;
+.tune-dock button,
+.orientation-widget button {
+  min-height: 34px;
   border: 1px solid rgba(242, 234, 216, 0.18);
   border-radius: 6px;
   background: rgba(242, 234, 216, 0.08);
   color: var(--ink);
   font: inherit;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 760;
+}
+
+.tune-parts-toggle {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  text-align: left;
+  padding: 0 8px;
+}
+
+.tune-parts-toggle span:first-child,
+.tune-active span {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tune-parts-list {
+  display: grid;
+  gap: 5px;
+  max-height: 34vh;
+  margin-top: 6px;
+  overflow-y: auto;
+}
+
+.tune-parts-panel.is-collapsed .tune-parts-list {
+  display: none;
 }
 
 .tune-part-row {
@@ -175,8 +195,8 @@ canvas {
 
 .tune-part-row.is-selected,
 .tune-dock button.is-selected {
-  border-color: rgba(213, 180, 111, 0.86);
-  background: rgba(213, 180, 111, 0.22);
+  border-color: rgba(213, 180, 111, 0.9);
+  background: rgba(213, 180, 111, 0.24);
 }
 
 .tune-part-row.is-hidden {
@@ -186,82 +206,77 @@ canvas {
 
 .tune-dock {
   right: max(10px, env(safe-area-inset-right));
-  bottom: max(44px, calc(env(safe-area-inset-bottom) + 30px));
-  width: min(360px, 45vw);
+  bottom: max(10px, env(safe-area-inset-bottom));
+  width: min(390px, 58vw);
   padding: 8px;
   display: grid;
   gap: 7px;
-  pointer-events: auto;
 }
 
 .tune-active,
-.tune-row,
-.tune-grid {
+.tune-row {
   display: grid;
   gap: 5px;
 }
 
 .tune-active {
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  min-width: 0;
 }
 
 .tune-active span {
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   color: var(--ink);
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 820;
 }
 
-.tune-row {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.tune-row[data-mode-row] {
+.tune-mode-row {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.tune-step,
-.tune-grid label {
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.tune-action-row {
+  grid-template-columns: 1.4fr repeat(4, minmax(0, 1fr));
 }
 
-.tune-step {
+.orientation-widget {
+  top: max(10px, env(safe-area-inset-top));
+  right: max(10px, env(safe-area-inset-right));
+  width: 112px;
+  padding: 6px;
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 8px;
-  align-items: center;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
 }
 
-.tune-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.orientation-widget button {
+  min-height: 28px;
+  padding: 0;
+  font-size: 10px;
 }
 
-.tune-step input,
-.tune-grid input {
-  width: 100%;
-  min-height: 30px;
-  margin-top: 3px;
-  border: 1px solid rgba(242, 234, 216, 0.16);
-  border-radius: 6px;
-  background: rgba(3, 4, 3, 0.54);
-  color: var(--ink);
-  font: inherit;
-  font-size: 12px;
-  padding: 4px 5px;
+.orientation-widget button[data-camera-view="front"] {
+  grid-column: 2;
+}
+
+.orientation-widget button[data-camera-view="left"] {
+  grid-column: 1;
+}
+
+.orientation-widget button[data-camera-view="top"] {
+  grid-column: 2;
+}
+
+.orientation-widget button[data-camera-view="right"] {
+  grid-column: 3;
+}
+
+.orientation-widget button[data-camera-view="back"] {
+  grid-column: 2;
 }
 
 .tune-export {
   left: 50%;
-  bottom: max(10px, env(safe-area-inset-bottom));
+  bottom: max(66px, calc(env(safe-area-inset-bottom) + 56px));
   transform: translateX(-50%);
   width: min(520px, 72vw);
   height: min(180px, 28vh);
@@ -279,40 +294,42 @@ canvas {
   font: 11px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-.is-tuning .camera-zone {
-  z-index: 3;
-  pointer-events: auto;
-}
-
 @media (max-width: 720px) {
+  .single-tank-readout {
+    width: min(240px, 62vw);
+  }
+
   .tune-parts-panel {
-    width: min(160px, 44vw);
-    max-height: 34vh;
+    width: min(174px, 45vw);
   }
 
   .tune-dock {
-    right: max(8px, env(safe-area-inset-right));
-    bottom: max(38px, calc(env(safe-area-inset-bottom) + 22px));
-    width: min(210px, 48vw);
+    width: min(232px, 54vw);
     gap: 5px;
   }
 
   .tune-dock button,
-  .tune-part-row {
+  .tune-part-row,
+  .tune-parts-toggle {
     min-height: 30px;
     font-size: 11px;
   }
 
-  .tune-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 4px;
+  .tune-action-row {
+    grid-template-columns: 1.35fr repeat(2, minmax(0, 1fr));
   }
 
-  .tune-step input,
-  .tune-grid input {
-    min-height: 28px;
-    font-size: 11px;
-    padding: 3px;
+  .tune-action-row button:nth-child(n+4) {
+    display: none;
+  }
+
+  .orientation-widget {
+    width: 96px;
+  }
+
+  .orientation-widget button {
+    min-height: 26px;
+    font-size: 9px;
   }
 
   .tune-export {

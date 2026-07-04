@@ -1,6 +1,7 @@
 import './single-tank.css';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AUTHORED_SHERMAN_BOXMODEL_GLB_URL } from './sherman-asset-links';
 import { applyAuthoredBoxmodelTexturePlates } from './sherman-runtime-materials';
 
@@ -10,11 +11,11 @@ if (!root) throw new Error('missing #boxmodel-tank-root');
 const query = new URLSearchParams(window.location.search);
 const isTuneMode = query.get('tune') === '1';
 const baseVisualBuild = 'tftm-authored-sherman-boxmodel-v1-7-20260704';
-const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v3-20260704';
+const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v4-20260704';
 const visualBuild = isTuneMode ? tunerVisualBuild : baseVisualBuild;
 
 type TuneMode = 'move' | 'rotate' | 'scale';
-type TuneAxis = 'x' | 'y' | 'z' | 'uniform';
+type TuneAxis = 'screen' | 'x' | 'y' | 'z';
 
 type BoxmodelTunePart = {
   id: string;
@@ -44,27 +45,30 @@ root.innerHTML = '<main class="single-tank-shell' + tuneShell + '">' +
     '<p class="single-tank-title">Sherman silhouette review</p>' +
     '<p class="single-tank-status" data-status>loading Blender Sherman boxmodel</p>' +
   '</section>' +
-  (isTuneMode ? '<section class="tune-parts-panel" aria-label="Boxmodel parts"><div class="tune-panel-title">Parts</div><div class="tune-parts-list" data-parts-list></div></section>' +
+  (isTuneMode ? '<section class="tune-parts-panel is-collapsed" aria-label="Boxmodel parts" data-parts-panel>' +
+    '<button class="tune-parts-toggle" type="button" data-toggle-parts><span data-selected-label>No part</span><span data-parts-caret>Parts</span></button>' +
+    '<div class="tune-parts-list" data-parts-list></div>' +
+  '</section>' +
   '<section class="tune-dock" aria-label="Gesture transform controls" data-tune-dock>' +
-    '<div class="tune-active"><span data-selected-label>No part</span><button type="button" data-export-tune>Export</button></div>' +
-    '<div class="tune-row" data-mode-row><button type="button" data-mode="move">Move</button><button type="button" data-mode="rotate">Rotate</button><button type="button" data-mode="scale">Scale</button></div>' +
-    '<div class="tune-row" data-axis-row><button type="button" data-axis="x">X</button><button type="button" data-axis="y">Y</button><button type="button" data-axis="z">Z</button><button type="button" data-axis="uniform">All</button></div>' +
-    '<label class="tune-step">Step <input data-step type="number" value="1" min="0.1" max="10" step="0.1"></label>' +
-    '<div class="tune-grid"><label>X<input data-field="position.x" type="number" step="0.01"></label><label>Y<input data-field="position.y" type="number" step="0.01"></label><label>Z<input data-field="position.z" type="number" step="0.01"></label><label>RX<input data-field="rotation.x" type="number" step="1"></label><label>RY<input data-field="rotation.y" type="number" step="1"></label><label>RZ<input data-field="rotation.z" type="number" step="1"></label><label>SX<input data-field="scale.x" type="number" step="0.01" min="0.01"></label><label>SY<input data-field="scale.y" type="number" step="0.01" min="0.01"></label><label>SZ<input data-field="scale.z" type="number" step="0.01" min="0.01"></label></div>' +
-    '<div class="tune-row"><button type="button" data-undo>Undo</button><button type="button" data-redo>Redo</button><button type="button" data-reset-part>Reset</button><button type="button" data-toggle-visible>Hide</button></div>' +
+    '<div class="tune-active"><span data-mode-label>Move / Screen</span><button type="button" data-export-tune>Export</button></div>' +
+    '<div class="tune-row tune-mode-row" data-mode-row><button type="button" data-mode="move">Move</button><button type="button" data-mode="rotate">Rotate</button><button type="button" data-mode="scale">Scale</button></div>' +
+    '<div class="tune-row tune-action-row"><button type="button" data-axis-cycle>Axis: Screen</button><button type="button" data-undo>Undo</button><button type="button" data-redo>Redo</button><button type="button" data-reset-part>Reset</button><button type="button" data-toggle-visible>Hide</button></div>' +
+  '</section>' +
+  '<section class="orientation-widget" aria-label="Camera orientation widget" data-orientation-widget>' +
+    '<button type="button" data-camera-view="front">Front</button><button type="button" data-camera-view="left">Left</button><button type="button" data-camera-view="top">Top</button><button type="button" data-camera-view="right">Right</button><button type="button" data-camera-view="back">Back</button>' +
   '</section>' +
   '<section class="tune-export" hidden aria-label="Tune export"><textarea data-export-output readonly></textarea></section>' : '') +
-  '<div class="camera-zone" data-camera-zone><span>right side: camera</span></div>' +
 '</main>';
 
 const canvas = root.querySelector<HTMLCanvasElement>('canvas')!;
-const cameraZone = root.querySelector<HTMLDivElement>('[data-camera-zone]')!;
 const statusEl = root.querySelector<HTMLElement>('[data-status]')!;
+const partsPanel = root.querySelector<HTMLElement>('[data-parts-panel]');
+const partsToggle = root.querySelector<HTMLButtonElement>('[data-toggle-parts]');
 const partsListEl = root.querySelector<HTMLDivElement>('[data-parts-list]');
 const selectedLabelEl = root.querySelector<HTMLElement>('[data-selected-label]');
+const modeLabelEl = root.querySelector<HTMLElement>('[data-mode-label]');
 const exportPanel = root.querySelector<HTMLElement>('.tune-export');
 const exportOutput = root.querySelector<HTMLTextAreaElement>('[data-export-output]');
-const stepInput = root.querySelector<HTMLInputElement>('[data-step]');
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
@@ -77,25 +81,42 @@ scene.background = new THREE.Color(0x171a14);
 scene.fog = new THREE.Fog(0x171a14, 12, 32);
 
 const camera = new THREE.PerspectiveCamera(33, 1, 0.05, 100);
+camera.position.set(-4.1, 3.5, 5.5);
+const controls = new OrbitControls(camera, canvas);
+controls.target.set(0, 0.36, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.rotateSpeed = 0.8;
+controls.panSpeed = 0.7;
+controls.zoomSpeed = 0.8;
+controls.minDistance = 2.4;
+controls.maxDistance = 13;
+controls.touches.ONE = THREE.TOUCH.ROTATE;
+controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
+
 const tankRoot = new THREE.Group();
 const tuneGroup = new THREE.Group();
 tankRoot.add(tuneGroup);
 scene.add(tankRoot);
 
-const target = new THREE.Vector3(0, 0.36, 0);
-const cameraState = { yaw: -0.72, pitch: 0.36, distance: 7.4 };
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 let selectedPart: BoxmodelTunePart | null = isTuneMode ? tuneParts[0] : null;
 if (selectedPart) selectedPart.visible = true;
 let currentMode: TuneMode = 'move';
-let currentAxis: TuneAxis = 'x';
-let dragPointer: number | null = null;
-let lastDragX = 0;
-let lastDragY = 0;
-let dragMoved = false;
+let currentAxis: TuneAxis = 'screen';
+let partsOpen = false;
+let gestureState: {
+  pointerId: number;
+  part: BoxmodelTunePart;
+  lastX: number;
+  lastY: number;
+  moved: boolean;
+  tapCanCycle: boolean;
+} | null = null;
 const pointerPositions = new Map<number, { x: number; y: number }>();
 let lastPinchDistance = 0;
+let lastTwistAngle = 0;
 const undoStack: string[] = [];
 const redoStack: string[] = [];
 const initialTuneSnapshot = serializeTuneParts();
@@ -116,41 +137,13 @@ floor.rotation.x = -Math.PI * 0.5;
 floor.position.y = -0.52;
 scene.add(floor);
 
-let cameraPointer: number | null = null;
-let lastCameraX = 0;
-let lastCameraY = 0;
-
-cameraZone.addEventListener('pointerdown', (event) => {
-  cameraPointer = event.pointerId;
-  lastCameraX = event.clientX;
-  lastCameraY = event.clientY;
-  cameraZone.setPointerCapture(event.pointerId);
-});
-
-cameraZone.addEventListener('pointermove', (event) => {
-  if (event.pointerId !== cameraPointer) return;
-  const dx = event.clientX - lastCameraX;
-  const dy = event.clientY - lastCameraY;
-  lastCameraX = event.clientX;
-  lastCameraY = event.clientY;
-  cameraState.yaw -= dx * 0.006;
-  cameraState.pitch = THREE.MathUtils.clamp(cameraState.pitch + dy * 0.0045, 0.14, 0.86);
-});
-
-function releaseCamera(event: PointerEvent) {
-  if (event.pointerId === cameraPointer) cameraPointer = null;
-}
-
-cameraZone.addEventListener('pointerup', releaseCamera);
-cameraZone.addEventListener('pointercancel', releaseCamera);
-
 if (isTuneMode) {
   createTuneMeshes();
   renderTuneUi();
   bindTuneUi();
   bindGestureControls();
   applyTuneToUrl();
-  statusEl.textContent = 'tuner ready: cloud review required';
+  statusEl.textContent = 'gesture tuner ready: drag plugs, pinch scale, twist rotate';
 }
 
 new GLTFLoader().load(AUTHORED_SHERMAN_BOXMODEL_GLB_URL, (gltf) => {
@@ -166,7 +159,7 @@ new GLTFLoader().load(AUTHORED_SHERMAN_BOXMODEL_GLB_URL, (gltf) => {
   model.position.y += size.y * 0.5 - 0.52;
   model.rotation.y = -Math.PI / 2 - 0.18;
   tankRoot.add(model);
-  statusEl.textContent = isTuneMode ? 'loaded boxmodel; gesture tuner active' : 'loaded Blender boxmodel with box UV plates';
+  statusEl.textContent = isTuneMode ? 'loaded boxmodel; gesture-only tuner active' : 'loaded Blender boxmodel with box UV plates';
   postVisualBeacon('loaded', isTuneMode ? { tuneParts: tuneParts.length } : {});
 }, undefined, (error) => {
   statusEl.textContent = 'Blender boxmodel load failed';
@@ -181,7 +174,7 @@ function createTuneMeshes() {
       roughness: 0.86,
       metalness: 0.08,
       transparent: true,
-      opacity: 0.82,
+      opacity: 0.68,
       emissive: 0x000000,
       depthWrite: true
     });
@@ -217,38 +210,33 @@ function renderTuneUi() {
     button.className = 'tune-part-row' + (part === selectedPart ? ' is-selected' : '') + (!part.visible ? ' is-hidden' : '');
     button.setAttribute('aria-pressed', String(part === selectedPart));
     button.textContent = part.label;
-    button.addEventListener('click', () => selectPart(part));
+    button.addEventListener('click', () => {
+      selectPart(part);
+      setPartsOpen(false);
+    });
     partsListEl.appendChild(button);
   }
   root.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((button) => button.classList.toggle('is-selected', button.dataset.mode === currentMode));
-  root.querySelectorAll<HTMLButtonElement>('[data-axis]').forEach((button) => button.classList.toggle('is-selected', button.dataset.axis === currentAxis));
   if (selectedLabelEl) selectedLabelEl.textContent = selectedPart ? selectedPart.label : 'No part';
-  syncNumericFields();
+  if (modeLabelEl) modeLabelEl.textContent = modeLabel();
+  const axisButton = root.querySelector<HTMLButtonElement>('[data-axis-cycle]');
+  if (axisButton) axisButton.textContent = 'Axis: ' + axisLabel();
   updateSelectedMaterial();
+  partsPanel?.classList.toggle('is-collapsed', !partsOpen);
 }
 
 function bindTuneUi() {
+  partsToggle?.addEventListener('click', () => setPartsOpen(!partsOpen));
   root.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((button) => {
     button.addEventListener('click', () => {
       currentMode = button.dataset.mode as TuneMode;
       renderTuneUi();
     });
   });
-  root.querySelectorAll<HTMLButtonElement>('[data-axis]').forEach((button) => {
-    button.addEventListener('click', () => {
-      currentAxis = button.dataset.axis as TuneAxis;
-      renderTuneUi();
-    });
-  });
-  root.querySelectorAll<HTMLInputElement>('[data-field]').forEach((input) => {
-    input.addEventListener('change', () => {
-      if (!selectedPart) return;
-      pushUndo();
-      setPartField(selectedPart, input.dataset.field || '', Number(input.value));
-      applyPartTransform(selectedPart);
-      renderTuneUi();
-      applyTuneToUrl();
-    });
+  root.querySelector<HTMLButtonElement>('[data-axis-cycle]')?.addEventListener('click', () => {
+    const order: TuneAxis[] = ['screen', 'x', 'y', 'z'];
+    currentAxis = order[(order.indexOf(currentAxis) + 1) % order.length];
+    renderTuneUi();
   });
   root.querySelector<HTMLButtonElement>('[data-export-tune]')?.addEventListener('click', exportTune);
   root.querySelector<HTMLButtonElement>('[data-toggle-visible]')?.addEventListener('click', () => {
@@ -274,6 +262,14 @@ function bindTuneUi() {
   });
   root.querySelector<HTMLButtonElement>('[data-undo]')?.addEventListener('click', undoTune);
   root.querySelector<HTMLButtonElement>('[data-redo]')?.addEventListener('click', redoTune);
+  root.querySelectorAll<HTMLButtonElement>('[data-camera-view]').forEach((button) => {
+    button.addEventListener('click', () => snapCamera(button.dataset.cameraView || 'front'));
+  });
+}
+
+function setPartsOpen(open: boolean) {
+  partsOpen = open;
+  renderTuneUi();
 }
 
 function bindGestureControls() {
@@ -282,42 +278,35 @@ function bindGestureControls() {
     pointerPositions.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (pointerPositions.size === 2) {
       lastPinchDistance = getPointerDistance();
+      lastTwistAngle = getPointerAngle();
+      if (gestureState) controls.enabled = false;
       return;
     }
-    dragPointer = event.pointerId;
-    lastDragX = event.clientX;
-    lastDragY = event.clientY;
-    dragMoved = false;
     const hit = pickTunePart(event.clientX, event.clientY);
-    if (hit) selectPart(hit);
+    if (!hit) return;
+    const wasSelected = hit === selectedPart;
+    selectPart(hit);
+    controls.enabled = false;
+    gestureState = { pointerId: event.pointerId, part: hit, lastX: event.clientX, lastY: event.clientY, moved: false, tapCanCycle: wasSelected };
     canvas.setPointerCapture(event.pointerId);
   });
   canvas.addEventListener('pointermove', (event) => {
     if (!isTuneMode) return;
     pointerPositions.set(event.pointerId, { x: event.clientX, y: event.clientY });
-    if (selectedPart && currentMode === 'scale' && pointerPositions.size >= 2) {
-      const distance = getPointerDistance();
-      if (lastPinchDistance > 0) {
-        pushUndoOncePerDrag();
-        const delta = (distance - lastPinchDistance) * 0.006 * getStep();
-        scalePart(selectedPart, delta);
-        applyPartTransform(selectedPart);
-        renderTuneUi();
-        applyTuneToUrl();
-      }
-      lastPinchDistance = distance;
+    if (gestureState && pointerPositions.size >= 2) {
+      handleTwoFingerGesture();
       return;
     }
-    if (event.pointerId !== dragPointer || !selectedPart) return;
-    const dx = event.clientX - lastDragX;
-    const dy = event.clientY - lastDragY;
+    if (!gestureState || event.pointerId !== gestureState.pointerId) return;
+    const dx = event.clientX - gestureState.lastX;
+    const dy = event.clientY - gestureState.lastY;
     if (Math.abs(dx) + Math.abs(dy) < 0.5) return;
-    pushUndoOncePerDrag();
-    transformByGesture(selectedPart, dx, dy);
-    lastDragX = event.clientX;
-    lastDragY = event.clientY;
-    dragMoved = true;
-    applyPartTransform(selectedPart);
+    pushUndoOncePerGesture();
+    transformByGesture(gestureState.part, dx, dy);
+    gestureState.lastX = event.clientX;
+    gestureState.lastY = event.clientY;
+    gestureState.moved = true;
+    applyPartTransform(gestureState.part);
     renderTuneUi();
     applyTuneToUrl();
   });
@@ -325,13 +314,37 @@ function bindGestureControls() {
   canvas.addEventListener('pointercancel', endGesture);
 }
 
+function handleTwoFingerGesture() {
+  if (!gestureState) return;
+  const part = gestureState.part;
+  const distance = getPointerDistance();
+  const angle = getPointerAngle();
+  pushUndoOncePerGesture();
+  if (currentMode === 'scale' && lastPinchDistance > 0) {
+    scalePart(part, (distance - lastPinchDistance) * 0.006);
+  }
+  if (currentMode === 'rotate' && Number.isFinite(lastTwistAngle)) {
+    rotatePart(part, THREE.MathUtils.radToDeg(angle - lastTwistAngle));
+  }
+  lastPinchDistance = distance;
+  lastTwistAngle = angle;
+  gestureState.moved = true;
+  applyPartTransform(part);
+  renderTuneUi();
+  applyTuneToUrl();
+}
+
 function endGesture(event: PointerEvent) {
   pointerPositions.delete(event.pointerId);
-  if (event.pointerId === dragPointer) {
-    dragPointer = null;
-    dragMoved = false;
+  if (gestureState && event.pointerId === gestureState.pointerId) {
+    if (!gestureState.moved && gestureState.tapCanCycle) cycleMode();
+    gestureState = null;
+    controls.enabled = true;
   }
-  if (pointerPositions.size < 2) lastPinchDistance = 0;
+  if (pointerPositions.size < 2) {
+    lastPinchDistance = 0;
+    lastTwistAngle = 0;
+  }
 }
 
 function pickTunePart(clientX: number, clientY: number) {
@@ -347,37 +360,48 @@ function pickTunePart(clientX: number, clientY: number) {
 }
 
 function transformByGesture(part: BoxmodelTunePart, dx: number, dy: number) {
-  const step = getStep();
-  if (currentMode === 'move') {
-    const amount = step * 0.006;
-    if (currentAxis === 'x') part.position[0] += dx * amount;
-    if (currentAxis === 'y') part.position[1] -= dy * amount;
-    if (currentAxis === 'z') part.position[2] += dy * amount;
-    if (currentAxis === 'uniform') {
-      part.position[0] += dx * amount;
-      part.position[1] -= dy * amount;
-    }
+  if (currentMode === 'move') movePart(part, dx, dy);
+  if (currentMode === 'rotate') rotatePart(part, (Math.abs(dx) > Math.abs(dy) ? dx : -dy) * 0.28);
+  if (currentMode === 'scale') scalePart(part, (dx - dy) * 0.004);
+}
+
+function movePart(part: BoxmodelTunePart, dx: number, dy: number) {
+  const amount = 0.006;
+  if (currentAxis === 'screen') {
+    const right = new THREE.Vector3();
+    const up = new THREE.Vector3();
+    camera.matrixWorld.extractBasis(right, up, new THREE.Vector3());
+    const delta = right.multiplyScalar(dx * amount).add(up.multiplyScalar(-dy * amount));
+    part.position[0] += delta.x;
+    part.position[1] += delta.y;
+    part.position[2] += delta.z;
+    return;
   }
-  if (currentMode === 'rotate') {
-    const amount = (Math.abs(dx) > Math.abs(dy) ? dx : -dy) * step * 0.28;
-    if (currentAxis === 'x' || currentAxis === 'uniform') part.rotationDeg[0] += amount;
-    if (currentAxis === 'y') part.rotationDeg[1] += amount;
-    if (currentAxis === 'z') part.rotationDeg[2] += amount;
+  const value = (Math.abs(dx) > Math.abs(dy) ? dx : -dy) * amount;
+  if (currentAxis === 'x') part.position[0] += value;
+  if (currentAxis === 'y') part.position[1] += value;
+  if (currentAxis === 'z') part.position[2] += value;
+}
+
+function rotatePart(part: BoxmodelTunePart, degrees: number) {
+  if (currentAxis === 'screen') {
+    part.rotationDeg[1] += degrees;
+    return;
   }
-  if (currentMode === 'scale') {
-    scalePart(part, (dx - dy) * step * 0.004);
-  }
+  if (currentAxis === 'x') part.rotationDeg[0] += degrees;
+  if (currentAxis === 'y') part.rotationDeg[1] += degrees;
+  if (currentAxis === 'z') part.rotationDeg[2] += degrees;
 }
 
 function scalePart(part: BoxmodelTunePart, delta: number) {
-  if (currentAxis === 'x') part.scale[0] = Math.max(0.02, part.scale[0] + delta);
-  if (currentAxis === 'y') part.scale[1] = Math.max(0.02, part.scale[1] + delta);
-  if (currentAxis === 'z') part.scale[2] = Math.max(0.02, part.scale[2] + delta);
-  if (currentAxis === 'uniform') {
+  if (currentAxis === 'screen') {
     part.scale[0] = Math.max(0.02, part.scale[0] + delta);
     part.scale[1] = Math.max(0.02, part.scale[1] + delta);
     part.scale[2] = Math.max(0.02, part.scale[2] + delta);
   }
+  if (currentAxis === 'x') part.scale[0] = Math.max(0.02, part.scale[0] + delta);
+  if (currentAxis === 'y') part.scale[1] = Math.max(0.02, part.scale[1] + delta);
+  if (currentAxis === 'z') part.scale[2] = Math.max(0.02, part.scale[2] + delta);
 }
 
 function getPointerDistance() {
@@ -386,16 +410,30 @@ function getPointerDistance() {
   return Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
 }
 
+function getPointerAngle() {
+  const points = [...pointerPositions.values()];
+  if (points.length < 2) return 0;
+  return Math.atan2(points[1].y - points[0].y, points[1].x - points[0].x);
+}
+
 function selectPart(part: BoxmodelTunePart) {
   selectedPart = part;
   if (!part.visible) part.visible = true;
   for (const candidate of tuneParts) applyPartTransform(candidate);
+  controls.target.set(part.position[0], part.position[1] + 0.1, part.position[2]);
+  controls.update();
   renderTuneUi();
   postVisualBeacon('select-part', { part: part.id });
 }
 
+function cycleMode() {
+  currentMode = currentMode === 'move' ? 'rotate' : currentMode === 'rotate' ? 'scale' : 'move';
+  renderTuneUi();
+}
+
 function updateSelectedMaterial() {
-  root.querySelector<HTMLButtonElement>('[data-toggle-visible]')!.textContent = selectedPart?.visible ? 'Hide' : 'Show';
+  const visibleButton = root.querySelector<HTMLButtonElement>('[data-toggle-visible]');
+  if (visibleButton) visibleButton.textContent = selectedPart?.visible ? 'Hide' : 'Show';
   for (const part of tuneParts) {
     const material = part.mesh?.material;
     if (!(material instanceof THREE.MeshStandardMaterial)) continue;
@@ -404,40 +442,12 @@ function updateSelectedMaterial() {
   }
 }
 
-function syncNumericFields() {
-  if (!selectedPart) return;
-  root.querySelectorAll<HTMLInputElement>('[data-field]').forEach((input) => {
-    const field = input.dataset.field || '';
-    let value = 0;
-    if (field === 'position.x') value = selectedPart.position[0];
-    if (field === 'position.y') value = selectedPart.position[1];
-    if (field === 'position.z') value = selectedPart.position[2];
-    if (field === 'rotation.x') value = selectedPart.rotationDeg[0];
-    if (field === 'rotation.y') value = selectedPart.rotationDeg[1];
-    if (field === 'rotation.z') value = selectedPart.rotationDeg[2];
-    if (field === 'scale.x') value = selectedPart.scale[0];
-    if (field === 'scale.y') value = selectedPart.scale[1];
-    if (field === 'scale.z') value = selectedPart.scale[2];
-    input.value = String(Math.round(value * 1000) / 1000);
-  });
+function axisLabel() {
+  return currentAxis === 'screen' ? 'Screen' : currentAxis.toUpperCase();
 }
 
-function setPartField(part: BoxmodelTunePart, field: string, value: number) {
-  if (!Number.isFinite(value)) return;
-  if (field === 'position.x') part.position[0] = value;
-  if (field === 'position.y') part.position[1] = value;
-  if (field === 'position.z') part.position[2] = value;
-  if (field === 'rotation.x') part.rotationDeg[0] = value;
-  if (field === 'rotation.y') part.rotationDeg[1] = value;
-  if (field === 'rotation.z') part.rotationDeg[2] = value;
-  if (field === 'scale.x') part.scale[0] = Math.max(0.02, value);
-  if (field === 'scale.y') part.scale[1] = Math.max(0.02, value);
-  if (field === 'scale.z') part.scale[2] = Math.max(0.02, value);
-}
-
-function getStep() {
-  const value = Number(stepInput?.value || 1);
-  return Number.isFinite(value) ? THREE.MathUtils.clamp(value, 0.1, 10) : 1;
+function modeLabel() {
+  return (currentMode[0].toUpperCase() + currentMode.slice(1)) + ' / ' + axisLabel();
 }
 
 function pushUndo() {
@@ -445,10 +455,10 @@ function pushUndo() {
   redoStack.length = 0;
 }
 
-function pushUndoOncePerDrag() {
-  if (dragMoved) return;
+function pushUndoOncePerGesture() {
+  if (!gestureState || gestureState.moved) return;
   pushUndo();
-  dragMoved = true;
+  gestureState.moved = true;
 }
 
 function undoTune() {
@@ -517,6 +527,22 @@ function applyTuneToUrl() {
   window.history.replaceState(null, '', next);
 }
 
+function snapCamera(view: string) {
+  const focus = selectedPart ? new THREE.Vector3(selectedPart.position[0], selectedPart.position[1] + 0.1, selectedPart.position[2]) : new THREE.Vector3(0, 0.36, 0);
+  const distance = Math.max(4.5, camera.position.distanceTo(controls.target));
+  const offsets: Record<string, THREE.Vector3> = {
+    front: new THREE.Vector3(0, 1.4, -distance),
+    back: new THREE.Vector3(0, 1.4, distance),
+    left: new THREE.Vector3(-distance, 1.4, 0),
+    right: new THREE.Vector3(distance, 1.4, 0),
+    top: new THREE.Vector3(0.01, distance, 0.01)
+  };
+  controls.target.copy(focus);
+  camera.position.copy(focus).add(offsets[view] || offsets.front);
+  controls.update();
+  postVisualBeacon('camera-snap', { view });
+}
+
 function postVisualBeacon(stage: string, extra: Record<string, string | number> = {}) {
   const params = new URLSearchParams({
     stage,
@@ -542,19 +568,9 @@ function resize() {
   }
 }
 
-function updateCamera() {
-  const orbit = new THREE.Vector3(
-    Math.sin(cameraState.yaw) * Math.cos(cameraState.pitch) * cameraState.distance,
-    Math.sin(cameraState.pitch) * cameraState.distance + 0.95,
-    Math.cos(cameraState.yaw) * Math.cos(cameraState.pitch) * cameraState.distance
-  );
-  camera.position.copy(target).add(orbit);
-  camera.lookAt(target);
-}
-
 function animate() {
   resize();
-  updateCamera();
+  controls.update();
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
