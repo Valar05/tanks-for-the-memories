@@ -1,0 +1,52 @@
+{
+  "asset_id": "original_heavy_tank_systems_v1",
+  "project": "tanks-for-the-memories",
+  "purpose": "phone-first animatable heavy tank model request",
+  "source_contracts": [
+    "docs/doctrine/scorpion-informed-heavy-tank-systems-contract.md",
+    "docs/doctrine/original-heavy-tank-model-request.md"
+  ],
+  "reference_policy": {
+    "scorpion": "systems reference only",
+    "forbidden": [
+      "Halo copied silhouette",
+      "War Thunder copied asset",
+      "logos",
+      "skins",
+      "exact proprietary geometry"
+    ]
+  },
+  "required_systems": [
+    "hull_root",
+    "turret_traverse_pivot",
+    "turret_shell",
+    "cannon_elevation_pivot",
+    "mantlet",
+    "main_barrel",
+    "coaxial_weapon",
+    "left_front_track_pod",
+    "left_rear_track_pod",
+    "right_front_track_pod",
+    "right_rear_track_pod",
+    "track_belt_material_regions",
+    "sprocket_idler_groups",
+    "roadwheel_groups",
+    "commander_hatch"
+  ],
+  "meshy_settings": {
+    "model_type": "lowpoly",
+    "pbr": true,
+    "remesh": true,
+    "topology": "triangle",
+    "target_polycount": 12000,
+    "reject_polycount_over": 20000,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "origin_at": "bottom"
+  },
+  "prompt": "Original hard-surface futuristic heavy tank for a mobile Three.js game, inspired only by the systems logic of a four-track heavy battle tank: central armored hull, dominant rotating turret, long main cannon, coaxial weapon, four integrated armored tread pods, visible track belt surfaces, sprocket and idler gear detail, grouped roadwheels, commander hatch, heavy cast and welded armor plates, believable mechanical pivots, matte olive drab and dark steel, realistic field wear, panel seams, bolts, mud and dust low on the running gear, non-toy proportions, readable hard-surface silhouette, game-ready low-poly PBR model, separated visual modules suitable for turret traversal, cannon elevation, tread texture scrolling, wheel rotation, and hatch posture.",
+  "negative_prompt": "No Halo copy, no War Thunder copy, no logos, no exact Scorpion silhouette, no copied game asset, no fantasy armor, no cartoon toy style, no cute proportions, no single fused sculpture, no red runtime planes, no decorative fins, no sci-fi hover parts, no DD flotation, no beach hardware, no excessive greeble, no massive polycount, no tiny per-link track geometry that breaks phone budget.",
+  "acceptance": "Must inspect as multi-part or bindable-region asset before gameplay animation integration. Fused single-mesh output is static reference only."
+}

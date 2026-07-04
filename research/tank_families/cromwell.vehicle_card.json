@@ -1,0 +1,55 @@
+{
+  "name": "Cromwell",
+  "nation": "United Kingdom",
+  "role": "cruiser_tank",
+  "crew_count": 5,
+  "base_hull": "Cromwell/Centaur cruiser hull",
+  "base_turret": "Cromwell 75mm turret",
+  "production_period": "1943-1945",
+  "normandy_presence": "Yes; British armoured formations in Normandy.",
+  "field_modifications": [
+    "prongs",
+    "extra stowage",
+    "command radios",
+    "applique armor"
+  ],
+  "engine_family": [
+    "Rolls-Royce Meteor"
+  ],
+  "suspension_family": [
+    "Christie"
+  ],
+  "radio_family": [
+    "Wireless Set No. 19"
+  ],
+  "optics_family": [
+    "cruiser-tank observation"
+  ],
+  "ammo_focus": [
+    "75mm HE",
+    "75mm AP",
+    "75mm smoke"
+  ],
+  "crew_layout": [
+    "commander",
+    "gunner",
+    "loader",
+    "driver",
+    "hull machine gunner/radio operator"
+  ],
+  "doctrine_tags": [
+    "speed",
+    "recon",
+    "exploitation"
+  ],
+  "field_replaceable_components": [
+    "prongs",
+    "radio",
+    "camouflage"
+  ],
+  "sources": [
+    "cromwell",
+    "ammo_75qf",
+    "ws19"
+  ]
+}

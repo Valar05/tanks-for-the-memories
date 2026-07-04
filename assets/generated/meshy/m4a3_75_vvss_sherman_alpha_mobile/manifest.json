@@ -1,0 +1,98 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-03T22:22:25+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "enable_pbr": true,
+    "hd_texture": false,
+    "input_task_id": "019f2a0a-96b3-7a36-ab59-ff274ee70e7a",
+    "model_type": "lowpoly",
+    "should_remesh": true,
+    "should_texture": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "target_polycount": 12000,
+    "topology": "triangle"
+  },
+  "files": [
+    {
+      "bytes": 7802892,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/m4a3_75_vvss_sherman_alpha_mobile/fbx.fbx"
+    },
+    {
+      "bytes": 9398200,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/m4a3_75_vvss_sherman_alpha_mobile/glb.glb"
+    }
+  ],
+  "last_image_to_3d_task": {
+    "art_style": "",
+    "consumed_credits": 30,
+    "created_at": 1783117567665,
+    "expires_at": 1783376944286,
+    "finished_at": 1783117744286,
+    "id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783117567689,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "",
+    "texture_image_url": "",
+    "texture_prompt": "",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "image-to-3d"
+  },
+  "name": "m4a3_75_vvss_sherman_alpha_mobile",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-03T22:26:07+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_pbr": true,
+        "hd_texture": false,
+        "image_url": "<data-uri>",
+        "model_type": "lowpoly",
+        "should_remesh": true,
+        "should_texture": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "target_polycount": 12000,
+        "topology": "triangle"
+      },
+      "provider": "meshy",
+      "step": "image_to_3d",
+      "task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00"
+    }
+  ],
+  "tasks": {
+    "image_to_3d": "019f2a16-c82b-7b52-b541-c707b58c5d00"
+  },
+  "updated_at": "2026-07-03T22:29:16+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

@@ -1,0 +1,29 @@
+{
+  "asset_id": "tank_mechanical_seed_v1",
+  "asset_class": "source_authored_runtime_assembly",
+  "created_for": "no_credit_animatable_tank_gate",
+  "tool": "Three.js procedural authored seed",
+  "credit_cost": 0,
+  "required_systems": [
+    "hull_root",
+    "turret_traverse_pivot",
+    "cannon_elevation_pivot",
+    "left_tread_system",
+    "right_tread_system"
+  ],
+  "parts": {
+    "hull_root": "separate central armored hull group",
+    "turret_traverse_pivot": "separate turret pivot at ring center",
+    "cannon_elevation_pivot": "separate barrel pitch pivot at mantlet",
+    "tread_belt_asset": "one reusable low-poly belt mesh/material instanced left and right",
+    "gear_assets": "individual low-poly cylinders, separate from belt asset, animated independently"
+  },
+  "motion": {
+    "vehicle_translation": "none",
+    "tread_motion": "texture_space_scroll_on_belt_material",
+    "wheel_motion": "individual_cylinder_rotation",
+    "turret_motion": "pivot_rotation_y",
+    "barrel_motion": "pivot_rotation_z"
+  },
+  "acceptance": "This seed is structurally animatable but visually provisional. Meshy may be used later for surface/texturing only if this part contract survives inspection."
+}

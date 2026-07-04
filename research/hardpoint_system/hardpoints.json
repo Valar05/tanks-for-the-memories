@@ -1,0 +1,385 @@
+[
+  {
+    "hardpoint": "main_gun_mount",
+    "allowed_components": [
+      "gun_75mm_m3",
+      "gun_76mm_m1",
+      "gun_90mm_m3",
+      "gun_17pdr",
+      "gun_37mm_m5",
+      "gun_qf_75"
+    ],
+    "historical_examples": [
+      "Sherman",
+      "Firefly",
+      "M36",
+      "M18",
+      "Churchill",
+      "Cromwell",
+      "Stuart"
+    ],
+    "visual_changes": [
+      "barrel length",
+      "mantlet",
+      "muzzle brake"
+    ],
+    "gameplay_changes": [
+      "firepower",
+      "target class",
+      "reveal risk"
+    ]
+  },
+  {
+    "hardpoint": "turret_family",
+    "allowed_components": [
+      "turret_sherman_75",
+      "turret_sherman_76",
+      "turret_firefly_17pdr",
+      "turret_m10_open",
+      "turret_m18_open",
+      "turret_m36_90",
+      "turret_churchill_family",
+      "turret_cromwell_75",
+      "turret_stuart_37"
+    ],
+    "historical_examples": [
+      "Sherman 75mm",
+      "Sherman 76mm",
+      "Firefly",
+      "M10",
+      "M18",
+      "M36",
+      "Churchill",
+      "Cromwell",
+      "Stuart"
+    ],
+    "visual_changes": [
+      "bustle",
+      "open top",
+      "loader hatch"
+    ],
+    "gameplay_changes": [
+      "crew exposure",
+      "line of sight",
+      "ammo stowage"
+    ]
+  },
+  {
+    "hardpoint": "hull_family",
+    "allowed_components": [
+      "hull_m4_cast",
+      "hull_m4_welded",
+      "hull_m4a4_lengthened",
+      "hull_m10_td",
+      "hull_m18_td",
+      "hull_m36_td",
+      "hull_churchill",
+      "hull_cromwell",
+      "hull_stuart"
+    ],
+    "historical_examples": [
+      "Sherman hulls",
+      "M10/M36 hulls",
+      "Churchill",
+      "Cromwell",
+      "Stuart"
+    ],
+    "visual_changes": [
+      "length",
+      "panniers",
+      "open superstructure"
+    ],
+    "gameplay_changes": [
+      "survivability",
+      "mobility",
+      "storage"
+    ]
+  },
+  {
+    "hardpoint": "engine_bay",
+    "allowed_components": [
+      "engine_r975",
+      "engine_ford_gaa",
+      "engine_gm6046",
+      "engine_chrysler_a57",
+      "engine_bedford",
+      "engine_meteor"
+    ],
+    "historical_examples": [
+      "Sherman family engines",
+      "Churchill Bedford",
+      "Cromwell Meteor"
+    ],
+    "visual_changes": [
+      "engine deck",
+      "intakes",
+      "grilles"
+    ],
+    "gameplay_changes": [
+      "acceleration",
+      "reliability",
+      "fuel use"
+    ]
+  },
+  {
+    "hardpoint": "transmission",
+    "allowed_components": [
+      "trans_spicer",
+      "trans_torqmatic",
+      "trans_merritt_brown"
+    ],
+    "historical_examples": [
+      "Sherman Spicer",
+      "M18 Torqmatic",
+      "British Merritt-Brown"
+    ],
+    "visual_changes": [
+      "final drive layout"
+    ],
+    "gameplay_changes": [
+      "reverse speed",
+      "slope performance",
+      "repair burden"
+    ]
+  },
+  {
+    "hardpoint": "suspension",
+    "allowed_components": [
+      "susp_vvss",
+      "susp_hvss",
+      "susp_torsion",
+      "susp_churchill",
+      "susp_christie"
+    ],
+    "historical_examples": [
+      "Sherman VVSS/HVSS",
+      "M18 torsion bar",
+      "Churchill bogies",
+      "Cromwell Christie"
+    ],
+    "visual_changes": [
+      "roadwheel count",
+      "track width",
+      "ride height"
+    ],
+    "gameplay_changes": [
+      "rough ground mobility",
+      "speed",
+      "stability"
+    ]
+  },
+  {
+    "hardpoint": "radio_bay",
+    "allowed_components": [
+      "radio_scr508",
+      "radio_ws19"
+    ],
+    "historical_examples": [
+      "SCR-508 Shermans",
+      "WS No.19 British armor"
+    ],
+    "visual_changes": [
+      "antenna placement",
+      "bustle gear"
+    ],
+    "gameplay_changes": [
+      "report latency",
+      "command range",
+      "information quality"
+    ]
+  },
+  {
+    "hardpoint": "optics",
+    "allowed_components": [
+      "optics_periscope",
+      "optics_telescopic"
+    ],
+    "historical_examples": [
+      "Sherman periscopes",
+      "British optics",
+      "open-top TD spotting"
+    ],
+    "visual_changes": [
+      "hatch view",
+      "scope zoom"
+    ],
+    "gameplay_changes": [
+      "spotting",
+      "aim time",
+      "target confirmation"
+    ]
+  },
+  {
+    "hardpoint": "armor_package",
+    "allowed_components": [
+      "armor_applique",
+      "armor_wet_stowage"
+    ],
+    "historical_examples": [
+      "Sherman applique",
+      "wet stowage"
+    ],
+    "visual_changes": [
+      "extra plates",
+      "floor bins"
+    ],
+    "gameplay_changes": [
+      "survivability",
+      "burn chance"
+    ]
+  },
+  {
+    "hardpoint": "special_equipment_bocage",
+    "allowed_components": [
+      "special_rhino"
+    ],
+    "historical_examples": [
+      "Rhino tanks",
+      "Prongs"
+    ],
+    "visual_changes": [
+      "front tusks",
+      "field-welded frame"
+    ],
+    "gameplay_changes": [
+      "hedgerow breach",
+      "noise",
+      "front profile"
+    ]
+  },
+  {
+    "hardpoint": "special_equipment_amphibious",
+    "allowed_components": [
+      "special_dd_screen"
+    ],
+    "historical_examples": [
+      "Sherman DD"
+    ],
+    "visual_changes": [
+      "canvas screen",
+      "stern prop gear"
+    ],
+    "gameplay_changes": [
+      "swim capability",
+      "launch risk"
+    ]
+  },
+  {
+    "hardpoint": "special_equipment_recovery",
+    "allowed_components": [
+      "special_recovery_boom"
+    ],
+    "historical_examples": [
+      "M32 boom and winch"
+    ],
+    "visual_changes": [
+      "A-frame boom",
+      "winch drums"
+    ],
+    "gameplay_changes": [
+      "tow disabled vehicles",
+      "repair throughput"
+    ]
+  },
+  {
+    "hardpoint": "special_equipment_muzzle",
+    "allowed_components": [
+      "special_muzzle_brake"
+    ],
+    "historical_examples": [
+      "Firefly brake",
+      "M18 brake",
+      "M36 brake"
+    ],
+    "visual_changes": [
+      "muzzle brake shape",
+      "dust cone"
+    ],
+    "gameplay_changes": [
+      "blast signature",
+      "recoil"
+    ]
+  },
+  {
+    "hardpoint": "secondary_weapon_mount",
+    "allowed_components": [
+      "weapon_coax_mg_generic",
+      "weapon_hull_mg_generic",
+      "weapon_aa_mount_generic"
+    ],
+    "historical_examples": [
+      "Sherman coax and bow MG",
+      "Churchill/Besa layout",
+      "AA pintle mounts"
+    ],
+    "visual_changes": [
+      "MG ball mount",
+      "pintle",
+      "hull port"
+    ],
+    "gameplay_changes": [
+      "suppression",
+      "close defense",
+      "air threat signal"
+    ]
+  },
+  {
+    "hardpoint": "commander_cupola",
+    "allowed_components": [
+      "access_hatch_commander_cupola"
+    ],
+    "historical_examples": [
+      "Sherman cupola",
+      "Churchill cupola",
+      "open TD command hatch"
+    ],
+    "visual_changes": [
+      "raised cupola",
+      "open hatch silhouette"
+    ],
+    "gameplay_changes": [
+      "observer quality",
+      "spotting bonus",
+      "exposure"
+    ]
+  },
+  {
+    "hardpoint": "crew_access",
+    "allowed_components": [
+      "access_loader_hatch"
+    ],
+    "historical_examples": [
+      "Firefly loader hatch",
+      "Sherman roof hatches"
+    ],
+    "visual_changes": [
+      "extra roof opening"
+    ],
+    "gameplay_changes": [
+      "reload speed",
+      "bailout safety",
+      "ammo access"
+    ]
+  },
+  {
+    "hardpoint": "external_stowage",
+    "allowed_components": [
+      "stowage_external_bins"
+    ],
+    "historical_examples": [
+      "Sherman external bins",
+      "track racks",
+      "field packs"
+    ],
+    "visual_changes": [
+      "bags",
+      "crates",
+      "spare track links"
+    ],
+    "gameplay_changes": [
+      "endurance",
+      "weight",
+      "silhouette"
+    ]
+  }
+]

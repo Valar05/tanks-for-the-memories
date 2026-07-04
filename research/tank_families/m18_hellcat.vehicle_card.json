@@ -1,0 +1,54 @@
+{
+  "name": "M18 Hellcat",
+  "nation": "United States",
+  "role": "high_speed_tank_destroyer",
+  "crew_count": 5,
+  "base_hull": "T70/M18 torsion-bar hull",
+  "base_turret": "Open-topped low-profile 76mm turret",
+  "production_period": "1943-1944",
+  "normandy_presence": "Post-breakout ETO TD family; not a D-Day beach vehicle.",
+  "field_modifications": [
+    "muzzle brake retrofit",
+    "winterization",
+    "open-top crew aids"
+  ],
+  "engine_family": [
+    "Continental R975"
+  ],
+  "suspension_family": [
+    "torsion bar"
+  ],
+  "radio_family": [
+    "SCR-508"
+  ],
+  "optics_family": [
+    "excellent open-top visibility"
+  ],
+  "ammo_focus": [
+    "76mm HE",
+    "76mm APCBC",
+    "76mm HVAP",
+    "76mm smoke"
+  ],
+  "crew_layout": [
+    "commander",
+    "gunner",
+    "loader",
+    "driver",
+    "assistant driver"
+  ],
+  "doctrine_tags": [
+    "speed",
+    "flank",
+    "low silhouette"
+  ],
+  "field_replaceable_components": [
+    "muzzle brake",
+    "engine kit"
+  ],
+  "sources": [
+    "m18",
+    "ammo_76mm",
+    "scr508"
+  ]
+}

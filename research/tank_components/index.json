@@ -1,0 +1,764 @@
+[
+  {
+    "component_id": "hull_m4_cast",
+    "category": "hull",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Sherman DD",
+      "Sherman Firefly",
+      "M32 Tank Recovery Vehicle"
+    ],
+    "historical_variants": [
+      "M4A1 cast hull"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.95
+  },
+  {
+    "component_id": "hull_m4_welded",
+    "category": "hull",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Sherman Firefly",
+      "M10 Wolverine",
+      "M36 Jackson"
+    ],
+    "historical_variants": [
+      "M4",
+      "M4A2",
+      "M4A3"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.95
+  },
+  {
+    "component_id": "hull_m4a4_lengthened",
+    "category": "hull",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Sherman Firefly"
+    ],
+    "historical_variants": [
+      "M4A4",
+      "Firefly VC"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.9
+  },
+  {
+    "component_id": "hull_m10_td",
+    "category": "hull",
+    "compatible_hulls": [
+      "M10 Wolverine"
+    ],
+    "historical_variants": [
+      "M10",
+      "M10A1"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "hull_m18_td",
+    "category": "hull",
+    "compatible_hulls": [
+      "M18 Hellcat"
+    ],
+    "historical_variants": [
+      "T70",
+      "M18"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.98
+  },
+  {
+    "component_id": "hull_m36_td",
+    "category": "hull",
+    "compatible_hulls": [
+      "M36 Jackson"
+    ],
+    "historical_variants": [
+      "M36",
+      "M36B1",
+      "M36B2"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "hull_churchill",
+    "category": "hull",
+    "compatible_hulls": [
+      "Churchill"
+    ],
+    "historical_variants": [
+      "Churchill Mk I-VIII"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.95
+  },
+  {
+    "component_id": "hull_cromwell",
+    "category": "hull",
+    "compatible_hulls": [
+      "Cromwell"
+    ],
+    "historical_variants": [
+      "Cromwell",
+      "Centaur"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.94
+  },
+  {
+    "component_id": "hull_stuart",
+    "category": "hull",
+    "compatible_hulls": [
+      "M3/M5 Stuart"
+    ],
+    "historical_variants": [
+      "M3",
+      "M5",
+      "M5A1"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "turret_sherman_75",
+    "category": "turret",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Sherman DD",
+      "M32 Tank Recovery Vehicle"
+    ],
+    "historical_variants": [
+      "75mm Sherman turret",
+      "105mm Sherman turret"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "turret_sherman_76",
+    "category": "turret",
+    "compatible_hulls": [
+      "M4 Sherman"
+    ],
+    "historical_variants": [
+      "M4A1(76)W",
+      "M4A2(76)W",
+      "M4A3(76)W"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.95
+  },
+  {
+    "component_id": "turret_firefly_17pdr",
+    "category": "turret",
+    "compatible_hulls": [
+      "Sherman Firefly"
+    ],
+    "historical_variants": [
+      "IC",
+      "VC"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "turret_m10_open",
+    "category": "turret",
+    "compatible_hulls": [
+      "M10 Wolverine"
+    ],
+    "historical_variants": [
+      "M10",
+      "M10A1"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.95
+  },
+  {
+    "component_id": "turret_m18_open",
+    "category": "turret",
+    "compatible_hulls": [
+      "M18 Hellcat"
+    ],
+    "historical_variants": [
+      "M18"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "turret_m36_90",
+    "category": "turret",
+    "compatible_hulls": [
+      "M36 Jackson"
+    ],
+    "historical_variants": [
+      "M36",
+      "M36B1",
+      "M36B2"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "turret_churchill_family",
+    "category": "turret",
+    "compatible_hulls": [
+      "Churchill"
+    ],
+    "historical_variants": [
+      "2-pdr",
+      "6-pdr",
+      "75mm",
+      "95mm"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.94
+  },
+  {
+    "component_id": "turret_cromwell_75",
+    "category": "turret",
+    "compatible_hulls": [
+      "Cromwell"
+    ],
+    "historical_variants": [
+      "Cromwell IV/VI/VIII"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.94
+  },
+  {
+    "component_id": "turret_stuart_37",
+    "category": "turret",
+    "compatible_hulls": [
+      "M3/M5 Stuart"
+    ],
+    "historical_variants": [
+      "M3",
+      "M5",
+      "M5A1"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "gun_75mm_m3",
+    "category": "gun",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Sherman DD",
+      "M10 Wolverine"
+    ],
+    "historical_variants": [
+      "75mm M3"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.98
+  },
+  {
+    "component_id": "gun_76mm_m1",
+    "category": "gun",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "M18 Hellcat"
+    ],
+    "historical_variants": [
+      "M1",
+      "M1A1",
+      "M1A1C",
+      "M1A2"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.98
+  },
+  {
+    "component_id": "gun_90mm_m3",
+    "category": "gun",
+    "compatible_hulls": [
+      "M36 Jackson"
+    ],
+    "historical_variants": [
+      "90mm M3"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "gun_17pdr",
+    "category": "gun",
+    "compatible_hulls": [
+      "Sherman Firefly"
+    ],
+    "historical_variants": [
+      "17-pounder APCBC",
+      "17-pounder APDS"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.98
+  },
+  {
+    "component_id": "gun_37mm_m5",
+    "category": "gun",
+    "compatible_hulls": [
+      "M3/M5 Stuart"
+    ],
+    "historical_variants": [
+      "37mm M5"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "gun_qf_75",
+    "category": "gun",
+    "compatible_hulls": [
+      "Churchill",
+      "Cromwell"
+    ],
+    "historical_variants": [
+      "QF 75mm"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "engine_r975",
+    "category": "engine",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "M10 Wolverine",
+      "M18 Hellcat",
+      "M32 Tank Recovery Vehicle",
+      "M3/M5 Stuart"
+    ],
+    "historical_variants": [
+      "Continental R975-C1",
+      "R975-C4"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "engine_ford_gaa",
+    "category": "engine",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "M10 Wolverine",
+      "M36 Jackson",
+      "M32 Tank Recovery Vehicle"
+    ],
+    "historical_variants": [
+      "Ford GAA"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "engine_gm6046",
+    "category": "engine",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "M10 Wolverine",
+      "M36 Jackson",
+      "M32 Tank Recovery Vehicle"
+    ],
+    "historical_variants": [
+      "GM 6046"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "engine_chrysler_a57",
+    "category": "engine",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Sherman Firefly"
+    ],
+    "historical_variants": [
+      "A57 multibank"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.95
+  },
+  {
+    "component_id": "engine_bedford",
+    "category": "engine",
+    "compatible_hulls": [
+      "Churchill"
+    ],
+    "historical_variants": [
+      "Bedford petrol"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.95
+  },
+  {
+    "component_id": "engine_meteor",
+    "category": "engine",
+    "compatible_hulls": [
+      "Cromwell"
+    ],
+    "historical_variants": [
+      "Rolls-Royce Meteor"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "trans_spicer",
+    "category": "transmission",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "M10 Wolverine",
+      "M36 Jackson",
+      "M32 Tank Recovery Vehicle",
+      "M3/M5 Stuart"
+    ],
+    "historical_variants": [
+      "Spicer synchromesh"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.95
+  },
+  {
+    "component_id": "trans_torqmatic",
+    "category": "transmission",
+    "compatible_hulls": [
+      "M18 Hellcat"
+    ],
+    "historical_variants": [
+      "900T Torqmatic"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "trans_merritt_brown",
+    "category": "transmission",
+    "compatible_hulls": [
+      "Churchill",
+      "Cromwell"
+    ],
+    "historical_variants": [
+      "Merritt-Brown"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "susp_vvss",
+    "category": "suspension",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "M10 Wolverine",
+      "M36 Jackson",
+      "M32 Tank Recovery Vehicle",
+      "M3/M5 Stuart"
+    ],
+    "historical_variants": [
+      "VVSS"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "susp_hvss",
+    "category": "suspension",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "M32 Tank Recovery Vehicle"
+    ],
+    "historical_variants": [
+      "HVSS"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.95
+  },
+  {
+    "component_id": "susp_torsion",
+    "category": "suspension",
+    "compatible_hulls": [
+      "M18 Hellcat"
+    ],
+    "historical_variants": [
+      "torsion bar"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "susp_churchill",
+    "category": "suspension",
+    "compatible_hulls": [
+      "Churchill"
+    ],
+    "historical_variants": [
+      "coiled spring bogies"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "susp_christie",
+    "category": "suspension",
+    "compatible_hulls": [
+      "Cromwell"
+    ],
+    "historical_variants": [
+      "Christie"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "radio_scr508",
+    "category": "radio",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "M10 Wolverine",
+      "M18 Hellcat",
+      "M36 Jackson",
+      "M3/M5 Stuart"
+    ],
+    "historical_variants": [
+      "SCR-508",
+      "SCR-528",
+      "SCR-506"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.96
+  },
+  {
+    "component_id": "radio_ws19",
+    "category": "radio",
+    "compatible_hulls": [
+      "Churchill",
+      "Cromwell",
+      "Sherman Firefly"
+    ],
+    "historical_variants": [
+      "Wireless Set No. 19"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "optics_periscope",
+    "category": "optics",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Churchill",
+      "Cromwell",
+      "M3/M5 Stuart"
+    ],
+    "historical_variants": [
+      "periscopic sight"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.88
+  },
+  {
+    "component_id": "optics_telescopic",
+    "category": "optics",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Sherman Firefly",
+      "M10 Wolverine",
+      "M18 Hellcat",
+      "M36 Jackson"
+    ],
+    "historical_variants": [
+      "telescopic sight"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.9
+  },
+  {
+    "component_id": "armor_applique",
+    "category": "armor_package",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "M10 Wolverine"
+    ],
+    "historical_variants": [
+      "applique plates"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.95
+  },
+  {
+    "component_id": "armor_wet_stowage",
+    "category": "armor_package",
+    "compatible_hulls": [
+      "M4 Sherman"
+    ],
+    "historical_variants": [
+      "wet stowage"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.98
+  },
+  {
+    "component_id": "special_dd_screen",
+    "category": "special_equipment",
+    "compatible_hulls": [
+      "Sherman DD"
+    ],
+    "historical_variants": [
+      "flotation screen"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.98
+  },
+  {
+    "component_id": "special_rhino",
+    "category": "special_equipment",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Sherman DD",
+      "M10 Wolverine",
+      "M3/M5 Stuart",
+      "Cromwell"
+    ],
+    "historical_variants": [
+      "Rhino device",
+      "Prongs"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.97
+  },
+  {
+    "component_id": "special_recovery_boom",
+    "category": "special_equipment",
+    "compatible_hulls": [
+      "M32 Tank Recovery Vehicle"
+    ],
+    "historical_variants": [
+      "A-frame boom",
+      "winch"
+    ],
+    "field_replaceable": false,
+    "confidence": 0.98
+  },
+  {
+    "component_id": "special_muzzle_brake",
+    "category": "special_equipment",
+    "compatible_hulls": [
+      "Sherman Firefly",
+      "M18 Hellcat",
+      "M36 Jackson"
+    ],
+    "historical_variants": [
+      "muzzle brake retrofit"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.92
+  },
+  {
+    "component_id": "weapon_coax_mg_generic",
+    "category": "secondary_weapon",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Sherman Firefly",
+      "M10 Wolverine",
+      "M18 Hellcat",
+      "M36 Jackson",
+      "Churchill",
+      "Cromwell",
+      "M3/M5 Stuart"
+    ],
+    "historical_variants": [
+      "Browning M1919A4 coax",
+      "Besa coax"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.88
+  },
+  {
+    "component_id": "weapon_hull_mg_generic",
+    "category": "secondary_weapon",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Churchill",
+      "Cromwell",
+      "M3/M5 Stuart"
+    ],
+    "historical_variants": [
+      "Browning M1919A4 hull",
+      "Besa hull"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.86
+  },
+  {
+    "component_id": "weapon_aa_mount_generic",
+    "category": "secondary_weapon",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "M10 Wolverine",
+      "M18 Hellcat",
+      "M36 Jackson",
+      "Churchill",
+      "Cromwell"
+    ],
+    "historical_variants": [
+      ".50 cal pintle mount",
+      "AA ring mount"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.84
+  },
+  {
+    "component_id": "access_hatch_commander_cupola",
+    "category": "crew_access",
+    "compatible_hulls": [
+      "M4 Sherman",
+      "Sherman Firefly",
+      "Churchill",
+      "Cromwell",
+      "M18 Hellcat",
+      "M36 Jackson"
+    ],
+    "historical_variants": [
+      "cupola",
+      "hatch ring",
+      "open top"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.9
+  },
+  {
+    "component_id": "access_loader_hatch",
+    "category": "crew_access",
+    "compatible_hulls": [
+      "Sherman Firefly",
+      "M4 Sherman",
+      "M36 Jackson"
+    ],
+    "historical_variants": [
+      "loader hatch"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.9
+  },
+  {
+    "component_id": "stowage_external_bins",
+    "category": "stowage",
+    "compatible_hulls": [
+      "all"
+    ],
+    "historical_variants": [
+      "rear bins",
+      "side bins",
+      "spare track racks"
+    ],
+    "field_replaceable": true,
+    "confidence": 0.82
+  }
+]

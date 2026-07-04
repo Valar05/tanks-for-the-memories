@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T01:37:24+00:00",
+  "files": [],
+  "name": "sherman_barrel_only_v1_source",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T01:37:24+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Single isolated M4 Sherman 75mm cannon barrel only for image-to-3D. A straight low-poly hard-surface barrel tube with slight taper, clean cylindrical silhouette, muzzle ring, hollow dark muzzle opening, subtle seams and worn dark gunmetal finish. No mantlet, no gun mount block, no turret, no hull, no tracks, no wheels, no complete tank, no background objects. Barrel should be horizontally centered with the breech end visible as a simple circular rear end for pivot alignment. Crop-safe neutral background, realistic military hard surface, not toy, not primitive cube, not soft, no text, no labels.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_barrel_only_v1_source/sherman_barrel_only_v1_source_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T01:37:24+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

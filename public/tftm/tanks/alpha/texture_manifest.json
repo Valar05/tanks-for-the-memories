@@ -1,0 +1,102 @@
+{
+  "identity_id": "alpha",
+  "display_name": "Alpha Sherman",
+  "generated_by": "scripts/generate_alpha_texture_proof.py",
+  "generator": "Pillow",
+  "seed": 19440609,
+  "asset_class": "generated_texture_language_proof",
+  "base_vehicle": {
+    "variant": "m4a3_75_vvss",
+    "chassis_fixed": true,
+    "turret_fixed": true,
+    "geometry_locked": true,
+    "accessory_additions_allowed": false,
+    "identity_from_texture_only": true
+  },
+  "personality": [
+    "calm",
+    "professional",
+    "veteran",
+    "disciplined",
+    "reliable",
+    "restrained"
+  ],
+  "recognition_colors": [
+    {
+      "name": "deep_crimson",
+      "hex": "#5d161a",
+      "role": "primary_only"
+    }
+  ],
+  "paint_layers": [
+    "olive_drab_base",
+    "broad_vertical_glacis_stripe",
+    "matching_turret_stripe",
+    "small_rear_hull_accent",
+    "hand_painted_white_A",
+    "simple_geometric_squad_symbol"
+  ],
+  "wear_layers": [
+    "crew_traffic_hatch_boot_wear",
+    "oil_stains_engine_access",
+    "fuel_staining_near_caps",
+    "maintenance_panel_scratches",
+    "lower_hull_mud_only",
+    "minimal_rust",
+    "field_brushed_imperfect_edges",
+    "months_of_touchups"
+  ],
+  "history_layers": [
+    "replacement_panel_slightly_different_olive",
+    "old_unit_markings_partially_painted_over",
+    "previous_tactical_number_barely_visible",
+    "chalk_maintenance_notes",
+    "inspection_dates",
+    "grease_pencil_route_marks",
+    "driver_hatch_reminders"
+  ],
+  "surface_targets": [
+    "glacis",
+    "turret",
+    "rear_hull",
+    "hatches",
+    "engine_deck",
+    "fuel_caps",
+    "maintenance_panels",
+    "lower_hull"
+  ],
+  "forbidden_motifs": [
+    "skulls",
+    "flames",
+    "pinup_art",
+    "fantasy_emblems",
+    "superhero_graphics",
+    "science_fiction_references",
+    "extra_armor_for_style",
+    "accessories_solely_for_style"
+  ],
+  "files": [
+    "/tftm/tanks/alpha/alpha_texture_contact_sheet.png",
+    "/tftm/tanks/alpha/alpha_glacis_plate.png",
+    "/tftm/tanks/alpha/alpha_turret_plate.png",
+    "/tftm/tanks/alpha/alpha_rear_hull_plate.png",
+    "/tftm/tanks/alpha/alpha_hatch_wear_plate.png",
+    "/tftm/tanks/alpha/alpha_lower_hull_mud_plate.png",
+    "/tftm/tanks/alpha/alpha_history_marks_plate.png"
+  ],
+  "real_texture_needs": [
+    "UV-aware glacis albedo/normal/roughness with crimson stripe and white A",
+    "UV-aware turret stripe and squad symbol decal mask",
+    "panel-level olive variation mask",
+    "hatch boot-wear mask",
+    "engine-deck oil and fuel stain masks",
+    "lower-hull mud and track grime masks",
+    "ghost-marking decal sheet for old tactical number and overpainted unit marks",
+    "chalk and grease-pencil decal sheet"
+  ],
+  "runtime_policy": {
+    "missing_texture_behavior": "use procedural proof or fallback material",
+    "mesh_material_names_are_not_source_truth": true,
+    "medium_distance_identity_requires_ui": false
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-03T23:05:21+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "enable_pbr": true,
+    "hd_texture": true,
+    "input_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+    "model_type": "lowpoly",
+    "should_remesh": false,
+    "should_texture": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "target_polycount": 12000,
+    "texture_prompt": "Retexture this existing M4A3 75mm Sherman tank as Alpha: realistic olive drab WWII field paint, deep crimson field-painted recognition stripe on glacis and turret, hand-painted white letter A, old overpainted tactical marks, hatch boot wear, localized fuel and oil stains, lower-hull mud, disciplined veteran crew maintenance, no fantasy markings, no decals floating off the surface, preserve the existing geometry and silhouette.",
+    "topology": "triangle"
+  },
+  "files": [],
+  "name": "m4a3_75_vvss_sherman_alpha_retexture",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "decision": "Do not fake Alpha with runtime planes. Use Meshy Web retexture or extend CLI/API path for actual model texturing.",
+      "http_status": 400,
+      "message": "Input task mode \"api-image-to-3d\" is not supported for this endpoint. Supported modes: api-text-to-image, api-image-to-image",
+      "provider": "meshy",
+      "result": "rejected_by_api",
+      "source_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+      "step": "meshy_retexture_submit"
+    }
+  ],
+  "status": "blocked_api_retexture_existing_image_to_3d_task",
+  "tasks": {},
+  "updated_at": "2026-07-03T23:05:21+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

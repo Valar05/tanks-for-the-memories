@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:28:01+00:00",
+  "files": [],
+  "name": "tank_meshy_part_assembly_v1_part_sheet",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:28:01+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Create a clean no-text concept sheet for generating separate Meshy vehicle parts from crops. Original non-toy heavy tank parts only, hard-surface beveled armor, neutral background, consistent scale and material style. Arrange isolated parts with spacing: 1 central armored hull only, 1 separate turret shell only, 1 mantlet with long barrel only, 1 wheel/gear/sprocket asset only. Do not assemble into a complete tank. Do not include tread belt geometry. No labels, no text, no logos, no Halo, no War Thunder, no copied vehicle, no toy look, no primitive cubes, no pillow shapes. Each part should be clear enough to crop independently for image-to-3D generation.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/tank_meshy_part_assembly_v1_part_sheet/tank_meshy_part_assembly_v1_part_sheet_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T00:28:01+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

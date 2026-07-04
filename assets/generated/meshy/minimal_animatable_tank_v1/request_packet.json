@@ -1,0 +1,43 @@
+{
+  "asset_id": "minimal_animatable_tank_v1",
+  "project": "tanks-for-the-memories",
+  "purpose": "minimal phone-first animatable tank model request",
+  "source_contract": "docs/doctrine/minimal-animatable-tank-model-request.md",
+  "required_parts": [
+    "hull",
+    "turret",
+    "mantlet",
+    "barrel",
+    "left_tread_system",
+    "right_tread_system"
+  ],
+  "required_motion": [
+    "turret_traverse",
+    "barrel_elevation_from_mantlet",
+    "believable_tread_motion"
+  ],
+  "tread_policy": {
+    "preferred": "scrolling_tread_texture",
+    "support": "sprocket_idler_wheel_motion_if_helpful",
+    "forbidden": [
+      "per_link_tread_geometry_v1",
+      "whole_tread_group_rotation"
+    ]
+  },
+  "prompt": "Original hard-surface heavy tank for a phone Three.js game, non-toy armored vehicle, central armored hull, separate rotating turret, clear mantlet, elevating main barrel, left and right tread systems designed for texture-scrolled tread animation, visible sprocket/idler/wheel support where useful, heavy industrial armor plates, believable mechanical pivots, matte olive drab and dark steel, realistic field wear, panel seams, low mud and dust on running gear, readable game-ready silhouette, mobile low-poly PBR asset.",
+  "negative_prompt": "No Halo copy, no War Thunder copy, no logos, no copied game asset, no exact Scorpion silhouette, no cartoon toy style, no cute proportions, no single fused sculpture if claiming animation support, no red runtime planes, no decorative sci-fi fins, no hover parts, no per-link tread geometry, no excessive greeble, no massive polycount.",
+  "meshy_settings": {
+    "model_type": "lowpoly",
+    "pbr": true,
+    "remesh": true,
+    "topology": "triangle",
+    "target_polycount": 12000,
+    "reject_polycount_over": 20000,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "origin_at": "bottom"
+  },
+  "acceptance": "Gameplay-ready only if hull, turret, mantlet/barrel, and left/right tread systems are separable or bindable. Fused visual wins only static_reference_only."
+}

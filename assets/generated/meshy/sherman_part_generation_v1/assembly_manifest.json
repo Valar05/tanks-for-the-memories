@@ -1,0 +1,111 @@
+{
+  "asset_id": "sherman_part_generation_v1",
+  "purpose": "corpus-grounded isolated Sherman part source images before Meshy generation",
+  "visual_target": "Sherman hard-surface, War-Thunder-like seriousness; Scorpion only informs decomposition",
+  "credit_strategy": "user_has_credits_but_human_patience_is_limited; generate isolated OpenAI candidates first, no Meshy until cloud review",
+  "credit_spend": {
+    "openai_image_calls": 7,
+    "meshy_calls": 0
+  },
+  "next_spend_allowed": false,
+  "gate_status": "awaiting_human_cloud_review_before_any_meshy_generation",
+  "allowed_authored_meshes": [
+    "tread_ribbon_only"
+  ],
+  "forbidden_authored_geometry": [
+    "hull",
+    "turret",
+    "mantlet",
+    "barrel",
+    "wheel",
+    "gear",
+    "sprocket"
+  ],
+  "forbidden_combination": [
+    "hull_with_tracks_or_wheels",
+    "turret_with_hull",
+    "barrel_with_turret_body_or_hull",
+    "gear_with_belt_or_hull",
+    "complete_tank_sheet"
+  ],
+  "openai_candidates": {
+    "hull_a": {
+      "label": "Hull A",
+      "prompt_file": "hull_a_prompt.txt",
+      "status": "generated",
+      "image_path": "assets/generated/meshy/sherman_part_generation_v1/hull_a.png",
+      "source_generation_manifest": "assets/generated/meshy/sherman_part_generation_v1_hull_a/manifest.json",
+      "source_generation_image": "assets/generated/meshy/sherman_part_generation_v1_hull_a/sherman_part_generation_v1_hull_a_concept.png"
+    },
+    "hull_b": {
+      "label": "Hull B",
+      "prompt_file": "hull_b_prompt.txt",
+      "status": "generated",
+      "image_path": "assets/generated/meshy/sherman_part_generation_v1/hull_b.png",
+      "source_generation_manifest": "assets/generated/meshy/sherman_part_generation_v1_hull_b/manifest.json",
+      "source_generation_image": "assets/generated/meshy/sherman_part_generation_v1_hull_b/sherman_part_generation_v1_hull_b_concept.png"
+    },
+    "turret_a": {
+      "label": "Turret A",
+      "prompt_file": "turret_a_prompt.txt",
+      "status": "generated",
+      "image_path": "assets/generated/meshy/sherman_part_generation_v1/turret_a.png",
+      "source_generation_manifest": "assets/generated/meshy/sherman_part_generation_v1_turret_a/manifest.json",
+      "source_generation_image": "assets/generated/meshy/sherman_part_generation_v1_turret_a/sherman_part_generation_v1_turret_a_concept.png"
+    },
+    "turret_b": {
+      "label": "Turret B",
+      "prompt_file": "turret_b_prompt.txt",
+      "status": "generated",
+      "image_path": "assets/generated/meshy/sherman_part_generation_v1/turret_b.png",
+      "source_generation_manifest": "assets/generated/meshy/sherman_part_generation_v1_turret_b/manifest.json",
+      "source_generation_image": "assets/generated/meshy/sherman_part_generation_v1_turret_b/sherman_part_generation_v1_turret_b_concept.png"
+    },
+    "mantlet_barrel": {
+      "label": "Mantlet / Barrel",
+      "prompt_file": "mantlet_barrel_prompt.txt",
+      "status": "generated",
+      "image_path": "assets/generated/meshy/sherman_part_generation_v1/mantlet_barrel.png",
+      "source_generation_manifest": "assets/generated/meshy/sherman_part_generation_v1_mantlet_barrel/manifest.json",
+      "source_generation_image": "assets/generated/meshy/sherman_part_generation_v1_mantlet_barrel/sherman_part_generation_v1_mantlet_barrel_concept.png"
+    },
+    "gear_wheel": {
+      "label": "Gear / Wheel",
+      "prompt_file": "gear_wheel_prompt.txt",
+      "status": "generated",
+      "image_path": "assets/generated/meshy/sherman_part_generation_v1/gear_wheel.png",
+      "source_generation_manifest": "assets/generated/meshy/sherman_part_generation_v1_gear_wheel/manifest.json",
+      "source_generation_image": "assets/generated/meshy/sherman_part_generation_v1_gear_wheel/sherman_part_generation_v1_gear_wheel_concept.png"
+    },
+    "material_atlas": {
+      "label": "Material Atlas",
+      "prompt_file": "material_atlas_prompt.txt",
+      "status": "generated",
+      "image_path": "assets/generated/meshy/sherman_part_generation_v1/material_atlas.png",
+      "source_generation_manifest": "assets/generated/meshy/sherman_part_generation_v1_material_atlas/manifest.json",
+      "source_generation_image": "assets/generated/meshy/sherman_part_generation_v1_material_atlas/sherman_part_generation_v1_material_atlas_concept.png"
+    }
+  },
+  "meshy_order_after_acceptance": [
+    "hull_selected",
+    "turret_selected",
+    "mantlet_barrel",
+    "gear_wheel"
+  ],
+  "acceptance": {
+    "hull": "hull shell only; no tracks, wheels, turret, barrel, or complete chassis running gear",
+    "turret": "turret shell only; no hull, wheels, tracks, or long barrel",
+    "mantlet_barrel": "gun mount and barrel only; no turret body or hull",
+    "gear_wheel": "one wheel or sprocket only; no belt, hull, or track assembly",
+    "material_atlas": "no labels/text; material tiles only"
+  },
+  "reject_if": [
+    "candidate reads as toy, pillow, primitive cube, low-poly blockout, or soft sculpture",
+    "hull includes tracks, wheels, turret, barrel, or complete chassis running gear",
+    "turret includes hull, wheels, tracks, chassis, or a long barrel",
+    "mantlet_barrel includes turret body, hull, wheels, or tracks",
+    "gear_wheel includes belt, hull, or track assembly",
+    "material_atlas contains text, logos, full vehicle objects, or labels"
+  ],
+  "next_step_after_human_acceptance": "submit only accepted isolated source images to Meshy as separate assets; do not combine parts before generation"
+}

@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:41:52+00:00",
+  "files": [],
+  "name": "sherman_part_generation_v1_mantlet_barrel",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:41:52+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Single isolated Sherman 75mm gun mantlet and barrel assembly only. Gun mount block, rounded mantlet face, long cylindrical 75mm barrel with muzzle detail, dark gunmetal and olive drab mount, scratches and heat discoloration. No turret shell, no hull, no tracks, no wheels, no complete vehicle. Centered crop-safe hard-surface component on neutral background, no text, no labels, no logos, not toy.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v1_mantlet_barrel/sherman_part_generation_v1_mantlet_barrel_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T00:41:52+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

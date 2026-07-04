@@ -1,0 +1,24 @@
+{
+  "vehicle_count": 10,
+  "component_count": 54,
+  "hardpoint_count": 17,
+  "ammo_count": 17,
+  "crew_role_count": 6,
+  "smallest_historically_accurate_architecture": [
+    "hull_family",
+    "turret_family",
+    "main_gun",
+    "secondary_weapons",
+    "engine_bay",
+    "transmission",
+    "suspension",
+    "radio_bay",
+    "optics",
+    "armor_package",
+    "special_equipment",
+    "crew_access",
+    "external_stowage"
+  ],
+  "answer": "A 13-slot model is the smallest architecture that can represent most Normandy Allied tanks without collapsing distinct vehicle families into one blob.",
+  "source_count": 20
+}

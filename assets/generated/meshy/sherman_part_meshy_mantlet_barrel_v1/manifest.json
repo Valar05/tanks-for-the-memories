@@ -1,0 +1,84 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:58:46+00:00",
+  "files": [
+    {
+      "bytes": 6391516,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_meshy_mantlet_barrel_v1/fbx.fbx"
+    },
+    {
+      "bytes": 11646044,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_meshy_mantlet_barrel_v1/glb.glb"
+    }
+  ],
+  "last_image_to_3d_task": {
+    "art_style": "",
+    "consumed_credits": 30,
+    "created_at": 1783126726685,
+    "expires_at": 1783386043175,
+    "finished_at": 1783126843175,
+    "id": "019f2aa2-836e-7d1d-9b10-8d5135df5d60",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783126726786,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "",
+    "texture_image_url": "",
+    "texture_prompt": "dark gunmetal barrel and olive drab mantlet block, worn metal edges, no extra turret body",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "image-to-3d"
+  },
+  "name": "sherman_part_meshy_mantlet_barrel_v1",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:58:46+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_pbr": true,
+        "hd_texture": false,
+        "image_url": "<data-uri>",
+        "model_type": "standard",
+        "should_remesh": true,
+        "should_texture": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "target_polycount": 3500,
+        "texture_prompt": "dark gunmetal barrel and olive drab mantlet block, worn metal edges, no extra turret body",
+        "topology": "triangle"
+      },
+      "provider": "meshy",
+      "step": "image_to_3d",
+      "task_id": "019f2aa2-836e-7d1d-9b10-8d5135df5d60"
+    }
+  ],
+  "tasks": {
+    "image_to_3d": "019f2aa2-836e-7d1d-9b10-8d5135df5d60"
+  },
+  "updated_at": "2026-07-04T01:00:52+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

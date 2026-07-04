@@ -1,0 +1,145 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-03T22:12:22+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "enable_pbr": true,
+    "hd_texture": false,
+    "image_url": "<data-uri>",
+    "model_type": "standard",
+    "should_remesh": true,
+    "should_texture": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "target_polycount": 35000,
+    "topology": "triangle"
+  },
+  "files": [
+    {
+      "bytes": 8426316,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/m4a3_75_vvss_sherman_alpha/fbx.fbx"
+    },
+    {
+      "bytes": 15943004,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/m4a3_75_vvss_sherman_alpha/glb.glb"
+    }
+  ],
+  "last_image_to_3d_task": {
+    "art_style": "",
+    "consumed_credits": 30,
+    "created_at": 1783116767577,
+    "expires_at": 1783376146045,
+    "finished_at": 1783116946045,
+    "id": "019f2a0a-96b3-7a36-ab59-ff274ee70e7a",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783116767590,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "",
+    "texture_image_url": "",
+    "texture_prompt": "",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "image-to-3d"
+  },
+  "last_status_task": {
+    "art_style": "",
+    "consumed_credits": 30,
+    "created_at": 1783116767577,
+    "expires_at": 1783376146045,
+    "finished_at": 1783116946045,
+    "id": "019f2a0a-96b3-7a36-ab59-ff274ee70e7a",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783116767590,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "",
+    "texture_image_url": "",
+    "texture_prompt": "",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "image-to-3d"
+  },
+  "name": "m4a3_75_vvss_sherman_alpha",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-03T22:12:22+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Original realistic World War II M4A3 75mm Sherman medium tank with VVSS suspension, three quarter side view, hard surface game ready vehicle asset, heavy cast and welded steel hull, olive drab field wear, clear hull mass first, visible turret ring, 75mm turret shell, mantlet, cannon barrel, commander hatch, continuous left and right track belts, visible VVSS bogies, road wheels, sprocket, idler, return rollers, spare track links, restrained field stowage, mud and road grime below hull line, historically grounded Normandy inland tank, no fantasy armor, no cartoon style, no toy proportions, no DD flotation, no logos, no copied video game skin, no War Thunder markings, no Halo design, clean neutral background, asset concept suitable for Meshy image to 3D generation",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    },
+    {
+      "created_at": "2026-07-03T22:12:47+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_pbr": true,
+        "hd_texture": false,
+        "image_url": "<data-uri>",
+        "model_type": "standard",
+        "should_remesh": true,
+        "should_texture": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "target_polycount": 35000,
+        "topology": "triangle"
+      },
+      "provider": "meshy",
+      "step": "image_to_3d",
+      "task_id": "019f2a0a-96b3-7a36-ab59-ff274ee70e7a"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/m4a3_75_vvss_sherman_alpha/m4a3_75_vvss_sherman_alpha_concept.png",
+  "tasks": {
+    "image_to_3d": "019f2a0a-96b3-7a36-ab59-ff274ee70e7a"
+  },
+  "updated_at": "2026-07-03T22:19:24+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

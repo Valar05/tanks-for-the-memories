@@ -1,0 +1,74 @@
+{
+  "asset_id": "sherman_part_selected_source_v1",
+  "purpose": "selected OpenAI source images ready for separate Meshy image-to-3D submissions",
+  "visual_target": "M4 Sherman hard-surface, non-toy, separate animatable part kit for phone-budget Three.js runtime",
+  "credit_spend_so_far": {
+    "openai_image_calls": 12,
+    "meshy_calls": 0
+  },
+  "gate_status": "source_images_selected_ready_for_meshy_submission",
+  "next_spend_allowed": true,
+  "next_spend_scope": [
+    "submit selected hull as separate Meshy asset",
+    "submit selected turret as separate Meshy asset",
+    "submit selected mantlet_barrel as separate Meshy asset",
+    "submit selected gear_wheel as separate Meshy asset"
+  ],
+  "not_for_meshy_submission": [
+    "material_tiles"
+  ],
+  "allowed_authored_meshes": [
+    "tread_ribbon_only"
+  ],
+  "selected_sources": {
+    "hull": {
+      "label": "Hull Upper B",
+      "src": "tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v2/hull_upper_b.png",
+      "source_manifest": "assets/generated/meshy/sherman_part_generation_v2_hull_upper_b/manifest.json",
+      "verdict": "usable upper hull shell; no visible wheels, tracks, sprockets, bogies, or turret",
+      "image_path": "assets/generated/meshy/sherman_part_selected_source_v1/hull.png"
+    },
+    "turret": {
+      "label": "Turret Shell C",
+      "src": "tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v2/turret_shell_c.png",
+      "source_manifest": "assets/generated/meshy/sherman_part_generation_v2_turret_shell_c/manifest.json",
+      "verdict": "usable separate turret shell with no long barrel and no hull",
+      "image_path": "assets/generated/meshy/sherman_part_selected_source_v1/turret.png"
+    },
+    "mantlet_barrel": {
+      "label": "Mantlet / Barrel",
+      "src": "tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v1/mantlet_barrel.png",
+      "source_manifest": "assets/generated/meshy/sherman_part_generation_v1_mantlet_barrel/manifest.json",
+      "verdict": "usable isolated gun and mantlet source",
+      "image_path": "assets/generated/meshy/sherman_part_selected_source_v1/mantlet_barrel.png"
+    },
+    "gear_wheel": {
+      "label": "Gear / Wheel",
+      "src": "tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v1/gear_wheel.png",
+      "source_manifest": "assets/generated/meshy/sherman_part_generation_v1_gear_wheel/manifest.json",
+      "verdict": "usable isolated sprocket/wheel module",
+      "image_path": "assets/generated/meshy/sherman_part_selected_source_v1/gear_wheel.png"
+    },
+    "material_tiles": {
+      "label": "Material Tiles B",
+      "src": "tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v2/material_tiles_b.png",
+      "source_manifest": "assets/generated/meshy/sherman_part_generation_v2_material_tiles_b/manifest.json",
+      "verdict": "usable style reference; contains clean material tiles without text labels",
+      "image_path": "assets/generated/meshy/sherman_part_selected_source_v1/material_tiles.png"
+    }
+  },
+  "assembly_plan": {
+    "hull": "static chassis root; receives authored tread ribbons and generated wheel modules as children",
+    "turret": "separate yaw pivot child on hull turret ring",
+    "mantlet_barrel": "separate pitch pivot child on turret mantlet socket",
+    "gear_wheel": "instanced/duplicated roadwheel-sprocket visual module; rotate as kitbash part where useful",
+    "tread_ribbon": "only hand-authored mesh; animate in texture space on phone runtime"
+  },
+  "reject_later_if_meshy_output": [
+    "hull output grows tracks, wheels, turret, barrel, or complete running gear",
+    "turret output grows hull, wheels, tracks, or long barrel",
+    "mantlet_barrel output grows turret body or hull",
+    "gear_wheel output grows a full belt or chassis",
+    "any output reads as soft pillow, primitive blockout, toy, or high-poly sculpt unusable on phone"
+  ]
+}

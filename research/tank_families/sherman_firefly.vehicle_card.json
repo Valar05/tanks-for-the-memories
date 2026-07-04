@@ -1,0 +1,54 @@
+{
+  "name": "Sherman Firefly",
+  "nation": "United Kingdom",
+  "role": "anti_armor_medium_tank",
+  "crew_count": 4,
+  "base_hull": "M4 or M4A4 Sherman hull",
+  "base_turret": "Modified Sherman turret with 17-pounder",
+  "production_period": "1944-1945",
+  "normandy_presence": "Yes; key British anti-armor tank in Normandy.",
+  "field_modifications": [
+    "barrel disguise",
+    "loader hatch",
+    "ammo rearrangement",
+    "hull-gunner removed"
+  ],
+  "engine_family": [
+    "Sherman-family engine variant"
+  ],
+  "suspension_family": [
+    "Sherman VVSS"
+  ],
+  "radio_family": [
+    "Wireless Set No. 19"
+  ],
+  "optics_family": [
+    "British sighting and concealment discipline"
+  ],
+  "ammo_focus": [
+    "17-pdr APCBC",
+    "17-pdr APDS",
+    "17-pdr HE",
+    "17-pdr smoke"
+  ],
+  "crew_layout": [
+    "commander",
+    "gunner",
+    "loader/radio operator",
+    "driver"
+  ],
+  "doctrine_tags": [
+    "tank killer",
+    "conceal the barrel"
+  ],
+  "field_replaceable_components": [
+    "gun conversion kit",
+    "radio fit",
+    "ammo stowage"
+  ],
+  "sources": [
+    "firefly",
+    "ammo_17pdr",
+    "ws19"
+  ]
+}

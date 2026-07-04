@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:40:25+00:00",
+  "files": [],
+  "name": "sherman_part_generation_v1_hull_a",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:40:25+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Single isolated M4A3 Sherman welded hull shell only, hard-surface game asset concept, no turret, no barrel, no tracks, no road wheels, no sprockets, no tread belt, no complete tank, no chassis running gear. Show only armored hull body with sloped glacis, side sponson armor, engine deck, hatches and bevels, olive drab cast and welded steel, realistic Normandy field wear, bevels, weld seams, bolts, chipped paint. Orthographic three-quarter view on neutral background, no text, no labels, no logos, no toy proportions, no primitive cube look, no soft pillow forms.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v1_hull_a/sherman_part_generation_v1_hull_a_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T00:40:25+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

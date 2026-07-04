@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:53:20+00:00",
+  "files": [],
+  "name": "sherman_part_generation_v2_turret_shell_c",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:53:20+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Isolated M4 Sherman 75mm turret shell only, no barrel. Rounded cast turret body with turret ring base, commander hatch, loader hatch, periscope bumps, mantlet opening socket only as a shallow empty hole. Absolutely no cannon barrel, no mantlet block protrusion, no hull, no tracks, no wheels, no complete tank. Crop-safe centered hard-surface game asset on neutral background, olive drab cast steel, bevel wear, grime, no text, no labels, realistic not toy.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v2_turret_shell_c/sherman_part_generation_v2_turret_shell_c_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T00:53:20+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

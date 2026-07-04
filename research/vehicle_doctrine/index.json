@@ -1,0 +1,9 @@
+{
+  "us_medium_tanks": "Sherman doctrine is general-purpose, with the 75mm keeping HE and smoke relevant; armor fights are often solved with fire control, not only gun power.",
+  "british_firefly": "Firefly doctrine is a one-tank heavy-kill add-on inside a normal Sherman troop; it trades loader space and flexibility for anti-Panther/Tiger reach.",
+  "td_family": "M10/M18/M36 doctrine is ambush, reserve, and shot discipline; open-topped visibility is traded against protection.",
+  "british_infantry_tanks": "Churchill doctrine is assault, obstacle crossing, and specialist support; speed is secondary to survivability and terrain power.",
+  "british_cruisers": "Cromwell doctrine is speed, reconnaissance, and exploitation; information access matters as much as armor.",
+  "light_tanks": "Stuart doctrine is screening, liaison, and route knowledge; it is a sensor more than a duelist.",
+  "recovery": "M32 doctrine is rear-area throughput; the vehicle is a mechanic with armor, not a combat tank."
+}

@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:52:49+00:00",
+  "files": [],
+  "name": "sherman_part_generation_v2_hull_upper_b",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:52:49+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Single separate Sherman upper hull component only for image-to-3D. It should look like an armored top shell removed from the tank: sloped front glacis, driver/co-driver hatches, turret ring opening, side armor panels, rear engine grates, open underside visible. Make the lower edge a clean cut line with empty air underneath. Exclude every moving-track element: no tracks, no belt, no wheels, no sprockets, no roadwheels, no VVSS bogies, no return rollers, no suspension, no lower chassis mass. Also exclude turret, mantlet, barrel, full vehicle silhouette. Realistic hard-surface military model, olive drab weathered metal, neutral studio background, no words.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v2_hull_upper_b/sherman_part_generation_v2_hull_upper_b_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T00:52:49+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

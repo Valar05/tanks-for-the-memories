@@ -1,0 +1,53 @@
+{
+  "name": "Sherman DD",
+  "nation": "United Kingdom / United States / Canada",
+  "role": "amphibious_assault_tank",
+  "crew_count": 5,
+  "base_hull": "Sherman hull with duplex-drive flotation gear",
+  "base_turret": "Standard Sherman 75mm turret",
+  "production_period": "1944",
+  "normandy_presence": "Yes; used in the D-Day assault waves.",
+  "field_modifications": [
+    "canvas flotation screen",
+    "propellers",
+    "pumps/seals",
+    "deployment frame"
+  ],
+  "engine_family": [
+    "Sherman-family engine variant"
+  ],
+  "suspension_family": [
+    "Sherman VVSS"
+  ],
+  "radio_family": [
+    "variant-dependent tank radio"
+  ],
+  "optics_family": [
+    "standard Sherman sighting"
+  ],
+  "ammo_focus": [
+    "75mm HE",
+    "75mm APCBC/AP",
+    "75mm WP"
+  ],
+  "crew_layout": [
+    "commander",
+    "gunner",
+    "loader",
+    "driver",
+    "assistant driver"
+  ],
+  "doctrine_tags": [
+    "amphibious",
+    "launch-then-fight"
+  ],
+  "field_replaceable_components": [
+    "flotation screen",
+    "propellers",
+    "sealing kit"
+  ],
+  "sources": [
+    "dd_tank",
+    "m4_sherman"
+  ]
+}

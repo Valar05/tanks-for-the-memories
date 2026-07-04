@@ -1,0 +1,68 @@
+{
+  "name": "M4 Sherman",
+  "nation": "United States",
+  "role": "multi_role_medium_tank",
+  "crew_count": 5,
+  "base_hull": "M4/M4A1/M4A2/M4A3/M4A4 Sherman hull family",
+  "base_turret": "75mm Sherman turret; 76mm and 105mm conversions",
+  "production_period": "1942-1945",
+  "normandy_presence": "Primary Allied medium tank in Normandy.",
+  "field_modifications": [
+    "Rhino cutter",
+    "applique armor",
+    "wet stowage",
+    "sandbags/track links",
+    "DD conversion"
+  ],
+  "engine_family": [
+    "R975",
+    "Ford GAA",
+    "GM 6046",
+    "A57 multibank"
+  ],
+  "suspension_family": [
+    "VVSS",
+    "HVSS"
+  ],
+  "radio_family": [
+    "SCR-508/528 family",
+    "SCR-506 command fit"
+  ],
+  "optics_family": [
+    "periscopes",
+    "telescopic gun sight"
+  ],
+  "ammo_focus": [
+    "75mm HE",
+    "75mm APCBC/AP",
+    "75mm WP",
+    "76mm HE/APCBC/HVAP"
+  ],
+  "crew_layout": [
+    "commander",
+    "gunner",
+    "loader",
+    "driver",
+    "assistant driver"
+  ],
+  "doctrine_tags": [
+    "general-purpose",
+    "HE-important",
+    "combined-arms"
+  ],
+  "field_replaceable_components": [
+    "gun",
+    "radio",
+    "armor",
+    "hedge cutter"
+  ],
+  "sources": [
+    "m4_sherman",
+    "m4_variants",
+    "ammo_75mm",
+    "ammo_76mm",
+    "dd_tank",
+    "rhino",
+    "armor_improvised"
+  ]
+}

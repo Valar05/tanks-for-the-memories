@@ -1,0 +1,55 @@
+{
+  "name": "M3/M5 Stuart",
+  "nation": "United States",
+  "role": "light_tank_recon_screen",
+  "crew_count": 4,
+  "base_hull": "M3 or M5 light tank hull",
+  "base_turret": "37mm light tank turret",
+  "production_period": "1941-1943",
+  "normandy_presence": "Yes; recon, liaison, screening, secondary support.",
+  "field_modifications": [
+    "extra radios",
+    "turretless command fits",
+    "Rhino/prongs in some units"
+  ],
+  "engine_family": [
+    "Continental R975",
+    "Cadillac V8 pair"
+  ],
+  "suspension_family": [
+    "VVSS"
+  ],
+  "radio_family": [
+    "SCR-508 family"
+  ],
+  "optics_family": [
+    "light tank scouting optics"
+  ],
+  "ammo_focus": [
+    "37mm AP",
+    "37mm APC",
+    "37mm HE",
+    "37mm canister"
+  ],
+  "crew_layout": [
+    "commander",
+    "gunner",
+    "loader",
+    "driver"
+  ],
+  "doctrine_tags": [
+    "recon",
+    "screening",
+    "liaison"
+  ],
+  "field_replaceable_components": [
+    "radio",
+    "turret delete kit",
+    "hedge cutter"
+  ],
+  "sources": [
+    "stuart",
+    "scr508",
+    "rhino"
+  ]
+}

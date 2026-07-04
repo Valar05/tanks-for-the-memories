@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:40:47+00:00",
+  "files": [],
+  "name": "sherman_part_generation_v1_hull_b",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:40:47+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Crop-safe isolated Sherman-family M4A3 hull body only for Meshy image-to-3D. The hull is an empty armored shell component: front glacis, rear engine deck, side armor, turret ring opening visible. Absolutely exclude turret, gun, mantlet, tracks, wheels, suspension, sprockets, idlers, roadwheels, complete vehicle silhouette. Serious War-Thunder-like hard surface, beveled armor plates, welded seams, cast texture, olive drab paint, grime low on armor. Neutral studio background, no text or labels.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v1_hull_b/sherman_part_generation_v1_hull_b_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T00:40:47+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

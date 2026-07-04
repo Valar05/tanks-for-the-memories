@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:42:14+00:00",
+  "files": [],
+  "name": "sherman_part_generation_v1_gear_wheel",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:42:14+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Single isolated Sherman running gear wheel or sprocket asset only, hard-surface game asset concept. One wheel/gear component with steel rim, hub bolts, spokes or sprocket teeth, dark blackened steel, mud and worn edges. No hull, no turret, no barrel, no tread belt, no track assembly, no complete tank. Centered crop-safe component, neutral background, no text, no labels, realistic not toy.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v1_gear_wheel/sherman_part_generation_v1_gear_wheel_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T00:42:14+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

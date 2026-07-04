@@ -1,0 +1,119 @@
+[
+  {
+    "vehicle": "M4 Sherman",
+    "crew_count": 5,
+    "stations": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "assistant driver/bow gunner"
+    ],
+    "notes": "commander has best awareness; bow position often doubles as radio support"
+  },
+  {
+    "vehicle": "Sherman DD",
+    "crew_count": 5,
+    "stations": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "assistant driver/bow gunner"
+    ],
+    "notes": "launch states reduce visibility until screens are lowered"
+  },
+  {
+    "vehicle": "Sherman Firefly",
+    "crew_count": 4,
+    "stations": [
+      "commander",
+      "gunner",
+      "loader/radio operator",
+      "driver"
+    ],
+    "notes": "loader/radio operator must manage ammo and comms in a cramped turret"
+  },
+  {
+    "vehicle": "M10 Wolverine",
+    "crew_count": 5,
+    "stations": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "assistant driver"
+    ],
+    "notes": "open turret gives sight but little protection"
+  },
+  {
+    "vehicle": "M18 Hellcat",
+    "crew_count": 5,
+    "stations": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "assistant driver"
+    ],
+    "notes": "excellent visibility, open-top exposure"
+  },
+  {
+    "vehicle": "M36 Jackson",
+    "crew_count": 5,
+    "stations": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "assistant driver"
+    ],
+    "notes": "90mm gun and travel-lock discipline matter"
+  },
+  {
+    "vehicle": "Churchill",
+    "crew_count": 5,
+    "stations": [
+      "commander",
+      "gunner",
+      "loader/radio operator",
+      "driver",
+      "co-driver/hull gunner"
+    ],
+    "notes": "slow assault tank; crew sees through layered British optics and radio discipline"
+  },
+  {
+    "vehicle": "Cromwell",
+    "crew_count": 5,
+    "stations": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "hull machine gunner/radio operator"
+    ],
+    "notes": "fast cruiser; commander and radio operator shape scouting and exploitation"
+  },
+  {
+    "vehicle": "M3/M5 Stuart",
+    "crew_count": 4,
+    "stations": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver"
+    ],
+    "notes": "light tank crew is information-heavy and often used for screening"
+  },
+  {
+    "vehicle": "M32 Tank Recovery Vehicle",
+    "crew_count": 4,
+    "stations": [
+      "commander",
+      "driver",
+      "assistant driver/operator",
+      "boom/winch operator"
+    ],
+    "notes": "recovery crew cares about tow points, boom load, and vehicle salvage rather than combat arcs"
+  }
+]

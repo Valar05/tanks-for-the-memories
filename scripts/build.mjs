@@ -42,25 +42,12 @@ function copyRecursive(source, destination) {
   copyFileSync(source, destination);
 }
 
-await esbuild.build({
-  stdin: {
-    contents: readFileSync(path.join(srcDir, 'main.ts'), 'utf8'),
-    resolveDir: srcDir,
-    sourcefile: 'main.ts',
-    loader: 'ts'
-  },
-  bundle: true,
-  format: 'esm',
-  platform: 'browser',
-  target: 'es2022',
-  outdir: assetsDir,
-  entryNames: 'index',
-  loader: { '.css': 'css' },
-  write: true,
-  plugins: [{
+function localFsResolver() {
+  return {
     name: 'local-fs-resolver',
     setup(build) {
       build.onResolve({ filter: /^three$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'build', 'three.module.js') }));
+      build.onResolve({ filter: /^three\/examples\/jsm\/loaders\/GLTFLoader\.js$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'examples', 'jsm', 'loaders', 'GLTFLoader.js') }));
       build.onResolve({ filter: /^\.|^\// }, (args) => {
         const resolved = resolveImport(args.path, args.resolveDir);
         if (!resolved) {
@@ -74,13 +61,68 @@ await esbuild.build({
       }));
       build.onLoad({ filter: /\.css$/ }, (args) => ({ contents: readFileSync(args.path, 'utf8'), loader: 'css' }));
     }
-  }]
-});
+  };
+}
 
-const html = readFileSync(path.join(root, 'index.html'), 'utf8')
-  .replace('</head>', '    <link rel="stylesheet" href="./assets/index.css" />\n  </head>')
-  .replace('<script type="module" src="/src/main.ts"></script>', '<script type="module" src="./assets/index.js"></script>');
+async function buildEntry(sourceName, outputName) {
+  await esbuild.build({
+    stdin: {
+      contents: readFileSync(path.join(srcDir, sourceName), 'utf8'),
+      resolveDir: srcDir,
+      sourcefile: sourceName,
+      loader: 'ts'
+    },
+    bundle: true,
+    format: 'esm',
+    platform: 'browser',
+    target: 'es2022',
+    outdir: assetsDir,
+    entryNames: outputName,
+    loader: { '.css': 'css' },
+    write: true,
+    plugins: [localFsResolver()]
+  });
+}
 
-writeFileSync(path.join(distDir, 'index.html'), html);
+function writeBundledHtml(sourceName, outputName, bundleName) {
+  const html = readFileSync(path.join(root, sourceName), 'utf8')
+    .replace('</head>', `    <link rel="stylesheet" href="./assets/${bundleName}.css" />\n  </head>`)
+    .replace(/<script type="module" src="\/src\/[^"]+"><\/script>/, `<script type="module" src="./assets/${bundleName}.js"></script>`);
+  writeFileSync(path.join(distDir, outputName), html);
+}
+
+await buildEntry('main.ts', 'index');
+await buildEntry('model-assay.ts', 'model-assay');
+
+writeBundledHtml('index.html', 'index.html', 'index');
+writeBundledHtml('model-assay.html', 'model-assay.html', 'model-assay');
 copyRecursive(publicDir, distDir);
+copyRecursive(
+  path.join(root, 'assets', 'generated', 'meshy', 'minimal_animatable_tank_v1'),
+  path.join(distDir, 'model-assay', 'minimal_animatable_tank_v1')
+);
+copyRecursive(
+  path.join(root, 'assets', 'generated', 'meshy', 'tank_meshy_part_assembly_v1'),
+  path.join(distDir, 'model-assay', 'tank_meshy_part_assembly_v1')
+);
+copyRecursive(
+  path.join(root, 'assets', 'generated', 'meshy', 'sherman_part_generation_v1'),
+  path.join(distDir, 'model-assay', 'sherman_part_generation_v1')
+);
+copyRecursive(
+  path.join(root, 'assets', 'generated', 'meshy', 'sherman_part_generation_v2'),
+  path.join(distDir, 'model-assay', 'sherman_part_generation_v2')
+);
+copyRecursive(
+  path.join(root, 'assets', 'generated', 'meshy', 'sherman_part_selected_source_v1'),
+  path.join(distDir, 'model-assay', 'sherman_part_selected_source_v1')
+);
+copyRecursive(
+  path.join(root, 'assets', 'generated', 'meshy', 'sherman_part_meshy_kit_v1'),
+  path.join(distDir, 'model-assay', 'sherman_part_meshy_kit_v1')
+);
+copyRecursive(
+  path.join(root, 'assets', 'authored'),
+  path.join(distDir, 'authored')
+);
 console.log('Built dist using esbuild-wasm.');

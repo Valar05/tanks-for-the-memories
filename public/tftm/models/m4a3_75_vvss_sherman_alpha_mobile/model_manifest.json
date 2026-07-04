@@ -1,0 +1,66 @@
+{
+  "asset_id": "m4a3_75_vvss_sherman_alpha_mobile",
+  "display_name": "M4A3 75mm Sherman Alpha Mobile",
+  "status": "runtime_hybrid_accept",
+  "asset_class": "meshy_phone_runtime_tank_model",
+  "base_vehicle": {
+    "variant": "m4a3_75_vvss",
+    "geometry_locked": true,
+    "identity_from_texture_only": true
+  },
+  "runtime": {
+    "glb": "/tftm/models/m4a3_75_vvss_sherman_alpha_mobile/m4a3_75_vvss_sherman_alpha_mobile.glb",
+    "fallback": "procedural_threejs_sherman_preview",
+    "loader": "GLTFLoader",
+    "classification": "hybrid_accept",
+    "animation_contract": "docs/doctrine/vehicle-animation-workflow-contract.md",
+    "animation_policy": "hybrid_static_treads",
+    "tread_motion": "static_fused_mesh",
+    "disabled_pivots": [
+      "left_track_motion",
+      "right_track_motion",
+      "roadwheel_groups"
+    ],
+    "visual_truth_note": "Fused Meshy GLB is the active visible non-toy tank body. It remains static for gameplay animation purposes because it has no separable turret, cannon, tread, wheel, or hatch nodes.",
+    "active_runtime_role": "visible_static_body_reference",
+    "systems_contract": "docs/doctrine/scorpion-informed-heavy-tank-systems-contract.md"
+  },
+  "budget": {
+    "preferred_triangles_max": 12000,
+    "warning_triangles_over": 12000,
+    "reject_triangles_over": 20000,
+    "preferred_texture_size_max": 1024,
+    "actual_triangles": 10216,
+    "glb_bytes": 9398200
+  },
+  "required_pivots": [
+    "hull_root",
+    "turret_traverse_pivot",
+    "cannon_elevation_pivot",
+    "commander_hatch"
+  ],
+  "inspection": {
+    "report": "/tftm/models/m4a3_75_vvss_sherman_alpha_mobile/glb_contract_report.json",
+    "node_count": 1,
+    "mesh_count": 1,
+    "primitive_count": 1,
+    "material_count": 1,
+    "texture_count": 4,
+    "image_count": 4,
+    "reasons": [
+      "animation regions need runtime supplemental binding: hull, turret, cannon, track, wheel",
+      "very low primitive count suggests fused static sculpture; usable only as body/display base"
+    ]
+  },
+  "provenance": {
+    "provider": "meshy",
+    "source_folder": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha_mobile",
+    "source_glb": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha_mobile/glb.glb",
+    "source_fbx": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha_mobile/fbx.fbx",
+    "source_concept_image": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha/m4a3_75_vvss_sherman_alpha_concept.png",
+    "task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+    "high_reference_task_id": "019f2a0a-96b3-7a36-ab59-ff274ee70e7a",
+    "created_by": "workspace Meshy asset workflow",
+    "notes": "Phone runtime candidate generated as lowpoly remesh from the approved concept image after Meshy rejected reprocessing the existing image-to-3d task id. Single fused mesh, restored as the visible static body reference because it reads less toy-like than the procedural kitbash. Future animatable models must satisfy the Scorpion-informed systems contract before generation or integration."
+  }
+}

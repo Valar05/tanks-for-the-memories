@@ -1,0 +1,85 @@
+{
+  "file": "assets/generated/meshy/minimal_animatable_tank_v1/glb.glb",
+  "glbVersion": 2,
+  "byteLength": 9208244,
+  "nodeCount": 1,
+  "meshCount": 1,
+  "primitiveCount": 1,
+  "materialCount": 1,
+  "textureCount": 4,
+  "imageCount": 4,
+  "approximateTriangles": 11432,
+  "foundTerms": {
+    "hull": [],
+    "turret": [],
+    "cannon": [],
+    "track": [],
+    "wheel": [],
+    "hatch": [],
+    "trackPod": [],
+    "beltRegion": [],
+    "coaxialWeapon": [],
+    "mantletPivot": []
+  },
+  "systemBindings": {
+    "hull": [],
+    "turret": [],
+    "mantlet": [],
+    "barrel": [],
+    "left_tread_system": [],
+    "right_tread_system": []
+  },
+  "missingSystems": [
+    "hull",
+    "turret",
+    "mantlet",
+    "barrel",
+    "left_tread_system",
+    "right_tread_system"
+  ],
+  "nodeNames": [
+    "node_0"
+  ],
+  "meshNames": [
+    "mesh_0"
+  ],
+  "materialNames": [
+    "material_0"
+  ],
+  "images": [
+    {
+      "index": 0,
+      "name": "image_0",
+      "mimeType": "image/jpeg",
+      "uri": null,
+      "byteLength": 3163464
+    },
+    {
+      "index": 1,
+      "name": "image_1",
+      "mimeType": "image/jpeg",
+      "uri": null,
+      "byteLength": 2076718
+    },
+    {
+      "index": 2,
+      "name": "image_2",
+      "mimeType": "image/jpeg",
+      "uri": null,
+      "byteLength": 3416399
+    },
+    {
+      "index": 3,
+      "name": "image_3",
+      "mimeType": "image/jpeg",
+      "uri": null,
+      "byteLength": 66194
+    }
+  ],
+  "classification": "hybrid_accept",
+  "reasons": [
+    "animation regions need runtime supplemental binding: hull, turret, cannon, track, wheel",
+    "very low primitive count suggests fused static sculpture; usable only as body/display base",
+    "minimal moving systems are unbound: hull, turret, mantlet, barrel, left_tread_system, right_tread_system"
+  ]
+}

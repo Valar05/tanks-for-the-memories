@@ -1,0 +1,55 @@
+{
+  "name": "M36 Jackson",
+  "nation": "United States",
+  "role": "heavy_tank_destroyer",
+  "crew_count": 5,
+  "base_hull": "M10A1 or M4A3 conversion hull",
+  "base_turret": "Open-topped 90mm turret",
+  "production_period": "1944-1945",
+  "normandy_presence": "Late Normandy / post-Normandy heavy anti-armor response.",
+  "field_modifications": [
+    "travel lock",
+    "muzzle brake",
+    "B1 Sherman hull conversion"
+  ],
+  "engine_family": [
+    "Ford GAA",
+    "GM 6046"
+  ],
+  "suspension_family": [
+    "VVSS"
+  ],
+  "radio_family": [
+    "SCR-508"
+  ],
+  "optics_family": [
+    "open-top long-range sighting"
+  ],
+  "ammo_focus": [
+    "90mm HE",
+    "90mm APCBC",
+    "90mm AP"
+  ],
+  "crew_layout": [
+    "commander",
+    "gunner",
+    "loader",
+    "driver",
+    "assistant driver"
+  ],
+  "doctrine_tags": [
+    "reserve anti-armor",
+    "heavy TD"
+  ],
+  "field_replaceable_components": [
+    "gun travel lock",
+    "muzzle brake",
+    "hull conversion kit"
+  ],
+  "sources": [
+    "m36",
+    "ammo_90mm",
+    "m4_sherman",
+    "scr508"
+  ]
+}

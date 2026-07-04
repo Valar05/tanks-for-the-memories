@@ -1,0 +1,54 @@
+{
+  "name": "Churchill",
+  "nation": "United Kingdom",
+  "role": "infantry_tank_assault_platform",
+  "crew_count": 5,
+  "base_hull": "Churchill infantry tank hull",
+  "base_turret": "Churchill family turret (75mm in Normandy service)",
+  "production_period": "1941-1945",
+  "normandy_presence": "Yes; assault, Crocodile, AVRE, and prongs-equipped variants.",
+  "field_modifications": [
+    "Prongs",
+    "Crocodile trailer",
+    "AVRE tools",
+    "extra radios"
+  ],
+  "engine_family": [
+    "Bedford petrol"
+  ],
+  "suspension_family": [
+    "coiled spring bogies"
+  ],
+  "radio_family": [
+    "Wireless Set No. 19"
+  ],
+  "optics_family": [
+    "British tank optics"
+  ],
+  "ammo_focus": [
+    "75mm HE",
+    "75mm AP",
+    "95mm support shells"
+  ],
+  "crew_layout": [
+    "commander",
+    "gunner",
+    "loader/radio operator",
+    "driver",
+    "co-driver/hull gunner"
+  ],
+  "doctrine_tags": [
+    "assault",
+    "infantry support"
+  ],
+  "field_replaceable_components": [
+    "prongs",
+    "flame trailer",
+    "radio"
+  ],
+  "sources": [
+    "churchill",
+    "ammo_75qf",
+    "ws19"
+  ]
+}

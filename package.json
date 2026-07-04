@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "smoke": "node scripts/smoke.mjs",
     "awareness-smoke": "node scripts/awareness-smoke.mjs",
-    "bootstrap": "sh scripts/bootstrap.sh"
+    "bootstrap": "sh scripts/bootstrap.sh",
+    "cloud-visual-release": "node scripts/build_cloud_visual_release.mjs"
   },
   "dependencies": {
     "three": "^0.166.1"

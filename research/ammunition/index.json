@@ -1,0 +1,266 @@
+[
+  {
+    "id": "75mm_he_m48",
+    "name": "75mm HE M48",
+    "caliber": "75mm",
+    "doctrine": "general-purpose support shell",
+    "target_preference": [
+      "infantry",
+      "hedges",
+      "guns"
+    ],
+    "availability": "high",
+    "battlefield_usage": "default bocage blast round",
+    "gameplay": [
+      "suppression",
+      "area damage"
+    ]
+  },
+  {
+    "id": "75mm_apcbc_m61",
+    "name": "75mm APCBC M61",
+    "caliber": "75mm",
+    "doctrine": "standard anti-armor shell",
+    "target_preference": [
+      "Panzer IV",
+      "StuG III"
+    ],
+    "availability": "high",
+    "battlefield_usage": "main U.S./British 75mm armor round",
+    "gameplay": [
+      "baseline armor kill"
+    ]
+  },
+  {
+    "id": "75mm_ap_m72",
+    "name": "75mm AP M72",
+    "caliber": "75mm",
+    "doctrine": "solid AP backup",
+    "target_preference": [
+      "flat armor",
+      "side shots"
+    ],
+    "availability": "moderate",
+    "battlefield_usage": "fallback anti-armor",
+    "gameplay": [
+      "simple penetration curve"
+    ]
+  },
+  {
+    "id": "75mm_wp_m64",
+    "name": "75mm WP M64",
+    "caliber": "75mm",
+    "doctrine": "smoke and crew suppression",
+    "target_preference": [
+      "optics",
+      "hatches",
+      "ambush points"
+    ],
+    "availability": "moderate",
+    "battlefield_usage": "visibility denial in bocage",
+    "gameplay": [
+      "obscuration",
+      "panic pressure"
+    ]
+  },
+  {
+    "id": "76mm_he_m42a1",
+    "name": "76mm HE M42A1",
+    "caliber": "76mm",
+    "doctrine": "general-purpose blast",
+    "target_preference": [
+      "infantry",
+      "soft cover"
+    ],
+    "availability": "high",
+    "battlefield_usage": "support shell for 76mm guns",
+    "gameplay": [
+      "suppression",
+      "soft-target kill"
+    ]
+  },
+  {
+    "id": "76mm_apcbc_m62",
+    "name": "76mm APCBC M62A1",
+    "caliber": "76mm",
+    "doctrine": "main anti-armor round",
+    "target_preference": [
+      "Panzer IV",
+      "StuG III",
+      "flanks"
+    ],
+    "availability": "high",
+    "battlefield_usage": "76mm standard armor shot",
+    "gameplay": [
+      "higher penetration"
+    ]
+  },
+  {
+    "id": "76mm_hvap_m93",
+    "name": "76mm HVAP M93",
+    "caliber": "76mm",
+    "doctrine": "rare high-penetration round",
+    "target_preference": [
+      "Panther",
+      "Tiger"
+    ],
+    "availability": "limited",
+    "battlefield_usage": "break-glass shot",
+    "gameplay": [
+      "extreme pen",
+      "rare ammo slot"
+    ]
+  },
+  {
+    "id": "76mm_smoke_m88",
+    "name": "76mm Smoke M88",
+    "caliber": "76mm",
+    "doctrine": "screening and break-contact smoke",
+    "target_preference": [
+      "observers",
+      "AT guns"
+    ],
+    "availability": "moderate",
+    "battlefield_usage": "masking movement",
+    "gameplay": [
+      "hide advance",
+      "delay targetting"
+    ]
+  },
+  {
+    "id": "90mm_he_m71",
+    "name": "90mm HE M71",
+    "caliber": "90mm",
+    "doctrine": "blast/support shell",
+    "target_preference": [
+      "guns",
+      "infantry",
+      "bunkers"
+    ],
+    "availability": "high",
+    "battlefield_usage": "M36 support round",
+    "gameplay": [
+      "area damage"
+    ]
+  },
+  {
+    "id": "90mm_apcbc_m82",
+    "name": "90mm APCBC M82",
+    "caliber": "90mm",
+    "doctrine": "main anti-armor round",
+    "target_preference": [
+      "Panther",
+      "Tiger"
+    ],
+    "availability": "high",
+    "battlefield_usage": "M36 core kill round",
+    "gameplay": [
+      "heavy armor answer"
+    ]
+  },
+  {
+    "id": "17pdr_apcbc",
+    "name": "17-pdr APCBC",
+    "caliber": "76.2mm",
+    "doctrine": "standard Firefly kill round",
+    "target_preference": [
+      "Panther",
+      "Tiger"
+    ],
+    "availability": "high",
+    "battlefield_usage": "main 17-pdr loadout",
+    "gameplay": [
+      "reliable heavy kill"
+    ]
+  },
+  {
+    "id": "17pdr_apds",
+    "name": "17-pdr APDS",
+    "caliber": "76.2mm",
+    "doctrine": "high-penetration sabot round",
+    "target_preference": [
+      "front armor"
+    ],
+    "availability": "limited",
+    "battlefield_usage": "late-/special-use round",
+    "gameplay": [
+      "extreme pen",
+      "less reliable"
+    ]
+  },
+  {
+    "id": "17pdr_he_smoke",
+    "name": "17-pdr HE/Smoke",
+    "caliber": "76.2mm",
+    "doctrine": "support load",
+    "target_preference": [
+      "infantry",
+      "screening"
+    ],
+    "availability": "moderate",
+    "battlefield_usage": "Firefly support ammo",
+    "gameplay": [
+      "suppression",
+      "obscuration"
+    ]
+  },
+  {
+    "id": "75qf_he_m48",
+    "name": "QF 75mm HE M48",
+    "caliber": "75mm",
+    "doctrine": "British general-purpose HE",
+    "target_preference": [
+      "infantry",
+      "hedges"
+    ],
+    "availability": "high",
+    "battlefield_usage": "Churchill/Cromwell support shell",
+    "gameplay": [
+      "support blast"
+    ]
+  },
+  {
+    "id": "37mm_apc_m51",
+    "name": "37mm APC M51",
+    "caliber": "37mm",
+    "doctrine": "light anti-vehicle round",
+    "target_preference": [
+      "light armor",
+      "side shots"
+    ],
+    "availability": "high",
+    "battlefield_usage": "Stuart anti-vehicle shell",
+    "gameplay": [
+      "light armor pressure"
+    ]
+  },
+  {
+    "id": "37mm_he_m63",
+    "name": "37mm HE M63",
+    "caliber": "37mm",
+    "doctrine": "light support shell",
+    "target_preference": [
+      "infantry",
+      "soft cover"
+    ],
+    "availability": "high",
+    "battlefield_usage": "Stuart support round",
+    "gameplay": [
+      "small blast"
+    ]
+  },
+  {
+    "id": "37mm_canister_m2",
+    "name": "37mm Canister M2",
+    "caliber": "37mm",
+    "doctrine": "close anti-infantry emergency round",
+    "target_preference": [
+      "close infantry"
+    ],
+    "availability": "limited",
+    "battlefield_usage": "short-range stopgap",
+    "gameplay": [
+      "cone damage"
+    ]
+  }
+]

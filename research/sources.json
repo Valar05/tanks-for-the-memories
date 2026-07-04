@@ -1,0 +1,122 @@
+[
+  {
+    "id": "m4_sherman",
+    "title": "M4 Sherman",
+    "url": "https://en.wikipedia.org/wiki/M4_Sherman",
+    "confidence": 0.9
+  },
+  {
+    "id": "m4_variants",
+    "title": "M4 Sherman variants",
+    "url": "https://en.wikipedia.org/wiki/M4_Sherman_variants",
+    "confidence": 0.88
+  },
+  {
+    "id": "dd_tank",
+    "title": "DD tank",
+    "url": "https://en.wikipedia.org/wiki/DD_tank",
+    "confidence": 0.87
+  },
+  {
+    "id": "firefly",
+    "title": "Sherman Firefly",
+    "url": "https://en.wikipedia.org/wiki/Sherman_Firefly",
+    "confidence": 0.92
+  },
+  {
+    "id": "m10",
+    "title": "M10 tank destroyer",
+    "url": "https://en.wikipedia.org/wiki/M10_tank_destroyer",
+    "confidence": 0.9
+  },
+  {
+    "id": "m18",
+    "title": "M18 Hellcat",
+    "url": "https://en.wikipedia.org/wiki/M18_Hellcat",
+    "confidence": 0.88
+  },
+  {
+    "id": "m36",
+    "title": "M36 tank destroyer",
+    "url": "https://en.wikipedia.org/wiki/M36_tank_destroyer",
+    "confidence": 0.9
+  },
+  {
+    "id": "stuart",
+    "title": "M3 Stuart",
+    "url": "https://en.wikipedia.org/wiki/M3_Stuart",
+    "confidence": 0.88
+  },
+  {
+    "id": "churchill",
+    "title": "Churchill tank",
+    "url": "https://en.wikipedia.org/wiki/Churchill_tank",
+    "confidence": 0.9
+  },
+  {
+    "id": "cromwell",
+    "title": "Cromwell tank",
+    "url": "https://en.wikipedia.org/wiki/Cromwell_tank",
+    "confidence": 0.9
+  },
+  {
+    "id": "m32",
+    "title": "M32 tank recovery vehicle",
+    "url": "https://en.wikipedia.org/wiki/M32_tank_recovery_vehicle",
+    "confidence": 0.9
+  },
+  {
+    "id": "rhino",
+    "title": "Rhino tank",
+    "url": "https://en.wikipedia.org/wiki/Rhino_tank",
+    "confidence": 0.9
+  },
+  {
+    "id": "ammo_75mm",
+    "title": "75 mm gun M2-M6",
+    "url": "https://en.wikipedia.org/wiki/75_mm_gun_M2%E2%80%93M6",
+    "confidence": 0.86
+  },
+  {
+    "id": "ammo_76mm",
+    "title": "76 mm gun M1",
+    "url": "https://en.wikipedia.org/wiki/76_mm_gun_M1",
+    "confidence": 0.92
+  },
+  {
+    "id": "ammo_90mm",
+    "title": "90 mm gun M1/M2/M3",
+    "url": "https://en.wikipedia.org/wiki/90_mm_gun_M1/M2/M3",
+    "confidence": 0.9
+  },
+  {
+    "id": "ammo_17pdr",
+    "title": "Ordnance QF 17-pounder",
+    "url": "https://en.wikipedia.org/wiki/Ordnance_QF_17-pounder",
+    "confidence": 0.93
+  },
+  {
+    "id": "ammo_75qf",
+    "title": "Ordnance QF 75 mm",
+    "url": "https://en.wikipedia.org/wiki/Ordnance_QF_75_mm",
+    "confidence": 0.84
+  },
+  {
+    "id": "scr508",
+    "title": "SCR-508",
+    "url": "https://en.wikipedia.org/wiki/SCR-508",
+    "confidence": 0.9
+  },
+  {
+    "id": "ws19",
+    "title": "Wireless Set No. 19",
+    "url": "https://en.wikipedia.org/wiki/Wireless_Set_No._19",
+    "confidence": 0.9
+  },
+  {
+    "id": "armor_improvised",
+    "title": "Vehicle armour",
+    "url": "https://en.wikipedia.org/wiki/Vehicle_armour",
+    "confidence": 0.78
+  }
+]

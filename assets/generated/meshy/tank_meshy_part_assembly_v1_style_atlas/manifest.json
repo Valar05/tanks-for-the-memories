@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:27:39+00:00",
+  "files": [],
+  "name": "tank_meshy_part_assembly_v1_style_atlas",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:27:39+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Create a production-quality hard-surface tank material and style atlas for a phone Three.js game. Subject: original heavy armored tank, grounded military industrial design, not Halo, not War Thunder, no logos, no copied vehicle. Make it look like a real beveled hard-surface asset, not low-poly toy primitives. Include labeled panels for: cast olive-drab hull armor with bevels and weld seams, turret armor with cast texture and edge wear, dark gunmetal mantlet and barrel material, blackened steel wheel/gear material, rubberized dark tread belt material, mud/dust lower running gear, chipped paint, grime, oil stains, subtle normal-map-like surface cues, panel seams, bolts, weld beads. Orthographic atlas sheet, clean readable labels, neutral lighting, no perspective vehicle scene, no cute proportions, no soft pillow forms, no simple cubes.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/tank_meshy_part_assembly_v1_style_atlas/tank_meshy_part_assembly_v1_style_atlas_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T00:27:39+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

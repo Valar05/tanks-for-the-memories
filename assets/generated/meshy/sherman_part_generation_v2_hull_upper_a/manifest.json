@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:52:32+00:00",
+  "files": [],
+  "name": "sherman_part_generation_v2_hull_upper_a",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:52:32+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Isolated upper armored hull shell of an M4A3 Sherman tank only, as a hard-surface 3D source concept. Show the bathtub-like upper hull casting/welded armor with sloped glacis, turret ring hole, side sponson armor, engine deck plates and hatches. The bottom is cut away and open; it is NOT a complete chassis. Absolutely no tracks, no tread belt, no road wheels, no sprocket, no idler, no suspension bogies, no lower running gear, no turret, no gun barrel, no complete tank. Crop-safe centered single component on neutral background. Serious realistic War-Thunder-like armor, bevels, weld seams, cast steel texture, chipped olive drab paint, not toy, not pillow, not primitive cube, no text, no labels.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v2_hull_upper_a/sherman_part_generation_v2_hull_upper_a_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T00:52:32+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

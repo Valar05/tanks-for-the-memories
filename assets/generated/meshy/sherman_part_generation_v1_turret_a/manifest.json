@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:41:09+00:00",
+  "files": [],
+  "name": "sherman_part_generation_v1_turret_a",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:41:09+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Single isolated 75mm Sherman turret shell only, hard-surface game asset concept, no hull, no tracks, no wheels, no full tank. Turret body with turret ring underside, commander hatch, loader hatch, cast armor texture, beveled edges, olive drab field wear. Include only a short mantlet socket placeholder, not a long barrel. Orthographic three-quarter view, neutral background, no text, no labels, no logos, not toy, not cube, not soft.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v1_turret_a/sherman_part_generation_v1_turret_a_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T00:41:09+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

@@ -1,0 +1,555 @@
+[
+  {
+    "name": "M4 Sherman",
+    "nation": "United States",
+    "role": "multi_role_medium_tank",
+    "crew_count": 5,
+    "base_hull": "M4/M4A1/M4A2/M4A3/M4A4 Sherman hull family",
+    "base_turret": "75mm Sherman turret; 76mm and 105mm conversions",
+    "production_period": "1942-1945",
+    "normandy_presence": "Primary Allied medium tank in Normandy.",
+    "field_modifications": [
+      "Rhino cutter",
+      "applique armor",
+      "wet stowage",
+      "sandbags/track links",
+      "DD conversion"
+    ],
+    "engine_family": [
+      "R975",
+      "Ford GAA",
+      "GM 6046",
+      "A57 multibank"
+    ],
+    "suspension_family": [
+      "VVSS",
+      "HVSS"
+    ],
+    "radio_family": [
+      "SCR-508/528 family",
+      "SCR-506 command fit"
+    ],
+    "optics_family": [
+      "periscopes",
+      "telescopic gun sight"
+    ],
+    "ammo_focus": [
+      "75mm HE",
+      "75mm APCBC/AP",
+      "75mm WP",
+      "76mm HE/APCBC/HVAP"
+    ],
+    "crew_layout": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "assistant driver"
+    ],
+    "doctrine_tags": [
+      "general-purpose",
+      "HE-important",
+      "combined-arms"
+    ],
+    "field_replaceable_components": [
+      "gun",
+      "radio",
+      "armor",
+      "hedge cutter"
+    ],
+    "sources": [
+      "m4_sherman",
+      "m4_variants",
+      "ammo_75mm",
+      "ammo_76mm",
+      "dd_tank",
+      "rhino",
+      "armor_improvised"
+    ]
+  },
+  {
+    "name": "Sherman DD",
+    "nation": "United Kingdom / United States / Canada",
+    "role": "amphibious_assault_tank",
+    "crew_count": 5,
+    "base_hull": "Sherman hull with duplex-drive flotation gear",
+    "base_turret": "Standard Sherman 75mm turret",
+    "production_period": "1944",
+    "normandy_presence": "Yes; used in the D-Day assault waves.",
+    "field_modifications": [
+      "canvas flotation screen",
+      "propellers",
+      "pumps/seals",
+      "deployment frame"
+    ],
+    "engine_family": [
+      "Sherman-family engine variant"
+    ],
+    "suspension_family": [
+      "Sherman VVSS"
+    ],
+    "radio_family": [
+      "variant-dependent tank radio"
+    ],
+    "optics_family": [
+      "standard Sherman sighting"
+    ],
+    "ammo_focus": [
+      "75mm HE",
+      "75mm APCBC/AP",
+      "75mm WP"
+    ],
+    "crew_layout": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "assistant driver"
+    ],
+    "doctrine_tags": [
+      "amphibious",
+      "launch-then-fight"
+    ],
+    "field_replaceable_components": [
+      "flotation screen",
+      "propellers",
+      "sealing kit"
+    ],
+    "sources": [
+      "dd_tank",
+      "m4_sherman"
+    ]
+  },
+  {
+    "name": "Sherman Firefly",
+    "nation": "United Kingdom",
+    "role": "anti_armor_medium_tank",
+    "crew_count": 4,
+    "base_hull": "M4 or M4A4 Sherman hull",
+    "base_turret": "Modified Sherman turret with 17-pounder",
+    "production_period": "1944-1945",
+    "normandy_presence": "Yes; key British anti-armor tank in Normandy.",
+    "field_modifications": [
+      "barrel disguise",
+      "loader hatch",
+      "ammo rearrangement",
+      "hull-gunner removed"
+    ],
+    "engine_family": [
+      "Sherman-family engine variant"
+    ],
+    "suspension_family": [
+      "Sherman VVSS"
+    ],
+    "radio_family": [
+      "Wireless Set No. 19"
+    ],
+    "optics_family": [
+      "British sighting and concealment discipline"
+    ],
+    "ammo_focus": [
+      "17-pdr APCBC",
+      "17-pdr APDS",
+      "17-pdr HE",
+      "17-pdr smoke"
+    ],
+    "crew_layout": [
+      "commander",
+      "gunner",
+      "loader/radio operator",
+      "driver"
+    ],
+    "doctrine_tags": [
+      "tank killer",
+      "conceal the barrel"
+    ],
+    "field_replaceable_components": [
+      "gun conversion kit",
+      "radio fit",
+      "ammo stowage"
+    ],
+    "sources": [
+      "firefly",
+      "ammo_17pdr",
+      "ws19"
+    ]
+  },
+  {
+    "name": "M10 Wolverine",
+    "nation": "United States",
+    "role": "tank_destroyer",
+    "crew_count": 5,
+    "base_hull": "M4A2/M4A3-derived hull",
+    "base_turret": "Open-topped M10 turret with 3-inch gun",
+    "production_period": "1942-1943",
+    "normandy_presence": "Yes; used by Allied forces in Normandy and later conversions.",
+    "field_modifications": [
+      "Rhino cutter",
+      "British Achilles conversions",
+      "travel locks"
+    ],
+    "engine_family": [
+      "GM 6046",
+      "Ford GAA"
+    ],
+    "suspension_family": [
+      "VVSS"
+    ],
+    "radio_family": [
+      "SCR-508"
+    ],
+    "optics_family": [
+      "open-top spotting"
+    ],
+    "ammo_focus": [
+      "3-inch AP",
+      "3-inch HE"
+    ],
+    "crew_layout": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "assistant driver"
+    ],
+    "doctrine_tags": [
+      "ambush",
+      "speed over armor"
+    ],
+    "field_replaceable_components": [
+      "gun",
+      "travel lock",
+      "hedge cutter"
+    ],
+    "sources": [
+      "m10",
+      "scr508",
+      "rhino"
+    ]
+  },
+  {
+    "name": "M18 Hellcat",
+    "nation": "United States",
+    "role": "high_speed_tank_destroyer",
+    "crew_count": 5,
+    "base_hull": "T70/M18 torsion-bar hull",
+    "base_turret": "Open-topped low-profile 76mm turret",
+    "production_period": "1943-1944",
+    "normandy_presence": "Post-breakout ETO TD family; not a D-Day beach vehicle.",
+    "field_modifications": [
+      "muzzle brake retrofit",
+      "winterization",
+      "open-top crew aids"
+    ],
+    "engine_family": [
+      "Continental R975"
+    ],
+    "suspension_family": [
+      "torsion bar"
+    ],
+    "radio_family": [
+      "SCR-508"
+    ],
+    "optics_family": [
+      "excellent open-top visibility"
+    ],
+    "ammo_focus": [
+      "76mm HE",
+      "76mm APCBC",
+      "76mm HVAP",
+      "76mm smoke"
+    ],
+    "crew_layout": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "assistant driver"
+    ],
+    "doctrine_tags": [
+      "speed",
+      "flank",
+      "low silhouette"
+    ],
+    "field_replaceable_components": [
+      "muzzle brake",
+      "engine kit"
+    ],
+    "sources": [
+      "m18",
+      "ammo_76mm",
+      "scr508"
+    ]
+  },
+  {
+    "name": "M36 Jackson",
+    "nation": "United States",
+    "role": "heavy_tank_destroyer",
+    "crew_count": 5,
+    "base_hull": "M10A1 or M4A3 conversion hull",
+    "base_turret": "Open-topped 90mm turret",
+    "production_period": "1944-1945",
+    "normandy_presence": "Late Normandy / post-Normandy heavy anti-armor response.",
+    "field_modifications": [
+      "travel lock",
+      "muzzle brake",
+      "B1 Sherman hull conversion"
+    ],
+    "engine_family": [
+      "Ford GAA",
+      "GM 6046"
+    ],
+    "suspension_family": [
+      "VVSS"
+    ],
+    "radio_family": [
+      "SCR-508"
+    ],
+    "optics_family": [
+      "open-top long-range sighting"
+    ],
+    "ammo_focus": [
+      "90mm HE",
+      "90mm APCBC",
+      "90mm AP"
+    ],
+    "crew_layout": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "assistant driver"
+    ],
+    "doctrine_tags": [
+      "reserve anti-armor",
+      "heavy TD"
+    ],
+    "field_replaceable_components": [
+      "gun travel lock",
+      "muzzle brake",
+      "hull conversion kit"
+    ],
+    "sources": [
+      "m36",
+      "ammo_90mm",
+      "m4_sherman",
+      "scr508"
+    ]
+  },
+  {
+    "name": "Churchill",
+    "nation": "United Kingdom",
+    "role": "infantry_tank_assault_platform",
+    "crew_count": 5,
+    "base_hull": "Churchill infantry tank hull",
+    "base_turret": "Churchill family turret (75mm in Normandy service)",
+    "production_period": "1941-1945",
+    "normandy_presence": "Yes; assault, Crocodile, AVRE, and prongs-equipped variants.",
+    "field_modifications": [
+      "Prongs",
+      "Crocodile trailer",
+      "AVRE tools",
+      "extra radios"
+    ],
+    "engine_family": [
+      "Bedford petrol"
+    ],
+    "suspension_family": [
+      "coiled spring bogies"
+    ],
+    "radio_family": [
+      "Wireless Set No. 19"
+    ],
+    "optics_family": [
+      "British tank optics"
+    ],
+    "ammo_focus": [
+      "75mm HE",
+      "75mm AP",
+      "95mm support shells"
+    ],
+    "crew_layout": [
+      "commander",
+      "gunner",
+      "loader/radio operator",
+      "driver",
+      "co-driver/hull gunner"
+    ],
+    "doctrine_tags": [
+      "assault",
+      "infantry support"
+    ],
+    "field_replaceable_components": [
+      "prongs",
+      "flame trailer",
+      "radio"
+    ],
+    "sources": [
+      "churchill",
+      "ammo_75qf",
+      "ws19"
+    ]
+  },
+  {
+    "name": "Cromwell",
+    "nation": "United Kingdom",
+    "role": "cruiser_tank",
+    "crew_count": 5,
+    "base_hull": "Cromwell/Centaur cruiser hull",
+    "base_turret": "Cromwell 75mm turret",
+    "production_period": "1943-1945",
+    "normandy_presence": "Yes; British armoured formations in Normandy.",
+    "field_modifications": [
+      "prongs",
+      "extra stowage",
+      "command radios",
+      "applique armor"
+    ],
+    "engine_family": [
+      "Rolls-Royce Meteor"
+    ],
+    "suspension_family": [
+      "Christie"
+    ],
+    "radio_family": [
+      "Wireless Set No. 19"
+    ],
+    "optics_family": [
+      "cruiser-tank observation"
+    ],
+    "ammo_focus": [
+      "75mm HE",
+      "75mm AP",
+      "75mm smoke"
+    ],
+    "crew_layout": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver",
+      "hull machine gunner/radio operator"
+    ],
+    "doctrine_tags": [
+      "speed",
+      "recon",
+      "exploitation"
+    ],
+    "field_replaceable_components": [
+      "prongs",
+      "radio",
+      "camouflage"
+    ],
+    "sources": [
+      "cromwell",
+      "ammo_75qf",
+      "ws19"
+    ]
+  },
+  {
+    "name": "M3/M5 Stuart",
+    "nation": "United States",
+    "role": "light_tank_recon_screen",
+    "crew_count": 4,
+    "base_hull": "M3 or M5 light tank hull",
+    "base_turret": "37mm light tank turret",
+    "production_period": "1941-1943",
+    "normandy_presence": "Yes; recon, liaison, screening, secondary support.",
+    "field_modifications": [
+      "extra radios",
+      "turretless command fits",
+      "Rhino/prongs in some units"
+    ],
+    "engine_family": [
+      "Continental R975",
+      "Cadillac V8 pair"
+    ],
+    "suspension_family": [
+      "VVSS"
+    ],
+    "radio_family": [
+      "SCR-508 family"
+    ],
+    "optics_family": [
+      "light tank scouting optics"
+    ],
+    "ammo_focus": [
+      "37mm AP",
+      "37mm APC",
+      "37mm HE",
+      "37mm canister"
+    ],
+    "crew_layout": [
+      "commander",
+      "gunner",
+      "loader",
+      "driver"
+    ],
+    "doctrine_tags": [
+      "recon",
+      "screening",
+      "liaison"
+    ],
+    "field_replaceable_components": [
+      "radio",
+      "turret delete kit",
+      "hedge cutter"
+    ],
+    "sources": [
+      "stuart",
+      "scr508",
+      "rhino"
+    ]
+  },
+  {
+    "name": "M32 Tank Recovery Vehicle",
+    "nation": "United States",
+    "role": "armored_recovery_vehicle",
+    "crew_count": 4,
+    "base_hull": "Sherman hull converted to recovery vehicle",
+    "base_turret": "Fixed recovery superstructure",
+    "production_period": "1943-1945",
+    "normandy_presence": "Yes; recovery and repair network for Allied armor.",
+    "field_modifications": [
+      "A-frame boom",
+      "winch",
+      "81mm mortar",
+      "tool and parts racks"
+    ],
+    "engine_family": [
+      "Sherman-family engine variant"
+    ],
+    "suspension_family": [
+      "VVSS or HVSS"
+    ],
+    "radio_family": [
+      "variant-dependent recovery fit"
+    ],
+    "optics_family": [
+      "recovery sightlines"
+    ],
+    "ammo_focus": [
+      "81mm smoke",
+      "machine guns"
+    ],
+    "crew_layout": [
+      "commander",
+      "driver",
+      "assistant driver/operator",
+      "boom/winch operator"
+    ],
+    "doctrine_tags": [
+      "recovery",
+      "rear-area throughput"
+    ],
+    "field_replaceable_components": [
+      "boom",
+      "winch",
+      "mortar",
+      "tow gear"
+    ],
+    "sources": [
+      "m32",
+      "m4_sherman"
+    ]
+  }
+]

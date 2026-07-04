@@ -1,0 +1,22 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:53:05+00:00",
+  "files": [],
+  "name": "sherman_part_generation_v2_hull_upper_c",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:53:05+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Orthographic three-quarter view of a crop-safe M4 Sherman upper hull shell only. The asset is a standalone armor tub with turret ring hole and engine deck, separated from all running gear. It floats slightly above the ground so the viewer can see there are no wheels or tracks attached. No lower hull skirt hiding wheels, no dark track-shaped mass, no cylindrical rolls, no sprockets, no suspension, no turret, no cannon, no assembled tank. Add welded seams, bevels, bolts, cast and rolled steel texture, chipped olive drab paint. Realistic hard-surface game asset, not low-poly toy, not rounded cushion, no text or labels.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    }
+  ],
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_part_generation_v2_hull_upper_c/sherman_part_generation_v2_hull_upper_c_concept.png",
+  "tasks": {},
+  "updated_at": "2026-07-04T00:53:05+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

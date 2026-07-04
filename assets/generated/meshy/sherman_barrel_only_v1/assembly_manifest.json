@@ -1,0 +1,25 @@
+{
+  "asset_id": "sherman_barrel_only_v1",
+  "purpose": "replace rejected mantlet/barrel block with a Meshy-generated low-poly barrel-only asset",
+  "target": "barrel tube only; no mantlet or turret housing",
+  "status": "meshy_barrel_only_generated",
+  "pivot_contract": {
+    "local_axis": "barrel length should align to local forward axis after import normalization",
+    "pivot": "runtime pivot belongs at rear/breech end, parented under turret or mantlet socket",
+    "note": "do not require Meshy to solve turret compatibility; barrel is a separate low-poly visual tube"
+  },
+  "forbidden": [
+    "mantlet",
+    "turret",
+    "hull",
+    "tracks",
+    "wheels",
+    "complete tank",
+    "gun mount block"
+  ],
+  "meshy_output": {
+    "glb": "assets/generated/meshy/sherman_part_meshy_barrel_only_v1/glb.glb",
+    "fbx": "assets/generated/meshy/sherman_part_meshy_barrel_only_v1/fbx.fbx",
+    "contract_report": "assets/generated/meshy/sherman_part_meshy_barrel_only_v1/glb_contract_report.json"
+  }
+}

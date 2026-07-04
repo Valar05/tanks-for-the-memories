@@ -1,0 +1,58 @@
+{
+  "asset_id": "m4a3_75_vvss_sherman_alpha",
+  "display_name": "M4A3 75mm Sherman Alpha",
+  "status": "source_high_reference",
+  "asset_class": "meshy_source_reference_tank_model",
+  "base_vehicle": {
+    "variant": "m4a3_75_vvss",
+    "geometry_locked": true,
+    "identity_from_texture_only": true
+  },
+  "runtime": {
+    "glb": null,
+    "fallback": "procedural_threejs_sherman_preview",
+    "loader": "GLTFLoader",
+    "classification": "not_phone_runtime",
+    "animation_contract": "docs/doctrine/vehicle-animation-workflow-contract.md",
+    "animation_policy": "source_reference_only"
+  },
+  "budget": {
+    "preferred_triangles_max": 12000,
+    "reject_triangles_over": 20000,
+    "preferred_texture_size_max": 2048,
+    "actual_triangles": 35943,
+    "glb_bytes": 15943004
+  },
+  "required_pivots": [
+    "hull_root",
+    "turret_traverse_pivot",
+    "cannon_elevation_pivot",
+    "left_track_motion",
+    "right_track_motion",
+    "roadwheel_groups",
+    "commander_hatch"
+  ],
+  "inspection": {
+    "report": "/tftm/models/m4a3_75_vvss_sherman_alpha/glb_contract_report.json",
+    "node_count": 1,
+    "mesh_count": 1,
+    "primitive_count": 1,
+    "material_count": 1,
+    "texture_count": 4,
+    "image_count": 4,
+    "reasons": [
+      "animation regions need runtime supplemental binding: hull, turret, cannon, track, wheel",
+      "very low primitive count suggests fused static sculpture; usable only as body/display base"
+    ]
+  },
+  "provenance": {
+    "provider": "meshy",
+    "source_folder": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha",
+    "source_glb": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha/glb.glb",
+    "source_fbx": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha/fbx.fbx",
+    "concept_image": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha/m4a3_75_vvss_sherman_alpha_concept.png",
+    "task_id": "019f2a0a-96b3-7a36-ab59-ff274ee70e7a",
+    "created_by": "workspace Meshy asset workflow",
+    "notes": "35k Meshy output is preserved as a high/detail source reference. It is too heavy for default phone Three.js runtime and is not loaded by default."
+  }
+}

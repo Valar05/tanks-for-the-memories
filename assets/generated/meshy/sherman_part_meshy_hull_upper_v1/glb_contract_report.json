@@ -1,0 +1,85 @@
+{
+  "file": "assets/generated/meshy/sherman_part_meshy_hull_upper_v1/glb.glb",
+  "glbVersion": 2,
+  "byteLength": 12520328,
+  "nodeCount": 1,
+  "meshCount": 1,
+  "primitiveCount": 1,
+  "materialCount": 1,
+  "textureCount": 4,
+  "imageCount": 4,
+  "approximateTriangles": 8862,
+  "foundTerms": {
+    "hull": [],
+    "turret": [],
+    "cannon": [],
+    "track": [],
+    "wheel": [],
+    "hatch": [],
+    "trackPod": [],
+    "beltRegion": [],
+    "coaxialWeapon": [],
+    "mantletPivot": []
+  },
+  "systemBindings": {
+    "hull": [],
+    "turret": [],
+    "mantlet": [],
+    "barrel": [],
+    "left_tread_system": [],
+    "right_tread_system": []
+  },
+  "missingSystems": [
+    "hull",
+    "turret",
+    "mantlet",
+    "barrel",
+    "left_tread_system",
+    "right_tread_system"
+  ],
+  "nodeNames": [
+    "Mesh_0"
+  ],
+  "meshNames": [
+    "Mesh_0"
+  ],
+  "materialNames": [
+    "Material_0"
+  ],
+  "images": [
+    {
+      "index": 0,
+      "name": "Image_3",
+      "mimeType": "image/jpeg",
+      "uri": null,
+      "byteLength": 66663
+    },
+    {
+      "index": 1,
+      "name": "normal",
+      "mimeType": "image/png",
+      "uri": null,
+      "byteLength": 7593575
+    },
+    {
+      "index": 2,
+      "name": "Image_0",
+      "mimeType": "image/jpeg",
+      "uri": null,
+      "byteLength": 2637715
+    },
+    {
+      "index": 3,
+      "name": "Image_1",
+      "mimeType": "image/jpeg",
+      "uri": null,
+      "byteLength": 1881286
+    }
+  ],
+  "classification": "hybrid_accept",
+  "reasons": [
+    "animation regions need runtime supplemental binding: hull, turret, cannon, track, wheel",
+    "very low primitive count suggests fused static sculpture; usable only as body/display base",
+    "minimal moving systems are unbound: hull, turret, mantlet, barrel, left_tread_system, right_tread_system"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "file": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha/glb.glb",
+  "glbVersion": 2,
+  "byteLength": 15943004,
+  "nodeCount": 1,
+  "meshCount": 1,
+  "primitiveCount": 1,
+  "materialCount": 1,
+  "textureCount": 4,
+  "imageCount": 4,
+  "approximateTriangles": 35943,
+  "foundTerms": {
+    "hull": [],
+    "turret": [],
+    "cannon": [],
+    "track": [],
+    "wheel": [],
+    "hatch": []
+  },
+  "nodeNames": [
+    "Mesh_0"
+  ],
+  "meshNames": [
+    "Mesh_0"
+  ],
+  "materialNames": [
+    "Material_0"
+  ],
+  "images": [
+    {
+      "index": 0,
+      "name": "Image_3",
+      "mimeType": "image/jpeg",
+      "uri": null,
+      "byteLength": 89805
+    },
+    {
+      "index": 1,
+      "name": "normal",
+      "mimeType": "image/png",
+      "uri": null,
+      "byteLength": 8427720
+    },
+    {
+      "index": 2,
+      "name": "Image_0",
+      "mimeType": "image/jpeg",
+      "uri": null,
+      "byteLength": 3150933
+    },
+    {
+      "index": 3,
+      "name": "Image_1",
+      "mimeType": "image/jpeg",
+      "uri": null,
+      "byteLength": 2562188
+    }
+  ],
+  "classification": "hybrid_accept",
+  "reasons": [
+    "animation regions need runtime supplemental binding: hull, turret, cannon, track, wheel",
+    "very low primitive count suggests fused static sculpture; usable only as body/display base"
+  ]
+}

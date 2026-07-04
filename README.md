@@ -1,22 +1,31 @@
 # Tanks For The Memories
 
-A small WW2 command simulation about uncertainty, posture, and memory from inside a Sherman turret.
+A corpus and design workbench for a Normandy tank-commander roguelike history simulation.
 
 The player is a young tank lieutenant, not a dashboard user.
 The player wins by reading the tank's fragments better than the battlefield can change.
 
 ## Current vision
 
-Tanks For The Memories is an embodied command game about managing uncertainty from inside a crewed machine.
+Tanks For The Memories is intended to become a dual-layer game:
+
+- a multiple-choice, corpus-based campaign layer on the outside
+- a small, dense, procedural, repeatable tank-command mission layer on the inside
+
+The campaign follows a tank commander in Normandy, starting around D-Day plus a few days inland. Beach operations are in scope later, but not first slice, and DD flotation or motorboat-like attachments are not first-slice targets.
 
 Current promoted doctrine:
 
+- [Game Shape Doctrine](./docs/doctrine/game-shape.md) - current product shape and first-slice boundary
 - [Repo Doctrine](./REPO_DOCTRINE.md) - durable working doctrine extracted from the corpus
+- [Steering](./STEERING.md) - character, crew, and campaign-simulation doctrine from the Sherman platoon exercise
 - [Verne-Wells Doctrine](./docs/doctrine/verne-wells-doctrine.md) - discovery and consequence as the project's creative engine
 - [Repo Crucible Report](./docs/doctrine/repo-crucible-report.md) - gold, ore, and dross classification for current direction
 - [Archival Memory Visual Doctrine](./docs/doctrine/archival-memory-visual-doctrine.md) - historical memory under pressure, not a black-and-white filter
 
-## Current slice
+## Current prototype slice
+
+The current browser slice is a commander-station sketch, not the whole intended game.
 
 - A commander station inside a Sherman turret
 - Hatch, optics, radio, and intercom as the main information channels
@@ -26,6 +35,7 @@ Current promoted doctrine:
 - False-picture memory where a believable report later resolves into a different reality
 - Crew voice and radio interruption layer
 - Memory events that summarize what the commander learned
+- A procedural Three.js Sherman silhouette as a tank-body preview touch
 
 ## What works
 
@@ -36,6 +46,7 @@ Current promoted doctrine:
 - Voice interrupt layer for contact arrival
 - Physical evidence carriers for scout, radio, visual, and HQ claims
 - After-action memory sheets with original report, reality, consequence, and lesson
+- Runtime-generated tank preview beside the commander station
 
 ## Commands
 

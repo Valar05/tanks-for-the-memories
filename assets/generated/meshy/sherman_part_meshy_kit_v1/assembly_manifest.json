@@ -1,0 +1,185 @@
+{
+  "asset_id": "sherman_part_meshy_kit_v1",
+  "purpose": "Meshy-generated separate Sherman part kit for phone-budget Three.js assembly",
+  "visual_target": "non-toy Sherman hard-surface kit: hull, traversable turret, elevatable cannon, repeated low-budget gear module, authored tread ribbon later",
+  "source_pack": "assets/generated/meshy/sherman_part_selected_source_v1/assembly_manifest.json",
+  "generation_spend": {
+    "openai_image_calls": 12,
+    "meshy_successes": 6,
+    "meshy_failed_no_credit": 1,
+    "runtime_default_meshy_parts": 4
+  },
+  "gate_status": "red_turret_socket_incompatible_barrel_only_salvaged",
+  "authored_meshes_allowed": [
+    "tread_ribbon_only"
+  ],
+  "parts": {
+    "hull": {
+      "label": "Hull Upper",
+      "role": "static chassis root",
+      "default_runtime_use": "blocked_until_human_visual_acceptance",
+      "glb": "assets/generated/meshy/sherman_part_meshy_kit_v1/hull.glb",
+      "fbx": "assets/generated/meshy/sherman_part_meshy_kit_v1/hull.fbx",
+      "source_manifest": "assets/generated/meshy/sherman_part_meshy_hull_upper_v1/manifest.json",
+      "contract_report": "assets/generated/meshy/sherman_part_meshy_kit_v1/hull_glb_contract_report.json",
+      "approximate_triangles": 8862,
+      "classification": "hybrid_accept",
+      "byte_length": 12520328,
+      "compatibility_status": "candidate_salvage_pending_visual_acceptance"
+    },
+    "turret": {
+      "label": "Turret Shell",
+      "role": "turret yaw pivot child",
+      "default_runtime_use": false,
+      "glb": "assets/generated/meshy/sherman_part_meshy_kit_v1/turret.glb",
+      "fbx": "assets/generated/meshy/sherman_part_meshy_kit_v1/turret.fbx",
+      "source_manifest": "assets/generated/meshy/sherman_part_meshy_turret_shell_v1/manifest.json",
+      "contract_report": "assets/generated/meshy/sherman_part_meshy_kit_v1/turret_glb_contract_report.json",
+      "approximate_triangles": 6111,
+      "classification": "hybrid_accept",
+      "byte_length": 12142348,
+      "compatibility_status": "rejected_incompatible_with_mantlet_barrel",
+      "rejection_reason": "turret socket/interface does not match generated mantlet/barrel; cannot support believable cannon elevation"
+    },
+    "mantlet_barrel": {
+      "label": "Mantlet / Barrel",
+      "role": "cannon elevation pivot child",
+      "default_runtime_use": false,
+      "glb": "assets/generated/meshy/sherman_part_meshy_kit_v1/mantlet_barrel.glb",
+      "fbx": "assets/generated/meshy/sherman_part_meshy_kit_v1/mantlet_barrel.fbx",
+      "source_manifest": "assets/generated/meshy/sherman_part_meshy_mantlet_barrel_v1/manifest.json",
+      "contract_report": "assets/generated/meshy/sherman_part_meshy_kit_v1/mantlet_barrel_glb_contract_report.json",
+      "approximate_triangles": 3461,
+      "classification": "hybrid_accept",
+      "byte_length": 11646044,
+      "compatibility_status": "rejected_overmodeled_mantlet_block_and_incompatible_with_turret",
+      "rejection_reason": "Generated part included bulky mantlet/block assembly; user correction requires Meshy barrel only, not authored tube and not overmodeled housing."
+    },
+    "gear_mobile": {
+      "label": "Mobile Gear / Wheel",
+      "role": "repeated tread-side wheel/sprocket module",
+      "default_runtime_use": "blocked_until_human_visual_acceptance",
+      "glb": "assets/generated/meshy/sherman_part_meshy_kit_v1/gear_mobile.glb",
+      "fbx": "assets/generated/meshy/sherman_part_meshy_kit_v1/gear_mobile.fbx",
+      "source_manifest": "assets/generated/meshy/sherman_part_meshy_gear_wheel_mobile_v1/manifest.json",
+      "contract_report": "assets/generated/meshy/sherman_part_meshy_kit_v1/gear_mobile_glb_contract_report.json",
+      "approximate_triangles": 833,
+      "classification": "hybrid_accept",
+      "byte_length": 12167904,
+      "compatibility_status": "candidate_salvage_pending_visual_acceptance"
+    },
+    "gear_hero_reference": {
+      "label": "Hero Gear Reference",
+      "role": "higher-detail gear reference, not default phone runtime duplicate",
+      "default_runtime_use": false,
+      "glb": "assets/generated/meshy/sherman_part_meshy_kit_v1/gear_hero_reference.glb",
+      "fbx": "assets/generated/meshy/sherman_part_meshy_kit_v1/gear_hero_reference.fbx",
+      "source_manifest": "assets/generated/meshy/sherman_part_meshy_gear_wheel_v2/manifest.json",
+      "contract_report": "assets/generated/meshy/sherman_part_meshy_kit_v1/gear_hero_reference_glb_contract_report.json",
+      "approximate_triangles": 2075,
+      "classification": "hybrid_accept",
+      "byte_length": 12044012
+    },
+    "barrel_only": {
+      "label": "Barrel Only",
+      "role": "low-poly cannon barrel visual tube; rear end must be parented to a future compatible mantlet/socket pivot",
+      "default_runtime_use": "candidate_pending_socket_solution_and_human_visual_acceptance",
+      "glb": "assets/generated/meshy/sherman_part_meshy_kit_v1/barrel_only.glb",
+      "fbx": "assets/generated/meshy/sherman_part_meshy_kit_v1/barrel_only.fbx",
+      "source_manifest": "assets/generated/meshy/sherman_part_meshy_barrel_only_v1/manifest.json",
+      "contract_report": "assets/generated/meshy/sherman_part_meshy_kit_v1/barrel_only_glb_contract_report.json",
+      "approximate_triangles": 920,
+      "classification": "hybrid_accept",
+      "byte_length": 10316676,
+      "compatibility_status": "barrel_shape_salvaged_socket_still_missing"
+    }
+  },
+  "phone_budget": {
+    "default_runtime_triangles_before_wheel_duplication": 16726,
+    "gear_mobile_triangles_each": 833,
+    "warning": "RED BUILD: phone budget numbers are diagnostic only until human visual review accepts the GLB parts. Do not integrate or promote."
+  },
+  "assembly_plan": {
+    "hull": "place at chassis root; do not merge with turret or cannon",
+    "turret": "child of turret_traverse_pivot on hull ring",
+    "mantlet_barrel": "REJECTED: overmodeled block assembly; replaced by barrel_only candidate for barrel geometry, but socket/mantlet still unsolved",
+    "gear_mobile": "duplicate sparingly or instance; rotate visible wheels; pair with authored tread ribbon texture animation",
+    "tread_ribbon": "only hand-authored mesh, but not a flat ribbon: must read as a detailed tread belt with sidewall thickness, curved returns, raised shoes/grousers, rails, and PBR UV motion while staying phone-budget instanced geometry",
+    "barrel_only": "candidate replacement for rejected mantlet_barrel; parent rear of barrel to a future compatible mantlet/socket pivot; do not use until socket exists and human review accepts it"
+  },
+  "reject_if_cloud_visual": [
+    "barrel grows mantlet block, turret body, hull, or any housing geometry",
+    "turret and mantlet/barrel diverge or fail to share a believable mechanical socket",
+    "user has not actually seen and accepted the cloud GLB review surface",
+    "parts read as toy, pillow, or primitive blockout",
+    "hull includes baked tracks/wheels that prevent tread animation",
+    "turret cannot visually separate for traversal",
+    "mantlet/barrel cannot plausibly pitch vertically",
+    "gear is too detailed to duplicate on phone or reads as a full track assembly"
+  ],
+  "next_runtime_use_allowed": false,
+  "red_build": {
+    "reason": "Meshy parts were generated before the user visually reviewed and accepted the cloud GLB viewer. Cloud deploy plus termux-open-url did not secure attention or acceptance.",
+    "expected_attention_gate": "wake user at selected source review and wait for explicit visual acceptance before Meshy spend; wake again at GLB review before any runtime integration claim",
+    "actual_failure": "agent proceeded from generated source pack into Meshy submissions and reported capability without confirmed user visual review",
+    "preservation_policy": "preserve downloaded GLB/FBX/provenance as red-build artifacts; do not wire into runtime or promote until human review accepts visible parts",
+    "required_recovery": "fresh browser wake to cloud GLB viewer, explicit user acceptance or rejection per part, then update manifest before integration",
+    "geometry_failure": {
+      "observed_by_user": "turret and barrel diverge; models are not compatible",
+      "cause": "turret shell and mantlet/barrel were generated from separate source images without a shared socket profile, shared scale reference, common local origin, or explicit cannon elevation axis",
+      "physical_truth": "separate GLBs exist and load",
+      "visual_truth": "the mantlet/barrel does not read as mechanically belonging to the turret face",
+      "perceptual_truth": "the cannon appears as an unrelated part rather than an elevatable gun assembly owned by the turret",
+      "behavioral_truth": "cannot proceed to turret traversal/cannon verticality assembly from these two parts",
+      "rejected_parts": [
+        "turret",
+        "mantlet_barrel"
+      ],
+      "salvageable_parts": [
+        "hull",
+        "gear_mobile",
+        "barrel_only"
+      ],
+      "required_recovery": "Keep the Meshy barrel-only asset. Regenerate or create a compatible turret/mantlet/socket asset that provides the rear barrel pivot and visual ownership; do not use the rejected overmodeled mantlet/barrel block."
+    }
+  },
+  "animation_proof": {
+    "status": "cloud_viewer_pending_human_visual_acceptance",
+    "page": "model-assay.html",
+    "spawn_target": 24,
+    "composition": [
+      "hull",
+      "turret",
+      "barrel_only",
+      "gear_mobile",
+      "authored_detailed_tread_belt"
+    ],
+    "motion": [
+      "forward_world_motion",
+      "wheel_rotation",
+      "tread_texture_scroll",
+      "turret_traverse_test",
+      "barrel_pitch_test"
+    ],
+    "pbr_tread_material": [
+      "albedo_map",
+      "roughness_map",
+      "metalness_map",
+      "normal_map"
+    ],
+    "runtime_strategy": "shared geometry/material extraction plus InstancedMesh for 24-tank spawn proof; every spawned tank has independent drive, wheel, tread, turret, and barrel animation state; no deep-cloned GLB object trees",
+    "explicit_red_condition": "human visual review must accept tread readability, wheel orientation, barrel orientation, turret/barrel ownership, independent 24-tank motion, and phone performance from the cloud page",
+    "authored_mesh_scope": "tread_ribbon_only",
+    "independent_animation_target": 24,
+    "per_tank_state": [
+      "drive_speed_phase",
+      "wheel_spin_phase",
+      "tread_scroll_phase",
+      "turret_horizontal_yaw_cycle",
+      "barrel_vertical_pitch_cycle"
+    ],
+    "tread_phase_mode": "instanced_shader_attribute",
+    "cycle_policy": "smoothed_random_per_tank_rates_and_phases_not_synchronized",
+    "authored_tread_quality_gate": "rejected_flat_ribbon; require phone_budget_detailed_belt_mesh_with_sidewall_returns_raised_shoes_and_pbr_uvs"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "asset_id": "m4a3_75_vvss_sherman_vanilla_mobile",
+  "display_name": "M4A3 75mm Sherman Vanilla Mobile",
+  "status": "saved_vanilla_baseline",
+  "asset_class": "meshy_phone_runtime_tank_model_vanilla_baseline",
+  "base_vehicle": {
+    "variant": "m4a3_75_vvss",
+    "geometry_locked": true,
+    "identity_from_texture_only": true
+  },
+  "runtime": {
+    "glb": "/tftm/models/m4a3_75_vvss_sherman_vanilla_mobile/m4a3_75_vvss_sherman_vanilla_mobile.glb",
+    "fallback": "procedural_threejs_sherman_preview",
+    "loader": "GLTFLoader",
+    "classification": "hybrid_accept",
+    "animation_contract": "docs/doctrine/vehicle-animation-workflow-contract.md",
+    "animation_policy": "hybrid_static_treads",
+    "tread_motion": "static_fused_mesh",
+    "disabled_pivots": [
+      "left_track_motion",
+      "right_track_motion",
+      "roadwheel_groups"
+    ],
+    "visual_truth_note": "Saved vanilla fused Meshy tank baseline. No Alpha/Tango/Whiskey recognition markings are applied to this baseline asset.",
+    "identity_overlay": "none"
+  },
+  "budget": {
+    "preferred_triangles_max": 12000,
+    "warning_triangles_over": 12000,
+    "reject_triangles_over": 20000,
+    "preferred_texture_size_max": 1024,
+    "actual_triangles": 10216,
+    "glb_bytes": 9398200
+  },
+  "required_pivots": [
+    "hull_root",
+    "turret_traverse_pivot",
+    "cannon_elevation_pivot",
+    "commander_hatch"
+  ],
+  "inspection": {
+    "report": "/tftm/models/m4a3_75_vvss_sherman_alpha_mobile/glb_contract_report.json",
+    "node_count": 1,
+    "mesh_count": 1,
+    "primitive_count": 1,
+    "material_count": 1,
+    "texture_count": 4,
+    "image_count": 4,
+    "reasons": [
+      "animation regions need runtime supplemental binding: hull, turret, cannon, track, wheel",
+      "very low primitive count suggests fused static sculpture; usable only as body/display base"
+    ]
+  },
+  "provenance": {
+    "provider": "meshy",
+    "source_folder": "public/tftm/models/m4a3_75_vvss_sherman_alpha_mobile",
+    "source_glb": "public/tftm/models/m4a3_75_vvss_sherman_alpha_mobile/m4a3_75_vvss_sherman_alpha_mobile.glb",
+    "source_fbx": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha_mobile/fbx.fbx",
+    "source_concept_image": "assets/generated/meshy/m4a3_75_vvss_sherman_alpha/m4a3_75_vvss_sherman_alpha_concept.png",
+    "task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+    "high_reference_task_id": "019f2a0a-96b3-7a36-ab59-ff274ee70e7a",
+    "created_by": "workspace Meshy asset workflow",
+    "notes": "Preserved from the accepted phone-runtime Meshy Sherman before Alpha recognition overlays were applied. This is the vanilla baseline to keep for comparison and future Tango/Whiskey identity work."
+  },
+  "identity_id": "vanilla"
+}

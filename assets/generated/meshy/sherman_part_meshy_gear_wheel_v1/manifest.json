@@ -1,0 +1,65 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T00:58:45+00:00",
+  "files": [],
+  "last_image_to_3d_task": {
+    "art_style": "",
+    "consumed_credits": 0,
+    "created_at": 1783126725700,
+    "expires_at": 1783386043704,
+    "finished_at": 1783126843704,
+    "id": "019f2aa2-818b-7881-b769-fc649324b517",
+    "image_style_url": "",
+    "model_url": "",
+    "model_urls": {},
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 99,
+    "remove_lighting": true,
+    "started_at": 1783126725760,
+    "status": "FAILED",
+    "style_prompt": "",
+    "task_error": {
+      "message": "The service is temporarily unavailable. Please retry in a few minutes.",
+      "type": "service_unavailable"
+    },
+    "text_style_prompt": "",
+    "texture_image_url": "",
+    "texture_prompt": "blackened steel sprocket wheel, worn metal teeth, bolts, grime, no belt and no chassis",
+    "texture_urls": null,
+    "thumbnail_url": "",
+    "type": "image-to-3d"
+  },
+  "name": "sherman_part_meshy_gear_wheel_v1",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T00:58:45+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_pbr": true,
+        "hd_texture": false,
+        "image_url": "<data-uri>",
+        "model_type": "standard",
+        "should_remesh": true,
+        "should_texture": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "target_polycount": 2000,
+        "texture_prompt": "blackened steel sprocket wheel, worn metal teeth, bolts, grime, no belt and no chassis",
+        "topology": "triangle"
+      },
+      "provider": "meshy",
+      "step": "image_to_3d",
+      "task_id": "019f2aa2-818b-7881-b769-fc649324b517"
+    }
+  ],
+  "tasks": {
+    "image_to_3d": "019f2aa2-818b-7881-b769-fc649324b517"
+  },
+  "updated_at": "2026-07-04T01:00:48+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

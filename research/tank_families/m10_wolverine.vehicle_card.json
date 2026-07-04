@@ -1,0 +1,53 @@
+{
+  "name": "M10 Wolverine",
+  "nation": "United States",
+  "role": "tank_destroyer",
+  "crew_count": 5,
+  "base_hull": "M4A2/M4A3-derived hull",
+  "base_turret": "Open-topped M10 turret with 3-inch gun",
+  "production_period": "1942-1943",
+  "normandy_presence": "Yes; used by Allied forces in Normandy and later conversions.",
+  "field_modifications": [
+    "Rhino cutter",
+    "British Achilles conversions",
+    "travel locks"
+  ],
+  "engine_family": [
+    "GM 6046",
+    "Ford GAA"
+  ],
+  "suspension_family": [
+    "VVSS"
+  ],
+  "radio_family": [
+    "SCR-508"
+  ],
+  "optics_family": [
+    "open-top spotting"
+  ],
+  "ammo_focus": [
+    "3-inch AP",
+    "3-inch HE"
+  ],
+  "crew_layout": [
+    "commander",
+    "gunner",
+    "loader",
+    "driver",
+    "assistant driver"
+  ],
+  "doctrine_tags": [
+    "ambush",
+    "speed over armor"
+  ],
+  "field_replaceable_components": [
+    "gun",
+    "travel lock",
+    "hedge cutter"
+  ],
+  "sources": [
+    "m10",
+    "scr508",
+    "rhino"
+  ]
+}

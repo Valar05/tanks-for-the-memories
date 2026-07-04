@@ -1,0 +1,81 @@
+{
+  "asset_id": "tank_meshy_part_assembly_v1",
+  "purpose": "credit-gated Meshy part assembly plan",
+  "credit_strategy": "balanced",
+  "credit_gate": "Red build: do not spend Meshy credits. The OpenAI part sheet contradicts the required mechanical decomposition.",
+  "allowed_authored_meshes": [
+    "tread_ribbon_only"
+  ],
+  "forbidden_authored_geometry": [
+    "hull",
+    "turret",
+    "mantlet",
+    "barrel",
+    "wheel",
+    "gear",
+    "sprocket",
+    "complete_tank_body"
+  ],
+  "parts": {
+    "hull": {
+      "source": "meshy_after_gate",
+      "status": "rejected_input_sheet_contains_tracks_and_chassis"
+    },
+    "turret": {
+      "source": "meshy_after_hull_acceptance",
+      "status": "blocked_by_red_gate"
+    },
+    "mantlet_barrel": {
+      "source": "meshy_after_turret_acceptance",
+      "status": "blocked_by_red_gate"
+    },
+    "gear_wheel": {
+      "source": "meshy_after_barrel_acceptance",
+      "status": "blocked_by_red_gate"
+    },
+    "tread_ribbon": {
+      "source": "authored_only_visible_geometry_exception",
+      "status": "not_started"
+    }
+  },
+  "openai_outputs": {
+    "style_atlas": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/tank_meshy_part_assembly_v1/style_atlas.png",
+    "part_sheet": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/tank_meshy_part_assembly_v1/part_sheet.png",
+    "source_style_manifest": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/tank_meshy_part_assembly_v1_style_atlas/manifest.json",
+    "source_part_manifest": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/tank_meshy_part_assembly_v1_part_sheet/manifest.json"
+  },
+  "meshy_policy": {
+    "submit_order": [
+      "hull",
+      "turret",
+      "mantlet_barrel",
+      "gear_wheel"
+    ],
+    "hard_stop": "Stop: current OpenAI sheets are red evidence and may not be used as Meshy inputs.",
+    "reject": [
+      "toy_read",
+      "primitive_cube_read",
+      "fused_whole_tank",
+      "unrelated_systems",
+      "soft_pillow_forms",
+      "assembled_chassis_in_part_sheet",
+      "text_artifacts_in_style_atlas",
+      "not_crop_safe"
+    ]
+  },
+  "gate_status": "rejected_before_meshy",
+  "next_spend_allowed": false,
+  "red_build": {
+    "capture_url": "https://pose-lab-visual-truth--tftm-visual-truth-7779na4m.web.app/model-assay.html?cacheBust=tftm-atlas-gate-20260703",
+    "expected_visible_state": "isolated crop-ready parts: hull shell only, turret only, mantlet/barrel only, gear/wheel only; no complete tank and no tracks on the hull part",
+    "actual_visible_read": "part sheet shows a mostly assembled tank/chassis with tracks and road wheels, plus separate turret, barrel, and wheel; style atlas contains text artifacts and spelling errors",
+    "visible_mismatch": [
+      "hull candidate includes track/chassis/running gear mass",
+      "part sheet is not crop-safe for independent Meshy hull generation",
+      "style atlas has baked text labels and typo artifacts",
+      "the sheet invites another fused or mechanically wrong Meshy spend"
+    ],
+    "blocked_next_action": "No Meshy generation from these images.",
+    "required_next_artifact": "new part sheet must show isolated orthographic components with hull shell only and no text artifacts before any Meshy call"
+  }
+}

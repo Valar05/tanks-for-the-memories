@@ -1,6 +1,8 @@
 # Repo Doctrine
 
-This repository is not a content dump. It is a historical simulation substrate with a query layer.
+This repository is a corpus and design workbench, not the finished current game.
+
+It is a historical simulation substrate with a query layer. Rough source notes, discoveries, mechanics, and prototype probes belong here when they help define the future game shape.
 
 ## Canonical Principle
 
@@ -9,9 +11,22 @@ Model what people knew, when they knew it, and what they believed was true.
 Do not model only events.
 Model information flow, delay, distortion, trust, and consequence.
 
-## Current Game Identity
+## Intended Game Identity
 
-Tanks For The Memories is a tank commander operation game about managing uncertainty from inside a crewed machine.
+Tanks For The Memories is intended to become a roguelike history simulation about a tank commander in Normandy.
+
+The game has two linked layers:
+
+- outside missions: a multiple-choice, corpus-based campaign shaped by historical metadata, branch pressure, unit state, memory, and local outcomes
+- inside missions: small, dense, procedural, repeatable tank-command scenarios inspired by tank-sim control language and Republic Commando-style voice/order flow
+
+The first scope is D-Day plus a few days inland. The beach can matter later, but it is not the first slice. DD flotation screens, motorboat-like attachments, and beach-assault hardware are not first-slice targets.
+
+The current browser prototype is a commander-station probe, not the full product.
+
+## Commander Identity
+
+Tanks For The Memories is a tank commander operation game about managing uncertainty from inside and around a crewed machine.
 
 The player is not the driver.
 The player is not a free camera.
@@ -42,6 +57,8 @@ The player is a commander converting partial reports, crew observations, visual 
 - Morale is not flavor; it is operational throughput.
 - Command is attention management under uncertainty.
 - The Verne-Wells tone axis matters: discovery asks how it works; consequence asks what it costs.
+- Campaign choices seed mission conditions, and mission outcomes write back to campaign memory.
+- Mission repeatability should come from terrain occlusion, information state, crew condition, and historical metadata, not from generic arena randomization.
 
 ## Battlefield Awareness Camera Doctrine
 
@@ -170,7 +187,8 @@ Before adding a feature, ask:
 3. Does this clarify source, confidence, latency, or consequence?
 4. Does this support battlefield awareness as human observation?
 5. Does this strengthen after-action memory?
-6. Can it be tested in the current bocage slice?
+6. Does it support the outside-campaign / inside-mission structure?
+7. Can it be tested in the current inland Normandy slice?
 
 ## Rejected Drift
 
@@ -179,6 +197,8 @@ Treat these as anti-goals unless deliberately quarantined for experiment:
 - omniscient RTS camera
 - free-roaming scouting fantasy
 - driver-first tank action
+- beach-first scope creep
+- DD flotation or motorboat attachment work in the first slice
 - retro filter as identity
 - lore unconnected to playable pressure
 - UI that exposes exact truth without modeled source

@@ -1,0 +1,52 @@
+{
+  "name": "M32 Tank Recovery Vehicle",
+  "nation": "United States",
+  "role": "armored_recovery_vehicle",
+  "crew_count": 4,
+  "base_hull": "Sherman hull converted to recovery vehicle",
+  "base_turret": "Fixed recovery superstructure",
+  "production_period": "1943-1945",
+  "normandy_presence": "Yes; recovery and repair network for Allied armor.",
+  "field_modifications": [
+    "A-frame boom",
+    "winch",
+    "81mm mortar",
+    "tool and parts racks"
+  ],
+  "engine_family": [
+    "Sherman-family engine variant"
+  ],
+  "suspension_family": [
+    "VVSS or HVSS"
+  ],
+  "radio_family": [
+    "variant-dependent recovery fit"
+  ],
+  "optics_family": [
+    "recovery sightlines"
+  ],
+  "ammo_focus": [
+    "81mm smoke",
+    "machine guns"
+  ],
+  "crew_layout": [
+    "commander",
+    "driver",
+    "assistant driver/operator",
+    "boom/winch operator"
+  ],
+  "doctrine_tags": [
+    "recovery",
+    "rear-area throughput"
+  ],
+  "field_replaceable_components": [
+    "boom",
+    "winch",
+    "mortar",
+    "tow gear"
+  ],
+  "sources": [
+    "m32",
+    "m4_sherman"
+  ]
+}

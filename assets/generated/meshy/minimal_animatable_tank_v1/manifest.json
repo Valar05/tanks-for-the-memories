@@ -1,0 +1,123 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-03T23:37:58+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "enable_pbr": true,
+    "hd_texture": false,
+    "image_url": "<data-uri>",
+    "model_type": "lowpoly",
+    "should_remesh": true,
+    "should_texture": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "target_polycount": 12000,
+    "topology": "triangle"
+  },
+  "files": [
+    {
+      "bytes": 7484844,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/minimal_animatable_tank_v1/fbx.fbx"
+    },
+    {
+      "bytes": 9208244,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/minimal_animatable_tank_v1/glb.glb"
+    },
+    {
+      "approximateTriangles": 11432,
+      "classification": "hybrid_accept",
+      "kind": "glb_contract_report",
+      "missingSystems": [
+        "hull",
+        "turret",
+        "mantlet",
+        "barrel",
+        "left_tread_system",
+        "right_tread_system"
+      ],
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/minimal_animatable_tank_v1/glb_contract_report.json"
+    }
+  ],
+  "last_image_to_3d_task": {
+    "art_style": "",
+    "consumed_credits": 30,
+    "created_at": 1783121895098,
+    "expires_at": 1783381331025,
+    "finished_at": 1783122131025,
+    "id": "019f2a58-cf73-73d9-8291-33d4f605eddc",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783121895214,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "",
+    "texture_image_url": "",
+    "texture_prompt": "",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "image-to-3d"
+  },
+  "name": "minimal_animatable_tank_v1",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-03T23:37:58+00:00",
+      "model": "gpt-image-1",
+      "prompt": "Original hard-surface heavy tank for a phone Three.js game, non-toy armored vehicle, central armored hull, separate rotating turret, clear mantlet, elevating main barrel, left and right tread systems designed for texture-scrolled tread animation, visible sprocket/idler/wheel support where useful, heavy industrial armor plates, believable mechanical pivots, matte olive drab and dark steel, realistic field wear, panel seams, low mud and dust on running gear, readable game-ready silhouette, mobile low-poly PBR asset. Three-quarter side view, clean neutral background, no text, no logos.",
+      "provider": "openai",
+      "quality": "medium",
+      "size": "1024x1024",
+      "step": "concept_image"
+    },
+    {
+      "created_at": "2026-07-03T23:38:15+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_pbr": true,
+        "hd_texture": false,
+        "image_url": "<data-uri>",
+        "model_type": "lowpoly",
+        "should_remesh": true,
+        "should_texture": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "target_polycount": 12000,
+        "topology": "triangle"
+      },
+      "provider": "meshy",
+      "step": "image_to_3d",
+      "task_id": "019f2a58-cf73-73d9-8291-33d4f605eddc"
+    }
+  ],
+  "runtime_acceptance": "static_reference_only_until_separable_or_bindable_hull_turret_mantlet_barrel_and_treads_exist",
+  "source_image": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/minimal_animatable_tank_v1/minimal_animatable_tank_v1_concept.png",
+  "tasks": {
+    "image_to_3d": "019f2a58-cf73-73d9-8291-33d4f605eddc"
+  },
+  "updated_at": "2026-07-03T23:42:24+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}
