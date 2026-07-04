@@ -6,6 +6,8 @@ Local screenshots and local browser capture are not authoritative for the tank v
 
 Do not present a local browser, localhost URL, local screenshot, or stale capture as proof for this tank visual pass. When the user needs to see the tank, deploy the current release packet to cloud hosting, then run the project visual QA harness before waking the browser for attention. Browser wake is blocked unless the visual QA report contains fresh captured frames/contact sheet evidence and a sense-simulation read says the named visible relationships pass.
 
+Do not use `screencap`, local Android screenshots, local browser screenshots, or localhost inspection as a fallback after waking the user. On this project they are deprecated evidence paths. If cloud visual QA cannot inspect the artifact, report the cloud-review blocker and repair the cloud review surface; do not substitute local capture.
+
 The proof is not "24 instanced GPU tanks." The proof is 24 independently animated tanks rendered within the phone budget. Shared geometry is acceptable only as a rendering optimization; every visible tank must have its own smoothed animation state for drive phase, wheel spin, tread phase, turret horizontal traverse, and barrel vertical elevation.
 
 Do not accept source variables as visual proof. If the barrel still reads as an ugly black tube, or if vertical barrel motion is not visible around the turret front/socket, the build is red even when `barrelPitch` exists in code.
