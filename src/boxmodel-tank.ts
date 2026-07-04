@@ -10,7 +10,7 @@ if (!root) throw new Error('missing #boxmodel-tank-root');
 const query = new URLSearchParams(window.location.search);
 const isTuneMode = query.get('tune') === '1';
 const baseVisualBuild = 'tftm-authored-sherman-boxmodel-v1-7-20260704';
-const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v1-20260704';
+const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v2-20260704';
 const visualBuild = isTuneMode ? tunerVisualBuild : baseVisualBuild;
 
 type TuneMode = 'move' | 'rotate' | 'scale';
@@ -30,13 +30,10 @@ type BoxmodelTunePart = {
 };
 
 const tuneParts: BoxmodelTunePart[] = [
-  { id: 'left-front-lower-armor-wall', label: 'L lower wall', kind: 'box', position: [-1.36, -0.04, -1.72], rotationDeg: [0, -7, 0], scale: [0.34, 0.82, 0.18], visible: true, locked: false, material: 0x8f946b },
-  { id: 'right-front-lower-armor-wall', label: 'R lower wall', kind: 'box', position: [1.36, -0.04, -1.72], rotationDeg: [0, 7, 0], scale: [0.34, 0.82, 0.18], visible: false, locked: false, material: 0x8f946b },
-  { id: 'left-glacis-shoulder-cap', label: 'L shoulder cap', kind: 'box', position: [-1.05, 0.34, -1.92], rotationDeg: [-18, -6, 0], scale: [0.58, 0.18, 0.38], visible: false, locked: false, material: 0xa5a078 },
-  { id: 'right-glacis-shoulder-cap', label: 'R shoulder cap', kind: 'box', position: [1.05, 0.34, -1.92], rotationDeg: [-18, 6, 0], scale: [0.58, 0.18, 0.38], visible: false, locked: false, material: 0xa5a078 },
-  { id: 'left-tread-side-filler', label: 'L tread filler', kind: 'box', position: [-1.74, -0.22, -1.38], rotationDeg: [0, 0, 0], scale: [0.22, 0.52, 0.72], visible: false, locked: false, material: 0x72795a },
-  { id: 'right-tread-side-filler', label: 'R tread filler', kind: 'box', position: [1.74, -0.22, -1.38], rotationDeg: [0, 0, 0], scale: [0.22, 0.52, 0.72], visible: false, locked: false, material: 0x72795a },
-  { id: 'center-front-nose-blocker', label: 'Nose blocker', kind: 'box', position: [0, 0.02, -2.04], rotationDeg: [-10, 0, 0], scale: [1.15, 0.28, 0.22], visible: false, locked: false, material: 0x9b966d }
+  { id: 'front-hole-plug', label: 'Front plug', kind: 'box', position: [0, -0.05, -1.92], rotationDeg: [-8, 0, 0], scale: [1.28, 0.64, 0.26], visible: true, locked: false, material: 0x8c8b63 },
+  { id: 'back-hole-plug', label: 'Back plug', kind: 'box', position: [0, -0.05, 1.72], rotationDeg: [4, 0, 0], scale: [1.18, 0.58, 0.26], visible: true, locked: false, material: 0x8c8b63 },
+  { id: 'right-hole-plug', label: 'Right plug', kind: 'box', position: [1.64, -0.08, -0.12], rotationDeg: [0, 0, -3], scale: [0.26, 0.62, 1.12], visible: true, locked: false, material: 0x8c8b63 },
+  { id: 'left-hole-plug', label: 'Left plug', kind: 'box', position: [-1.64, -0.08, -0.12], rotationDeg: [0, 0, 3], scale: [0.26, 0.62, 1.12], visible: true, locked: false, material: 0x8c8b63 }
 ];
 
 const tuneShell = isTuneMode ? ' is-tuning' : '';
@@ -207,7 +204,7 @@ function applyPartTransform(part: BoxmodelTunePart) {
     THREE.MathUtils.degToRad(part.rotationDeg[2])
   );
   mesh.scale.set(part.scale[0], part.scale[1], part.scale[2]);
-  mesh.visible = part === selectedPart && part.visible;
+  mesh.visible = part.visible;
 }
 
 function renderTuneUi() {
@@ -402,8 +399,8 @@ function updateSelectedMaterial() {
   for (const part of tuneParts) {
     const material = part.mesh?.material;
     if (!(material instanceof THREE.MeshStandardMaterial)) continue;
-    material.emissive.set(part === selectedPart ? 0x3c2c05 : 0x000000);
-    material.opacity = part === selectedPart ? 0.96 : 0.78;
+    material.emissive.set(part === selectedPart ? 0x463809 : 0x000000);
+    material.opacity = part === selectedPart ? 0.98 : 0.68;
   }
 }
 

@@ -15,17 +15,14 @@ const css = read('src/single-tank.css');
 const releaseScript = read('scripts/build_cloud_visual_release.mjs');
 
 const requiredPartIds = [
-  'left-front-lower-armor-wall',
-  'right-front-lower-armor-wall',
-  'left-glacis-shoulder-cap',
-  'right-glacis-shoulder-cap',
-  'left-tread-side-filler',
-  'right-tread-side-filler',
-  'center-front-nose-blocker'
+  'front-hole-plug',
+  'back-hole-plug',
+  'right-hole-plug',
+  'left-hole-plug'
 ];
 
 if (!source.includes("query.get('tune') === '1'")) fail('boxmodel scene must expose ?tune=1 mode');
-if (!source.includes('tftm-authored-sherman-boxmodel-tuner-v1-20260704')) fail('tuner build token missing');
+if (!source.includes('tftm-authored-sherman-boxmodel-tuner-v2-20260704')) fail('tuner build token missing');
 if (!source.includes("type TuneMode = 'move' | 'rotate' | 'scale'")) fail('tuner must have move/rotate/scale modes');
 if (!source.includes("type TuneAxis = 'x' | 'y' | 'z' | 'uniform'")) fail('tuner must have gesture axis locks');
 if (!source.includes('serializeTuneParts')) fail('tuner must serialize editable part transforms');
@@ -33,7 +30,8 @@ if (!source.includes('localStorage.setItem')) fail('tuner export must persist br
 if (!source.includes('window.history.replaceState')) fail('tuner export must create recoverable URL/hash state');
 if (!source.includes('pointermove')) fail('tuner must use pointer gesture movement');
 if (!source.includes('raycaster.intersectObjects')) fail('tuner must select parts by touch/raycast');
-if (!source.includes('mesh.visible = part === selectedPart && part.visible')) fail('tuner must render only the selected visible part, not every seeded box');
+if (!source.includes('mesh.visible = part.visible')) fail('placed plugs must remain visible while one plug is selected for editing');
+if (!source.includes('0x8c8b63')) fail('plug material must default to hull-compatible armor color');
 if (!source.includes('aria-pressed')) fail('parts list must expose one active selected row');
 for (const id of requiredPartIds) {
   if (!source.includes(id)) fail('missing seeded tune part ' + id);
