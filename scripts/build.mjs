@@ -10,6 +10,7 @@ const srcDir = path.join(root, 'src');
 const distDir = path.join(root, 'dist');
 const assetsDir = path.join(distDir, 'assets');
 const publicDir = path.join(root, 'public');
+const assetVersion = process.env.TFTM_ASSET_VERSION || String(Date.now());
 
 rmSync(distDir, { recursive: true, force: true });
 mkdirSync(assetsDir, { recursive: true });
@@ -86,8 +87,8 @@ async function buildEntry(sourceName, outputName) {
 
 function writeBundledHtml(sourceName, outputName, bundleName) {
   const html = readFileSync(path.join(root, sourceName), 'utf8')
-    .replace('</head>', `    <link rel="stylesheet" href="./assets/${bundleName}.css" />\n  </head>`)
-    .replace(/<script type="module" src="\/src\/[^"]+"><\/script>/, `<script type="module" src="./assets/${bundleName}.js"></script>`);
+    .replace('</head>', `    <link rel="stylesheet" href="./assets/${bundleName}.css?v=${assetVersion}" />\n  </head>`)
+    .replace(/<script type="module" src="\/src\/[^"]+"><\/script>/, `<script type="module" src="./assets/${bundleName}.js?v=${assetVersion}"></script>`);
   writeFileSync(path.join(distDir, outputName), html);
 }
 

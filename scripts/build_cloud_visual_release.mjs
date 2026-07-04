@@ -69,7 +69,7 @@ const releaseManifest = {
   ],
   false_change_penalty: {
     status: 'active',
-    reason: 'Fresh cloud screenshots showed no material visual delta after source-level tread/barrel changes.',
+    reason: 'Fresh cloud screenshots showed no material visual delta after source-level tread/barrel changes. Root cause includes stable bundled JS/CSS asset URLs; page-level cacheBust alone did not force the phone browser to load changed render code.',
     required_next_evidence: 'Next tank visual pass must show a fresh cloud screenshot or time-separated cloud capture with visible delta for tread volume, barrel material, and barrel verticality.'
   },
   sense_simulation_questions: [

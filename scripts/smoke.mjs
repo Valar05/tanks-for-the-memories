@@ -238,6 +238,12 @@ if (!String(kitManifest.animation_proof?.barrel_quality_gate || '').includes('re
 }
 
 const main = readFileSync('src/main.ts', 'utf8');
+const buildScript = readFileSync('scripts/build.mjs', 'utf8');
+for (const buildMarker of ['assetVersion', 'TFTM_ASSET_VERSION', '.css?v=${assetVersion}', '.js?v=${assetVersion}']) {
+  if (!buildScript.includes(buildMarker)) {
+    failures.push('build script must cache-bust generated JS/CSS asset URLs: ' + buildMarker);
+  }
+}
 const requiredSnippets = [
   'Inside a tank',
   'Sherman commander station',

@@ -28,6 +28,7 @@ For the current red build, the named false-change relationships are:
 - barrel still reads as an ugly black tube
 - barrel verticality is not perceptible
 - proof UI text claims more than the visible artifact proves
+- page-level cache bust is insufficient if bundled JS/CSS asset URLs are stable
 
 ## Target Artifact
 
