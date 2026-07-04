@@ -4,3 +4,6 @@ dist/
 vite.config.d.ts
 vite.config.js
 generated/cloud-visual-truth/tftm-release/.firebase/
+generated/blender-visibility/
+__pycache__/
+*.pyc
