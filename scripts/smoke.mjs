@@ -55,6 +55,10 @@ const requiredFiles = [
   'assets/generated/meshy/sherman_part_meshy_kit_v1/barrel_only.fbx',
   'assets/generated/meshy/sherman_part_meshy_kit_v1/barrel_only_glb_contract_report.json',
   'assets/generated/meshy/sherman_part_meshy_kit_v1/barrel_only_meshy_manifest.json',
+  'assets/generated/meshy/sherman_mantlet_socket_v1/sherman_mantlet_socket_v1_concept.png',
+  'assets/generated/meshy/sherman_mantlet_socket_v1/glb.glb',
+  'assets/generated/meshy/sherman_mantlet_socket_v1/fbx.fbx',
+  'assets/generated/meshy/sherman_mantlet_socket_v1/manifest.json',
   'assets/generated/meshy/sherman_barrel_only_v1/assembly_manifest.json',
   'assets/generated/meshy/sherman_barrel_only_v1/source_barrel.png',
   'scripts/inspect_glb_contract.mjs',
@@ -103,7 +107,7 @@ for (const dep of deps) {
 
 const assaySource = readFileSync('src/model-assay.ts', 'utf8');
 const cloudVisualDoctrine = readFileSync('docs/doctrine/cloud-visual-truth.md', 'utf8');
-for (const marker of ['sherman_part_meshy_kit_v1', 'RED BUILD / 24-tank animated runtime proof', 'Hero proof plus 24 independently animated tanks', 'drive-stage', 'spawnTarget = 24', 'InstancedMesh', 'InstancedBufferAttribute', 'instanceTreadPhase', 'onBeforeCompile', 'MeshStandardMaterial', 'roughnessMap', 'metalnessMap', 'normalMap', 'makeTreadMaterialSet', 'makeInstancedTreadMaterialSet', 'createTreadGeometry', 'TankAnimationState', 'seedTankState', 'smoothRandomCycle', 'tankStates', 'GLTFLoader', 'WebGLRenderer', 'Hull Upper', 'Turret Shell', 'Barrel Only', 'Mobile Gear / Wheel']) {
+for (const marker of ['sherman_part_meshy_kit_v1', 'sherman_mantlet_socket_v1', 'RED BUILD / 24-tank animated runtime proof', 'Hero proof plus 24 independently animated tanks', 'drive-stage', 'spawnTarget = 24', 'InstancedMesh', 'InstancedBufferAttribute', 'instanceTreadPhase', 'onBeforeCompile', 'MeshStandardMaterial', 'roughnessMap', 'metalnessMap', 'normalMap', 'makeTreadMaterialSet', 'makeInstancedTreadMaterialSet', 'createTreadGeometry', 'TankAnimationState', 'seedTankState', 'smoothRandomCycle', 'tankStates', 'GLTFLoader', 'WebGLRenderer', 'Hull Upper', 'Turret Shell', 'Mantlet Socket', 'Barrel Only', 'Mobile Gear / Wheel', 'loadMantletSocketRuntimePart', 'composeGunSocketMatrix', 'Meshy mantlet socket owns the gun pivot']) {
   if (!assaySource.includes(marker)) {
     failures.push('model assay missing Meshy kit viewer marker ' + marker);
   }
@@ -119,7 +123,7 @@ for (const forbidden of ['BoxGeometry', 'CylinderGeometry', 'MeshBasicMaterial',
     failures.push('model assay must not render primitive/mesh seed in Meshy kit gate: ' + forbidden);
   }
 }
-for (const motionMarker of ['hero.position.x', 'wheel.rotation.z', 'map.offset.x', 'heroTurretPivot.rotation.y', 'heroBarrelPivot.rotation.z', 'setMatrixAt', 'spawnTarget', 'state.driveSpeed', 'state.drivePhase', 'state.wheelRate', 'state.wheelPhase', 'state.treadRate', 'state.treadPhase', 'state.turretRate', 'state.turretPhase', 'state.barrelRate', 'state.barrelPhase', 'updateTreadPhase(leftTreadInstances', 'updateTreadPhase(rightTreadInstances', 'composeBarrelMatrix(barrelInstances']) {
+for (const motionMarker of ['hero.position.x', 'wheel.rotation.z', 'map.offset.x', 'heroTurretPivot.rotation.y', 'heroGunPivot.rotation.z', 'setMatrixAt', 'spawnTarget', 'state.driveSpeed', 'state.drivePhase', 'state.wheelRate', 'state.wheelPhase', 'state.treadRate', 'state.treadPhase', 'state.turretRate', 'state.turretPhase', 'state.barrelRate', 'state.barrelPhase', 'updateTreadPhase(leftTreadInstances', 'updateTreadPhase(rightTreadInstances', 'composeGunSocketMatrix(mantletSocketInstances', 'composeBarrelMatrix(barrelInstances']) {
   if (!assaySource.includes(motionMarker)) {
     failures.push('animated 24-tank proof missing motion marker ' + motionMarker);
   }
@@ -139,7 +143,7 @@ for (const forbiddenTreadProof of ['addRaisedShoeGeometry', 'curved returns, rai
     failures.push('authored tread belt must not use static raised-link geometry as animation proof: ' + forbiddenTreadProof);
   }
 }
-for (const barrelQualityMarker of ['bakeBarrelGeometryWithRearPivot', 'makeBarrelMaterial', 'barrelSocket', 'composeBarrelMatrix', 'olive gunmetal PBR']) {
+for (const barrelQualityMarker of ['bakeBarrelGeometryWithRearPivot', 'makeBarrelMaterial', 'gunPivotSocket', 'barrelRearOffset', 'composeBarrelMatrix', 'olive gunmetal PBR']) {
   if (!assaySource.includes(barrelQualityMarker)) {
     failures.push('barrel proof missing quality marker ' + barrelQualityMarker);
   }

@@ -11,7 +11,7 @@
     "awareness-smoke": "node scripts/awareness-smoke.mjs",
     "bootstrap": "sh scripts/bootstrap.sh",
     "cloud-visual-release": "node scripts/build_cloud_visual_release.mjs",
-    "visual-qa:model-assay": "node ../tools/visual_qa.mjs --project tanks-for-the-memories --url /tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay.html --frames 8 --interval-ms 500 --timeout-ms 45000 --expected-build tftm-model-assay-sherman-trapezoid-20260704 --launcher am --persist-to tanks-for-the-memories/generated/visual_qa/model-assay-latest"
+    "visual-qa:model-assay": "node ../tools/visual_qa.mjs --project tanks-for-the-memories --url /tanks-for-the-memories/generated/cloud-visual-truth/tftm-release/dist/model-assay.html --frames 8 --interval-ms 500 --timeout-ms 45000 --expected-build tftm-model-assay-socketed-trapezoid-20260704a --launcher termux-open-url --persist-to tanks-for-the-memories/generated/visual_qa/model-assay-latest"
   },
   "dependencies": {
     "three": "^0.166.1"

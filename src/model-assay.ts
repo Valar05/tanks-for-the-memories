@@ -58,14 +58,16 @@ type TankAnimationState = {
 const spawnTarget = 24;
 const wheelsPerTank = 10;
 const treadTrianglesPerTank = 1400;
-const visualQaBuild = 'tftm-model-assay-sherman-trapezoid-20260704';
-const barrelSocket = new THREE.Vector3(0.58, 0.82, 0);
-const heroBarrelSocket = new THREE.Vector3(0.53, 0.08, 0);
+const visualQaBuild = 'tftm-model-assay-socketed-trapezoid-20260704a';
+const gunPivotSocket = new THREE.Vector3(0.43, 0.83, 0);
+const heroGunPivotSocket = new THREE.Vector3(0.38, 0.09, 0);
+const barrelRearOffset = new THREE.Vector3(-0.08, 0, 0);
 const matrixScratch = {
   root: new THREE.Matrix4(),
   yaw: new THREE.Matrix4(),
   socket: new THREE.Matrix4(),
   pitch: new THREE.Matrix4(),
+  barrelRear: new THREE.Matrix4(),
   scale: new THREE.Matrix4(),
   composed: new THREE.Matrix4()
 };
@@ -75,6 +77,7 @@ if (!root) throw new Error('missing #assay-root');
 const compositionSlots = [
   { id: 'hull', label: 'Hull Upper' },
   { id: 'turret', label: 'Turret Shell' },
+  { id: 'mantlet_socket', label: 'Mantlet Socket' },
   { id: 'barrel_only', label: 'Barrel Only' },
   { id: 'gear_mobile', label: 'Mobile Gear / Wheel' }
 ];
@@ -170,20 +173,20 @@ function makeMap(kind: 'albedo' | 'roughness' | 'metalness' | 'normal') {
   textureCanvas.height = 96;
   const ctx = textureCanvas.getContext('2d')!;
   if (kind === 'albedo') {
-    ctx.fillStyle = '#1d201d';
+    ctx.fillStyle = '#292922';
     ctx.fillRect(0, 0, 512, 96);
-    ctx.fillStyle = '#2c2d25';
+    ctx.fillStyle = '#3c392e';
     ctx.fillRect(0, 6, 512, 8);
     ctx.fillRect(0, 82, 512, 8);
-    ctx.fillStyle = '#131511';
+    ctx.fillStyle = '#1c1d18';
     ctx.fillRect(0, 0, 512, 5);
     ctx.fillRect(0, 91, 512, 5);
     for (let x = 0; x < 512; x += 24) {
-      ctx.fillStyle = 'rgba(79, 76, 60, 0.42)';
+      ctx.fillStyle = 'rgba(101, 94, 72, 0.46)';
       ctx.fillRect(x + 2, 15, 17, 66);
       ctx.fillStyle = 'rgba(158, 149, 112, 0.16)';
       ctx.fillRect(x + 4, 18, 2, 57);
-      ctx.fillStyle = 'rgba(15, 16, 13, 0.48)';
+      ctx.fillStyle = 'rgba(24, 23, 19, 0.48)';
       ctx.fillRect(x + 20, 11, 3, 74);
       ctx.fillStyle = 'rgba(129, 116, 82, 0.18)';
       ctx.fillRect(x + 7, 61, 9, 12);
@@ -239,8 +242,8 @@ function makeTreadMaterialSet() {
     roughnessMap,
     metalnessMap,
     normalMap,
-    color: 0x80795f,
-    roughness: 0.88,
+    color: 0x9b9271,
+    roughness: 0.86,
     metalness: 0.2
   });
   return { material, maps: [albedo, roughnessMap, metalnessMap, normalMap] };
@@ -268,8 +271,8 @@ function createTreadGeometry() {
   const positions: number[] = [];
   const uvs: number[] = [];
   const indices: number[] = [];
-  const outerSide = 0.13;
-  const innerSide = -0.13;
+  const outerSide = 0.18;
+  const innerSide = -0.18;
   const outerBeltSurface = 'outerBeltSurface';
   const innerBeltSurface = 'innerBeltSurface';
   const outerSidewall = 'outerSidewall';
@@ -310,20 +313,24 @@ function createTreadGeometry() {
   };
 
   const outerProfile: ProfilePoint[] = [
-    { x: -1.48, y: 0.1, u: 0 },
-    { x: 1.16, y: 0.1, u: 4.2 },
-    { x: 1.53, y: -0.08, u: 4.9 },
-    { x: 1.28, y: -0.36, u: 5.65 },
-    { x: -1.3, y: -0.36, u: 9.75 },
-    { x: -1.53, y: -0.11, u: 10.45 }
+    { x: -1.58, y: 0.12, u: 0 },
+    { x: 1.18, y: 0.12, u: 4.15 },
+    { x: 1.55, y: -0.03, u: 4.75 },
+    { x: 1.5, y: -0.24, u: 5.25 },
+    { x: 1.27, y: -0.41, u: 5.75 },
+    { x: -1.34, y: -0.41, u: 9.75 },
+    { x: -1.55, y: -0.25, u: 10.2 },
+    { x: -1.62, y: -0.05, u: 10.65 }
   ];
   const innerProfile: ProfilePoint[] = [
-    { x: -1.3, y: 0.035, u: 0 },
-    { x: 1.04, y: 0.035, u: 4.2 },
-    { x: 1.35, y: -0.08, u: 4.9 },
-    { x: 1.13, y: -0.27, u: 5.65 },
-    { x: -1.16, y: -0.27, u: 9.75 },
-    { x: -1.35, y: -0.105, u: 10.45 }
+    { x: -1.34, y: 0.025, u: 0 },
+    { x: 1.02, y: 0.025, u: 4.15 },
+    { x: 1.33, y: -0.055, u: 4.75 },
+    { x: 1.3, y: -0.19, u: 5.25 },
+    { x: 1.12, y: -0.285, u: 5.75 },
+    { x: -1.16, y: -0.285, u: 9.75 },
+    { x: -1.35, y: -0.19, u: 10.2 },
+    { x: -1.39, y: -0.06, u: 10.65 }
   ];
 
   function addVertex(x: number, y: number, z: number, u: number, v: number) {
@@ -374,10 +381,10 @@ function createTreadGeometry() {
     );
   }
 
-  addOuterBand(-1.18, 0.07, 1.02, 0.07, 0.016, 0.5, 4.05);
-  addOuterBand(-1.16, -0.325, 1.08, -0.325, 0.018, 6.0, 9.35);
-  addOuterBand(1.23, -0.285, 1.43, -0.09, 0.015, 5.35, 5.75);
-  addOuterBand(-1.42, -0.12, -1.22, -0.305, 0.015, 9.65, 10.15);
+  addOuterBand(-1.32, 0.085, 1.02, 0.085, 0.022, 0.45, 4.05);
+  addOuterBand(-1.18, -0.37, 1.1, -0.37, 0.024, 6.05, 9.35);
+  addOuterBand(1.27, -0.33, 1.45, -0.08, 0.02, 5.35, 5.85);
+  addOuterBand(-1.5, -0.08, -1.28, -0.34, 0.02, 9.65, 10.25);
 
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
   geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
@@ -619,6 +626,19 @@ function loadBarrelRuntimePart(loader: GLTFLoader, url: string, targetMaxAxis: n
   });
 }
 
+function loadMantletSocketRuntimePart(loader: GLTFLoader, url: string, targetMaxAxis: number) {
+  return new Promise<RuntimePart>((resolve, reject) => {
+    loader.load(url, (gltf) => {
+      const object = normalizeObject(gltf.scene, targetMaxAxis);
+      object.rotation.y = Math.PI * 0.5;
+      const baked = bakeGeometryFromObject(object);
+      const mesh = findFirstMesh(object);
+      const primitive = mesh.geometry.getIndex()?.count || mesh.geometry.getAttribute('position').count;
+      resolve({ object, geometry: baked.geometry, material: baked.material, triangles: Math.floor(primitive / 3) });
+    }, undefined, reject);
+  });
+}
+
 function setInstance(mesh: THREE.InstancedMesh, index: number, x: number, y: number, z: number, yaw: number, pitch: number, roll: number, scale: number) {
   const dummy = new THREE.Object3D();
   dummy.position.set(x, y, z);
@@ -628,10 +648,10 @@ function setInstance(mesh: THREE.InstancedMesh, index: number, x: number, y: num
   mesh.setMatrixAt(index, dummy.matrix);
 }
 
-function composeBarrelMatrix(mesh: THREE.InstancedMesh, index: number, x: number, z: number, yaw: number, barrelPitch: number, scale: number) {
+function composeGunSocketMatrix(mesh: THREE.InstancedMesh, index: number, x: number, z: number, yaw: number, barrelPitch: number, scale: number) {
   matrixScratch.root.makeTranslation(x, 0, z);
   matrixScratch.yaw.makeRotationY(yaw);
-  matrixScratch.socket.makeTranslation(barrelSocket.x, barrelSocket.y, barrelSocket.z);
+  matrixScratch.socket.makeTranslation(gunPivotSocket.x, gunPivotSocket.y, gunPivotSocket.z);
   matrixScratch.pitch.makeRotationZ(barrelPitch);
   matrixScratch.scale.makeScale(scale, scale, scale);
   matrixScratch.composed
@@ -639,6 +659,23 @@ function composeBarrelMatrix(mesh: THREE.InstancedMesh, index: number, x: number
     .multiply(matrixScratch.yaw)
     .multiply(matrixScratch.socket)
     .multiply(matrixScratch.pitch)
+    .multiply(matrixScratch.scale);
+  mesh.setMatrixAt(index, matrixScratch.composed);
+}
+
+function composeBarrelMatrix(mesh: THREE.InstancedMesh, index: number, x: number, z: number, yaw: number, barrelPitch: number, scale: number) {
+  matrixScratch.root.makeTranslation(x, 0, z);
+  matrixScratch.yaw.makeRotationY(yaw);
+  matrixScratch.socket.makeTranslation(gunPivotSocket.x, gunPivotSocket.y, gunPivotSocket.z);
+  matrixScratch.pitch.makeRotationZ(barrelPitch);
+  matrixScratch.barrelRear.makeTranslation(barrelRearOffset.x, barrelRearOffset.y, barrelRearOffset.z);
+  matrixScratch.scale.makeScale(scale, scale, scale);
+  matrixScratch.composed
+    .copy(matrixScratch.root)
+    .multiply(matrixScratch.yaw)
+    .multiply(matrixScratch.socket)
+    .multiply(matrixScratch.pitch)
+    .multiply(matrixScratch.barrelRear)
     .multiply(matrixScratch.scale);
   mesh.setMatrixAt(index, matrixScratch.composed);
 }
@@ -697,14 +734,15 @@ function updateTreadPhase(mesh: TreadInstancedMesh, index: number, value: number
 async function boot() {
   const manifest = await fetch('./model-assay/sherman_part_meshy_kit_v1/assembly_manifest.json', { cache: 'no-store' }).then((r) => r.json() as Promise<KitManifest>);
   const loader = new GLTFLoader();
-  const [hull, turret, barrel, gear] = await Promise.all([
+  const [hull, turret, mantletSocket, barrel, gear] = await Promise.all([
     loadRuntimePart(loader, glbSrc(manifest.parts.hull.glb), 2.9),
     loadRuntimePart(loader, glbSrc(manifest.parts.turret.glb), 1.25),
-    loadBarrelRuntimePart(loader, glbSrc(manifest.parts.barrel_only.glb), 1.18),
+    loadMantletSocketRuntimePart(loader, './model-assay/sherman_mantlet_socket_v1/glb.glb', 0.58),
+    loadBarrelRuntimePart(loader, glbSrc(manifest.parts.barrel_only.glb), 1.25),
     loadRuntimePart(loader, glbSrc(manifest.parts.gear_mobile.glb), 0.34, alignWheelFaceToTankSide)
   ]);
 
-  const heroTriangles = manifest.parts.hull.approximate_triangles + manifest.parts.turret.approximate_triangles + manifest.parts.barrel_only.approximate_triangles + wheelsPerTank * manifest.parts.gear_mobile.approximate_triangles + treadTrianglesPerTank;
+  const heroTriangles = manifest.parts.hull.approximate_triangles + manifest.parts.turret.approximate_triangles + mantletSocket.triangles + manifest.parts.barrel_only.approximate_triangles + wheelsPerTank * manifest.parts.gear_mobile.approximate_triangles + treadTrianglesPerTank;
   const spawnTriangles = heroTriangles * spawnTarget;
   gateEl.textContent = manifest.gate_status;
   heroBudgetEl.textContent = String(heroTriangles) + ' tris';
@@ -714,6 +752,7 @@ async function boot() {
   contractEl.innerHTML = [
     'Hero tank validates visible part relationship up close',
     'Spawn proof renders exactly 24 independently animated tanks',
+    'Meshy mantlet socket owns the gun pivot between turret and barrel',
     'Treads use MeshStandardMaterial with albedo, roughness, metalness, and normal maps',
     'Authored tread belt uses Sherman trapezoid silhouette, closed side/back volume, guide bands, and animated PBR material lanes',
     'Spawn treads use InstancedBufferAttribute tread phase instead of a shared material-wide texture offset',
@@ -769,11 +808,14 @@ async function boot() {
   hero.add(heroTurretPivot);
   const heroTurret = turret.object.clone(true);
   heroTurretPivot.add(heroTurret);
-  const heroBarrelPivot = new THREE.Group();
-  heroBarrelPivot.position.copy(heroBarrelSocket);
-  heroTurretPivot.add(heroBarrelPivot);
+  const heroGunPivot = new THREE.Group();
+  heroGunPivot.position.copy(heroGunPivotSocket);
+  heroTurretPivot.add(heroGunPivot);
+  const heroMantletSocket = new THREE.Mesh(mantletSocket.geometry, mantletSocket.material);
+  heroGunPivot.add(heroMantletSocket);
   const heroBarrel = new THREE.Mesh(barrel.geometry, barrel.material);
-  heroBarrelPivot.add(heroBarrel);
+  heroBarrel.position.copy(barrelRearOffset);
+  heroGunPivot.add(heroBarrel);
   const heroLeftTread = new THREE.Mesh(createTreadGeometry(), treadHeroLeft.material);
   heroLeftTread.position.z = -0.72;
   const heroRightTread = new THREE.Mesh(createTreadGeometry(), treadHeroRight.material);
@@ -791,11 +833,12 @@ async function boot() {
 
   const hullInstances = makeInstancedMesh(hull, spawnTarget);
   const turretInstances = makeInstancedMesh(turret, spawnTarget);
+  const mantletSocketInstances = makeInstancedMesh(mantletSocket, spawnTarget);
   const barrelInstances = makeInstancedMesh(barrel, spawnTarget);
   const gearInstances = makeInstancedMesh(gear, spawnTarget * wheelsPerTank);
   const leftTreadInstances = makeTreadInstancedMesh(treadSpawnLeft, spawnTarget);
   const rightTreadInstances = makeTreadInstancedMesh(treadSpawnRight, spawnTarget);
-  scene.add(hullInstances, turretInstances, barrelInstances, gearInstances, leftTreadInstances, rightTreadInstances);
+  scene.add(hullInstances, turretInstances, mantletSocketInstances, barrelInstances, gearInstances, leftTreadInstances, rightTreadInstances);
 
   const tankStates: TankAnimationState[] = [];
   for (let i = 0; i < spawnTarget; i += 1) {
@@ -826,7 +869,7 @@ async function boot() {
     hero.position.x = -5.1 + ((t * 0.48 + 1.6) % 3.2);
     heroWheels.forEach((wheel) => { wheel.rotation.z -= dt * 5.8; });
     heroTurretPivot.rotation.y = Math.sin(t * 0.65) * 0.14;
-    heroBarrelPivot.rotation.z = Math.sin(t * 1.05) * 0.08;
+    heroGunPivot.rotation.z = Math.sin(t * 1.05) * 0.08;
 
     let gearIndex = 0;
     for (let i = 0; i < spawnTarget; i += 1) {
@@ -840,6 +883,7 @@ async function boot() {
       const barrelPitch = smoothRandomCycle(t, state.barrelRate, state.barrelPhase, state.barrelAmplitude);
       setInstance(hullInstances, i, x, 0.22, z, yaw, 0, 0, 0.72);
       setInstance(turretInstances, i, x + 0.04, 0.76, z, yaw + turretYaw, 0, 0, 0.72);
+      composeGunSocketMatrix(mantletSocketInstances, i, x, z, yaw + turretYaw, barrelPitch, 0.72);
       composeBarrelMatrix(barrelInstances, i, x, z, yaw + turretYaw, barrelPitch, 0.72);
       setInstance(leftTreadInstances, i, x, 0, z - 0.52, yaw, 0, 0, 0.72);
       setInstance(rightTreadInstances, i, x, 0, z + 0.52, yaw, 0, 0, 0.72);
@@ -854,6 +898,7 @@ async function boot() {
     }
     hullInstances.instanceMatrix.needsUpdate = true;
     turretInstances.instanceMatrix.needsUpdate = true;
+    mantletSocketInstances.instanceMatrix.needsUpdate = true;
     barrelInstances.instanceMatrix.needsUpdate = true;
     gearInstances.instanceMatrix.needsUpdate = true;
     leftTreadInstances.instanceMatrix.needsUpdate = true;
@@ -869,8 +914,8 @@ async function boot() {
       visualQaRendered = true;
       postVisualQaBeacon('rendered', {
         target: spawnTarget,
-        heroBarrelSocketX: heroBarrelSocket.x,
-        heroBarrelSocketY: heroBarrelSocket.y
+        heroGunPivotSocketX: heroGunPivotSocket.x,
+        heroGunPivotSocketY: heroGunPivotSocket.y
       });
     }
     if (qa.capture && visualQaFrame < qa.frames && now - visualQaLastCapture >= qa.intervalMs) {

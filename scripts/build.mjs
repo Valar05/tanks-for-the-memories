@@ -123,6 +123,10 @@ copyRecursive(
   path.join(distDir, 'model-assay', 'sherman_part_meshy_kit_v1')
 );
 copyRecursive(
+  path.join(root, 'assets', 'generated', 'meshy', 'sherman_mantlet_socket_v1'),
+  path.join(distDir, 'model-assay', 'sherman_mantlet_socket_v1')
+);
+copyRecursive(
   path.join(root, 'assets', 'authored'),
   path.join(distDir, 'authored')
 );
