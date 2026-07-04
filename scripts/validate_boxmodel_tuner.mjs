@@ -33,6 +33,8 @@ if (!source.includes('localStorage.setItem')) fail('tuner export must persist br
 if (!source.includes('window.history.replaceState')) fail('tuner export must create recoverable URL/hash state');
 if (!source.includes('pointermove')) fail('tuner must use pointer gesture movement');
 if (!source.includes('raycaster.intersectObjects')) fail('tuner must select parts by touch/raycast');
+if (!source.includes('mesh.visible = part === selectedPart && part.visible')) fail('tuner must render only the selected visible part, not every seeded box');
+if (!source.includes('aria-pressed')) fail('parts list must expose one active selected row');
 for (const id of requiredPartIds) {
   if (!source.includes(id)) fail('missing seeded tune part ' + id);
 }

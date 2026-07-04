@@ -31,12 +31,12 @@ type BoxmodelTunePart = {
 
 const tuneParts: BoxmodelTunePart[] = [
   { id: 'left-front-lower-armor-wall', label: 'L lower wall', kind: 'box', position: [-1.36, -0.04, -1.72], rotationDeg: [0, -7, 0], scale: [0.34, 0.82, 0.18], visible: true, locked: false, material: 0x8f946b },
-  { id: 'right-front-lower-armor-wall', label: 'R lower wall', kind: 'box', position: [1.36, -0.04, -1.72], rotationDeg: [0, 7, 0], scale: [0.34, 0.82, 0.18], visible: true, locked: false, material: 0x8f946b },
-  { id: 'left-glacis-shoulder-cap', label: 'L shoulder cap', kind: 'box', position: [-1.05, 0.34, -1.92], rotationDeg: [-18, -6, 0], scale: [0.58, 0.18, 0.38], visible: true, locked: false, material: 0xa5a078 },
-  { id: 'right-glacis-shoulder-cap', label: 'R shoulder cap', kind: 'box', position: [1.05, 0.34, -1.92], rotationDeg: [-18, 6, 0], scale: [0.58, 0.18, 0.38], visible: true, locked: false, material: 0xa5a078 },
-  { id: 'left-tread-side-filler', label: 'L tread filler', kind: 'box', position: [-1.74, -0.22, -1.38], rotationDeg: [0, 0, 0], scale: [0.22, 0.52, 0.72], visible: true, locked: false, material: 0x72795a },
-  { id: 'right-tread-side-filler', label: 'R tread filler', kind: 'box', position: [1.74, -0.22, -1.38], rotationDeg: [0, 0, 0], scale: [0.22, 0.52, 0.72], visible: true, locked: false, material: 0x72795a },
-  { id: 'center-front-nose-blocker', label: 'Nose blocker', kind: 'box', position: [0, 0.02, -2.04], rotationDeg: [-10, 0, 0], scale: [1.15, 0.28, 0.22], visible: true, locked: false, material: 0x9b966d }
+  { id: 'right-front-lower-armor-wall', label: 'R lower wall', kind: 'box', position: [1.36, -0.04, -1.72], rotationDeg: [0, 7, 0], scale: [0.34, 0.82, 0.18], visible: false, locked: false, material: 0x8f946b },
+  { id: 'left-glacis-shoulder-cap', label: 'L shoulder cap', kind: 'box', position: [-1.05, 0.34, -1.92], rotationDeg: [-18, -6, 0], scale: [0.58, 0.18, 0.38], visible: false, locked: false, material: 0xa5a078 },
+  { id: 'right-glacis-shoulder-cap', label: 'R shoulder cap', kind: 'box', position: [1.05, 0.34, -1.92], rotationDeg: [-18, 6, 0], scale: [0.58, 0.18, 0.38], visible: false, locked: false, material: 0xa5a078 },
+  { id: 'left-tread-side-filler', label: 'L tread filler', kind: 'box', position: [-1.74, -0.22, -1.38], rotationDeg: [0, 0, 0], scale: [0.22, 0.52, 0.72], visible: false, locked: false, material: 0x72795a },
+  { id: 'right-tread-side-filler', label: 'R tread filler', kind: 'box', position: [1.74, -0.22, -1.38], rotationDeg: [0, 0, 0], scale: [0.22, 0.52, 0.72], visible: false, locked: false, material: 0x72795a },
+  { id: 'center-front-nose-blocker', label: 'Nose blocker', kind: 'box', position: [0, 0.02, -2.04], rotationDeg: [-10, 0, 0], scale: [1.15, 0.28, 0.22], visible: false, locked: false, material: 0x9b966d }
 ];
 
 const tuneShell = isTuneMode ? ' is-tuning' : '';
@@ -90,6 +90,7 @@ const cameraState = { yaw: -0.72, pitch: 0.36, distance: 7.4 };
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 let selectedPart: BoxmodelTunePart | null = isTuneMode ? tuneParts[0] : null;
+if (selectedPart) selectedPart.visible = true;
 let currentMode: TuneMode = 'move';
 let currentAxis: TuneAxis = 'x';
 let dragPointer: number | null = null;
@@ -206,7 +207,7 @@ function applyPartTransform(part: BoxmodelTunePart) {
     THREE.MathUtils.degToRad(part.rotationDeg[2])
   );
   mesh.scale.set(part.scale[0], part.scale[1], part.scale[2]);
-  mesh.visible = part.visible;
+  mesh.visible = part === selectedPart && part.visible;
 }
 
 function renderTuneUi() {
@@ -217,6 +218,7 @@ function renderTuneUi() {
     button.type = 'button';
     button.dataset.partId = part.id;
     button.className = 'tune-part-row' + (part === selectedPart ? ' is-selected' : '') + (!part.visible ? ' is-hidden' : '');
+    button.setAttribute('aria-pressed', String(part === selectedPart));
     button.textContent = part.label;
     button.addEventListener('click', () => selectPart(part));
     partsListEl.appendChild(button);
@@ -256,7 +258,7 @@ function bindTuneUi() {
     if (!selectedPart) return;
     pushUndo();
     selectedPart.visible = !selectedPart.visible;
-    applyPartTransform(selectedPart);
+    for (const part of tuneParts) applyPartTransform(part);
     renderTuneUi();
     applyTuneToUrl();
   });
@@ -389,11 +391,14 @@ function getPointerDistance() {
 
 function selectPart(part: BoxmodelTunePart) {
   selectedPart = part;
+  if (!part.visible) part.visible = true;
+  for (const candidate of tuneParts) applyPartTransform(candidate);
   renderTuneUi();
   postVisualBeacon('select-part', { part: part.id });
 }
 
 function updateSelectedMaterial() {
+  root.querySelector<HTMLButtonElement>('[data-toggle-visible]')!.textContent = selectedPart?.visible ? 'Hide' : 'Show';
   for (const part of tuneParts) {
     const material = part.mesh?.material;
     if (!(material instanceof THREE.MeshStandardMaterial)) continue;
