@@ -58,6 +58,7 @@ type TankAnimationState = {
 const spawnTarget = 24;
 const wheelsPerTank = 10;
 const treadTrianglesPerTank = 1400;
+const visualQaBuild = 'tftm-model-assay-sherman-trapezoid-20260704';
 const barrelSocket = new THREE.Vector3(0.58, 0.82, 0);
 const heroBarrelSocket = new THREE.Vector3(0.53, 0.08, 0);
 const matrixScratch = {
@@ -118,6 +119,50 @@ const seedsEl = document.querySelector<HTMLElement>('#seeds')!;
 const fpsEl = document.querySelector<HTMLElement>('#fps')!;
 const contractEl = document.querySelector<HTMLUListElement>('#contract')!;
 const verdictEl = document.querySelector<HTMLElement>('#verdict')!;
+
+function visualQaConfig() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    enabled: params.get('beacon') === '1' || params.get('capture') === '1',
+    capture: params.get('capture') === '1',
+    frames: Math.max(1, Math.min(24, Number(params.get('captureFrames') || 0) || 0)),
+    intervalMs: Math.max(100, Math.min(10000, Number(params.get('captureIntervalMs') || 500) || 500)),
+    expectedBuild: params.get('visualQaExpectedBuild') || ''
+  };
+}
+
+function postVisualQaBeacon(stage: string, extra: Record<string, string | number> = {}) {
+  const params = new URLSearchParams({
+    stage,
+    build: visualQaBuild,
+    actor: 'sherman_part_meshy_kit_v1',
+    clip: '24 independent tank runtime proof',
+    clipKey: 'model-assay',
+    frameMode: 'cloud-visual-truth',
+    sourceName: 'tanks-for-the-memories',
+    ...Object.fromEntries(Object.entries(extra).map(([key, value]) => [key, String(value)]))
+  });
+  fetch('/__visual_qa_smoke?' + params.toString(), { method: 'POST', cache: 'no-store' }).catch(() => {});
+}
+
+function postVisualQaFrame(canvas: HTMLCanvasElement, frame: number) {
+  canvas.toBlob((blob) => {
+    if (!blob) return;
+    const params = new URLSearchParams({
+      frame: String(frame),
+      build: visualQaBuild,
+      actor: 'sherman_part_meshy_kit_v1',
+      clip: '24 independent tank runtime proof',
+      clipKey: 'model-assay',
+      frameMode: 'cloud-visual-truth'
+    });
+    fetch('/__visual_qa_capture?' + params.toString(), {
+      method: 'POST',
+      body: blob,
+      cache: 'no-store'
+    }).catch(() => {});
+  }, 'image/png');
+}
 
 function makeMap(kind: 'albedo' | 'roughness' | 'metalness' | 'normal') {
   const textureCanvas = document.createElement('canvas');
@@ -685,6 +730,10 @@ async function boot() {
   scene.background = new THREE.Color(0x101315);
   scene.fog = new THREE.Fog(0x101315, 9, 24);
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  const qa = visualQaConfig();
+  if (qa.expectedBuild && qa.expectedBuild !== visualQaBuild) {
+    verdictEl.textContent = 'Visual QA build mismatch: expected ' + qa.expectedBuild + ' but loaded ' + visualQaBuild + '.';
+  }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   const camera = new THREE.PerspectiveCamera(38, 1, 0.01, 90);
@@ -757,6 +806,9 @@ async function boot() {
   let fpsAccum = 0;
   let fpsFrames = 0;
   let fpsLast = performance.now();
+  let visualQaRendered = false;
+  let visualQaFrame = 0;
+  let visualQaLastCapture = 0;
   function resize() {
     const rect = canvas.getBoundingClientRect();
     const w = Math.max(320, Math.floor(rect.width));
@@ -813,6 +865,19 @@ async function boot() {
 
     resize();
     renderer.render(scene, camera);
+    if (qa.enabled && !visualQaRendered) {
+      visualQaRendered = true;
+      postVisualQaBeacon('rendered', {
+        target: spawnTarget,
+        heroBarrelSocketX: heroBarrelSocket.x,
+        heroBarrelSocketY: heroBarrelSocket.y
+      });
+    }
+    if (qa.capture && visualQaFrame < qa.frames && now - visualQaLastCapture >= qa.intervalMs) {
+      visualQaLastCapture = now;
+      postVisualQaFrame(canvas, visualQaFrame);
+      visualQaFrame += 1;
+    }
     fpsAccum += 1 / Math.max(dt, 0.001);
     fpsFrames += 1;
     if (now - fpsLast > 1000) {

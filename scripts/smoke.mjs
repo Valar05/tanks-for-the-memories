@@ -85,7 +85,7 @@ const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
 if (packageJson.name !== 'tftm') {
   failures.push('package name should be tftm');
 }
-for (const scriptName of ['build', 'dev', 'smoke', 'bootstrap', 'cloud-visual-release']) {
+for (const scriptName of ['build', 'dev', 'smoke', 'bootstrap', 'cloud-visual-release', 'visual-qa:model-assay']) {
   if (!packageJson.scripts || !packageJson.scripts[scriptName]) {
     failures.push('missing npm script ' + scriptName);
   }
@@ -106,6 +106,11 @@ const cloudVisualDoctrine = readFileSync('docs/doctrine/cloud-visual-truth.md', 
 for (const marker of ['sherman_part_meshy_kit_v1', 'RED BUILD / 24-tank animated runtime proof', 'Hero proof plus 24 independently animated tanks', 'drive-stage', 'spawnTarget = 24', 'InstancedMesh', 'InstancedBufferAttribute', 'instanceTreadPhase', 'onBeforeCompile', 'MeshStandardMaterial', 'roughnessMap', 'metalnessMap', 'normalMap', 'makeTreadMaterialSet', 'makeInstancedTreadMaterialSet', 'createTreadGeometry', 'TankAnimationState', 'seedTankState', 'smoothRandomCycle', 'tankStates', 'GLTFLoader', 'WebGLRenderer', 'Hull Upper', 'Turret Shell', 'Barrel Only', 'Mobile Gear / Wheel']) {
   if (!assaySource.includes(marker)) {
     failures.push('model assay missing Meshy kit viewer marker ' + marker);
+  }
+}
+for (const visualQaMarker of ['visualQaBuild', 'visualQaConfig', 'postVisualQaBeacon', 'postVisualQaFrame', '/__visual_qa_smoke', '/__visual_qa_capture', 'visualQaExpectedBuild']) {
+  if (!assaySource.includes(visualQaMarker)) {
+    failures.push('model assay missing visual QA capture marker ' + visualQaMarker);
   }
 }
 

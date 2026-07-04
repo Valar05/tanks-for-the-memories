@@ -4,11 +4,27 @@ Local screenshots and local browser capture are not authoritative for the tank v
 
 ## Cloud-Only Attention Rule
 
-Do not present a local browser, localhost URL, local screenshot, or stale capture as proof for this tank visual pass. When the user needs to see the tank, deploy the current release packet to cloud hosting and wake the browser to the cloud URL with a fresh cache-bust value.
+Do not present a local browser, localhost URL, local screenshot, or stale capture as proof for this tank visual pass. When the user needs to see the tank, deploy the current release packet to cloud hosting, then run the project visual QA harness before waking the browser for attention. Browser wake is blocked unless the visual QA report contains fresh captured frames/contact sheet evidence and a sense-simulation read says the named visible relationships pass.
 
 The proof is not "24 instanced GPU tanks." The proof is 24 independently animated tanks rendered within the phone budget. Shared geometry is acceptable only as a rendering optimization; every visible tank must have its own smoothed animation state for drive phase, wheel spin, tread phase, turret horizontal traverse, and barrel vertical elevation.
 
 Do not accept source variables as visual proof. If the barrel still reads as an ugly black tube, or if vertical barrel motion is not visible around the turret front/socket, the build is red even when `barrelPitch` exists in code.
+
+Required pre-wake command:
+
+```sh
+npm run visual-qa:model-assay
+```
+
+The harness result is acceptance evidence only if the contact sheet and representative full frames show:
+
+- cannon visually seated in the turret/mantlet area, not separated from it
+- barrel vertical motion readable around the socket/pivot
+- tread reads as a Sherman-like trapezoid belt volume with visible side/back thickness
+- tread motion reads as belt/material travel rather than a rounded static ribbon
+- 24 tanks remain independently animated and plausible on phone
+
+If the harness launches, captures frames, and still shows separated barrel or rounded/one-sided tread, the result is a captured red build. Do not wake the user for review.
 
 ## False-Change Penalty
 

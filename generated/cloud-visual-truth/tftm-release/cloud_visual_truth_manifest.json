@@ -1,13 +1,13 @@
 {
   "artifact": "tftm-sherman-24-tank-runtime-proof-red-review",
-  "generated_at": "2026-07-04T03:38:18.748Z",
-  "source_commit": "c359dcf",
+  "generated_at": "2026-07-04T03:44:31.705Z",
+  "source_commit": "f778603",
   "dirty_status": [
-    "M assets/generated/meshy/sherman_part_meshy_kit_v1/assembly_manifest.json",
-    " M docs/doctrine/cloud-visual-truth.md",
+    "M docs/doctrine/cloud-visual-truth.md",
     " D generated/cloud-visual-truth/tftm-release/README.md",
     " D generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json",
     " D generated/cloud-visual-truth/tftm-release/firebase.json",
+    " M package.json",
     " M scripts/smoke.mjs",
     " M src/model-assay.ts"
   ],
