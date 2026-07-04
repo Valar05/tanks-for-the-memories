@@ -11,7 +11,7 @@
     "route": "boxmodel-tank.html",
     "expected_build": "tftm-authored-sherman-boxmodel-v1-7-20260704",
     "tuner_route": "boxmodel-tank.html?tune=1",
-    "tuner_expected_build": "tftm-authored-sherman-boxmodel-tuner-v2-20260704",
+    "tuner_expected_build": "tftm-authored-sherman-boxmodel-tuner-v3-20260704",
     "asset_id": "authored_sherman_boxmodel_v1",
     "output_glb": "public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb",
     "source_blend": "assets/authored/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.blend",
@@ -39,7 +39,7 @@
     ],
     "asset_policy": "fully authored Blender box-model chassis with solidified overlapping armor plates, non-cube cast turret silhouette, and coaxial MG; no Meshy chassis or turret imports; box UV PNG plates for DALL-E paintability",
     "acceptance": "Sense Simulation must confirm Sherman silhouette, non-cube turret massing, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.",
-    "tuner_acceptance": "Sense Simulation must review boxmodel-tank.html?tune=1 as a gesture-only boxmodel part tuner: parts list visible, four hull-colored plug instances are available for front/back/left/right holes, one selected plug is highlighted for editing, already enabled plugs remain visible, move/rotate/scale gestures or numeric edits visibly change the selected plug, right-side camera rotation still works, no 3D gizmo appears, and local capture was not used."
+    "tuner_acceptance": "Sense Simulation must review boxmodel-tank.html?tune=1 as a gesture-only boxmodel part tuner: parts list visible, four hull-colored plug instances are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected plug is highlighted for editing, already enabled plugs remain visible, move/rotate/scale gestures or numeric edits visibly change the selected plug, right-side camera rotation still works, no 3D gizmo appears, and local capture was not used."
   },
   "authored_retopo_review": {
     "route": "retopo-tank.html",
@@ -68,11 +68,10 @@
     "asset_policy": "fully authored hard-surface chassis and turret; no Meshy chassis or turret imports; split face PNG plates for DALL-E paintability",
     "acceptance": "Sense Simulation must confirm close-up chassis and turret read as usable hard-surface armor, barrel belongs to mantlet, split face texture plates map sanely, and local capture was not used."
   },
-  "generated_at": "2026-07-04T21:09:34.846Z",
-  "source_commit": "4c2014e",
+  "generated_at": "2026-07-04T21:18:19.188Z",
+  "source_commit": "eb15e78",
   "dirty_status": [
-    "M generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json",
-    " M scripts/build_cloud_visual_release.mjs",
+    "M scripts/build_cloud_visual_release.mjs",
     " M scripts/validate_boxmodel_tank_cloud_gate.mjs",
     " M scripts/validate_boxmodel_tuner.mjs",
     " M src/boxmodel-tank.ts"
@@ -240,7 +239,7 @@
     "boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-7-20260704",
     "boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, and no local capture",
     "boxmodel-tank close-up review showing solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability",
-    "boxmodel-tank.html?tune=1 phone portrait showing gesture-only part tuner with front/back/left/right hull-colored plug parts, selected plug highlight, parts list, and build token tftm-authored-sherman-boxmodel-tuner-v2-20260704",
+    "boxmodel-tank.html?tune=1 phone portrait showing gesture-only part tuner with front-right/front-left/rear-right/rear-left hull-colored plug parts aligned parallel to the tracks, selected plug highlight, parts list, and build token tftm-authored-sherman-boxmodel-tuner-v3-20260704",
     "boxmodel-tank.html?tune=1 cloud interaction evidence showing one selected plug visibly move/rotate/scale while other enabled plugs remain placed, right-side camera rotation preserved, and no 3D gizmo",
     "retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-1-20260704",
     "retopo-tank phone landscape showing split face texture plates with sane UV mapping and no local capture",
@@ -261,7 +260,7 @@
   },
   "sense_simulation_questions": [
     "Does authored_sherman_boxmodel_v1 read closer to a real Sherman silhouette than the rejected high-poly box retopo?",
-    "On boxmodel-tank.html?tune=1, does the gesture-only parts workflow provide four front/back/left/right hull-colored plugs while still editing only one selected plug at a time without a 3D gizmo?",
+    "On boxmodel-tank.html?tune=1, does the gesture-only parts workflow provide four hull-colored front-right/front-left/rear-right/rear-left plugs aligned parallel to the tracks while still editing only one selected plug at a time without a 3D gizmo?",
     "Does the turret read as a non-cube cast turret form with cheek mass, roof flattening, and rear bustle?",
     "Do the armor plates read as joined metal mass rather than separated cardboard planes?",
     "Is the coaxial MG visible and owned by the mantlet/gun assembly?",

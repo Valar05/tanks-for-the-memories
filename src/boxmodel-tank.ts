@@ -10,7 +10,7 @@ if (!root) throw new Error('missing #boxmodel-tank-root');
 const query = new URLSearchParams(window.location.search);
 const isTuneMode = query.get('tune') === '1';
 const baseVisualBuild = 'tftm-authored-sherman-boxmodel-v1-7-20260704';
-const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v2-20260704';
+const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v3-20260704';
 const visualBuild = isTuneMode ? tunerVisualBuild : baseVisualBuild;
 
 type TuneMode = 'move' | 'rotate' | 'scale';
@@ -30,10 +30,10 @@ type BoxmodelTunePart = {
 };
 
 const tuneParts: BoxmodelTunePart[] = [
-  { id: 'front-hole-plug', label: 'Front plug', kind: 'box', position: [0, -0.05, -1.92], rotationDeg: [-8, 0, 0], scale: [1.28, 0.64, 0.26], visible: true, locked: false, material: 0x8c8b63 },
-  { id: 'back-hole-plug', label: 'Back plug', kind: 'box', position: [0, -0.05, 1.72], rotationDeg: [4, 0, 0], scale: [1.18, 0.58, 0.26], visible: true, locked: false, material: 0x8c8b63 },
-  { id: 'right-hole-plug', label: 'Right plug', kind: 'box', position: [1.64, -0.08, -0.12], rotationDeg: [0, 0, -3], scale: [0.26, 0.62, 1.12], visible: true, locked: false, material: 0x8c8b63 },
-  { id: 'left-hole-plug', label: 'Left plug', kind: 'box', position: [-1.64, -0.08, -0.12], rotationDeg: [0, 0, 3], scale: [0.26, 0.62, 1.12], visible: true, locked: false, material: 0x8c8b63 }
+  { id: 'front-right-track-hole-plug', label: 'Front R plug', kind: 'box', position: [1.42, -0.08, -1.82], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 },
+  { id: 'front-left-track-hole-plug', label: 'Front L plug', kind: 'box', position: [-1.42, -0.08, -1.82], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 },
+  { id: 'rear-right-track-hole-plug', label: 'Rear R plug', kind: 'box', position: [1.42, -0.08, 1.52], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 },
+  { id: 'rear-left-track-hole-plug', label: 'Rear L plug', kind: 'box', position: [-1.42, -0.08, 1.52], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 }
 ];
 
 const tuneShell = isTuneMode ? ' is-tuning' : '';
