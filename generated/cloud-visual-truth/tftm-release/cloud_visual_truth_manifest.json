@@ -68,18 +68,9 @@
     "asset_policy": "fully authored hard-surface chassis and turret; no Meshy chassis or turret imports; split face PNG plates for DALL-E paintability",
     "acceptance": "Sense Simulation must confirm close-up chassis and turret read as usable hard-surface armor, barrel belongs to mantlet, split face texture plates map sanely, and local capture was not used."
   },
-  "generated_at": "2026-07-04T20:51:43.273Z",
-  "source_commit": "61eec90",
-  "dirty_status": [
-    "M README.md",
-    " M REPO_DOCTRINE.md",
-    " M package.json",
-    " M scripts/build_cloud_visual_release.mjs",
-    " M scripts/validate_boxmodel_tank_cloud_gate.mjs",
-    " M src/boxmodel-tank.ts",
-    " M src/single-tank.css",
-    "?? scripts/validate_boxmodel_tuner.mjs"
-  ],
+  "generated_at": "2026-07-04T20:53:54.590Z",
+  "source_commit": "34e09ef",
+  "dirty_status": [],
   "dist": "generated/cloud-visual-truth/tftm-release/dist",
   "tank_asset": "m4a3_75_vvss_sherman_alpha_mobile",
   "tank_runtime": {
