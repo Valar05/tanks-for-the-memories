@@ -11,7 +11,7 @@ if (!root) throw new Error('missing #boxmodel-tank-root');
 const query = new URLSearchParams(window.location.search);
 const isTuneMode = query.get('tune') === '1';
 const baseVisualBuild = 'tftm-authored-sherman-boxmodel-v1-7-20260704';
-const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v6-20260704';
+const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v7-20260704';
 const visualBuild = isTuneMode ? tunerVisualBuild : baseVisualBuild;
 
 type TuneMode = 'move' | 'rotate' | 'scale';
@@ -20,7 +20,7 @@ type TuneAxis = 'all' | 'screen' | 'x' | 'y' | 'z';
 type BoxmodelTunePart = {
   id: string;
   label: string;
-  kind: 'box' | 'plate';
+  kind: 'box' | 'plate' | 'trackGapTrapezoid';
   position: [number, number, number];
   rotationDeg: [number, number, number];
   scale: [number, number, number];
@@ -31,10 +31,10 @@ type BoxmodelTunePart = {
 };
 
 const tuneParts: BoxmodelTunePart[] = [
-  { id: 'front-right-track-hole-plug', label: 'Front R plug', kind: 'box', position: [1.42, -0.08, -1.82], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 },
-  { id: 'front-left-track-hole-plug', label: 'Front L plug', kind: 'box', position: [-1.42, -0.08, -1.82], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 },
-  { id: 'rear-right-track-hole-plug', label: 'Rear R plug', kind: 'box', position: [1.42, -0.08, 1.52], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 },
-  { id: 'rear-left-track-hole-plug', label: 'Rear L plug', kind: 'box', position: [-1.42, -0.08, 1.52], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 }
+  { id: 'front-right-track-hole-plug', label: 'Front R plug', kind: 'trackGapTrapezoid', position: [1.42, -0.08, -1.82], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 },
+  { id: 'front-left-track-hole-plug', label: 'Front L plug', kind: 'trackGapTrapezoid', position: [-1.42, -0.08, -1.82], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 },
+  { id: 'rear-right-track-hole-plug', label: 'Rear R plug', kind: 'trackGapTrapezoid', position: [1.42, -0.08, 1.52], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 },
+  { id: 'rear-left-track-hole-plug', label: 'Rear L plug', kind: 'trackGapTrapezoid', position: [-1.42, -0.08, 1.52], rotationDeg: [0, 0, 0], scale: [0.34, 0.62, 0.92], visible: true, locked: false, material: 0x8c8b63 }
 ];
 
 const tuneShell = isTuneMode ? ' is-tuning' : '';
@@ -168,14 +168,16 @@ new GLTFLoader().load(AUTHORED_SHERMAN_BOXMODEL_GLB_URL, (gltf) => {
 });
 
 function createTuneMeshes() {
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
   for (const part of tuneParts) {
+    const geometry = part.kind === 'trackGapTrapezoid'
+      ? createTrackGapTrapezoidGeometry(part.id.includes('rear'))
+      : new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshStandardMaterial({
       color: part.material,
       roughness: 0.86,
       metalness: 0.08,
       transparent: true,
-      opacity: 0.68,
+      opacity: 0.72,
       emissive: 0x000000,
       depthWrite: true
     });
@@ -186,6 +188,36 @@ function createTuneMeshes() {
     tuneGroup.add(mesh);
     applyPartTransform(part);
   }
+}
+
+function createTrackGapTrapezoidGeometry(reverseSlope: boolean) {
+  const x0 = -0.5;
+  const x1 = 0.5;
+  const z0 = -0.5;
+  const z1 = 0.5;
+  const yBottom = -0.5;
+  const lowTop = 0.12;
+  const highTop = 0.5;
+  const yTopFront = reverseSlope ? highTop : lowTop;
+  const yTopRear = reverseSlope ? lowTop : highTop;
+  const vertices = new Float32Array([
+    x0, yBottom, z0,  x1, yBottom, z0,  x1, yBottom, z1,  x0, yBottom, z1,
+    x0, yTopFront, z0, x1, yTopFront, z0, x1, yTopRear, z1, x0, yTopRear, z1
+  ]);
+  const indices = [
+    0, 1, 2, 0, 2, 3,
+    4, 6, 5, 4, 7, 6,
+    0, 4, 5, 0, 5, 1,
+    3, 2, 6, 3, 6, 7,
+    0, 3, 7, 0, 7, 4,
+    1, 5, 6, 1, 6, 2
+  ];
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  geometry.name = reverseSlope ? 'rear-track-gap-trapezoid-plug' : 'front-track-gap-trapezoid-plug';
+  return geometry;
 }
 
 function applyPartTransform(part: BoxmodelTunePart) {
