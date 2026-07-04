@@ -63,3 +63,7 @@ Alpha is not accepted until the recognition language is part of a Meshy retextur
 A direct CLI/API attempt to retexture the existing phone Meshy task (`019f2a16-c82b-7b52-b541-c707b58c5d00`) with an Alpha texture prompt was rejected by Meshy: the image-to-3D endpoint does not accept an `api-image-to-3d` task as `input_task_id`. The saved dry-run and failure provenance live in `assets/generated/meshy/m4a3_75_vvss_sherman_alpha_retexture/manifest.json`.
 
 Do not work around this by adding runtime color planes. The next valid route is Meshy Web/UI retexture if available, or a repo CLI extension for the correct Meshy texture/retexture endpoint.
+
+A later image-to-3D attempt from the Alpha character-sheet reference (`019f2ba7-4ad8-7bd1-a094-8469439725e3`) is also rejected. Human visual review read it as a red highlighter on a beige generated tank, not as Alpha personality. Preserve it as evidence only: `assets/generated/meshy/alpha_sherman_player_character_from_reference_v1/manifest.json`.
+
+Do not repeat character-sheet image-to-3D as the Alpha texture path. It changes the model and overfits the recognition color. Alpha needs nuanced paint, wear, chalk, overpaint, and maintenance history bound to the accepted Sherman surface IDs.

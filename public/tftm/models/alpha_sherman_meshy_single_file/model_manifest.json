@@ -14,5 +14,12 @@
     "assets/generated/openai/sherman_runtime_pbr_v1/tread_normal.png",
     "assets/generated/openai/sherman_runtime_pbr_v1/tread_roughness.png"
   ],
-  "note": "Player-character Alpha Sherman. Use this file for Meshy upload; data-uri textures plus geometry decals preserve identity if importer drops PBR."
+  "note": "Player-character Alpha Sherman. Use this file for Meshy upload; data-uri textures plus geometry decals preserve identity if importer drops PBR.",
+  "status": "red_rejected_visual_build",
+  "red_build": {
+    "evidence": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-003950.png",
+    "observed": "Muddy/gold noisy stretched texture, Alpha markings effectively absent, blue/black slab artifacts visible, camera/UI crop makes it unusable.",
+    "cause": "Geometry/material decal workaround violated Alpha texture architecture; not a UV-aware model texture/retexture result.",
+    "replacement_candidate": "public/tftm/models/alpha_sherman_player_character_from_reference_v1/alpha_sherman_player_character_from_reference_v1.glb"
+  }
 }

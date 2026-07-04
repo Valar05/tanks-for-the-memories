@@ -1,0 +1,36 @@
+{
+  "asset_id": "alpha_sherman_player_character_from_reference_v1",
+  "display_name": "Alpha Sherman Player Character From Reference V1",
+  "asset_class": "meshy_reference_image_to_3d_texture_candidate",
+  "status": "red_rejected_visual_build",
+  "generated_at": "2026-07-04T05:48:46.156Z",
+  "source_reference_image": "/storage/emulated/0/Download/file_00000000544c720ca6775c5f5fb2a678 (1).png",
+  "source_task_id": "019f2ba7-4ad8-7bd1-a094-8469439725e3",
+  "source_manifest": "assets/generated/meshy/alpha_sherman_player_character_from_reference_v1/manifest.json",
+  "glb": "public/tftm/models/alpha_sherman_player_character_from_reference_v1/alpha_sherman_player_character_from_reference_v1.glb",
+  "inspection": {
+    "approximate_triangles": 13559,
+    "texture_count": 4,
+    "image_count": 4,
+    "node_count": 1,
+    "mesh_count": 1,
+    "primitive_count": 1,
+    "material_count": 1
+  },
+  "runtime_contract": {
+    "vanilla_preserved_separately": true,
+    "visual_texture_candidate": false,
+    "gameplay_animation_ready": false,
+    "rejection_reason_for_gameplay_animation": "Fused static Meshy sculpture; no separable hull/turret/barrel/tread bindings.",
+    "acceptance_gate": "Rejected by human visual review; must be replaced by UV-aware Alpha texture/retexture on accepted base."
+  },
+  "red_build": {
+    "evidence": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-005201.png",
+    "observed": "Human visual review rejected the candidate as a red highlighter: beige/generated tank with loud red banding, no disciplined Alpha personality, no credible field-painted white A/chalk story, and no usable texture language.",
+    "failed_relationship": "Alpha personality must read through texture language, not a simple red stripe/highlighter band.",
+    "cause": "Image-to-3D from the character-sheet reference overfit the recognition color and regenerated a fused static tank instead of applying nuanced UV-aware identity texture to the accepted base.",
+    "do_not_promote": true,
+    "do_not_use_as_alpha_player_asset": true,
+    "next_valid_route": "Use Meshy Web/model-texture retexture if available, or build a UV-aware texture pipeline for the accepted vanilla base. Do not use runtime red planes, geometry decals, or another character-sheet image-to-3D pass as proof."
+  }
+}

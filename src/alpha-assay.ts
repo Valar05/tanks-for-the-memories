@@ -5,8 +5,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 const root = document.querySelector<HTMLDivElement>('#alpha-assay-root');
 if (!root) throw new Error('missing #alpha-assay-root');
 
-const visualQaBuild = 'tftm-alpha-sherman-texture-20260704a';
-const assetUrl = './tftm/models/alpha_sherman_meshy_single_file/alpha_sherman_meshy_single_file.glb';
+const visualQaBuild = 'tftm-alpha-sherman-meshy-reference-20260704a';
+const assetUrl = './tftm/models/alpha_sherman_player_character_from_reference_v1/alpha_sherman_player_character_from_reference_v1.glb';
 
 root.innerHTML = '<main class="alpha-shell">' +
   '<header class="alpha-head">' +
@@ -14,15 +14,15 @@ root.innerHTML = '<main class="alpha-shell">' +
       '<h1>Alpha Sherman Texture Review</h1>' +
       '<p>Player-character Sherman variant. Vanilla baseline remains separate.</p>' +
     '</div>' +
-    '<div class="alpha-badge">visual review required</div>' +
+    '<div class="alpha-badge">red build rejected</div>' +
   '</header>' +
   '<section class="alpha-stage">' +
     '<canvas id="alpha-stage" aria-label="Alpha Sherman GLB texture review"></canvas>' +
     '<aside class="alpha-readout" aria-label="Alpha Sherman review readout">' +
       '<dl>' +
-        '<dt>asset</dt><dd>alpha_sherman_meshy_single_file.glb</dd>' +
+        '<dt>asset</dt><dd>alpha_sherman_player_character_from_reference_v1.glb</dd>' +
         '<dt>target</dt><dd>olive Sherman, crimson recognition, white A, chalk/dirt</dd>' +
-        '<dt>status</dt><dd id="alpha-status">loading</dd>' +
+        '<dt>status</dt><dd id="alpha-status">red build evidence</dd>' +
         '<dt>build</dt><dd>' + visualQaBuild + '</dd>' +
       '</dl>' +
     '</aside>' +
@@ -69,7 +69,7 @@ function postVisualQaBeacon(stage: string, extra: Record<string, string | number
   const params = new URLSearchParams({
     stage,
     build: visualQaBuild,
-    actor: 'alpha_sherman_meshy_single_file',
+    actor: 'alpha_sherman_player_character_from_reference_v1',
     clip: 'texture review',
     clipKey: 'alpha-assay',
     frameMode: 'cloud-visual-truth',
@@ -93,7 +93,7 @@ const loader = new GLTFLoader();
 let tank: THREE.Object3D | null = null;
 loader.load(assetUrl, (gltf) => {
   tank = gltf.scene;
-  tank.name = 'alpha_sherman_visible_texture_review';
+  tank.name = 'alpha_sherman_meshy_reference_texture_review';
   tank.rotation.y = -0.58;
   scene.add(tank);
   const box = new THREE.Box3().setFromObject(tank);
@@ -103,7 +103,7 @@ loader.load(assetUrl, (gltf) => {
   box.getSize(size);
   tank.position.sub(center);
   tank.position.y += size.y * 0.5 - 0.43;
-  statusEl.textContent = 'loaded: crimson, chalk, and dust geometry/materials should be visible';
+  statusEl.textContent = 'REJECTED: reads as red highlighter, not Alpha personality texture';
   postVisualQaBeacon('loaded', { meshes: gltf.scene.children.length });
 }, undefined, (error) => {
   statusEl.textContent = 'failed to load Alpha GLB';

@@ -74,6 +74,11 @@ const requiredFiles = [
   'public/tftm/models/alpha_sherman_combined/model_manifest.json',
   'public/tftm/models/alpha_sherman_meshy_single_file/alpha_sherman_meshy_single_file.glb',
   'public/tftm/models/alpha_sherman_meshy_single_file/model_manifest.json',
+  'assets/generated/meshy/alpha_sherman_player_character_from_reference_v1/glb.glb',
+  'assets/generated/meshy/alpha_sherman_player_character_from_reference_v1/fbx.fbx',
+  'assets/generated/meshy/alpha_sherman_player_character_from_reference_v1/manifest.json',
+  'public/tftm/models/alpha_sherman_player_character_from_reference_v1/alpha_sherman_player_character_from_reference_v1.glb',
+  'public/tftm/models/alpha_sherman_player_character_from_reference_v1/model_manifest.json',
   'scripts/pack_vanilla_sherman_for_meshy.mjs',
   'scripts/pack_vanilla_sherman_textures.mjs',
   'scripts/export_vanilla_sherman_glb.mjs',
@@ -309,10 +314,13 @@ for (const buildMarker of ['assetVersion', 'TFTM_ASSET_VERSION', '.css?v=${asset
     failures.push('build script must cache-bust generated JS/CSS asset URLs: ' + buildMarker);
   }
 }
-for (const alphaAssayMarker of ['tftm-alpha-sherman-texture-20260704a', 'alpha_sherman_meshy_single_file.glb', 'Alpha Sherman Texture Review', 'Review the visible texture language, not the manifest.', 'visual review required']) {
+for (const alphaAssayMarker of ['tftm-alpha-sherman-meshy-reference-20260704a', 'alpha_sherman_player_character_from_reference_v1.glb', 'Alpha Sherman Texture Review', 'Review the visible texture language, not the manifest.', 'red build rejected', 'REJECTED: reads as red highlighter']) {
   if (!alphaAssaySource.includes(alphaAssayMarker)) {
     failures.push('Alpha assay missing texture review marker ' + alphaAssayMarker);
   }
+}
+if (alphaAssaySource.includes('alpha_sherman_meshy_single_file.glb')) {
+  failures.push('Alpha assay must not load the rejected decal single-file GLB');
 }
 for (const alphaBuildMarker of ['alpha-assay.ts', 'alpha-assay.html']) {
   if (!buildScript.includes(alphaBuildMarker)) {
@@ -415,11 +423,39 @@ const alphaMeshyManifest = JSON.parse(readFileSync('public/tftm/models/alpha_she
 if (alphaMeshyManifest.asset_id !== 'alpha_sherman_meshy_single_file') {
   failures.push('Alpha Meshy single-file manifest missing asset_id');
 }
+if (alphaMeshyManifest.status !== 'red_rejected_visual_build') {
+  failures.push('Alpha Meshy single-file GLB must remain marked red_rejected_visual_build');
+}
+if (!String(alphaMeshyManifest.red_build?.evidence || '').includes('Screenshot_20260704-003950.png')) {
+  failures.push('Alpha Meshy single-file red build must cite the failing screenshot evidence');
+}
 if (!String(alphaMeshyManifest.texture_pack_mode || '').includes('data-uri')) {
   failures.push('Alpha Meshy single-file GLB must declare data-uri texture mode');
 }
 if (!String(alphaMeshyManifest.note || '').includes('geometry decals preserve identity')) {
   failures.push('Alpha Meshy single-file manifest must preserve geometry-decal fallback note');
+}
+const alphaReferenceManifest = JSON.parse(readFileSync('public/tftm/models/alpha_sherman_player_character_from_reference_v1/model_manifest.json', 'utf8'));
+if (alphaReferenceManifest.asset_id !== 'alpha_sherman_player_character_from_reference_v1') {
+  failures.push('Alpha reference Meshy candidate manifest missing asset_id');
+}
+if (alphaReferenceManifest.status !== 'red_rejected_visual_build') {
+  failures.push('Alpha reference Meshy candidate must remain marked red_rejected_visual_build');
+}
+if (alphaReferenceManifest.runtime_contract?.gameplay_animation_ready !== false) {
+  failures.push('Alpha reference Meshy candidate must not claim gameplay animation readiness');
+}
+if (!String(alphaReferenceManifest.red_build?.evidence || '').includes('Screenshot_20260704-005201.png')) {
+  failures.push('Alpha reference Meshy candidate must cite red-highlighter screenshot evidence');
+}
+if (!String(alphaReferenceManifest.red_build?.observed || '').includes('red highlighter')) {
+  failures.push('Alpha reference Meshy candidate must preserve red-highlighter rejection read');
+}
+if (!String(alphaReferenceManifest.runtime_contract?.acceptance_gate || '').includes('Rejected by human visual review')) {
+  failures.push('Alpha reference Meshy candidate must preserve rejection gate');
+}
+if (alphaReferenceManifest.inspection?.approximate_triangles > 20000) {
+  failures.push('Alpha reference Meshy candidate exceeds static visual phone triangle budget');
 }
 const alphaExporter = readFileSync('scripts/export_alpha_sherman_variant.mjs', 'utf8');
 for (const marker of ['alpha_sherman_combined', 'addAlphaCharacterMarks', 'alpha_crimson_glacis_recognition_stripe', "'_A_crossbar'", 'alpha_front_chalk_A17_plate', 'alpha_dust_scratch_']) {

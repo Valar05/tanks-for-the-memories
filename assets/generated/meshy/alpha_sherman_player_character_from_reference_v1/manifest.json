@@ -1,0 +1,110 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T05:43:21+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "enable_pbr": true,
+    "hd_texture": false,
+    "image_url": "<data-uri>",
+    "model_type": "lowpoly",
+    "should_remesh": true,
+    "should_texture": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "target_polycount": 25000,
+    "texture_prompt": "Player-character Alpha Sherman tank variant based on the reference image: realistic WWII M4A3 Sherman family tank, olive drab hard-surface armor, deep crimson recognition bands on hull and turret, hand-painted white A marking, restrained chalk maintenance marks, field dirt and chipped paint, maintained but battered, mobile game-ready PBR texture, preserve Sherman silhouette, no fantasy armor, no toy proportions, no pillow soft shapes, no random red planes, no logos, no copied War Thunder asset",
+    "topology": "triangle"
+  },
+  "files": [
+    {
+      "bytes": 8272076,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/alpha_sherman_player_character_from_reference_v1/fbx.fbx"
+    },
+    {
+      "bytes": 10373412,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/alpha_sherman_player_character_from_reference_v1/glb.glb"
+    }
+  ],
+  "last_image_to_3d_task": {
+    "art_style": "",
+    "consumed_credits": 30,
+    "created_at": 1783143818811,
+    "expires_at": 1783403272612,
+    "finished_at": 1783144072612,
+    "id": "019f2ba7-4ad8-7bd1-a094-8469439725e3",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783143818866,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "",
+    "texture_image_url": "",
+    "texture_prompt": "Player-character Alpha Sherman tank variant based on the reference image: realistic WWII M4A3 Sherman family tank, olive drab hard-surface armor, deep crimson recognition bands on hull and turret, hand-painted white A marking, restrained chalk maintenance marks, field dirt and chipped paint, maintained but battered, mobile game-ready PBR texture, preserve Sherman silhouette, no fantasy armor, no toy proportions, no pillow soft shapes, no random red planes, no logos, no copied War Thunder asset",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "image-to-3d"
+  },
+  "name": "alpha_sherman_player_character_from_reference_v1",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T05:43:38+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_pbr": true,
+        "hd_texture": false,
+        "image_url": "<data-uri>",
+        "model_type": "lowpoly",
+        "should_remesh": true,
+        "should_texture": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "target_polycount": 25000,
+        "texture_prompt": "Player-character Alpha Sherman tank variant based on the reference image: realistic WWII M4A3 Sherman family tank, olive drab hard-surface armor, deep crimson recognition bands on hull and turret, hand-painted white A marking, restrained chalk maintenance marks, field dirt and chipped paint, maintained but battered, mobile game-ready PBR texture, preserve Sherman silhouette, no fantasy armor, no toy proportions, no pillow soft shapes, no random red planes, no logos, no copied War Thunder asset",
+        "topology": "triangle"
+      },
+      "provider": "meshy",
+      "step": "image_to_3d",
+      "task_id": "019f2ba7-4ad8-7bd1-a094-8469439725e3"
+    }
+  ],
+  "tasks": {
+    "image_to_3d": "019f2ba7-4ad8-7bd1-a094-8469439725e3"
+  },
+  "updated_at": "2026-07-04T05:48:03+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects",
+  "status": "red_rejected_visual_build",
+  "red_build": {
+    "evidence": "/storage/emulated/0/Pictures/Screenshots/Screenshot_20260704-005201.png",
+    "observed": "Human visual review rejected the candidate as a red highlighter: beige/generated tank with loud red banding, no disciplined Alpha personality, no credible field-painted white A/chalk story, and no usable texture language.",
+    "failed_relationship": "Alpha personality must read through texture language, not a simple red stripe/highlighter band.",
+    "cause": "Image-to-3D from the character-sheet reference overfit the recognition color and regenerated a fused static tank instead of applying nuanced UV-aware identity texture to the accepted base.",
+    "do_not_promote": true,
+    "do_not_use_as_alpha_player_asset": true,
+    "next_valid_route": "Use Meshy Web/model-texture retexture if available, or build a UV-aware texture pipeline for the accepted vanilla base. Do not use runtime red planes, geometry decals, or another character-sheet image-to-3D pass as proof."
+  }
+}
