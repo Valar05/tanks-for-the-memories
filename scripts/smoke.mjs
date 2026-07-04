@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 
 const requiredFiles = [
   'index.html',
+  'alpha-assay.html',
   'model-assay.html',
   'README.md',
   'ARCHITECTURE.md',
@@ -301,10 +302,21 @@ if (!String(kitManifest.animation_proof?.barrel_quality_gate || '').includes('re
 }
 
 const main = readFileSync('src/main.ts', 'utf8');
+const alphaAssaySource = readFileSync('src/alpha-assay.ts', 'utf8');
 const buildScript = readFileSync('scripts/build.mjs', 'utf8');
 for (const buildMarker of ['assetVersion', 'TFTM_ASSET_VERSION', '.css?v=${assetVersion}', '.js?v=${assetVersion}']) {
   if (!buildScript.includes(buildMarker)) {
     failures.push('build script must cache-bust generated JS/CSS asset URLs: ' + buildMarker);
+  }
+}
+for (const alphaAssayMarker of ['tftm-alpha-sherman-texture-20260704a', 'alpha_sherman_meshy_single_file.glb', 'Alpha Sherman Texture Review', 'Review the visible texture language, not the manifest.', 'visual review required']) {
+  if (!alphaAssaySource.includes(alphaAssayMarker)) {
+    failures.push('Alpha assay missing texture review marker ' + alphaAssayMarker);
+  }
+}
+for (const alphaBuildMarker of ['alpha-assay.ts', 'alpha-assay.html']) {
+  if (!buildScript.includes(alphaBuildMarker)) {
+    failures.push('build script must include Alpha assay marker ' + alphaBuildMarker);
   }
 }
 const requiredSnippets = [

@@ -94,9 +94,11 @@ function writeBundledHtml(sourceName, outputName, bundleName) {
 
 await buildEntry('main.ts', 'index');
 await buildEntry('model-assay.ts', 'model-assay');
+await buildEntry('alpha-assay.ts', 'alpha-assay');
 
 writeBundledHtml('index.html', 'index.html', 'index');
 writeBundledHtml('model-assay.html', 'model-assay.html', 'model-assay');
+writeBundledHtml('alpha-assay.html', 'alpha-assay.html', 'alpha-assay');
 copyRecursive(publicDir, distDir);
 copyRecursive(
   path.join(root, 'assets', 'generated', 'meshy', 'minimal_animatable_tank_v1'),
