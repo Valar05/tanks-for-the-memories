@@ -1,0 +1,17 @@
+{
+  "asset_id": "vanilla_sherman_meshy_single_file",
+  "display_name": "Vanilla Sherman Meshy Single File GLB",
+  "generated_at": "2026-07-04T05:13:38.019Z",
+  "generator": "scripts/pack_vanilla_sherman_for_meshy.mjs",
+  "source_glb": "public/tftm/models/vanilla_sherman_combined/vanilla_sherman.glb",
+  "output_glb": "public/tftm/models/vanilla_sherman_meshy_single_file/vanilla_sherman_meshy_single_file.glb",
+  "texture_pack_mode": "data-uri images embedded in GLB JSON for Meshy importer compatibility",
+  "embedded_textures": [
+    "assets/generated/openai/sherman_runtime_pbr_v1/olive_albedo.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/olive_normal.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/tread_albedo.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/tread_normal.png",
+    "assets/generated/openai/sherman_runtime_pbr_v1/tread_roughness.png"
+  ],
+  "note": "Use this file for Meshy upload when bufferView-packed GLB imports grey."
+}

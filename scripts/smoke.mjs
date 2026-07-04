@@ -67,6 +67,9 @@ const requiredFiles = [
   'public/tftm/models/vanilla_sherman_combined/model_manifest.json',
   'public/tftm/models/vanilla_sherman_packed/vanilla_sherman_packed.glb',
   'public/tftm/models/vanilla_sherman_packed/model_manifest.json',
+  'public/tftm/models/vanilla_sherman_meshy_single_file/vanilla_sherman_meshy_single_file.glb',
+  'public/tftm/models/vanilla_sherman_meshy_single_file/model_manifest.json',
+  'scripts/pack_vanilla_sherman_for_meshy.mjs',
   'scripts/pack_vanilla_sherman_textures.mjs',
   'scripts/export_vanilla_sherman_glb.mjs',
   'assets/generated/meshy/sherman_runtime_tread_pbr_v1/sherman_runtime_tread_pbr_v1_concept.png',
@@ -351,6 +354,21 @@ if (vanillaCombinedManifest.runtime_contract?.static_combined_asset !== true) {
 }
 if (!String(vanillaCombinedManifest.runtime_contract?.animation_source || '').includes('separated source components')) {
   failures.push('vanilla combined Sherman must point animation back to separated components');
+}
+
+
+const vanillaMeshyManifest = JSON.parse(readFileSync('public/tftm/models/vanilla_sherman_meshy_single_file/model_manifest.json', 'utf8'));
+if (vanillaMeshyManifest.asset_id !== 'vanilla_sherman_meshy_single_file') {
+  failures.push('vanilla Meshy single-file manifest missing asset_id');
+}
+if (!String(vanillaMeshyManifest.texture_pack_mode || '').includes('data-uri')) {
+  failures.push('vanilla Meshy single-file GLB must declare data-uri texture mode');
+}
+const vanillaMeshyPacker = readFileSync('scripts/pack_vanilla_sherman_for_meshy.mjs', 'utf8');
+for (const meshyPackMarker of ['vanilla_sherman_meshy_single_file', 'data:${source.mimeType};base64', 'baseColorFactor', 'meshyCompatibility']) {
+  if (!vanillaMeshyPacker.includes(meshyPackMarker)) {
+    failures.push('vanilla Meshy packer missing marker ' + meshyPackMarker);
+  }
 }
 
 const vanillaPackedManifest = JSON.parse(readFileSync('public/tftm/models/vanilla_sherman_packed/model_manifest.json', 'utf8'));
