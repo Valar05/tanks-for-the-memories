@@ -1,16 +1,17 @@
 {
   "asset_id": "authored_sherman_retopo_v1",
-  "display_name": "Authored Sherman Retopo V1",
-  "generated_at": "2026-07-04T17:23:04.678Z",
+  "display_name": "Authored Sherman Retopo V1.1",
+  "silhouette_revision": "v1.1-sherman-silhouette-subdivision",
+  "generated_at": "2026-07-04T17:46:26.298Z",
   "generator": "scripts/export_authored_sherman_retopo.mjs",
   "output_glb": "public/tftm/models/authored_sherman_retopo_v1/authored_sherman_retopo_v1.glb",
-  "source_policy": "fully authored low-poly hard-surface geometry; no Meshy chassis or turret imports",
+  "source_policy": "fully authored low-poly hard-surface geometry with added silhouette subdivision/detail layer; no Meshy chassis or turret imports",
   "uv_policy": "split face texture plates, one 0-1 rectangular UV material per paintable surface group",
   "dalle_paintability": {
     "template_dir": "assets/authored/authored_sherman_retopo_v1/texture_templates",
     "runtime_plate_dir": "public/tftm/models/authored_sherman_retopo_v1/texture_plates",
     "prompt_rule": "Use the filename/surface id in the prompt; do not ask DALL-E to paint labels or readable typography inside the image.",
-    "first_pass": "albedo plates only; derive roughness/normal after cloud/Sense accepts silhouette and paint language."
+    "first_pass": "runtime albedo plates avoid visible guide seams; authoring templates retain safe-area guides; derive roughness/normal after cloud/Sense accepts silhouette and paint language."
   },
   "face_plate_ids": [
     "hull_glacis",
@@ -50,5 +51,5 @@
     "wheel_motion": "rotate children of left_roadwheel_group and right_roadwheel_group",
     "commander_hatch": "commander_hatch__turret_top is a named posture marker, not final hatch rig"
   },
-  "approximate_triangles": 1834
+  "approximate_triangles": 9138
 }

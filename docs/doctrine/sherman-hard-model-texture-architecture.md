@@ -89,3 +89,7 @@ Bravo/Tango/Delta v1 proved that Meshy Retexture should not be asked to write co
 ## Alpha-Style Derivative Route
 
 If human visual review says only one commander tank has the right graphic shell, do not keep asking Meshy to generate unrelated variants. Use the accepted texture as the source family and derive other commander colors deterministically from its base-color map. This preserves the successful read and avoids the one-good-tank plus rejected-tanks failure.
+
+### Runtime Plate Seams
+
+For authored retopo reviews, authoring templates may keep safe-area guide borders and center marks, but runtime texture plates should not show obvious guide seams. If a cloud review shows visible plate boxes, treat that as placeholder albedo leakage, not accepted paint language. The current silhouette revision is `v1.1-sherman-silhouette-subdivision`: a stable authored asset id with a second geometry/detail pass for Sherman-like massing, cast turret read, VVSS bogies, track cleats, fenders, and barrel/mantlet ownership.

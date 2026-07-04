@@ -7,7 +7,7 @@ import { applyAuthoredRetopoTexturePlates } from './sherman-runtime-materials';
 const root = document.querySelector<HTMLDivElement>('#retopo-tank-root');
 if (!root) throw new Error('missing #retopo-tank-root');
 
-const visualBuild = 'tftm-authored-sherman-retopo-v1-20260704';
+const visualBuild = 'tftm-authored-sherman-retopo-v1-1-20260704';
 
 root.innerHTML = '<main class="single-tank-shell">' +
   '<div class="single-tank-stage"><canvas aria-label="Authored Sherman retopo scene"></canvas></div>' +

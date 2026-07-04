@@ -158,3 +158,7 @@ Tread animation can return only through one of these methods:
 - another cloud-reviewed method that reads as belt travel instead of fan sweep
 
 The current approved authored mesh exception is `tread_ribbon_only`, but "ribbon" means a closed 3D Sherman-like trapezoid track volume, not a side facade or generic rounded belt. It must include outer and inner sidewalls, top run tucked under the hull, long grounded bottom run, angled front and rear returns, side/back thickness, and animated PBR material lanes. Static raised link blocks are rejected as the primary motion proof because they imply moving tread links while the geometry stays still. Hull, turret, barrel, and wheel/gear visual assets remain Meshy-generated unless a later doctrine explicitly changes that.
+
+### Authored Retopo V1.1 Review
+
+The `authored_sherman_retopo_v1` asset now carries silhouette revision `v1.1-sherman-silhouette-subdivision`. Cloud/Sense review should judge whether the added detail layer improves Sherman silhouette without turning the split face plate system into visible seams. Runtime plates are intentionally seam-minimized; authoring templates are allowed to retain guide borders for repaint work.

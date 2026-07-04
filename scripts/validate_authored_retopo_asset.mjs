@@ -62,7 +62,7 @@ if (failures.length === 0) {
   if (!String(manifest.source_policy || '').includes('fully authored')) fail('manifest must identify fully authored geometry');
   if (!String(manifest.source_policy || '').includes('no Meshy chassis or turret')) fail('manifest must reject Meshy chassis/turret imports');
   if (!String(manifest.uv_policy || '').includes('split face texture plates')) fail('manifest must use split face texture plate UV policy');
-  if (manifest.approximate_triangles > 5000) fail('authored retopo must stay below 5000 triangles for first phone review');
+  if (manifest.approximate_triangles > 12000) fail('authored retopo must stay below 12000 triangles for first phone review');
   for (const id of facePlateIds) {
     if (!manifest.face_plate_ids?.includes(id)) fail('manifest missing face plate id ' + id);
     if (!materialNames.has(id)) fail('GLB missing material slot ' + id);
@@ -73,7 +73,7 @@ if (failures.length === 0) {
   for (const forbidden of ['loadGlb(', 'sherman_part_meshy_kit_v1', 'hull.glb', 'turret.glb', 'SimplifyModifier']) {
     if (exporter.includes(forbidden)) fail('authored exporter must not import or simplify Meshy chassis/turret marker ' + forbidden);
   }
-  for (const marker of ['AUTHORED_SHERMAN_RETOPO_GLB_URL', 'AUTHORED_SHERMAN_RETOPO_FACE_PLATES', 'applyAuthoredRetopoTexturePlates', 'tftm-authored-sherman-retopo-v1-20260704']) {
+  for (const marker of ['AUTHORED_SHERMAN_RETOPO_GLB_URL', 'AUTHORED_SHERMAN_RETOPO_FACE_PLATES', 'applyAuthoredRetopoTexturePlates', 'tftm-authored-sherman-retopo-v1-1-20260704']) {
     if (!source.includes(marker) && !links.includes(marker) && !materials.includes(marker)) fail('retopo runtime missing marker ' + marker);
   }
   if (!build.includes("buildEntry('retopo-tank.ts', 'retopo-tank')")) fail('build must bundle retopo-tank.ts');

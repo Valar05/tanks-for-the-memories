@@ -51,7 +51,7 @@ const releaseManifest = {
   },
   authored_retopo_review: {
     route: 'retopo-tank.html',
-    expected_build: 'tftm-authored-sherman-retopo-v1-20260704',
+    expected_build: 'tftm-authored-sherman-retopo-v1-1-20260704',
     asset_id: authoredRetopoManifest.asset_id,
     output_glb: authoredRetopoManifest.output_glb,
     approximate_triangles: authoredRetopoManifest.approximate_triangles,
@@ -85,7 +85,7 @@ const releaseManifest = {
     }]))
   },
   required_cloud_captures: [
-    'retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-20260704',
+    'retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-1-20260704',
     'retopo-tank phone landscape showing split face texture plates with sane UV mapping and no local capture',
     'retopo-tank close-up chassis and turret review showing hard-surface authored form, usable turret ring, and barrel/mantlet ownership',
     'single-tank phone portrait showing one linked textured Sherman and build token tftm-single-linked-sherman-textured-v1-20260704',

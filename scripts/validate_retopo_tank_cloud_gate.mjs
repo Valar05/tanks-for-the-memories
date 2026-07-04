@@ -12,7 +12,7 @@ if (!existsSync(manifestPath)) {
   const captures = Array.isArray(manifest.required_cloud_captures) ? manifest.required_cloud_captures.join('\n') : '';
   if (!existsSync('generated/cloud-visual-truth/tftm-release/dist/retopo-tank.html')) fail('cloud release missing dist/retopo-tank.html');
   if (!rules.includes('authored_sherman_retopo_v1')) fail('cloud manifest must name authored_sherman_retopo_v1');
-  if (!rules.includes('tftm-authored-sherman-retopo-v1-20260704')) fail('cloud manifest must require the authored retopo build token');
+  if (!rules.includes('tftm-authored-sherman-retopo-v1-1-20260704')) fail('cloud manifest must require the authored retopo build token');
   if (!captures.includes('retopo-tank phone portrait')) fail('cloud captures must require retopo-tank phone portrait');
   if (!captures.includes('split face texture plates')) fail('cloud captures must require split face texture plates');
   if (!captures.includes('close-up chassis and turret')) fail('cloud captures must require close-up chassis and turret review');
