@@ -1,0 +1,57 @@
+{
+  "asset_id": "sherman_default_texture_set_v1",
+  "asset_class": "canonical_sherman_default_painted_realism_albedo_set",
+  "created_at": "2026-07-04T10:20:00Z",
+  "generator": "promoted from accepted model-assay painted-realism albedo-only set after user visual acceptance",
+  "source_assets": {
+    "accepted_set": "assets/generated/openai/sherman_albedo_only_v1",
+    "olive_albedo": "assets/generated/openai/sherman_albedo_only_v1/olive_albedo.png",
+    "tread_albedo": "assets/generated/openai/sherman_albedo_only_v1/tread_albedo.png",
+    "acceptance_surface": "model-assay.html canonical tank, build tftm-model-assay-canonical-coaxial-mg-20260704t"
+  },
+  "target_use": "Canonical Sherman default runtime texture set for separated kit body, barrel, bow MG, wheels, and authored tread ribbons",
+  "visual_doctrine": {
+    "mode": "painted_realism_not_physical_realism",
+    "accepted_read": "user accepted canonical model-assay tank texture/body/tread read on 2026-07-04",
+    "primary_rule": "The albedo must carry the tank. PBR maps may be derived later, but they must not rescue a weak base color map.",
+    "default_identity": "boring default Sherman field-maintained olive drab with dust, grime, wear, and non-black gun/barrel material language",
+    "variant_policy": "Alpha/Bravo/Tango/Delta commander variants should derive from this default language without changing the canonical mesh/tread contract."
+  },
+  "outputs": {
+    "olive_albedo": "assets/generated/openai/sherman_default_texture_set_v1/olive_albedo.png",
+    "tread_albedo": "assets/generated/openai/sherman_default_texture_set_v1/tread_albedo.png"
+  },
+  "dimensions": {
+    "olive_albedo": {
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGB"
+    },
+    "tread_albedo": {
+      "width": 1024,
+      "height": 256,
+      "mode": "RGB"
+    }
+  },
+  "runtime_policy": {
+    "active_default": true,
+    "geometry_locked": true,
+    "canonical_runtime_tank": "sherman_part_meshy_kit_v1 / model-assay",
+    "anti_personnel_policy": "cannon_chain_mg_no_fixed_bow_mg",
+    "active_maps": [
+      "olive_albedo",
+      "tread_albedo"
+    ],
+    "forbidden_active_maps": [
+      "normalMap",
+      "roughnessMap",
+      "metalnessMap"
+    ],
+    "legacy_pbr_folder_policy": "preserve sherman_runtime_pbr_v1 for comparison and possible derived maps, but active default uses albedo-only maps."
+  },
+  "verification": {
+    "validator": "scripts/validate_sherman_albedo_manifest.mjs",
+    "review_surface": "model-assay.html cloud visual truth wake",
+    "acceptance_requires_user_visible_cloud_review": true
+  }
+}

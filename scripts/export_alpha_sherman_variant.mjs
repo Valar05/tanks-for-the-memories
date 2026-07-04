@@ -30,7 +30,7 @@ const olive = new THREE.MeshStandardMaterial({ color: 0x5f5a34, roughness: 0.86,
 const crimson = new THREE.MeshStandardMaterial({ color: 0x7d2018, roughness: 0.9, metalness: 0.08, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
 const chalk = new THREE.MeshStandardMaterial({ color: 0xd8d2b8, roughness: 0.92, metalness: 0.02, polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -3 });
 const dust = new THREE.MeshStandardMaterial({ color: 0x8a7653, roughness: 1.0, metalness: 0.0, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
-const darkGun = new THREE.MeshStandardMaterial({ color: 0x11120f, roughness: 0.72, metalness: 0.5 });
+const darkGun = new THREE.MeshStandardMaterial({ color: 0x4a4b3b, roughness: 0.72, metalness: 0.34 });
 const simplifyModifier = new SimplifyModifier();
 const trackMat = new THREE.MeshStandardMaterial({ color: 0x3a3021, roughness: 0.86, metalness: 0.16, side: THREE.DoubleSide });
 const wheelMat = new THREE.MeshStandardMaterial({ color: 0x514632, roughness: 0.82, metalness: 0.2 });
@@ -107,6 +107,37 @@ function alignWheelFaceToTankSide(object) {
   if (size.x <= size.y && size.x <= size.z) object.rotation.y = halfTurn;
   if (size.y < size.x && size.y <= size.z) object.rotation.x = halfTurn;
   return object;
+}
+
+function findFirstMesh(object) {
+  let found = null;
+  object.traverse((child) => {
+    if (!found && child.isMesh && child.geometry) found = child;
+  });
+  if (!found) throw new Error('GLB part has no mesh');
+  return found;
+}
+
+function bakeBarrelGeometryWithRearPivot(object) {
+  object.updateWorldMatrix(true, true);
+  const mesh = findFirstMesh(object);
+  const geometry = mesh.geometry.clone();
+  geometry.applyMatrix4(mesh.matrixWorld);
+  const box = new THREE.Box3().setFromBufferAttribute(geometry.getAttribute('position'));
+  const center = new THREE.Vector3();
+  box.getCenter(center);
+  geometry.translate(-box.min.x, -center.y, -center.z);
+  geometry.computeVertexNormals();
+  geometry.computeBoundingSphere();
+  return geometry;
+}
+
+function makeMeshFromGeometry(name, geometry, material) {
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.name = name;
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  return mesh;
 }
 
 function createTreadGeometry() {
@@ -265,15 +296,20 @@ const mantlet = applyMaterial(simplifyMeshes(normalizeObject(mantletSource, 0.58
 mantlet.rotation.y = Math.PI * 0.5;
 mantlet.name = 'mantlet_socket_meshy';
 gunPivot.add(mantlet);
-const barrel = applyMaterial(alignLongestAxisToX(normalizeObject(barrelSource, 1.25)), olive);
-barrel.name = 'barrel_only_meshy';
+const barrelObject = alignLongestAxisToX(normalizeObject(barrelSource, 1.25));
+const barrel = makeMeshFromGeometry('barrel_only_meshy', bakeBarrelGeometryWithRearPivot(barrelObject), olive);
 barrel.position.set(-0.08, 0, 0);
 gunPivot.add(barrel);
-const bow = applyMaterial(simplifyMeshes(alignLongestAxisToX(normalizeObject(mgSource, 0.72)), 0.48), darkGun);
-bow.rotation.y += Math.PI;
-bow.name = 'bow_mg_meshy';
-bow.position.set(1.12, 0.16, 0.36);
-model.add(bow);
+const coaxialMgObject = alignLongestAxisToX(normalizeObject(mgSource.clone(true), 0.95));
+coaxialMgObject.rotation.y += Math.PI;
+const coaxialMg = makeMeshFromGeometry('coaxial_mg_meshy', bakeBarrelGeometryWithRearPivot(coaxialMgObject), darkGun);
+coaxialMg.position.set(0.26, -0.08, 0.34);
+gunPivot.add(coaxialMg);
+const bowMgObject = alignLongestAxisToX(normalizeObject(mgSource.clone(true), 0.72));
+bowMgObject.rotation.y += Math.PI;
+const bowMg = makeMeshFromGeometry('bow_mg_meshy', bakeBarrelGeometryWithRearPivot(bowMgObject), darkGun);
+bowMg.position.set(1.14, 0.18, 0.36);
+model.add(bowMg);
 addAlphaCharacterMarks(model, turretPivot);
 
 for (const z of [-0.72, 0.72]) {
@@ -311,8 +347,8 @@ const manifest = {
   source_components: sourceFiles,
   composition: [
     'Meshy hull upper', 'Meshy turret shell', 'Meshy mantlet socket', 'Meshy barrel only',
-    'Meshy bow anti-personnel MG module; separated coaxial component included for runtime assembly',
-    'Alpha player-character markings based on newest Downloads reference image', 'Meshy mobile gear wheels',
+    'Meshy coaxial MG module follows cannon elevation and is pulled forward/outboard for default-camera readability',
+    'Alpha player-character markings based on newest Downloads reference image', 'Meshy bow MG module stays fixed on hull front for anti-personnel read', 'Meshy mobile gear wheels',
     'authored closed Sherman-like trapezoid tread ribbons with sidewall blockers'
   ],
   runtime_contract: {
@@ -323,7 +359,10 @@ const manifest = {
     vanilla_identity: false,
     character_identity: 'alpha_player_sherman',
     reference_image: '/storage/emulated/0/Download/file_00000000544c720ca6775c5f5fb2a678 (1).png',
-    visual_motifs: ['crimson recognition stripe', 'white A turret mark', 'chalk crew marks', 'field dirt']
+    visual_motifs: ['crimson recognition stripe', 'white A turret mark', 'chalk crew marks', 'field dirt'],
+    barrel_rear_pivot_bake: true,
+    anti_personnel_weapons: ['coaxial_mg_meshy', 'bow_mg_meshy'],
+    anti_personnel_visibility_tune: 'parade-style coaxial plus bow MG restored; coaxial is forward/outboard for default alpha-control camera readability'
   },
   approximate_triangles: countTriangles(scene)
 };

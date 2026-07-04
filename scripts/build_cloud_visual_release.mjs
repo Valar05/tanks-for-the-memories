@@ -62,8 +62,8 @@ const releaseManifest = {
   },
   required_cloud_captures: [
     'model-assay phone portrait showing hero proof plus 24 independently animated tanks',
-    'model-assay phone landscape showing readable closed 3D tread belt volume, wheel orientation, and non-black barrel material',
-    'model-assay time-separated capture showing unsynchronized horizontal turret traverse and vertical barrel elevation across the 24 tanks',
+    'model-assay phone landscape showing canonical body, cannon-chain MG, readable closed 3D tread belt volume, wheel orientation, and non-black barrel material',
+    'model-assay time-separated capture showing unsynchronized horizontal turret traverse, vertical barrel elevation, cannon-chain MG, and no fixed bow MG across the 24 tanks',
     'model-assay three-quarter capture showing top/bottom/front/rear tread volume rather than side-facade tread',
     'model-assay desktop medium viewport showing FPS, draw-call estimate, and 24-tank budget readout'
   ],
@@ -80,7 +80,7 @@ const releaseManifest = {
     'Is the gear/wheel candidate a reusable wheel or sprocket module, not a belt or whole suspension?',
     'Is the material atlas free of text, labels, logos, and complete vehicle objects?'
   ],
-  acceptance: 'RED BUILD: Animated 24-tank runtime proof is deployed for human visual review. It passes only if treads read as closed 3D tread belt volumes rather than side facades, wheels face the hull sides, barrels use non-black Sherman-compatible PBR material and visibly elevate from a rear/socket pivot, every turret traverses horizontally on unsynchronized smooth cycles, every tank has independent motion state, and 24 tanks are plausible on phone.'
+  acceptance: 'RED BUILD: Animated 24-tank runtime proof is deployed for human visual review. It passes only if this canonical body/tread system reads as the tank, has cannon-chain MG with no fixed bow MG, treads read as closed 3D tread belt volumes rather than side facades, wheels face the hull sides, barrels use non-black Sherman-compatible PBR material and visibly elevate from a rear/socket pivot, every turret traverses horizontally on unsynchronized smooth cycles, every tank has independent motion state, and 24 tanks are plausible on phone.'
 };
 
 writeFileSync(join(releaseRoot, 'cloud_visual_truth_manifest.json'), JSON.stringify(releaseManifest, null, 2) + '\n');

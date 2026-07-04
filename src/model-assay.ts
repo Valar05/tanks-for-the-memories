@@ -30,7 +30,7 @@ type RuntimePart = {
 
 type TreadMaterialSet = {
   material: THREE.MeshStandardMaterial;
-  maps: THREE.CanvasTexture[];
+  maps: THREE.Texture[];
 };
 
 type TreadInstancedMesh = THREE.InstancedMesh & {
@@ -58,12 +58,11 @@ type TankAnimationState = {
 const spawnTarget = 24;
 const wheelsPerTank = 10;
 const treadTrianglesPerTank = 1400;
-const visualQaBuild = 'tftm-model-assay-coaxial-mg-20260704a';
+const visualQaBuild = 'tftm-model-assay-canonical-coaxial-mg-20260704t';
 const gunPivotSocket = new THREE.Vector3(0.43, 0.83, 0);
 const heroGunPivotSocket = new THREE.Vector3(0.38, 0.09, 0);
 const barrelRearOffset = new THREE.Vector3(-0.08, 0, 0);
 const coaxialMgOffset = new THREE.Vector3(0.08, -0.02, 0.42);
-const bowMgOffset = new THREE.Vector3(1.12, 0.16, 0.36);
 const matrixScratch = {
   root: new THREE.Matrix4(),
   yaw: new THREE.Matrix4(),
@@ -71,21 +70,20 @@ const matrixScratch = {
   pitch: new THREE.Matrix4(),
   barrelRear: new THREE.Matrix4(),
   coaxialMg: new THREE.Matrix4(),
-  bowMg: new THREE.Matrix4(),
   scale: new THREE.Matrix4(),
   composed: new THREE.Matrix4()
 };
 const root = document.querySelector<HTMLDivElement>('#assay-root');
 if (!root) throw new Error('missing #assay-root');
 const materialTextureLoader = new THREE.TextureLoader();
-const materialBase = './model-assay/sherman_runtime_pbr_v1/';
+const materialBase = './model-assay/sherman_default_texture_set_v1/';
 
 const compositionSlots = [
   { id: 'hull', label: 'Hull Upper' },
   { id: 'turret', label: 'Turret Shell' },
   { id: 'mantlet_socket', label: 'Mantlet Socket' },
   { id: 'barrel_only', label: 'Barrel Only' },
-  { id: 'coaxial_mg', label: 'Coaxial MG' },
+  { id: 'coaxial_mg', label: 'Cannon MG' },
   { id: 'gear_mobile', label: 'Mobile Gear / Wheel' }
 ];
 const glbSrc = (glbPath: string) => './model-assay/sherman_part_meshy_kit_v1/' + glbPath.split('/').pop();
@@ -93,7 +91,7 @@ const glbSrc = (glbPath: string) => './model-assay/sherman_part_meshy_kit_v1/' +
 root.innerHTML = '<main class="drive-proof-shell">' +
   '<header class="drive-proof-header">' +
     '<p class="eyebrow blocked">RED BUILD / 24-tank animated runtime proof</p>' +
-    '<h1>sherman_part_meshy_kit_v1</h1>' +
+    '<h1>sherman_part_meshy_kit_v1 / canonical tank</h1>' +
     '<p class="summary">Hero proof plus 24 independently animated tanks. Meshy geometry is shared for phone performance, but drive, wheel, tread, turret, and barrel state are seeded per tank.</p>' +
   '</header>' +
   '<section class="drive-stage-wrap">' +
@@ -174,36 +172,25 @@ function postVisualQaFrame(canvas: HTMLCanvasElement, frame: number) {
   }, 'image/png');
 }
 
-function makePbrTexture(path: string, color: boolean, repeatX = 1, repeatY = 1) {
+function makeAlbedoTexture(path: string, repeatX = 1, repeatY = 1) {
   const texture = materialTextureLoader.load(path);
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(repeatX, repeatY);
-  texture.colorSpace = color ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+  texture.colorSpace = THREE.SRGBColorSpace;
   return texture;
 }
 
-function makeMap(kind: 'albedo' | 'roughness' | 'metalness' | 'normal') {
-  const file = kind === 'albedo' ? 'tread_albedo.png' : kind === 'roughness' ? 'tread_roughness.png' : kind === 'metalness' ? 'tread_metalness.png' : 'tread_normal.png';
-  return makePbrTexture(materialBase + file, kind === 'albedo');
-}
-
 function makeTreadMaterialSet() {
-  const albedo = makeMap('albedo');
-  const roughnessMap = makeMap('roughness');
-  const metalnessMap = makeMap('metalness');
-  const normalMap = makeMap('normal');
+  const albedo = makeAlbedoTexture(materialBase + 'tread_albedo.png');
   const material = new THREE.MeshStandardMaterial({
     map: albedo,
-    roughnessMap,
-    metalnessMap,
-    normalMap,
     color: 0xffffff,
-    roughness: 0.82,
-    metalness: 0.28,
+    roughness: 0.88,
+    metalness: 0.12,
     side: THREE.DoubleSide
   });
-  return { material, maps: [albedo, roughnessMap, metalnessMap, normalMap] };
+  return { material, maps: [albedo] };
 }
 
 function makeInstancedTreadMaterialSet() {
@@ -496,20 +483,17 @@ function bakeGeometryFromObject(object: THREE.Object3D) {
   return { geometry, material };
 }
 
-function makeOlivePbrMaterial() {
+function makeOliveAlbedoMaterial() {
   return new THREE.MeshStandardMaterial({
-    map: makePbrTexture(materialBase + 'olive_albedo.png', true, 1.2, 1.2),
-    roughnessMap: makePbrTexture(materialBase + 'olive_roughness.png', false, 1.2, 1.2),
-    metalnessMap: makePbrTexture(materialBase + 'olive_metalness.png', false, 1.2, 1.2),
-    normalMap: makePbrTexture(materialBase + 'olive_normal.png', false, 1.2, 1.2),
+    map: makeAlbedoTexture(materialBase + 'olive_albedo.png', 1.2, 1.2),
     color: 0xffffff,
-    roughness: 0.78,
-    metalness: 0.32
+    roughness: 0.86,
+    metalness: 0.14
   });
 }
 
 function makeBarrelMaterial() {
-  return makeOlivePbrMaterial();
+  return makeOliveAlbedoMaterial();
 }
 
 function bakeBarrelGeometryWithRearPivot(object: THREE.Object3D) {
@@ -563,7 +547,7 @@ function loadMantletSocketRuntimePart(loader: GLTFLoader, url: string, targetMax
       const baked = bakeGeometryFromObject(object);
       const mesh = findFirstMesh(object);
       const primitive = mesh.geometry.getIndex()?.count || mesh.geometry.getAttribute('position').count;
-      resolve({ object, geometry: baked.geometry, material: makeOlivePbrMaterial(), triangles: Math.floor(primitive / 3) });
+      resolve({ object, geometry: baked.geometry, material: makeOliveAlbedoMaterial(), triangles: Math.floor(primitive / 3) });
     }, undefined, reject);
   });
 }
@@ -623,7 +607,7 @@ function composeBarrelMatrix(mesh: THREE.InstancedMesh, index: number, x: number
   mesh.setMatrixAt(index, matrixScratch.composed);
 }
 
-function composeCoaxialMgMatrix(mesh: THREE.InstancedMesh, index: number, x: number, z: number, yaw: number, barrelPitch: number, scale: number) {
+function composeCannonMgMatrix(mesh: THREE.InstancedMesh, index: number, x: number, z: number, yaw: number, barrelPitch: number, scale: number) {
   matrixScratch.root.makeTranslation(x, 0, z);
   matrixScratch.yaw.makeRotationY(yaw);
   matrixScratch.socket.makeTranslation(gunPivotSocket.x, gunPivotSocket.y, gunPivotSocket.z);
@@ -636,19 +620,6 @@ function composeCoaxialMgMatrix(mesh: THREE.InstancedMesh, index: number, x: num
     .multiply(matrixScratch.socket)
     .multiply(matrixScratch.pitch)
     .multiply(matrixScratch.coaxialMg)
-    .multiply(matrixScratch.scale);
-  mesh.setMatrixAt(index, matrixScratch.composed);
-}
-
-function composeBowMgMatrix(mesh: THREE.InstancedMesh, index: number, x: number, z: number, yaw: number, scale: number) {
-  matrixScratch.root.makeTranslation(x, 0, z);
-  matrixScratch.yaw.makeRotationY(yaw);
-  matrixScratch.bowMg.makeTranslation(bowMgOffset.x, bowMgOffset.y, bowMgOffset.z);
-  matrixScratch.scale.makeScale(scale, scale, scale);
-  matrixScratch.composed
-    .copy(matrixScratch.root)
-    .multiply(matrixScratch.yaw)
-    .multiply(matrixScratch.bowMg)
     .multiply(matrixScratch.scale);
   mesh.setMatrixAt(index, matrixScratch.composed);
 }
@@ -707,7 +678,7 @@ function updateTreadPhase(mesh: TreadInstancedMesh, index: number, value: number
 async function boot() {
   const manifest = await fetch('./model-assay/sherman_part_meshy_kit_v1/assembly_manifest.json', { cache: 'no-store' }).then((r) => r.json() as Promise<KitManifest>);
   const loader = new GLTFLoader();
-  const [hull, turret, mantletSocket, barrel, coaxialMg, gear] = await Promise.all([
+  const [hull, turret, mantletSocket, barrel, cannonMg, gear] = await Promise.all([
     loadRuntimePart(loader, glbSrc(manifest.parts.hull.glb), 2.9),
     loadRuntimePart(loader, glbSrc(manifest.parts.turret.glb), 1.25),
     loadMantletSocketRuntimePart(loader, './model-assay/sherman_mantlet_socket_v1/glb.glb', 0.58),
@@ -716,26 +687,25 @@ async function boot() {
     loadRuntimePart(loader, glbSrc(manifest.parts.gear_mobile.glb), 0.34, alignWheelFaceToTankSide)
   ]);
 
-  const heroTriangles = manifest.parts.hull.approximate_triangles + manifest.parts.turret.approximate_triangles + mantletSocket.triangles + manifest.parts.barrel_only.approximate_triangles + coaxialMg.triangles + wheelsPerTank * manifest.parts.gear_mobile.approximate_triangles + treadTrianglesPerTank;
+  const heroTriangles = manifest.parts.hull.approximate_triangles + manifest.parts.turret.approximate_triangles + mantletSocket.triangles + manifest.parts.barrel_only.approximate_triangles + cannonMg.triangles + wheelsPerTank * manifest.parts.gear_mobile.approximate_triangles + treadTrianglesPerTank;
   const spawnTriangles = heroTriangles * spawnTarget;
   gateEl.textContent = manifest.gate_status;
   heroBudgetEl.textContent = String(heroTriangles) + ' tris';
   spawnBudgetEl.textContent = String(spawnTarget) + ' tanks / ' + String(spawnTriangles) + ' submitted tris';
-  drawsEl.textContent = 'draw-call estimate: hero plus 6 instanced draw groups; shared GLB geometry/textures';
+  drawsEl.textContent = 'draw-call estimate: hero plus 7 instanced draw groups; shared GLB geometry/textures';
   seedsEl.textContent = String(spawnTarget) + '/' + String(spawnTarget) + ' independent animation seeds';
   contractEl.innerHTML = [
     'Hero tank validates visible part relationship up close',
     'Spawn proof renders exactly 24 independently animated tanks',
     'Meshy mantlet socket owns the gun pivot between turret and barrel',
-    'Meshy coaxial machine gun gives anti-personnel read and follows the same traverse/elevation chain',
-    'Meshy bow machine gun stays visible on the hull front as a fixed anti-personnel weapon',
-    'Treads use MeshStandardMaterial with albedo, roughness, metalness, and normal maps',
-    'Authored tread belt uses Sherman trapezoid silhouette, upper sidewall blockers, closed side/back volume, guide bands, and animated PBR material lanes',
+    'Canonical anti-personnel weapon is the cannon-chain MG; no fixed bow MG',
+    'Treads use MeshStandardMaterial with standalone painted-realism albedo maps',
+    'Authored tread belt uses Sherman trapezoid silhouette, upper sidewall blockers, closed side/back volume, guide bands, and animated painted albedo material lanes',
     'Spawn treads use InstancedBufferAttribute tread phase instead of a shared material-wide texture offset',
     'Drive, wheel, turret, barrel, and tread motion are seeded per tank with smoothed random cycles',
     'Every turret traverses horizontally on its own yaw cycle',
-    'Every barrel and coaxial MG elevates visibly from a rear socket pivot on its own pitch cycle',
-    'Barrel material is Sherman-compatible olive gunmetal PBR, not inherited black GLB material',
+    'Every barrel and cannon MG elevate visibly from a rear socket pivot on their own pitch cycle',
+    'Barrel material is Sherman-compatible painted olive albedo, not inherited black GLB material',
     'Wheels face tank sides and spin around the axle',
     'Barrel aligns forward from the turret instead of standing perpendicular',
     '24-tank target uses InstancedMesh; no deep-cloned GLB object trees'
@@ -792,12 +762,9 @@ async function boot() {
   const heroBarrel = new THREE.Mesh(barrel.geometry, barrel.material);
   heroBarrel.position.copy(barrelRearOffset);
   heroGunPivot.add(heroBarrel);
-  const heroCoaxialMg = new THREE.Mesh(coaxialMg.geometry, coaxialMg.material);
-  heroCoaxialMg.position.copy(coaxialMgOffset);
-  heroGunPivot.add(heroCoaxialMg);
-  const heroBowMg = new THREE.Mesh(coaxialMg.geometry, coaxialMg.material);
-  heroBowMg.position.copy(bowMgOffset);
-  hero.add(heroBowMg);
+  const heroCannonMg = new THREE.Mesh(cannonMg.geometry, cannonMg.material);
+  heroCannonMg.position.copy(coaxialMgOffset);
+  heroGunPivot.add(heroCannonMg);
   const heroLeftTread = new THREE.Mesh(createTreadGeometry(), treadHeroLeft.material);
   heroLeftTread.position.z = -0.72;
   const heroRightTread = new THREE.Mesh(createTreadGeometry(), treadHeroRight.material);
@@ -817,12 +784,11 @@ async function boot() {
   const turretInstances = makeInstancedMesh(turret, spawnTarget);
   const mantletSocketInstances = makeInstancedMesh(mantletSocket, spawnTarget);
   const barrelInstances = makeInstancedMesh(barrel, spawnTarget);
-  const coaxialMgInstances = makeInstancedMesh(coaxialMg, spawnTarget);
-  const bowMgInstances = makeInstancedMesh(coaxialMg, spawnTarget);
+  const cannonMgInstances = makeInstancedMesh(cannonMg, spawnTarget);
   const gearInstances = makeInstancedMesh(gear, spawnTarget * wheelsPerTank);
   const leftTreadInstances = makeTreadInstancedMesh(treadSpawnLeft, spawnTarget);
   const rightTreadInstances = makeTreadInstancedMesh(treadSpawnRight, spawnTarget);
-  scene.add(hullInstances, turretInstances, mantletSocketInstances, barrelInstances, coaxialMgInstances, bowMgInstances, gearInstances, leftTreadInstances, rightTreadInstances);
+  scene.add(hullInstances, turretInstances, mantletSocketInstances, barrelInstances, cannonMgInstances, gearInstances, leftTreadInstances, rightTreadInstances);
 
   const tankStates: TankAnimationState[] = [];
   for (let i = 0; i < spawnTarget; i += 1) {
@@ -869,8 +835,7 @@ async function boot() {
       setInstance(turretInstances, i, x + 0.04, 0.76, z, yaw + turretYaw, 0, 0, 0.72);
       composeGunSocketMatrix(mantletSocketInstances, i, x, z, yaw + turretYaw, barrelPitch, 0.72);
       composeBarrelMatrix(barrelInstances, i, x, z, yaw + turretYaw, barrelPitch, 0.72);
-      composeCoaxialMgMatrix(coaxialMgInstances, i, x, z, yaw + turretYaw, barrelPitch, 0.72);
-      composeBowMgMatrix(bowMgInstances, i, x, z, yaw, 0.72);
+      composeCannonMgMatrix(cannonMgInstances, i, x, z, yaw + turretYaw, barrelPitch, 0.72);
       setInstance(leftTreadInstances, i, x, 0, z - 0.52, yaw, 0, 0, 0.72);
       setInstance(rightTreadInstances, i, x, 0, z + 0.52, yaw, 0, 0, 0.72);
       updateTreadPhase(leftTreadInstances, i, treadPhase);
@@ -886,8 +851,7 @@ async function boot() {
     turretInstances.instanceMatrix.needsUpdate = true;
     mantletSocketInstances.instanceMatrix.needsUpdate = true;
     barrelInstances.instanceMatrix.needsUpdate = true;
-    coaxialMgInstances.instanceMatrix.needsUpdate = true;
-    bowMgInstances.instanceMatrix.needsUpdate = true;
+    cannonMgInstances.instanceMatrix.needsUpdate = true;
     gearInstances.instanceMatrix.needsUpdate = true;
     leftTreadInstances.instanceMatrix.needsUpdate = true;
     rightTreadInstances.instanceMatrix.needsUpdate = true;
@@ -904,8 +868,8 @@ async function boot() {
         target: spawnTarget,
         heroGunPivotSocketX: heroGunPivotSocket.x,
         heroGunPivotSocketY: heroGunPivotSocket.y,
-        coaxialMgOffsetZ: coaxialMgOffset.z,
-        bowMgOffsetZ: bowMgOffset.z
+        antiPersonnelWeapon: 'cannon_chain_mg',
+        cannonMgOffsetZ: coaxialMgOffset.z
       });
     }
     if (qa.capture && visualQaFrame < qa.frames && now - visualQaLastCapture >= qa.intervalMs) {
@@ -923,7 +887,7 @@ async function boot() {
     }
     requestAnimationFrame(render);
   }
-  verdictEl.textContent = 'Loaded hero proof plus 24 independently animated instanced tanks with Meshy coaxial anti-personnel MG. Still red until tread readability, weapon seating, independent motion, and phone performance are accepted from this cloud page.';
+  verdictEl.textContent = 'Loaded canonical hero proof plus 24 independently animated instanced tanks with cannon-chain MG. Still red until tread readability, weapon seating, independent motion, and phone performance are accepted from this cloud page.';
   requestAnimationFrame(render);
 }
 

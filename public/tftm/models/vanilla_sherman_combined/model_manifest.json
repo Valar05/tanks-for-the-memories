@@ -1,7 +1,7 @@
 {
   "asset_id": "vanilla_sherman_combined",
   "display_name": "Vanilla Sherman Combined",
-  "generated_at": "2026-07-04T04:57:42.123Z",
+  "generated_at": "2026-07-04T14:43:50.042Z",
   "generator": "scripts/export_vanilla_sherman_glb.mjs",
   "output_glb": "public/tftm/models/vanilla_sherman_combined/vanilla_sherman.glb",
   "source_components": {
@@ -17,7 +17,8 @@
     "Meshy turret shell",
     "Meshy mantlet socket",
     "Meshy barrel only",
-    "Meshy bow anti-personnel MG module; separated coaxial component included in zip for runtime assembly",
+    "Meshy coaxial MG module follows cannon elevation and is pulled forward/outboard for default-camera readability",
+    "Meshy bow MG module stays fixed on hull front for anti-personnel read",
     "Meshy mobile gear wheels",
     "authored closed Sherman-like trapezoid tread ribbons with sidewall blockers"
   ],
@@ -26,7 +27,13 @@
     "phone_gate_target_triangles": 20000,
     "export_decimation": "SimplifyModifier applied to combined static GLB only; source Meshy component GLBs are unchanged and included in component zip.",
     "animation_source": "Use separated source components for turret traverse, barrel elevation, wheel spin, and tread material animation.",
-    "vanilla_identity": true
+    "vanilla_identity": true,
+    "barrel_rear_pivot_bake": true,
+    "anti_personnel_weapons": [
+      "coaxial_mg_meshy",
+      "bow_mg_meshy"
+    ],
+    "anti_personnel_visibility_tune": "parade-style coaxial plus bow MG restored; coaxial is forward/outboard for default alpha-control camera readability"
   },
-  "approximate_triangles": 14203
+  "approximate_triangles": 19158
 }

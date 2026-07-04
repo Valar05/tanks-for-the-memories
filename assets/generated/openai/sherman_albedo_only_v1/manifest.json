@@ -1,0 +1,64 @@
+{
+  "asset_id": "sherman_albedo_only_v1",
+  "asset_class": "painted_realism_albedo_only_material",
+  "created_at": "2026-07-04T04:40:00Z",
+  "generator": "derived repo asset pass from existing OpenAI albedo maps; no Meshy retexture; no new 3D generation",
+  "source_assets": {
+    "olive_albedo": "assets/generated/openai/sherman_runtime_pbr_v1/olive_albedo.png",
+    "tread_albedo": "assets/generated/openai/sherman_runtime_pbr_v1/tread_albedo.png",
+    "texture_language_reference": "public/tftm/tanks/alpha/texture_manifest.json"
+  },
+  "target_use": "Three.js Alpha control and model assay painted-realism review path",
+  "visual_doctrine": {
+    "mode": "painted_realism_not_physical_realism",
+    "primary_rule": "The albedo must carry the tank. If the flat color map cannot read as painted realism, PBR maps are not allowed to rescue it.",
+    "standalone_acceptance": [
+      "olive albedo reads as painted field-maintained olive drab steel with dust, grime, and wear language",
+      "tread albedo reads as worn track/rubber/road grime material before motion or shader detail helps it",
+      "barrel and armor must not read as black or untextured when using the olive albedo",
+      "crew identity and battlefield use must be visible through paint, wear, markings, dirt, and field repair color"
+    ]
+  },
+  "outputs": {
+    "olive_albedo": "assets/generated/openai/sherman_albedo_only_v1/olive_albedo.png",
+    "tread_albedo": "assets/generated/openai/sherman_albedo_only_v1/tread_albedo.png"
+  },
+  "dimensions": {
+    "olive_albedo": {
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGB"
+    },
+    "tread_albedo": {
+      "width": 1024,
+      "height": 256,
+      "mode": "RGB"
+    }
+  },
+  "forbidden_active_maps": [
+    "normalMap",
+    "roughnessMap",
+    "metalnessMap",
+    "olive_normal.png",
+    "olive_roughness.png",
+    "olive_metalness.png",
+    "tread_normal.png",
+    "tread_roughness.png",
+    "tread_metalness.png"
+  ],
+  "runtime_policy": {
+    "geometry_locked": true,
+    "identity_from_texture_only": true,
+    "runtime_materials": "MeshStandardMaterial with base color map only plus fixed scalar roughness/metalness",
+    "old_pbr_folder_policy": "preserve for rollback/comparison; do not require for active Alpha review"
+  },
+  "verification": {
+    "validator": "scripts/validate_sherman_albedo_manifest.mjs",
+    "review_surface": "alpha-control.html cloud visual truth wake",
+    "acceptance_requires_user_visible_cloud_review": true
+  },
+  "notes": [
+    "This is an albedo isolation pass. It intentionally removes shader-map ambiguity from the visual review.",
+    "If the screenshot still reads weak, replace the albedo artwork instead of reintroducing PBR maps."
+  ]
+}

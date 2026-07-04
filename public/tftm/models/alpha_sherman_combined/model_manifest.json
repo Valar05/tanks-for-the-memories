@@ -1,7 +1,7 @@
 {
   "asset_id": "alpha_sherman_combined",
   "display_name": "Alpha Sherman Combined",
-  "generated_at": "2026-07-04T05:24:51.495Z",
+  "generated_at": "2026-07-04T14:43:50.055Z",
   "generator": "scripts/export_alpha_sherman_variant.mjs",
   "output_glb": "public/tftm/models/alpha_sherman_combined/alpha_sherman.glb",
   "source_components": {
@@ -17,8 +17,9 @@
     "Meshy turret shell",
     "Meshy mantlet socket",
     "Meshy barrel only",
-    "Meshy bow anti-personnel MG module; separated coaxial component included for runtime assembly",
+    "Meshy coaxial MG module follows cannon elevation and is pulled forward/outboard for default-camera readability",
     "Alpha player-character markings based on newest Downloads reference image",
+    "Meshy bow MG module stays fixed on hull front for anti-personnel read",
     "Meshy mobile gear wheels",
     "authored closed Sherman-like trapezoid tread ribbons with sidewall blockers"
   ],
@@ -35,7 +36,13 @@
       "white A turret mark",
       "chalk crew marks",
       "field dirt"
-    ]
+    ],
+    "barrel_rear_pivot_bake": true,
+    "anti_personnel_weapons": [
+      "coaxial_mg_meshy",
+      "bow_mg_meshy"
+    ],
+    "anti_personnel_visibility_tune": "parade-style coaxial plus bow MG restored; coaxial is forward/outboard for default alpha-control camera readability"
   },
-  "approximate_triangles": 14431
+  "approximate_triangles": 19386
 }

@@ -171,7 +171,7 @@
       "normal_map"
     ],
     "runtime_strategy": "shared geometry/material extraction plus InstancedMesh for 24-tank spawn proof; every spawned tank has independent drive, wheel, tread, turret, and barrel animation state; no deep-cloned GLB object trees",
-    "explicit_red_condition": "human visual review must accept closed 3D tread volume, wheel orientation, non-black rear-pivot barrel verticality, turret/barrel ownership, independent 24-tank motion, and phone performance from the cloud page",
+    "explicit_red_condition": "human visual review must accept canonical kit body, cannon-chain MG with no fixed bow MG, closed 3D tread volume, wheel orientation, non-black rear-pivot barrel verticality, turret/barrel ownership, independent 24-tank motion, and phone performance from the cloud page",
     "authored_mesh_scope": "tread_ribbon_only",
     "independent_animation_target": 24,
     "per_tank_state": [
@@ -186,6 +186,12 @@
     "authored_tread_quality_gate": "rejected_flat_ribbon; rejected_side_facade_tread; rejected_generic_rounded_belt; rejected_static_raised_link_motion; require phone_budget_sherman_trapezoid_track_volume_with_outer_inner_sidewalls_tucked_top_run_long_grounded_bottom_run_angled_front_rear_returns_guide_bands_side_back_thickness_and_animated_pbr_material_lanes",
     "barrel_pivot_mode": "rear_socket_pivot_geometry",
     "barrel_material_mode": "sherman_compatible_olive_gunmetal_pbr_override",
-    "barrel_quality_gate": "rejected_black_center_pivot_barrel; require visible rear-socket vertical elevation and non-black Sherman-compatible PBR material"
+    "barrel_quality_gate": "rejected_black_center_pivot_barrel; require visible rear-socket vertical elevation and non-black Sherman-compatible PBR material",
+    "canonical_runtime_tank": true,
+    "canonical_acceptance_source": "user accepted model-assay body and tread on 2026-07-04; this is the canonical tank, not the fused Alpha parade GLB",
+    "anti_personnel_policy": "cannon_chain_mg_no_fixed_bow_mg",
+    "rejected_runtime_features": [
+      "fixed_bow_mg"
+    ]
   }
 }
