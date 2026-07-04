@@ -1,0 +1,96 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T06:50:09+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "enable_original_uv": true,
+    "enable_pbr": true,
+    "hd_texture": true,
+    "input_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+    "remove_lighting": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "text_style_prompt": "Delta planner Sherman commander variant on existing M4A3 Sherman model. Preserve exact geometry and silhouette. US olive drab base, Normandy dust and controlled mud. One clear restrained YELLOW field-painted recognition stripe wrapping across turret and front hull, practical military paint, not bright toy yellow. Disciplined methodical crew personality through clean organized touch-up paint, carefully wiped fuel caps, tidy tools implied by clean wear patterns, neat edge chips, controlled grime, maintained track area. No letters. No words. No numbers. No range chalk text. No alphabet patterns. No decorative typography. No cartoon logo. No fantasy. Realistic maintained American Sherman tank paint."
+  },
+  "endpoint": "/openapi/v1/retexture",
+  "files": [
+    {
+      "bytes": 28610332,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/m4a3_75_vvss_sherman_delta_retexture_v2/fbx.fbx"
+    },
+    {
+      "bytes": 29059564,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/m4a3_75_vvss_sherman_delta_retexture_v2/glb.glb"
+    }
+  ],
+  "last_retexture_task": {
+    "art_style": "realistic",
+    "consumed_credits": 10,
+    "created_at": 1783147821081,
+    "expires_at": 1783407144525,
+    "finished_at": 1783147944525,
+    "hd_texture": true,
+    "id": "019f2be4-7152-7ca7-8f52-a0899bd331be",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783147821101,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "Delta planner Sherman commander variant on existing M4A3 Sherman model. Preserve exact geometry and silhouette. US olive drab base, Normandy dust and controlled mud. One clear restrained YELLOW field-painted recognition stripe wrapping across turret and front hull, practical military paint, not bright toy yellow. Disciplined methodical crew personality through clean organized touch-up paint, carefully wiped fuel caps, tidy tools implied by clean wear patterns, neat edge chips, controlled grime, maintained track area. No letters. No words. No numbers. No range chalk text. No alphabet patterns. No decorative typography. No cartoon logo. No fantasy. Realistic maintained American Sherman tank paint.",
+    "texture_image_url": "",
+    "texture_prompt": "",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "retexture"
+  },
+  "name": "m4a3_75_vvss_sherman_delta_retexture_v2",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T06:50:20+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_original_uv": true,
+        "enable_pbr": true,
+        "hd_texture": true,
+        "input_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+        "remove_lighting": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "text_style_prompt": "Delta planner Sherman commander variant on existing M4A3 Sherman model. Preserve exact geometry and silhouette. US olive drab base, Normandy dust and controlled mud. One clear restrained YELLOW field-painted recognition stripe wrapping across turret and front hull, practical military paint, not bright toy yellow. Disciplined methodical crew personality through clean organized touch-up paint, carefully wiped fuel caps, tidy tools implied by clean wear patterns, neat edge chips, controlled grime, maintained track area. No letters. No words. No numbers. No range chalk text. No alphabet patterns. No decorative typography. No cartoon logo. No fantasy. Realistic maintained American Sherman tank paint."
+      },
+      "provider": "meshy",
+      "step": "retexture",
+      "task_id": "019f2be4-7152-7ca7-8f52-a0899bd331be"
+    }
+  ],
+  "tasks": {
+    "retexture": "019f2be4-7152-7ca7-8f52-a0899bd331be"
+  },
+  "updated_at": "2026-07-04T06:52:30+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

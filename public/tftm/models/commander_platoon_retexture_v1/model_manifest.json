@@ -1,7 +1,7 @@
 {
   "asset_id": "m4a3_75_vvss_sherman_commander_platoon_retexture_v1",
   "display_name": "M4A3 75mm Sherman Commander Platoon Retexture V1",
-  "status": "human_cloud_visual_review_pending",
+  "status": "human_cloud_visual_review_pending_font_noise_repair_v2",
   "generated_at": "2026-07-04T06:28:34.311Z",
   "common_language": {
     "base_color": "US olive drab",
@@ -44,10 +44,11 @@
       "role": "Aggressive Assault Tank",
       "recognition_color": "blue",
       "mood": "Restless, energetic, always moving",
-      "glb": "public/tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v1/m4a3_75_vvss_sherman_bravo_retexture_v1.glb",
-      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v1/model_manifest.json",
-      "retexture_task_id": "019f2bcd-721b-7895-9944-a49462214e77",
-      "status": "human_cloud_visual_review_pending"
+      "glb": "public/tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v2/m4a3_75_vvss_sherman_bravo_retexture_v2.glb",
+      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v2/model_manifest.json",
+      "retexture_task_id": "019f2bde-e9a8-779a-95fe-4af07c87a97c",
+      "status": "human_cloud_visual_review_pending",
+      "repair": "v2 no-text recognition-stripe repair"
     },
     {
       "id": "tango",
@@ -56,10 +57,11 @@
       "role": "Human Tank",
       "recognition_color": "green",
       "mood": "Warm, approachable, campaign veteran",
-      "glb": "public/tftm/models/m4a3_75_vvss_sherman_tango_retexture_v1/m4a3_75_vvss_sherman_tango_retexture_v1.glb",
-      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_tango_retexture_v1/model_manifest.json",
-      "retexture_task_id": "019f2bcd-7268-7896-80b1-c098ad6f5054",
-      "status": "human_cloud_visual_review_pending"
+      "glb": "public/tftm/models/m4a3_75_vvss_sherman_tango_retexture_v2/m4a3_75_vvss_sherman_tango_retexture_v2.glb",
+      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_tango_retexture_v2/model_manifest.json",
+      "retexture_task_id": "019f2be1-f1fe-781f-8541-1fd8a9e073cc",
+      "status": "human_cloud_visual_review_pending",
+      "repair": "v2 no-text recognition-stripe repair"
     },
     {
       "id": "delta",
@@ -68,11 +70,13 @@
       "role": "Planner",
       "recognition_color": "yellow",
       "mood": "Methodical, disciplined, controlled",
-      "glb": "public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v1/m4a3_75_vvss_sherman_delta_retexture_v1.glb",
-      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v1/model_manifest.json",
-      "retexture_task_id": "019f2bcd-721a-7184-a0bb-e0a87a62a28d",
-      "status": "human_cloud_visual_review_pending"
+      "glb": "public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v2/m4a3_75_vvss_sherman_delta_retexture_v2.glb",
+      "manifest": "public/tftm/models/m4a3_75_vvss_sherman_delta_retexture_v2/model_manifest.json",
+      "retexture_task_id": "019f2be4-7152-7ca7-8f52-a0899bd331be",
+      "status": "human_cloud_visual_review_pending",
+      "repair": "v2 no-text recognition-stripe repair"
     }
   ],
-  "acceptance_gate": "Viewer should infer four different crews after a three-second glance while recognizing one platoon and one shared Sherman base."
+  "acceptance_gate": "Viewer should infer four different crews after a three-second glance while recognizing one platoon and one shared Sherman base; Bravo/Tango/Delta must not read as harsh font texture or pseudo-lettering.",
+  "repair_note": "Bravo/Tango/Delta v1 were rejected by visual read as pseudo-font marking noise. V2 variants remove letters and chalk text from Meshy prompts and use one recognition stripe plus restrained wear/personality per tank."
 }

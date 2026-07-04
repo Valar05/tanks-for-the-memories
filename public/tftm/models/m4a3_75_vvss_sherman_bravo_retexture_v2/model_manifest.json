@@ -1,0 +1,43 @@
+{
+  "asset_id": "m4a3_75_vvss_sherman_bravo_retexture_v2",
+  "display_name": "M4A3 75mm Sherman Bravo Retexture V2",
+  "asset_class": "meshy_retexture_on_vanilla_base_candidate",
+  "status": "human_cloud_visual_review_pending",
+  "commander_variant": "bravo",
+  "commander_letter": "B",
+  "role": "Aggressive Assault Tank",
+  "recognition_color": "blue",
+  "mood": "Restless, energetic, always moving",
+  "traits": [
+    "blue recognition stripe",
+    "motion wear",
+    "fresh glacis scratches",
+    "exhaust soot",
+    "subtle replacement wheel"
+  ],
+  "repair_reason": "V1 visual review read as pseudo-font marking noise; V2 removes letter/chalk/typography burden from Meshy and asks for one clear recognition stripe plus restrained wear language.",
+  "generated_at": "2026-07-04T06:52:00.000Z",
+  "endpoint": "/openapi/v1/retexture",
+  "source_vanilla_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+  "retexture_task_id": "019f2bde-e9a8-779a-95fe-4af07c87a97c",
+  "source_manifest": "assets/generated/meshy/m4a3_75_vvss_sherman_bravo_retexture_v2/manifest.json",
+  "glb": "public/tftm/models/m4a3_75_vvss_sherman_bravo_retexture_v2/m4a3_75_vvss_sherman_bravo_retexture_v2.glb",
+  "inspection": {
+    "approximate_triangles": 10216,
+    "texture_count": 4,
+    "image_count": 4,
+    "node_count": 1,
+    "mesh_count": 1,
+    "primitive_count": 1,
+    "material_count": 1,
+    "glb_bytes": 30481464
+  },
+  "runtime_contract": {
+    "vanilla_base_preserved": true,
+    "identity_from_texture_only": true,
+    "visual_texture_candidate": true,
+    "gameplay_animation_ready": false,
+    "rejection_reason_for_gameplay_animation": "Fused static Meshy sculpture; same vanilla-base animation limitations remain.",
+    "acceptance_gate": "Human cloud visual review must confirm a clear commander personality without pseudo-lettering, harsh font texture, or decorative typography."
+  }
+}

@@ -2,7 +2,7 @@
   "asset_id": "m4a3_75_vvss_sherman_bravo_retexture_v1",
   "display_name": "M4A3 75mm Sherman Bravo Retexture V1",
   "asset_class": "meshy_retexture_on_vanilla_base_candidate",
-  "status": "human_cloud_visual_review_pending",
+  "status": "red_rejected_visual_build_font_noise",
   "commander_variant": "bravo",
   "commander_letter": "B",
   "role": "Aggressive Assault Tank",
@@ -37,5 +37,10 @@
     "gameplay_animation_ready": false,
     "rejection_reason_for_gameplay_animation": "Fused static Meshy sculpture; same vanilla-base animation limitations remain.",
     "acceptance_gate": "Human cloud visual review must confirm four distinct commander personalities while preserving one platoon/base mesh."
+  },
+  "red_build": {
+    "observed": "Human visual review read the markings as harsh pseudo-font texture / reject font noise rather than commander personality.",
+    "replacement": "m4a3_75_vvss_sherman_bravo_retexture_v2",
+    "doctrine": "Do not ask Meshy Retexture to carry complex text, chalk notes, route marks, numbers, or lettering as personality. Use one clear recognition color and restrained non-text wear language."
   }
 }

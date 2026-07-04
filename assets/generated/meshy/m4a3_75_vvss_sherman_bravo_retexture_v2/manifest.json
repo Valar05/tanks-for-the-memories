@@ -1,0 +1,96 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-04T06:44:08+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "enable_original_uv": true,
+    "enable_pbr": true,
+    "hd_texture": true,
+    "input_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+    "remove_lighting": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "text_style_prompt": "Bravo assault Sherman commander variant on existing M4A3 Sherman model. Preserve exact geometry and silhouette. US olive drab base, Normandy mud and dust. One clear field-painted BLUE recognition stripe wrapping across turret and front hull, restrained and military. Aggressive fast crew personality through chipped hatch edges, fresh glacis scratches, exhaust soot, track grime, and one subtly different olive road wheel. No extra words. No alphabet patterns. No route notes. No decorative typography. No cartoon logo. No fantasy. Realistic maintained American Sherman tank paint."
+  },
+  "endpoint": "/openapi/v1/retexture",
+  "files": [
+    {
+      "bytes": 29648684,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/m4a3_75_vvss_sherman_bravo_retexture_v2/fbx.fbx"
+    },
+    {
+      "bytes": 30481464,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/m4a3_75_vvss_sherman_bravo_retexture_v2/glb.glb"
+    }
+  ],
+  "last_retexture_task": {
+    "art_style": "realistic",
+    "consumed_credits": 10,
+    "created_at": 1783147458415,
+    "expires_at": 1783406823447,
+    "finished_at": 1783147623447,
+    "hd_texture": true,
+    "id": "019f2bde-e9a8-779a-95fe-4af07c87a97c",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783147458447,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "Bravo assault Sherman commander variant on existing M4A3 Sherman model. Preserve exact geometry and silhouette. US olive drab base, Normandy mud and dust. One clear field-painted BLUE recognition stripe wrapping across turret and front hull, restrained and military. Aggressive fast crew personality through chipped hatch edges, fresh glacis scratches, exhaust soot, track grime, and one subtly different olive road wheel. No extra words. No alphabet patterns. No route notes. No decorative typography. No cartoon logo. No fantasy. Realistic maintained American Sherman tank paint.",
+    "texture_image_url": "",
+    "texture_prompt": "",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "retexture"
+  },
+  "name": "m4a3_75_vvss_sherman_bravo_retexture_v2",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-04T06:44:18+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_original_uv": true,
+        "enable_pbr": true,
+        "hd_texture": true,
+        "input_task_id": "019f2a16-c82b-7b52-b541-c707b58c5d00",
+        "remove_lighting": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "text_style_prompt": "Bravo assault Sherman commander variant on existing M4A3 Sherman model. Preserve exact geometry and silhouette. US olive drab base, Normandy mud and dust. One clear field-painted BLUE recognition stripe wrapping across turret and front hull, restrained and military. Aggressive fast crew personality through chipped hatch edges, fresh glacis scratches, exhaust soot, track grime, and one subtly different olive road wheel. No extra words. No alphabet patterns. No route notes. No decorative typography. No cartoon logo. No fantasy. Realistic maintained American Sherman tank paint."
+      },
+      "provider": "meshy",
+      "step": "retexture",
+      "task_id": "019f2bde-e9a8-779a-95fe-4af07c87a97c"
+    }
+  ],
+  "tasks": {
+    "retexture": "019f2bde-e9a8-779a-95fe-4af07c87a97c"
+  },
+  "updated_at": "2026-07-04T06:47:16+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}
