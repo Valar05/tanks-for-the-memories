@@ -11,7 +11,7 @@ def P(x, y, z):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_treads_v1'
-REVISION = 'v1-3-wheels-in-profile-opening'
+REVISION = 'v1-4-crisp-rims-smooth-tires'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -153,10 +153,15 @@ def make_belt(side_name, side_sign):
         obj['contains_turret'] = False
         bpy.context.collection.objects.link(obj)
         obj.parent = belt_root
+        for poly in mesh.polygons:
+            poly.use_smooth = False
         bevel = obj.modifiers.new('worn_tread_edge_micro_bevel', 'BEVEL')
         bevel.width = 0.018
         bevel.segments = 1
-        obj.modifiers.new('weighted_tread_normals', 'WEIGHTED_NORMAL')
+        bevel.affect = 'EDGES'
+        bevel.harden_normals = True
+        weighted = obj.modifiers.new('weighted_tread_plate_normals', 'WEIGHTED_NORMAL')
+        weighted.keep_sharp = True
         return obj
 
     for role, segment_indices in SEGMENT_MARKERS.items():
@@ -165,49 +170,84 @@ def make_belt(side_name, side_sign):
     belt_root['profile_point_count'] = len(OUTER_PROFILE)
     return belt_root
 
-def disc_mesh(name, center, radius, depth, parent, material_name='wheel_metal', segments=28, hub_radius=0.12):
+def disc_mesh(name, center, radius, depth, parent, material_name='wheel_metal', segments=48, hub_radius=0.12):
     cx, cy, cz = center
     z0 = cz - depth / 2
     z1 = cz + depth / 2
+    tire_inner = radius * 0.82
+    rim_inner = max(hub_radius * 1.45, radius * 0.54)
+    rim_lip_outer = radius * 0.94
     verts = []
     faces = []
+    face_mats = []
+    smooth_faces = set()
     def add(v):
         verts.append(v)
         return len(verts) - 1
-    front_center = add((cx, cy, z1))
-    back_center = add((cx, cy, z0))
-    front_ring = []
-    back_ring = []
+    front_center = add((cx, cy, z1 + 0.010))
+    back_center = add((cx, cy, z0 - 0.010))
     front_hub = []
     back_hub = []
+    front_rim_inner = []
+    back_rim_inner = []
+    front_tire_inner = []
+    back_tire_inner = []
+    front_outer = []
+    back_outer = []
+    front_lip = []
+    back_lip = []
     for i in range(segments):
         a = math.tau * i / segments
         co = math.cos(a)
         si = math.sin(a)
-        front_ring.append(add((cx + co * radius, cy + si * radius, z1)))
-        back_ring.append(add((cx + co * radius, cy + si * radius, z0)))
-        front_hub.append(add((cx + co * hub_radius, cy + si * hub_radius, z1 + 0.006)))
-        back_hub.append(add((cx + co * hub_radius, cy + si * hub_radius, z0 - 0.006)))
+        front_hub.append(add((cx + co * hub_radius, cy + si * hub_radius, z1 + 0.012)))
+        back_hub.append(add((cx + co * hub_radius, cy + si * hub_radius, z0 - 0.012)))
+        front_rim_inner.append(add((cx + co * rim_inner, cy + si * rim_inner, z1 + 0.006)))
+        back_rim_inner.append(add((cx + co * rim_inner, cy + si * rim_inner, z0 - 0.006)))
+        front_tire_inner.append(add((cx + co * tire_inner, cy + si * tire_inner, z1 + 0.003)))
+        back_tire_inner.append(add((cx + co * tire_inner, cy + si * tire_inner, z0 - 0.003)))
+        front_lip.append(add((cx + co * rim_lip_outer, cy + si * rim_lip_outer, z1 + 0.002)))
+        back_lip.append(add((cx + co * rim_lip_outer, cy + si * rim_lip_outer, z0 - 0.002)))
+        front_outer.append(add((cx + co * radius, cy + si * radius, z1)))
+        back_outer.append(add((cx + co * radius, cy + si * radius, z0)))
     for i in range(segments):
         j = (i + 1) % segments
-        faces.append((front_center, front_hub[i], front_hub[j]))
-        faces.append((back_center, back_hub[j], back_hub[i]))
-        faces.append((front_hub[i], front_ring[i], front_ring[j], front_hub[j]))
-        faces.append((back_hub[j], back_ring[j], back_ring[i], back_hub[i]))
-        faces.append((front_ring[i], back_ring[i], back_ring[j], front_ring[j]))
+        faces.append((front_center, front_hub[i], front_hub[j])); face_mats.append('wheel_metal')
+        faces.append((back_center, back_hub[j], back_hub[i])); face_mats.append('wheel_metal')
+        faces.append((front_hub[i], front_rim_inner[i], front_rim_inner[j], front_hub[j])); face_mats.append('wheel_metal')
+        faces.append((back_hub[j], back_rim_inner[j], back_rim_inner[i], back_hub[i])); face_mats.append('wheel_metal')
+        faces.append((front_rim_inner[i], front_tire_inner[i], front_tire_inner[j], front_rim_inner[j])); face_mats.append('wheel_metal')
+        faces.append((back_rim_inner[j], back_tire_inner[j], back_tire_inner[i], back_rim_inner[i])); face_mats.append('wheel_metal')
+        faces.append((front_tire_inner[i], front_lip[i], front_lip[j], front_tire_inner[j])); face_mats.append('wheel_metal')
+        faces.append((back_tire_inner[j], back_lip[j], back_lip[i], back_tire_inner[i])); face_mats.append('wheel_metal')
+        faces.append((front_lip[i], front_outer[i], front_outer[j], front_lip[j])); face_mats.append('wheel_rubber')
+        faces.append((back_lip[j], back_outer[j], back_outer[i], back_lip[i])); face_mats.append('wheel_rubber')
+        side_face_index = len(faces)
+        faces.append((front_outer[i], back_outer[i], back_outer[j], front_outer[j])); face_mats.append('wheel_rubber'); smooth_faces.add(side_face_index)
+        inner_corner_index = len(faces)
+        faces.append((front_tire_inner[j], back_tire_inner[j], back_tire_inner[i], front_tire_inner[i])); face_mats.append('wheel_metal'); smooth_faces.add(inner_corner_index)
     mesh = bpy.data.meshes.new(name + '_mesh')
     mesh.from_pydata([P(*v) for v in verts], [], faces)
     mesh.update(calc_edges=True)
-    mesh.materials.append(materials[material_name])
+    mesh.materials.append(materials['wheel_metal'])
+    mesh.materials.append(materials['wheel_rubber'])
+    for poly, mat_name in zip(mesh.polygons, face_mats):
+        poly.material_index = 1 if mat_name == 'wheel_rubber' else 0
+        poly.use_smooth = poly.index in smooth_faces
     assign_uvs(mesh)
     obj = bpy.data.objects.new(name, mesh)
-    obj['component_role'] = 'side_facing_running_gear_wheel'
+    obj['component_role'] = 'side_facing_running_gear_wheel_with_crisp_rim_and_smooth_tire_band'
     obj['wheel_axis'] = 'runtime_Z_width_axis'
+    obj['shading_contract'] = 'flat metal rim faces and hard rim corners; smooth rubber tire sidewall to avoid ring facets'
     bpy.context.collection.objects.link(obj)
     obj.parent = parent
-    for poly in mesh.polygons:
-        poly.use_smooth = True
-    obj.modifiers.new('weighted_wheel_normals', 'WEIGHTED_NORMAL')
+    bevel = obj.modifiers.new('crisp_wheel_rim_micro_bevel', 'BEVEL')
+    bevel.width = 0.006
+    bevel.segments = 1
+    bevel.affect = 'EDGES'
+    bevel.harden_normals = True
+    weighted = obj.modifiers.new('weighted_wheel_rim_normals', 'WEIGHTED_NORMAL')
+    weighted.keep_sharp = True
     return obj
 
 def box_mesh(name, center, size, parent):
@@ -250,11 +290,11 @@ for side_name, side_sign, mount_parent, wheel_parent, bogie_parent in [
     # Wheel centers deliberately occupy the side-view inner-profile opening;
     # they are not exterior-plane decorations.
     for index, x in enumerate([-1.04, -0.63, -0.22, 0.19, 0.60, 0.96]):
-        disc_mesh(f'{side_name}_roadwheel_{index + 1}', (x, -0.205, wheel_z), 0.135, 0.105, wheel_parent, 'wheel_metal', 30, 0.064)
-    disc_mesh(f'{side_name}_front_sprocket', (1.17, -0.130, wheel_z), 0.155, 0.12, wheel_parent, 'wheel_metal', 32, 0.066)
-    disc_mesh(f'{side_name}_rear_idler', (-1.25, -0.118, wheel_z), 0.145, 0.11, wheel_parent, 'wheel_metal', 32, 0.060)
+        disc_mesh(f'{side_name}_roadwheel_{index + 1}', (x, -0.205, wheel_z), 0.135, 0.105, wheel_parent, 'wheel_metal', 56, 0.064)
+    disc_mesh(f'{side_name}_front_sprocket', (1.17, -0.130, wheel_z), 0.155, 0.12, wheel_parent, 'wheel_metal', 60, 0.066)
+    disc_mesh(f'{side_name}_rear_idler', (-1.25, -0.118, wheel_z), 0.145, 0.11, wheel_parent, 'wheel_metal', 60, 0.060)
     for index, x in enumerate([-0.84, -0.12, 0.56]):
-        disc_mesh(f'{side_name}_return_roller_{index + 1}', (x, -0.020, wheel_z), 0.065, 0.09, wheel_parent, 'wheel_metal', 24, 0.030)
+        disc_mesh(f'{side_name}_return_roller_{index + 1}', (x, -0.020, wheel_z), 0.065, 0.09, wheel_parent, 'wheel_metal', 44, 0.030)
     for x in [-0.84, -0.02, 0.78]:
         box_mesh(f'{side_name}_vvss_bogie_arm_{x:+.2f}', (x, -0.155, mount_z), (0.27, 0.11, 0.09), bogie_parent)
 
@@ -276,6 +316,7 @@ manifest = {
     'approximate_triangles': triangle_count,
     'coordinate_contract': 'runtime X length, Y height, Z width; Blender Z-up converted through P()',
     'component_scope': 'full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
+    'shading_contract': 'track plates keep flat hard-surface normals with crisp bevel corners; wheels use flat metal rim faces, crisp rim corners, and smooth rubber tire sidewalls so the tire ring does not read as faceted',
     'reference_source': 'src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only',
     'profile': {
         'old_reference_point_count': 8,
@@ -287,7 +328,7 @@ manifest = {
     },
     'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors'],
     'forbidden_nodes': ['hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','tank_root'],
-    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; no hull/turret/full-tank salvage.'
+    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; flat tread plate normals and crisp rim corners must read while rubber tire bands do not show radial facets; no hull/turret/full-tank salvage.'
 }
 MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({'asset_id': ASSET_ID, 'revision': REVISION, 'triangles': triangle_count, 'glb': str(GLB_PATH)}, indent=2))

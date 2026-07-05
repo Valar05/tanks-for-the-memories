@@ -122,6 +122,18 @@ function wheelProfile(json, name) {
   return { name, center, radius, bounds };
 }
 
+function materialName(json, materialIndex) { return json.materials?.[materialIndex]?.name || ''; }
+function meshPrimitiveSummary(json, nodeName) {
+  const node = (json.nodes || []).find((entry) => entry.name === nodeName);
+  const mesh = node?.mesh != null ? json.meshes?.[node.mesh] : null;
+  if (!mesh) return null;
+  return (mesh.primitives || []).map((primitive) => ({
+    material: materialName(json, primitive.material),
+    positions: json.accessors?.[primitive.attributes?.POSITION]?.count || 0,
+    normals: json.accessors?.[primitive.attributes?.NORMAL]?.count || 0,
+  }));
+}
+
 function descendants(json, nodeName) {
   const root = (json.nodes || []).findIndex((node) => node.name === nodeName);
   const out = [];
@@ -139,13 +151,15 @@ if (failures.length === 0) {
   const runtime = readFileSync('src/treadfirst-treads.ts', 'utf8') + readFileSync('src/sherman-asset-links.ts', 'utf8');
   const build = readFileSync('scripts/build.mjs', 'utf8');
   if (manifest.asset_id !== assetId) fail('manifest asset_id mismatch');
-  if (manifest.silhouette_revision !== 'v1-3-wheels-in-profile-opening') fail('unexpected revision ' + manifest.silhouette_revision);
+  if (manifest.silhouette_revision !== 'v1-4-crisp-rims-smooth-tires') fail('unexpected revision ' + manifest.silhouette_revision);
   const v11Verdict = JSON.parse(readFileSync(v11RedVerdictPath, 'utf8'));
   const v12Verdict = JSON.parse(readFileSync(v12RedVerdictPath, 'utf8'));
   if (v11Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.1 red verdict must remain explicit before accepting v1.3 diagnostics');
   if (v12Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.2 red verdict must remain explicit before accepting v1.3 diagnostics');
   if (manifest.profile?.old_reference_point_count !== 8) fail('manifest must record old subdivision-0 profile point count');
   if ((manifest.profile?.outer_profile_point_count || 0) < 16) fail('outer profile must add one silhouette subdivision layer beyond the old 8-point profile');
+  if (!String(manifest.shading_contract || '').includes('smooth rubber tire sidewalls')) fail('manifest must declare smooth tire sidewalls and hard rim/tread corners');
+  for (const sourceMarker of ['weighted_tread_plate_normals', 'poly.use_smooth = False', 'crisp_wheel_rim_micro_bevel', 'smooth rubber tire sidewall']) if (!exporter.includes(sourceMarker)) fail('exporter missing shading marker ' + sourceMarker);
   for (const node of ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors','left_front_sprocket','right_front_sprocket','left_rear_idler','right_rear_idler']) if (!(json.nodes || []).some((entry) => entry.name === node)) fail('missing required node ' + node);
   for (const forbidden of ['hull','turret','barrel','coax','mantlet','cannon','tank_root']) {
     const hit = (json.nodes || []).find((node) => String(node.name || '').toLowerCase().includes(forbidden));
@@ -155,7 +169,7 @@ if (failures.length === 0) {
     if (exporter.includes(forbidden)) fail('tread exporter must not copy failed exporter marker ' + forbidden);
   }
   const tri = triangles(json);
-  if (tri < 1800 || tri > 7600) fail('unexpected full tread assembly triangle count ' + tri);
+  if (tri < 18000 || tri > 38000) fail('unexpected full tread assembly triangle count ' + tri);
   const innerProfile = manifest.profile?.inner_profile_xy;
   if (!Array.isArray(innerProfile) || innerProfile.length < 8) fail('manifest must expose inner_profile_xy for profile-opening validation');
   diagnostic = { asset_id: assetId, revision: manifest.silhouette_revision, profile_opening: innerProfile, sides: {} };
@@ -178,6 +192,14 @@ if (failures.length === 0) {
       const checked = [];
       for (const wheelName of [`${side}_roadwheel_1`, `${side}_roadwheel_3`, `${side}_roadwheel_6`, `${side}_front_sprocket`, `${side}_rear_idler`, `${side}_return_roller_1`]) {
         const wheel = wheelProfile(json, wheelName);
+        const primitiveSummary = meshPrimitiveSummary(json, wheelName);
+        if (!primitiveSummary) fail(`${side} missing material primitive summary for ${wheelName}`);
+        else {
+          const materialNames = new Set(primitiveSummary.map((entry) => entry.material));
+          const totalPositions = primitiveSummary.reduce((sum, entry) => sum + entry.positions, 0);
+          if (!materialNames.has('wheel_metal') || !materialNames.has('wheel_rubber')) fail(`${wheelName} must export both wheel_metal rim and wheel_rubber tire primitives`);
+          if (totalPositions < 480) fail(`${wheelName} does not have enough ring samples to avoid faceted tire read: ${totalPositions} positions`);
+        }
         if (!wheel) fail(`${side} missing profile-opening bounds for ${wheelName}`);
         else {
           const centerInside = pointInPolygon(wheel.center, innerProfile);
@@ -194,7 +216,7 @@ if (failures.length === 0) {
     const bogieNames = descendants(json, `${side}_bogie_connectors`).join('\n');
     if ((bogieNames.match(/vvss_bogie_arm_/g) || []).length < 3) fail(`${side} bogie connectors must expose three bogie arm blocks`);
   }
-  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-3-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
+  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-4-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
   if (!build.includes("buildEntry('treadfirst-treads.ts', 'treadfirst-treads')")) fail('build must bundle treadfirst-treads.ts');
   if (!build.includes("writeBundledHtml('treadfirst-treads.html', 'treadfirst-treads.html', 'treadfirst-treads')")) fail('build must write treadfirst-treads.html');
 }
@@ -205,4 +227,4 @@ if (failures.length) {
   process.exit(1);
 }
 await import('node:fs').then(({ mkdirSync, writeFileSync }) => { mkdirSync('generated/diagnostics/authored_sherman_treads_v1', { recursive: true }); writeFileSync(diagnosticPath, JSON.stringify(diagnostic, null, 2) + '\n'); });
-console.log('Authored tread assembly validation passed: v1.3 wheels occupy the inner profile opening; cloud/Sense visual acceptance is still required.');
+console.log('Authored tread assembly validation passed: v1.4 keeps wheels in the profile opening with crisp rims and smooth tire bands; cloud/Sense visual acceptance is still required.');

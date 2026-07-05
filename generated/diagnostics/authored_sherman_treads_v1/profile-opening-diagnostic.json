@@ -1,6 +1,6 @@
 {
   "asset_id": "authored_sherman_treads_v1",
-  "revision": "v1-3-wheels-in-profile-opening",
+  "revision": "v1-4-crisp-rims-smooth-tires",
   "profile_opening": [
     [
       -1.39,
@@ -75,7 +75,7 @@
           -1.0399999618530273,
           -0.20500000193715096
         ],
-        "radius": 0.13499999046325684,
+        "radius": 0.13500000163912773,
         "center_inside": true,
         "useful_disc_inside_ratio": 0.875
       },
@@ -85,7 +85,7 @@
           -0.2199999950826168,
           -0.20500000193715096
         ],
-        "radius": 0.13499999418854713,
+        "radius": 0.13500000163912773,
         "center_inside": true,
         "useful_disc_inside_ratio": 1
       },
@@ -137,7 +137,7 @@
           -1.0399999618530273,
           -0.20500000193715096
         ],
-        "radius": 0.13499999046325684,
+        "radius": 0.13500000163912773,
         "center_inside": true,
         "useful_disc_inside_ratio": 0.875
       },
@@ -147,7 +147,7 @@
           -0.2199999950826168,
           -0.20500000193715096
         ],
-        "radius": 0.13499999418854713,
+        "radius": 0.13500000163912773,
         "center_inside": true,
         "useful_disc_inside_ratio": 1
       },
