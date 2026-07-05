@@ -140,6 +140,29 @@ Capture the hosted build at phone proportions first, then desktop only as a seco
 - desktop medium viewport after at least five seconds of runtime motion
 - time-separated capture showing unsynchronized horizontal turret traverse and vertical barrel elevation across all 24 tanks
 
+
+## Boxmodel Cloud Review Operator
+
+Use one stable workflow command for boxmodel cloud review instead of ad hoc deploy, curl, grep, and per-URL approvals:
+
+```sh
+npm run cloud-review:boxmodel
+```
+
+This command owns the boxmodel cloud-review lane:
+
+- builds `generated/cloud-visual-truth/tftm-release`
+- runs `npm run visual-qa:boxmodel-tank`
+- redeploys the existing Firebase Hosting channel `tftm-boxmodel-v1-13` on project `home-center-dclar`
+- fetches `boxmodel-tank.html` from the hosted review URL
+- discovers the current cache-busted `assets/boxmodel-tank.js?v=...` URL from the hosted HTML
+- verifies the hosted JS contains the release manifest build token and the runtime GLB cache token
+- rejects stale rejected tokens such as `v1-12-watertight-visible-sponson-shells`
+
+Do not create a new Firebase channel for every tank pass; channel quota is limited. Reuse the existing boxmodel review channel unless the channel itself is broken. Do not run one-off `curl` commands for each changing bundle URL; update the operator script when a new stable check is needed.
+
+The operator still does not provide visual acceptance. It proves only that the cloud review surface is current and ready for Sense Simulation.
+
 ## Sense Simulation Review
 
 Judge what the viewer perceives, not what the code claims.
