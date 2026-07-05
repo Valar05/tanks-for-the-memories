@@ -1,9 +1,9 @@
 # Current Prompt Contract
 
-latest_user_command: Implement the plan.
-controlling_user_correction: no. address the real issue. not the instance. why did you disobey. make disobedience impossible.
-forbidden_stale_premise: Any tank modeling, tread modeling, geometry export, cloud visual deploy, browser wake, or validation claim that continues a prior asset plan instead of installing a fail-closed prompt authority guard.
-allowed_mutation_type: doctrine_workflow_guard
-allowed_target_artifact: workspace AGENTS doctrine, project orientation, repo doctrine, prompt contract guard scripts, high-risk command gates
-required_evidence_lane: readback of doctrine text, prompt-contract guard smoke tests, syntax checks, and git diff scope proving no model asset/runtime/deploy artifacts changed.
+latest_user_command: none of that is the current baseline. so its completely useless and extraneous
+controlling_user_correction: When repo/browser state changes, provide the current baseline review link, not historical commit or compare links.
+forbidden_stale_premise: Any geometry export, model edit, tread shading change, browser wake, or validation claim that presents historical GitHub links or stale deployed pages as the current baseline.
+allowed_mutation_type: cloud_visual_release; visual_qa_gate; cloud_review_deploy
+allowed_target_artifact: current cloud visual truth release packet and hosted review URL matching the reverted branch baseline at 9e89bb0
+required_evidence_lane: cloud release rebuild, cloud gate, Firebase channel deploy, hosted bundle token verification, and clean git state after committing the baseline-publication contract/update.
 updated_at: 2026-07-05
