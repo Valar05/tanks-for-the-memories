@@ -10,3 +10,4 @@
 - [Minimal Animatable Tank Model Request](./minimal-animatable-tank-model-request.md)
 - [Tank Generation Red-Build Credit Gate](./tank-generation-red-build-credit-gate.md)
 - [Cloud Visual Truth Gate](./cloud-visual-truth.md)
+- [3D Placement Corpus For Tank Parts](./3d-placement-corpus.md)

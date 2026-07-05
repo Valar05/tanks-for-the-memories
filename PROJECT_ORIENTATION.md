@@ -12,6 +12,7 @@ Start with these files:
 2. `docs/doctrine/cloud-visual-truth.md`
 3. `docs/doctrine/sherman-hard-model-texture-architecture.md`
 4. The relevant exporter, validator, runtime page, and manifest for the asset under work
+5. `docs/doctrine/3d-placement-corpus.md` before moving, adding, scaling, or rotating any tank part
 
 ## Visual Evidence Rule
 
