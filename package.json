@@ -31,7 +31,10 @@
     "cloud-review:boxmodel": "node scripts/deploy_boxmodel_cloud_review.mjs",
     "tank-visual-repair-preflight": "node scripts/validate_tank_visual_repair_preflight.mjs",
     "tank-visible-failure-preflight": "node scripts/validate_tank_visual_repair_preflight.mjs",
-    "boxmodel-dominant-shape-smoke": "node scripts/validate_boxmodel_dominant_shape_delta.mjs"
+    "boxmodel-dominant-shape-smoke": "node scripts/validate_boxmodel_dominant_shape_delta.mjs",
+    "export:authored-textureable": "node scripts/export_authored_sherman_textureable.mjs",
+    "authored-textureable-smoke": "node scripts/validate_authored_textureable_asset.mjs",
+    "visual-qa:textureable-tank": "node scripts/validate_textureable_tank_cloud_gate.mjs"
   },
   "dependencies": {
     "three": "^0.166.1"

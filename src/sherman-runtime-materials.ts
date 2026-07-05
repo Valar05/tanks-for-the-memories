@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES, AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL, AUTHORED_SHERMAN_RETOPO_FACE_PLATES, AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL, SHERMAN_DEFAULT_OLIVE_ALBEDO_URL, SHERMAN_DEFAULT_TREAD_ALBEDO_URL } from './sherman-asset-links';
+import { AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES, AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL, AUTHORED_SHERMAN_RETOPO_FACE_PLATES, AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL, AUTHORED_SHERMAN_TEXTUREABLE_FACE_PLATES, AUTHORED_SHERMAN_TEXTUREABLE_TEXTURE_BASE_URL, SHERMAN_DEFAULT_OLIVE_ALBEDO_URL, SHERMAN_DEFAULT_TREAD_ALBEDO_URL } from './sherman-asset-links';
 
 type MaterialTarget = 'olive' | 'tread';
 
@@ -122,4 +122,10 @@ export function applyAuthoredRetopoTexturePlates(root: THREE.Object3D) {
 export function applyAuthoredBoxmodelTexturePlates(root: THREE.Object3D) {
   applyAuthoredTexturePlates(root, AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES, AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL, 'authored_sherman_boxmodel_v1');
   root.userData.authoredBoxmodelTextureSet = root.userData.authoredTextureSet;
+}
+
+
+export function applyAuthoredTextureableTexturePlates(root: THREE.Object3D) {
+  applyAuthoredTexturePlates(root, AUTHORED_SHERMAN_TEXTUREABLE_FACE_PLATES, AUTHORED_SHERMAN_TEXTUREABLE_TEXTURE_BASE_URL, 'authored_sherman_textureable_v1');
+  root.userData.authoredTextureableTextureSet = root.userData.authoredTextureSet;
 }

@@ -1,0 +1,146 @@
+{
+  "asset_id": "authored_sherman_textureable_v1",
+  "display_name": "Authored Sherman Textureable V1",
+  "silhouette_revision": "v1-1-contained-running-gear-textureable",
+  "generated_at": "2026-07-05T14:32:33.833027Z",
+  "generator": "scripts/export_authored_sherman_textureable.py",
+  "blender": "4.3.2",
+  "source_blend": "assets/authored/authored_sherman_textureable_v1/authored_sherman_textureable_v1.blend",
+  "output_glb": "public/tftm/models/authored_sherman_textureable_v1/authored_sherman_textureable_v1.glb",
+  "source_policy": "fully authored Blender textureable geometry with contained closed track pods, integrated turret ring overlap, split UV plates, and coaxial MG; no Meshy chassis or turret imports; rejected boxmodel remains prior evidence only",
+  "uv_policy": "box and planar UV plates, one 0-1 paintable plate per surface family; no atlas packing",
+  "dalle_paintability": {
+    "template_dir": "assets/authored/authored_sherman_textureable_v1/texture_templates",
+    "runtime_plate_dir": "public/tftm/models/authored_sherman_textureable_v1/texture_plates",
+    "prompt_rule": "Use the filename/surface id in the prompt; do not paint labels or readable typography inside the image.",
+    "first_pass": "runtime albedo plates avoid guide seams; authoring templates retain safe-area guides."
+  },
+  "face_plate_ids": [
+    "hull_glacis",
+    "hull_left",
+    "hull_right",
+    "hull_rear",
+    "engine_deck",
+    "turret_front",
+    "turret_left",
+    "turret_right",
+    "turret_top",
+    "turret_bustle",
+    "mantlet",
+    "barrel_strip",
+    "coaxial_mg",
+    "track_outer",
+    "track_inner_top_bottom",
+    "wheel_disc",
+    "bogie_side"
+  ],
+  "decal_anchors": {
+    "glacis_stripe": {
+      "surface_id": "hull_glacis",
+      "center": [
+        1.05,
+        0.36,
+        0
+      ],
+      "size": [
+        0.42,
+        0.2,
+        0.92
+      ]
+    },
+    "turret_stripe": {
+      "surface_id": "turret_shell",
+      "center": [
+        0.04,
+        1.18,
+        0
+      ],
+      "size": [
+        0.76,
+        0.12,
+        0.78
+      ]
+    },
+    "turret_side_symbol_left": {
+      "surface_id": "turret_left",
+      "center": [
+        -0.02,
+        0.94,
+        -0.55
+      ],
+      "size": [
+        0.32,
+        0.24,
+        0.02
+      ]
+    },
+    "turret_side_symbol_right": {
+      "surface_id": "turret_right",
+      "center": [
+        -0.02,
+        0.94,
+        0.55
+      ],
+      "size": [
+        0.32,
+        0.24,
+        0.02
+      ]
+    },
+    "rear_hull_accent": {
+      "surface_id": "hull_rear",
+      "center": [
+        -1.67,
+        0.18,
+        0
+      ],
+      "size": [
+        0.03,
+        0.26,
+        0.72
+      ]
+    }
+  },
+  "node_contract": [
+    "tank_root",
+    "hull_root",
+    "left_track_pod",
+    "right_track_pod",
+    "turret_traverse_pivot",
+    "turret_shell",
+    "cannon_elevation_pivot",
+    "mantlet",
+    "barrel",
+    "coaxial_mg",
+    "left_tread_motion",
+    "right_tread_motion",
+    "left_roadwheel_group",
+    "right_roadwheel_group",
+    "commander_hatch__turret_top",
+    "loader_hatch__turret_top"
+  ],
+  "orientation_contract": {
+    "authored_axes": "X forward/back, Y up/down, Z left/right",
+    "blender_axes": "X forward/back, Y left/right, Z up/down after P/S/R conversion helpers",
+    "threejs_axes_after_gltf": "X forward/back, Y up/down, Z left/right",
+    "visual_regression_prevented": "tank must not export on its side; barrel and coaxial MG must point forward; wheels must be contained inside closed track pods rather than outside side skirts; track pods must preserve top, bottom, front, rear, inner, and outer band thickness; turret lower overlap must hide the ring gap; hatches must touch the turret roof; no pasted cover panels, blockers, wing plates, or runtime overlays"
+  },
+  "runtime_contract": {
+    "turret_traverse": "rotate turret_traverse_pivot around Y",
+    "cannon_elevation": "rotate cannon_elevation_pivot for barrel and coaxial MG pitch",
+    "coaxial_mg": "coaxial_mg is parented to cannon_elevation_pivot and must move with the barrel",
+    "tread_motion": "scroll material maps on left_tread_motion and right_tread_motion",
+    "wheel_motion": "rotate children of left_roadwheel_group and right_roadwheel_group",
+    "side_skirt_occlusion": "roadwheel discs sit inside track pod/skirt volume; exterior track bands contain wheel faces without cutting through them",
+    "integrated_sponson_skirt_armor": "joined sponson shells bridge the upper hull into contained track pods; running gear remains mechanically owned by the pods and not pasted in front of a slab",
+    "raycast_exterior_closure": "outside gap rays hit exterior armor before interior at front-left, front-right, rear-left, and rear-right hull/track corners",
+    "commander_hatch": "commander_hatch__turret_top is a named posture marker"
+  },
+  "budget": {
+    "target_triangles": "3500-6500",
+    "hard_cap_triangles": 6000,
+    "actual_triangles": 4704,
+    "mesh_count": 131
+  },
+  "approximate_triangles": 4704
+}

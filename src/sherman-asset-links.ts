@@ -46,3 +46,26 @@ export const AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES = [
   'wheel_disc',
   'bogie_side'
 ] as const;
+
+
+export const AUTHORED_SHERMAN_TEXTUREABLE_GLB_URL = './tftm/models/authored_sherman_textureable_v1/authored_sherman_textureable_v1.glb?v=v1-1-contained-running-gear-textureable';
+export const AUTHORED_SHERMAN_TEXTUREABLE_TEXTURE_BASE_URL = './tftm/models/authored_sherman_textureable_v1/texture_plates/';
+export const AUTHORED_SHERMAN_TEXTUREABLE_FACE_PLATES = [
+  'hull_glacis',
+  'hull_left',
+  'hull_right',
+  'hull_rear',
+  'engine_deck',
+  'turret_front',
+  'turret_left',
+  'turret_right',
+  'turret_top',
+  'turret_bustle',
+  'mantlet',
+  'barrel_strip',
+  'coaxial_mg',
+  'track_outer',
+  'track_inner_top_bottom',
+  'wheel_disc',
+  'bogie_side'
+] as const;

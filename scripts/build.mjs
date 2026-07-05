@@ -100,6 +100,7 @@ await buildEntry('alpha-control.ts', 'alpha-control');
 await buildEntry('single-tank.ts', 'single-tank');
 await buildEntry('retopo-tank.ts', 'retopo-tank');
 await buildEntry('boxmodel-tank.ts', 'boxmodel-tank');
+await buildEntry('textureable-tank.ts', 'textureable-tank');
 
 writeBundledHtml('index.html', 'index.html', 'index');
 writeBundledHtml('model-assay.html', 'model-assay.html', 'model-assay');
@@ -107,6 +108,7 @@ writeBundledHtml('alpha-control.html', 'alpha-control.html', 'alpha-control');
 writeBundledHtml('single-tank.html', 'single-tank.html', 'single-tank');
 writeBundledHtml('retopo-tank.html', 'retopo-tank.html', 'retopo-tank');
 writeBundledHtml('boxmodel-tank.html', 'boxmodel-tank.html', 'boxmodel-tank');
+writeBundledHtml('textureable-tank.html', 'textureable-tank.html', 'textureable-tank');
 copyRecursive(publicDir, distDir);
 copyRecursive(
   path.join(root, 'assets', 'generated', 'meshy', 'minimal_animatable_tank_v1'),
