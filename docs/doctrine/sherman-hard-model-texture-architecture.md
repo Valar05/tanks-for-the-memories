@@ -136,3 +136,5 @@ The v1.5 tread shading attempt uses the Blender correction suggested after v1.4:
 The v1.5 tread shading attempt is red/no-op. Future gates must inspect exported GLB buffer normals directly: hard rim/corner loops require duplicate-position normal discontinuities, while rounded tire-band radial segments must remain smooth. Blender source markers, modifier names, custom properties, material primitives, and vertex counts are not enough.
 
 The v1.6 tread shading gate implements that correction: it bakes Blender modifiers before GLB export, parses exported GLB buffers, and requires hard duplicate-normal groups at rim/corner loops with zero bad duplicate-normal groups on rounded rubber faces. This is still diagnostic only; cloud/Sense must decide whether the visible rim/tire distinction actually improves.
+
+The v1.7 tread belt correction removes visible split tread-panel meshes. The belt must be one smooth continuous shaded surface per side, with top/front/bottom/rear segment nodes retained only as non-rendered review markers. Tread link detail belongs in texture/UV treatment, not hard panel normals.

@@ -254,6 +254,29 @@ function meshPrimitiveSummary(json, nodeName) {
   }));
 }
 
+function normalContinuityDiagnostic(parsed, nodeName) {
+  const records = primitiveVertexRecords(parsed, nodeName);
+  const byPosition = new Map();
+  for (const record of records) {
+    const key = keyFor(record.position);
+    if (!byPosition.has(key)) byPosition.set(key, []);
+    byPosition.get(key).push(record);
+  }
+  let duplicateGroups = 0;
+  let badSplitGroups = 0;
+  let maxAngle = 0;
+  for (const group of byPosition.values()) {
+    if (group.length < 2) continue;
+    duplicateGroups += 1;
+    for (let i = 0; i < group.length; i += 1) for (let j = i + 1; j < group.length; j += 1) {
+      const angle = angleBetween(group[i].normal, group[j].normal);
+      maxAngle = Math.max(maxAngle, angle);
+      if (angle > 0.20) badSplitGroups += 1;
+    }
+  }
+  return { node: nodeName, duplicate_groups: duplicateGroups, bad_split_groups: badSplitGroups, max_duplicate_normal_angle: maxAngle };
+}
+
 function descendants(json, nodeName) {
   const root = (json.nodes || []).findIndex((node) => node.name === nodeName);
   const out = [];
@@ -272,7 +295,7 @@ if (failures.length === 0) {
   const runtime = readFileSync('src/treadfirst-treads.ts', 'utf8') + readFileSync('src/sherman-asset-links.ts', 'utf8');
   const build = readFileSync('scripts/build.mjs', 'utf8');
   if (manifest.asset_id !== assetId) fail('manifest asset_id mismatch');
-  if (manifest.silhouette_revision !== 'v1-6-baked-smooth-shade-creased-rims') fail('unexpected revision ' + manifest.silhouette_revision);
+  if (manifest.silhouette_revision !== 'v1-7-smooth-continuous-tread-belt') fail('unexpected revision ' + manifest.silhouette_revision);
   const v11Verdict = JSON.parse(readFileSync(v11RedVerdictPath, 'utf8'));
   const v12Verdict = JSON.parse(readFileSync(v12RedVerdictPath, 'utf8'));
   const v14Verdict = JSON.parse(readFileSync(v14RedVerdictPath, 'utf8'));
@@ -283,9 +306,9 @@ if (failures.length === 0) {
   if (v15Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.5 red verdict must remain explicit before accepting v1.6 diagnostics');
   if (manifest.profile?.old_reference_point_count !== 8) fail('manifest must record old subdivision-0 profile point count');
   if ((manifest.profile?.outer_profile_point_count || 0) < 16) fail('outer profile must add one silhouette subdivision layer beyond the old 8-point profile');
-  if (!String(manifest.shading_contract || '').includes('hard duplicate-normal splits')) fail('manifest must declare baked GLB normal split proof');
-  for (const sourceMarker of ['bake_mesh_modifiers_for_export', 'modifier_apply', 'mark_circular_crease_edges', 'edge.use_edge_sharp = True', 'marked_wheel_rim_edge_split', 'Do not bevel or weighted-normal the tire ring']) if (!exporter.includes(sourceMarker)) fail('exporter missing shading marker ' + sourceMarker);
-  for (const node of ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors','left_front_sprocket','right_front_sprocket','left_rear_idler','right_rear_idler']) if (!(json.nodes || []).some((entry) => entry.name === node)) fail('missing required node ' + node);
+  if (!String(manifest.shading_contract || '').includes('smooth continuous shaded surface')) fail('manifest must declare smooth continuous tread belt shading');
+  for (const sourceMarker of ['bake_mesh_modifiers_for_export', 'modifier_apply', 'mark_circular_crease_edges', 'smooth_continuous_tread_belt_surface', 'nonrendered_segment_marker_for_review', 'Do not bevel or weighted-normal the tire ring']) if (!exporter.includes(sourceMarker)) fail('exporter missing shading marker ' + sourceMarker);
+  for (const node of ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_continuous_tread_belt_surface','right_continuous_tread_belt_surface','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors','left_front_sprocket','right_front_sprocket','left_rear_idler','right_rear_idler']) if (!(json.nodes || []).some((entry) => entry.name === node)) fail('missing required node ' + node);
   for (const forbidden of ['hull','turret','barrel','coax','mantlet','cannon','tank_root']) {
     const hit = (json.nodes || []).find((node) => String(node.name || '').toLowerCase().includes(forbidden));
     if (hit) fail('tread-only asset contains forbidden full-tank node ' + hit.name);
@@ -305,9 +328,15 @@ if (failures.length === 0) {
     if (!belt) fail(`missing ${side} belt bounds`);
     else {
       if (!(belt.size[0] > 3.0 && belt.size[1] > 0.55 && belt.size[2] > 0.35)) fail(`${side} belt is not a closed 3D tread volume: ` + belt.size.map((n) => n.toFixed(3)).join(' x '));
+      if (!nodeMeshBounds(json, `${side}_continuous_tread_belt_surface`)) fail(`${side} must expose one visible continuous tread belt surface`);
       for (const segment of ['top_run','bottom_run','front_return','rear_return']) {
-        if (!nodeMeshBounds(json, `${side}_tread_${segment}`)) fail(`${side} tread belt must expose split segment ${segment}`);
+        const segmentNode = (json.nodes || []).find((entry) => entry.name === `${side}_tread_${segment}`);
+        if (!segmentNode) fail(`${side} tread belt must expose nonrendered segment marker ${segment}`);
+        if (segmentNode?.mesh != null) fail(`${side}_tread_${segment} must be a nonrendered marker, not a visible faceted tread panel mesh`);
       }
+      const beltContinuity = normalContinuityDiagnostic(parsed, `${side}_continuous_tread_belt_surface`);
+      diagnostic.normal_shading.push(beltContinuity);
+      if (beltContinuity.bad_split_groups > 0) fail(`${side} continuous tread belt has faceted duplicate-normal splits: ${beltContinuity.bad_split_groups}`);
     }
     const names = descendants(json, `${side}_tread_connector_mounts`).join('\n');
     if ((names.match(/connector_mount_/g) || []).length < 4) fail(`${side} connector mounts must expose four subordinate mount blocks`);
@@ -348,7 +377,7 @@ if (failures.length === 0) {
     const bogieNames = descendants(json, `${side}_bogie_connectors`).join('\n');
     if ((bogieNames.match(/vvss_bogie_arm_/g) || []).length < 3) fail(`${side} bogie connectors must expose three bogie arm blocks`);
   }
-  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-6-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
+  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-7-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
   if (!build.includes("buildEntry('treadfirst-treads.ts', 'treadfirst-treads')")) fail('build must bundle treadfirst-treads.ts');
   if (!build.includes("writeBundledHtml('treadfirst-treads.html', 'treadfirst-treads.html', 'treadfirst-treads')")) fail('build must write treadfirst-treads.html');
 }
@@ -359,4 +388,4 @@ if (failures.length) {
   process.exit(1);
 }
 await import('node:fs').then(({ mkdirSync, writeFileSync }) => { mkdirSync('generated/diagnostics/authored_sherman_treads_v1', { recursive: true }); writeFileSync(diagnosticPath, JSON.stringify(diagnostic, null, 2) + '\n'); });
-console.log('Authored tread assembly validation passed: v1.6 keeps wheels in the profile opening with baked GLB normal splits on rim loops; cloud/Sense visual acceptance is still required.');
+console.log('Authored tread assembly validation passed: v1.7 keeps wheels in the profile opening with baked rim splits and smooth continuous tread belt; cloud/Sense visual acceptance is still required.');

@@ -1,6 +1,6 @@
 {
   "asset_id": "authored_sherman_treads_v1",
-  "revision": "v1-6-baked-smooth-shade-creased-rims",
+  "revision": "v1-7-smooth-continuous-tread-belt",
   "profile_opening": [
     [
       -1.39,
@@ -195,6 +195,12 @@
   },
   "normal_shading": [
     {
+      "node": "left_continuous_tread_belt_surface",
+      "duplicate_groups": 32,
+      "bad_split_groups": 0,
+      "max_duplicate_normal_angle": 0.0003985986791003186
+    },
+    {
       "node": "left_roadwheel_1",
       "hard_rim_split_groups": 112,
       "rubber_duplicate_groups": 0,
@@ -241,6 +247,12 @@
       "rubber_bad_split_groups": 0,
       "rubber_radial_samples": 176,
       "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "right_continuous_tread_belt_surface",
+      "duplicate_groups": 32,
+      "bad_split_groups": 0,
+      "max_duplicate_normal_angle": 0.00042005576000342636
     },
     {
       "node": "right_roadwheel_1",

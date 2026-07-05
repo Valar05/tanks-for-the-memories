@@ -11,7 +11,7 @@ def P(x, y, z):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_treads_v1'
-REVISION = 'v1-6-baked-smooth-shade-creased-rims'
+REVISION = 'v1-7-smooth-continuous-tread-belt'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -151,57 +151,54 @@ def make_belt(side_name, side_sign):
     outer_z = side_sign * 1.14
     inner_z = side_sign * 0.72
 
-    def build_segment(role, segment_indices):
-        verts = []
-        faces = []
-        face_mats = []
-        def add(v):
-            verts.append(v)
-            return len(verts) - 1
-        for i in segment_indices:
-            j = (i + 1) % len(OUTER_PROFILE)
-            ox0, oy0, _ = OUTER_PROFILE[i]
-            ox1, oy1, _ = OUTER_PROFILE[j]
-            ix0, iy0, _ = INNER_PROFILE[i]
-            ix1, iy1, _ = INNER_PROFILE[j]
-            a = add((ox0, oy0, outer_z)); b = add((ox1, oy1, outer_z)); c = add((ix1, iy1, outer_z)); d = add((ix0, iy0, outer_z))
-            faces.append((a, b, c, d)); face_mats.append('track_outer')
-            a = add((ox1, oy1, inner_z)); b = add((ox0, oy0, inner_z)); c = add((ix0, iy0, inner_z)); d = add((ix1, iy1, inner_z))
-            faces.append((a, b, c, d)); face_mats.append('track_inner')
-            a = add((ox0, oy0, outer_z)); b = add((ox0, oy0, inner_z)); c = add((ox1, oy1, inner_z)); d = add((ox1, oy1, outer_z))
-            faces.append((a, b, c, d)); face_mats.append('track_outer')
-            a = add((ix1, iy1, outer_z)); b = add((ix1, iy1, inner_z)); c = add((ix0, iy0, inner_z)); d = add((ix0, iy0, outer_z))
-            faces.append((a, b, c, d)); face_mats.append('track_inner')
-        mesh = bpy.data.meshes.new(side_name + '_tread_' + role + '_mesh')
-        mesh.from_pydata([P(*v) for v in verts], [], faces)
-        mesh.update(calc_edges=True)
-        mesh.materials.append(materials['track_outer'])
-        mesh.materials.append(materials['track_inner'])
-        for poly, mat_name in zip(mesh.polygons, face_mats):
-            poly.material_index = 0 if mat_name == 'track_outer' else 1
-        assign_uvs(mesh)
-        obj = bpy.data.objects.new(side_name + '_tread_' + role, mesh)
-        obj['component_role'] = 'open_perimeter_sidewall_' + role
-        obj['profile_point_count'] = len(OUTER_PROFILE)
-        obj['source_reference'] = 'src/model-assay.ts createTreadGeometry subdivision-0 reference only'
-        obj['contains_hull'] = False
-        obj['contains_turret'] = False
-        bpy.context.collection.objects.link(obj)
-        obj.parent = belt_root
-        smooth_all_faces(mesh)
-        # Segment meshes duplicate their plate vertices, so smooth faces still keep plate boundaries visible.
-        bevel = obj.modifiers.new('worn_tread_edge_micro_bevel', 'BEVEL')
-        bevel.width = 0.018
-        bevel.segments = 1
-        bevel.affect = 'EDGES'
-        bevel.harden_normals = True
-        add_marked_edge_split(obj, 'marked_tread_corner_edge_split')
-        add_weighted_normals(obj, 'weighted_tread_plate_normals')
-        return obj
+    verts = []
+    faces = []
+    face_mats = []
+    outer_outer = []
+    inner_outer = []
+    outer_inner = []
+    inner_inner = []
+    def add(v):
+        verts.append(v)
+        return len(verts) - 1
+    for (outer, inner) in zip(OUTER_PROFILE, INNER_PROFILE):
+        ox, oy, _ = outer
+        ix, iy, _ = inner
+        outer_outer.append(add((ox, oy, outer_z)))
+        inner_outer.append(add((ix, iy, outer_z)))
+        outer_inner.append(add((ox, oy, inner_z)))
+        inner_inner.append(add((ix, iy, inner_z)))
+    point_count = len(OUTER_PROFILE)
+    for i in range(point_count):
+        j = (i + 1) % point_count
+        faces.append((outer_outer[i], outer_outer[j], inner_outer[j], inner_outer[i])); face_mats.append('track_outer')
+        faces.append((outer_inner[j], outer_inner[i], inner_inner[i], inner_inner[j])); face_mats.append('track_inner')
+        faces.append((outer_outer[i], outer_inner[i], outer_inner[j], outer_outer[j])); face_mats.append('track_outer')
+        faces.append((inner_outer[j], inner_inner[j], inner_inner[i], inner_outer[i])); face_mats.append('track_inner')
+    mesh = bpy.data.meshes.new(side_name + '_continuous_tread_belt_mesh')
+    mesh.from_pydata([P(*v) for v in verts], [], faces)
+    mesh.update(calc_edges=True)
+    mesh.materials.append(materials['track_outer'])
+    mesh.materials.append(materials['track_inner'])
+    for poly, mat_name in zip(mesh.polygons, face_mats):
+        poly.material_index = 0 if mat_name == 'track_outer' else 1
+    smooth_all_faces(mesh)
+    assign_uvs(mesh)
+    obj = bpy.data.objects.new(side_name + '_continuous_tread_belt_surface', mesh)
+    obj['component_role'] = 'smooth_continuous_tread_belt_surface_texture_driven_links'
+    obj['profile_point_count'] = len(OUTER_PROFILE)
+    obj['source_reference'] = 'src/model-assay.ts createTreadGeometry subdivision-0 reference only'
+    obj['contains_hull'] = False
+    obj['contains_turret'] = False
+    bpy.context.collection.objects.link(obj)
+    obj.parent = belt_root
+    add_weighted_normals(obj, 'smooth_continuous_tread_normals')
 
     for role, segment_indices in SEGMENT_MARKERS.items():
-        build_segment(role, segment_indices)
-    belt_root['component_role'] = 'closed_subdivided_tread_belt_with_split_visible_segments'
+        marker = empty(side_name + '_tread_' + role, belt_root)
+        marker['component_role'] = 'nonrendered_segment_marker_for_review_' + role
+        marker['profile_indices'] = segment_indices
+    belt_root['component_role'] = 'smooth_continuous_subdivided_tread_belt_with_segment_markers'
     belt_root['profile_point_count'] = len(OUTER_PROFILE)
     return belt_root
 
@@ -365,7 +362,7 @@ manifest = {
     'approximate_triangles': triangle_count,
     'coordinate_contract': 'runtime X length, Y height, Z width; Blender Z-up converted through P()',
     'component_scope': 'full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
-    'shading_contract': 'bake smooth shaded wheel and tread forms into the exported GLB, with raised metal rim lips producing hard duplicate-normal splits only on desired circular rim/corner loops and smooth normals on rounded rubber faces',
+    'shading_contract': 'wheels keep baked hard rim-loop normal splits; tread belt is one smooth continuous shaded surface so texture, not hard panel normals, sells tread detail',
     'reference_source': 'src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only',
     'profile': {
         'old_reference_point_count': 8,
@@ -377,7 +374,7 @@ manifest = {
     },
     'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors'],
     'forbidden_nodes': ['hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','tank_root'],
-    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; exported GLB normals must prove hard rim/corner loop splits and smooth rounded rubber faces; no hull/turret/full-tank salvage.'
+    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; exported GLB normals must prove hard wheel rim-loop splits, smooth rounded rubber faces, and a smooth continuous tread belt without faceted tread panels; no hull/turret/full-tank salvage.'
 }
 MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({'asset_id': ASSET_ID, 'revision': REVISION, 'triangles': triangle_count, 'glb': str(GLB_PATH)}, indent=2))

@@ -2,8 +2,8 @@ import { existsSync, readFileSync } from 'node:fs';
 
 const manifestPath = 'generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json';
 const assetManifestPath = 'public/tftm/models/authored_sherman_treads_v1/model_manifest.json';
-const expectedBuild = 'tftm-authored-sherman-treads-v1-6-20260705';
-const expectedRevision = 'v1-6-baked-smooth-shade-creased-rims';
+const expectedBuild = 'tftm-authored-sherman-treads-v1-7-20260705';
+const expectedRevision = 'v1-7-smooth-continuous-tread-belt';
 const previousRedVerdictPath = 'docs/visual-verdicts/treads-v1-5-red.json';
 const failures = [];
 function fail(message) { failures.push(message); }
@@ -28,7 +28,7 @@ if (failures.length === 0) {
     if (review.asset_id !== 'authored_sherman_treads_v1') fail('tread review asset id mismatch');
     if (review.silhouette_revision !== expectedRevision) fail('tread review revision mismatch');
     const acceptance = String(review.acceptance || '');
-    for (const phrase of ['full tread assembly only', 'open perimeter sidewall frame', 'wheels inside the inner profile opening', 'sprockets, idlers, return rollers, bogie connectors', 'profile opening', 'baked creased rim loops', 'smooth rounded rubber faces', 'baked smooth shaded tread forms with hard corner loops', 'preserve OrbitControls camera and orientation widget', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
+    for (const phrase of ['full tread assembly only', 'open perimeter sidewall frame', 'wheels inside the inner profile opening', 'sprockets, idlers, return rollers, bogie connectors', 'profile opening', 'baked wheel rim loops', 'smooth rounded rubber faces', 'smooth continuous tread belt without faceted panels', 'preserve OrbitControls camera and orientation widget', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
       if (!acceptance.includes(phrase)) fail('tread acceptance must mention ' + phrase);
     }
   }
@@ -47,4 +47,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Tread-first cloud review gate passed: hosted packet declares v1.6 baked smooth-shade/creased-rims review lane with preserved camera controls; cloud/Sense acceptance is still required.');
+console.log('Tread-first cloud review gate passed: hosted packet declares v1.7 smooth continuous tread belt review lane with preserved camera controls; cloud/Sense acceptance is still required.');
