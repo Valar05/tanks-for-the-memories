@@ -7,7 +7,7 @@ import { AUTHORED_SHERMAN_CHASSIS_GLB_URL, AUTHORED_SHERMAN_TREADS_GLB_URL } fro
 const root = document.querySelector<HTMLDivElement>('#chassisfirst-chassis-root');
 if (!root) throw new Error('missing #chassisfirst-chassis-root');
 
-const visualBuild = 'tftm-authored-sherman-chassis-v1-1-20260705';
+const visualBuild = 'tftm-authored-sherman-chassis-v1-2-20260705';
 
 root.innerHTML = '<main class="single-tank-shell">' +
   '<div class="single-tank-stage"><canvas aria-label="Chassis-first Sherman component review"></canvas></div>' +
@@ -100,7 +100,7 @@ function onLoaded() {
   reviewGroup.position.sub(center);
   reviewGroup.position.y += size.y * 0.5 - 0.46;
   reviewGroup.rotation.y = -Math.PI / 2 - 0.12;
-  statusEl.textContent = 'loaded v1.1 watertight chassis shell fitted to frozen v1.8c golden treads; no turret, barrel, wheels, or tread edits';
+  statusEl.textContent = 'loaded v1.2 silhouette-fit chassis shell fitted to frozen v1.8c golden treads; no turret, barrel, wheels, or tread edits';
   postVisualBeacon('loaded');
 }
 

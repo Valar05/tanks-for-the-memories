@@ -1,0 +1,13 @@
+{
+  "artifact_type": "chassis_visual_verdict",
+  "route": "chassisfirst-chassis.html",
+  "build_token": "tftm-authored-sherman-chassis-v1-1-20260705",
+  "glb_token": "v1-1-watertight-chassis-shell",
+  "status": "red_unaccepted_tent_silhouette",
+  "source": "user_visual_report",
+  "recorded_at": "2026-07-05T21:55:00Z",
+  "expected_visible_relationship": "The chassis-only asset should read as one hard-surface Sherman-like armored hull fitted to the frozen golden treads.",
+  "actual_visible_relationship": "User reported the asset is not a tank; it reads as a tent.",
+  "root_cause": "The exporter lofted closed cross-sections with one top centerline point, producing a peaked canopy. Watertight, bounds, and raycast checks were false-green because a convex tent passes them.",
+  "next_gate": "scripts/validate_authored_chassis_silhouette.mjs must fail v1.1 and require broad deck width, vertical side armor normals, sponson shoulder area, and anti-ridge silhouette before v1.2 can pass."
+}

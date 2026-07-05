@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 
-const expectedBuild = 'tftm-authored-sherman-chassis-v1-1-20260705';
-const expectedRevision = 'v1-1-watertight-chassis-shell';
+const expectedBuild = 'tftm-authored-sherman-chassis-v1-2-20260705';
+const expectedRevision = 'v1-2-silhouette-fit-chassis-shell';
 const assetManifestPath = 'public/tftm/models/authored_sherman_chassis_v1/model_manifest.json';
 const treadManifestPath = 'public/tftm/models/authored_sherman_treads_v1/model_manifest.json';
 const releaseManifestPath = 'generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json';
@@ -39,4 +39,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Chassis-first cloud review gate passed: hosted packet declares v1.1 watertight chassis review lane with frozen v1.8c treads; cloud/Sense acceptance is still required.');
+console.log('Chassis-first cloud review gate passed: hosted packet declares v1.2 silhouette-fit chassis review lane with frozen v1.8c treads; cloud/Sense acceptance is still required.');

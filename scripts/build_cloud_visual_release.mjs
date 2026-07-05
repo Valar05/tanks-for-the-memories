@@ -132,7 +132,7 @@ const releaseManifest = {
   },
   authored_chassis_review: {
     route: 'chassisfirst-chassis.html',
-    expected_build: 'tftm-authored-sherman-chassis-v1-1-20260705',
+    expected_build: 'tftm-authored-sherman-chassis-v1-2-20260705',
     asset_id: authoredChassisManifest.asset_id,
     silhouette_revision: authoredChassisManifest.silhouette_revision,
     output_glb: authoredChassisManifest.output_glb,
@@ -197,7 +197,7 @@ const releaseManifest = {
   required_cloud_captures: [
     'treadfirst-treads phone portrait showing authored_sherman_treads_v1 and build token tftm-authored-sherman-treads-v1-8c-20260705, with wheels/sprockets/idlers/rollers/bogie connectors occupying the inner profile opening with baked wheel rim loops and smooth tire bands and linked mirrored tread nodes sharing mesh data, readable lip corners, no black sidewall crush, and no hull/turret/full tank geometry',
     'treadfirst-treads phone landscape showing full tread assembly showing an open perimeter sidewall frame, wheels/sprockets/idlers/return rollers/bogie arms occupying the inner profile opening, left/right tread nodes share mesh data as mirrored instances, baked wheel rim loops, smooth tire bands, connector mounts subordinate, one silhouette subdivision layer beyond the old 8-point tread, preserved OrbitControls camera/orientation widget, no rail/cage/box-pod read, and no local capture',
-    'chassisfirst-chassis phone portrait showing authored_sherman_chassis_v1 build token tftm-authored-sherman-chassis-v1-1-20260705 fitted around frozen authored_sherman_treads_v1 v1-8c-linked-mirror-tread-assembly, one watertight chassis mesh, no turret/barrel/wheel/tread edits, and no local capture',
+    'chassisfirst-chassis phone portrait showing authored_sherman_chassis_v1 build token tftm-authored-sherman-chassis-v1-2-20260705 fitted around frozen authored_sherman_treads_v1 v1-8c-linked-mirror-tread-assembly, one watertight chassis mesh, no turret/barrel/wheel/tread edits, and no local capture',
     'chassisfirst-chassis phone landscape showing one joined chassis shell bridging the lower sponson and track-interface relationship with no visible tread-interface gaps at front, rear, side, or oblique views, golden treads unchanged, preserved OrbitControls camera/orientation widget, and no local capture',
     'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-15-20260705',
     'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, smaller integrated track-well slot-wall coverage at front-left, front-right, rear-left, and rear-right lower hull/track cracks, and no local capture',

@@ -1,11 +1,11 @@
 {
   "asset_id": "authored_sherman_chassis_v1",
   "artifact_type": "chassis_only_blender_asset",
-  "silhouette_revision": "v1-1-watertight-chassis-shell",
+  "silhouette_revision": "v1-2-silhouette-fit-chassis-shell",
   "generator": "scripts/export_authored_sherman_chassis.py",
   "source_blend": "assets/authored/authored_sherman_chassis_v1/authored_sherman_chassis_v1.blend",
   "output_glb": "public/tftm/models/authored_sherman_chassis_v1/authored_sherman_chassis_v1.glb",
-  "approximate_triangles": 116,
+  "approximate_triangles": 96,
   "coordinate_contract": "runtime X length, Y height, Z width; Blender Z-up converted through P()",
   "component_scope": "one visible watertight chassis shell only; no treads, wheels, bogies, turret, mantlet, barrel, coaxial MG, or full tank scene",
   "mesh_contract": "exactly one exported visible mesh node named chassis_watertight_shell; closed manifold shell with no boundary edges or pasted panels",

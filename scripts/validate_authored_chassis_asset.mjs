@@ -1,8 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 const assetId = 'authored_sherman_chassis_v1';
-const revision = 'v1-1-watertight-chassis-shell';
-const buildToken = 'tftm-authored-sherman-chassis-v1-1-20260705';
+const revision = 'v1-2-silhouette-fit-chassis-shell';
+const buildToken = 'tftm-authored-sherman-chassis-v1-2-20260705';
 const glbPath = 'public/tftm/models/authored_sherman_chassis_v1/authored_sherman_chassis_v1.glb';
 const manifestPath = 'public/tftm/models/authored_sherman_chassis_v1/model_manifest.json';
 const blendPath = 'assets/authored/authored_sherman_chassis_v1/authored_sherman_chassis_v1.blend';

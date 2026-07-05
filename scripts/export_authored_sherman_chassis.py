@@ -11,7 +11,7 @@ def P(x, y, z):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_chassis_v1'
-REVISION = 'v1-1-watertight-chassis-shell'
+REVISION = 'v1-2-silhouette-fit-chassis-shell'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -46,46 +46,47 @@ for plate_id in FACE_PLATE_IDS:
     bsdf.inputs['Metallic'].default_value = 0.08 if plate_id != 'belly_shadow' else 0.02
     materials[plate_id] = mat
 
-# Cross-sections define one closed armor body. The lower side drops below the golden
-# tread top and the outer z planes cover the tread interface, so the shell owns the
-# visible sponson/track-well relationship instead of using separate patch panels.
+# Cross-sections define one connected hard-surface armor body. Unlike v1.1, this
+# profile has a broad flat deck and vertical side armor instead of a center ridge.
+# The mesh remains one watertight chassis shell; the golden treads are fit reference only.
 sections = [
-    (-1.74, 0.92, 1.08, 0.54),
-    (-1.18, 1.00, 1.22, 0.62),
-    ( 0.45, 1.03, 1.24, 0.68),
-    ( 1.18, 0.90, 1.18, 0.55),
-    ( 1.70, 0.58, 1.00, 0.38),
+    # x, top_y, deck_half_z, side_half_z, side_top_y, side_bottom_y, belly_half_z, nose_bias
+    (-1.74, 0.72, 0.66, 1.08, 0.28, -0.31, 0.72, 0.00),
+    (-1.16, 0.88, 0.80, 1.20, 0.34, -0.32, 0.78, 0.00),
+    ( 0.55, 0.90, 0.82, 1.22, 0.34, -0.32, 0.80, 0.00),
+    ( 1.18, 0.72, 0.76, 1.12, 0.30, -0.31, 0.72, 0.18),
+    ( 1.70, 0.43, 0.58, 0.96, 0.18, -0.29, 0.62, 0.35),
 ]
 # Profile points are (height, width) in authoring Y/Z, ordered around the exterior.
-def profile(height, half_width, crown):
+def profile(top_y, deck_half_z, side_half_z, side_top_y, side_bottom_y, belly_half_z, nose_bias):
+    # Broad deck, chamfered shoulders, vertical sides, tucked belly. This gives a
+    # Sherman-like hull envelope while preserving a single watertight mesh.
     return [
-        (height, 0.0),
-        (height - 0.09, half_width * 0.45),
-        (height - 0.27, half_width * 0.72),
-        (0.28, half_width),
-        (-0.30, half_width),
-        (-0.39, half_width * 0.55),
-        (-0.42, 0.0),
-        (-0.39, -half_width * 0.55),
-        (-0.30, -half_width),
-        (0.28, -half_width),
-        (height - 0.27, -half_width * 0.72),
-        (height - 0.09, -half_width * 0.45),
+        (top_y, -deck_half_z),
+        (top_y,  deck_half_z),
+        (top_y - 0.12 - nose_bias * 0.05,  side_half_z * 0.82),
+        (side_top_y,  side_half_z),
+        (side_bottom_y,  side_half_z),
+        (side_bottom_y - 0.10,  belly_half_z),
+        (side_bottom_y - 0.13, -belly_half_z),
+        (side_bottom_y, -side_half_z),
+        (side_top_y, -side_half_z),
+        (top_y - 0.12 - nose_bias * 0.05, -side_half_z * 0.82),
     ]
 
 verts = []
-for x, h, w, crown in sections:
-    for y, z in profile(h, w, crown):
+for x, top_y, deck_half_z, side_half_z, side_top_y, side_bottom_y, belly_half_z, nose_bias in sections:
+    for y, z in profile(top_y, deck_half_z, side_half_z, side_top_y, side_bottom_y, belly_half_z, nose_bias):
         verts.append((x, y, z))
 
-n = 12
+n = 10
 faces = []
 face_mats = []
-# Rear and front caps.
+# Rear and front caps are real armor plates, not open profile ends.
 faces.append(tuple(range(n - 1, -1, -1))); face_mats.append('hull_rear')
 front_start = (len(sections) - 1) * n
 faces.append(tuple(range(front_start, front_start + n))); face_mats.append('hull_glacis')
-# Longitudinal bands.
+# Longitudinal bands. Segment ids are profile edge ids: i -> i+1.
 for si in range(len(sections) - 1):
     a = si * n
     b = (si + 1) * n
@@ -93,22 +94,20 @@ for si in range(len(sections) - 1):
     for i in range(n):
         j = (i + 1) % n
         faces.append((a + i, a + j, b + j, b + i))
-        if i in (0, 11):
-            mat = 'engine_deck' if x_mid < 0.95 else 'hull_glacis'
+        if i == 0:
+            mat = 'turret_ring_cap' if -0.45 <= x_mid <= 0.65 else ('hull_glacis' if x_mid > 1.05 else 'engine_deck')
         elif i in (1, 2):
-            mat = 'hull_right'
-        elif i == 3:
             mat = 'sponson_right'
-        elif i == 8:
-            mat = 'sponson_left'
-        elif i in (9, 10):
-            mat = 'hull_left'
-        elif i in (4, 5, 6, 7):
+        elif i == 3:
+            mat = 'hull_right'
+        elif i in (4, 5, 6):
             mat = 'belly_shadow'
-        else:
+        elif i == 7:
             mat = 'hull_left'
-        if -0.38 <= x_mid <= 0.52 and i in (0, 11):
-            mat = 'turret_ring_cap'
+        elif i in (8, 9):
+            mat = 'sponson_left'
+        else:
+            mat = 'engine_deck'
         face_mats.append(mat)
 
 mesh = bpy.data.meshes.new('chassis_watertight_shell_mesh')

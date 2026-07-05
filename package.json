@@ -40,6 +40,7 @@
     "visual-qa:treadfirst-treads": "node scripts/validate_treadfirst_treads_cloud_gate.mjs",
     "export:authored-chassis": "node scripts/export_authored_sherman_chassis.mjs",
     "authored-chassis-smoke": "node scripts/validate_authored_chassis_asset.mjs",
+    "authored-chassis-silhouette-smoke": "node scripts/validate_authored_chassis_silhouette.mjs",
     "visual-qa:chassisfirst-chassis": "node scripts/validate_chassisfirst_chassis_cloud_gate.mjs",
     "prompt-contract-smoke": "node scripts/validate_prompt_contract_guard.mjs"
   },
