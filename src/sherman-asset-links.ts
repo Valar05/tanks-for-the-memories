@@ -25,8 +25,54 @@ export const AUTHORED_SHERMAN_RETOPO_FACE_PLATES = [
   'bogie_side'
 ] as const;
 
-export const AUTHORED_SHERMAN_BOXMODEL_GLB_URL = './tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb?v=v1-9-front-gap-exterior-cover';
+export const AUTHORED_SHERMAN_BOXMODEL_GLB_URL = './tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb?v=v1-13-recessed-sponson-shadow-backing';
 export const AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL = './tftm/models/authored_sherman_boxmodel_v1/texture_plates/';
+
+export const AUTHORED_SHERMAN_HERO_GLB_URL = './tftm/models/authored_sherman_hero_v1/authored_sherman_hero_v1.glb?v=v1-1-animatable-static-hero';
+export const AUTHORED_SHERMAN_HERO_TEXTURE_BASE_URL = './tftm/models/authored_sherman_hero_v1/texture_plates/';
+export const AUTHORED_SHERMAN_HERO_FACE_PLATES = [
+  'hull_glacis',
+  'hull_left',
+  'hull_right',
+  'hull_rear',
+  'engine_deck',
+  'turret_front',
+  'turret_left',
+  'turret_right',
+  'turret_top',
+  'turret_bustle',
+  'mantlet',
+  'barrel_strip',
+  'coaxial_mg',
+  'track_outer',
+  'track_inner_top_bottom',
+  'wheel_disc',
+  'bogie_side'
+] as const;
+
+
+export const AUTHORED_SHERMAN_ARMORED_GLB_URL = './tftm/models/authored_sherman_armored_v1/authored_sherman_armored_v1.glb?v=v1-1-watertight-armored-sherman';
+export const AUTHORED_SHERMAN_ARMORED_TEXTURE_BASE_URL = './tftm/models/authored_sherman_armored_v1/texture_plates/';
+export const AUTHORED_SHERMAN_ARMORED_FACE_PLATES = [
+  'hull_glacis',
+  'hull_left',
+  'hull_right',
+  'hull_rear',
+  'engine_deck',
+  'turret_front',
+  'turret_left',
+  'turret_right',
+  'turret_top',
+  'turret_bustle',
+  'mantlet',
+  'barrel_strip',
+  'coaxial_mg',
+  'track_outer',
+  'track_inner_top_bottom',
+  'wheel_disc',
+  'bogie_side'
+] as const;
+
 export const AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES = [
   'hull_glacis',
   'hull_left',

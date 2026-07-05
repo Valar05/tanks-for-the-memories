@@ -19,7 +19,7 @@ if (manifest) {
   if (!String(manifest.acceptance_note || '').includes('not browser/cloud acceptance proof')) fail('manifest must reject acceptance-proof use');
   if (!String(manifest.source_blend || '').endsWith('authored_sherman_boxmodel_v1.blend')) fail('manifest must name source blend');
   if (!manifest.source_blend_sha256 || manifest.source_blend_sha256.length !== 64) fail('manifest must record source blend sha256');
-  const requiredViews = ['front','left_side','right_side','front_left_three_quarter','front_right_three_quarter','front_left_gap_close','front_right_gap_close'];
+  const requiredViews = ['front','left_side','right_side','front_left_three_quarter','front_right_three_quarter','front_left_gap_close','front_right_gap_close','rear','rear_left_three_quarter','rear_right_three_quarter','rear_left_gap_close','rear_right_gap_close'];
   const requiredPasses = ['material','clay','problem'];
   const views = new Set((manifest.views || []).map((view) => view.id));
   const passes = new Set((manifest.passes || []).map((pass) => pass.id));
@@ -45,7 +45,7 @@ if (manifest) {
   if (!existsSync(contact)) fail('missing contact sheet ' + contact);
   else {
     const size = pngSize(contact);
-    if (!size || size.width < 1000 || size.height < 2000) fail('contact sheet dimensions are too small');
+    if (!size || size.width < 1000 || size.height < 3600) fail('contact sheet dimensions are too small');
   }
 }
 

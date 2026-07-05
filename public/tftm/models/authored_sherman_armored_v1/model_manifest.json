@@ -1,0 +1,78 @@
+{
+  "asset_id": "authored_sherman_armored_v1",
+  "display_name": "Authored Sherman Armored V1",
+  "silhouette_revision": "v1-1-watertight-armored-sherman",
+  "generated_at": "2026-07-05T01:59:25.395096Z",
+  "generator": "scripts/export_authored_sherman_armored.py",
+  "blender": "4.3.2",
+  "source_blend": "assets/authored/authored_sherman_armored_v1/authored_sherman_armored_v1.blend",
+  "output_glb": "public/tftm/models/authored_sherman_armored_v1/authored_sherman_armored_v1.glb",
+  "source_policy": "fully authored Blender armored Sherman geometry; boxmodel v1-13 is baseline; hero v1 is rejected red evidence; no Meshy chassis or turret imports",
+  "uv_policy": "box and planar UV plates with broad paintable armor surfaces and decal-friendly material families; no packed atlas",
+  "face_plate_ids": [
+    "hull_glacis",
+    "hull_left",
+    "hull_right",
+    "hull_rear",
+    "engine_deck",
+    "turret_front",
+    "turret_left",
+    "turret_right",
+    "turret_top",
+    "turret_bustle",
+    "mantlet",
+    "barrel_strip",
+    "coaxial_mg",
+    "track_outer",
+    "track_inner_top_bottom",
+    "wheel_disc",
+    "bogie_side"
+  ],
+  "node_contract": [
+    "tank_root",
+    "hull_root",
+    "turret_traverse_pivot",
+    "turret_shell",
+    "cannon_elevation_pivot",
+    "mantlet",
+    "barrel",
+    "coaxial_mg",
+    "left_track_motion",
+    "right_track_motion",
+    "left_roadwheel_group",
+    "right_roadwheel_group",
+    "left_continuous_outer_skirt__track_outer",
+    "right_continuous_outer_skirt__track_outer",
+    "left_under_sponson_backing__hull_left",
+    "right_under_sponson_backing__hull_right",
+    "left_front_armored_return__hull_left",
+    "right_front_armored_return__hull_right",
+    "left_rear_armored_return__hull_left",
+    "right_rear_armored_return__hull_right"
+  ],
+  "orientation_contract": {
+    "authored_axes": "X forward/back, Y up/down, Z left/right",
+    "threejs_axes_after_gltf": "X forward/back, Y up/down, Z left/right",
+    "visual_regression_prevented": "track cleats must remain behind continuous outer skirts; front/rear sponson gaps must be covered by armored returns; coaxial MG must be visible and parented to cannon elevation pivot"
+  },
+  "runtime_contract": {
+    "turret_traverse": "rotate turret_traverse_pivot around Y",
+    "cannon_elevation": "rotate cannon_elevation_pivot for mantlet, barrel, and coaxial MG pitch",
+    "coaxial_mg": "coaxial_mg is parented to cannon_elevation_pivot and seated beside the main barrel through the mantlet",
+    "tread_motion": "scroll material maps on left_track_motion and right_track_motion; visible cleats are recessed behind skirt silhouette",
+    "wheel_motion": "rotate children of left_roadwheel_group and right_roadwheel_group",
+    "hull_track_relationship": "continuous outer skirts, under-sponson backing, and front/rear armored returns cover the track wells so the tank reads as armor-covered rather than a comb of exposed track blocks"
+  },
+  "red_build_context": {
+    "baseline": "authored_sherman_boxmodel_v1 v1-13",
+    "rejected": "authored_sherman_hero_v1 v1-1 exposed comb-like track blocks and obvious armor gaps",
+    "forbidden_success_claim": "node, token, route, or bbox overlap without visible cloud/Sense comparison against old boxmodel and rejected hero"
+  },
+  "budget": {
+    "target_triangles": "2800-6200",
+    "hard_cap_triangles": 8000,
+    "actual_triangles": 2850,
+    "mesh_count": 105
+  },
+  "approximate_triangles": 2850
+}

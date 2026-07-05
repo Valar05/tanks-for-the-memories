@@ -76,6 +76,47 @@ VIEWS = [
         'ortho_scale': 1.28,
         'purpose': 'close-up of right glacis/track gap'
     }
+    ,
+    {
+        'id': 'rear',
+        'label': 'Rear',
+        'camera': (-5.8, 0.0, 1.15),
+        'target': (-0.10, 0.0, 0.08),
+        'ortho_scale': 3.35,
+        'purpose': 'overall rear silhouette and idler gap ownership'
+    },
+    {
+        'id': 'rear_left_three_quarter',
+        'label': 'Rear left 3/4',
+        'camera': (-5.0, -4.2, 1.35),
+        'target': (-0.90, -0.10, 0.04),
+        'ortho_scale': 3.9,
+        'purpose': 'rear-left larger hull/track gap relationship'
+    },
+    {
+        'id': 'rear_right_three_quarter',
+        'label': 'Rear right 3/4',
+        'camera': (-5.0, 4.2, 1.35),
+        'target': (-0.90, 0.10, 0.04),
+        'ortho_scale': 3.9,
+        'purpose': 'rear-right larger hull/track gap relationship'
+    },
+    {
+        'id': 'rear_left_gap_close',
+        'label': 'Rear left gap close',
+        'camera': (-3.45, -3.45, 0.72),
+        'target': (-1.18, -0.94, 0.02),
+        'ortho_scale': 1.36,
+        'purpose': 'close-up of left rear idler/sponson gap'
+    },
+    {
+        'id': 'rear_right_gap_close',
+        'label': 'Rear right gap close',
+        'camera': (-3.45, 3.45, 0.72),
+        'target': (-1.18, 0.94, 0.02),
+        'ortho_scale': 1.36,
+        'purpose': 'close-up of right rear idler/sponson gap'
+    }
 ]
 
 PASSES = [
@@ -181,8 +222,8 @@ def apply_problem_materials(objects):
         name = obj.name.lower()
         surface = str(obj.get('surface_id', '')).lower()
         mat = other
-        if any(token in name for token in ['gap', 'slot', 'shoulder', 'cheek', 'cover']) or any(token in surface for token in ['hull_left', 'hull_right', 'hull_glacis']):
-            mat = gap if any(token in name for token in ['gap', 'slot', 'shoulder', 'cheek', 'cover']) else hull
+        if any(token in name for token in ['gap', 'slot', 'shoulder', 'cheek', 'cover', 'closure', 'blocker', 'backing', 'return']) or any(token in surface for token in ['hull_left', 'hull_right', 'hull_glacis']):
+            mat = gap if any(token in name for token in ['gap', 'slot', 'shoulder', 'cheek', 'cover', 'closure', 'blocker', 'backing', 'return']) else hull
         if 'track' in name or 'track' in surface or 'skirt' in name or 'cleat' in name:
             mat = track
         if 'wheel' in name or 'bogie' in name or 'idler' in name or 'sprocket' in name:

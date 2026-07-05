@@ -26,7 +26,17 @@
     "visual-qa:boxmodel-tank": "node scripts/validate_boxmodel_tank_cloud_gate.mjs",
     "boxmodel-tuner-smoke": "node scripts/validate_boxmodel_tuner.mjs",
     "blender-visibility:boxmodel": "node scripts/render_boxmodel_blender_visibility.mjs",
-    "blender-visibility:boxmodel-smoke": "node scripts/validate_boxmodel_blender_visibility.mjs"
+    "blender-visibility:boxmodel-smoke": "node scripts/validate_boxmodel_blender_visibility.mjs",
+    "export:authored-hero": "node scripts/export_authored_sherman_hero.mjs",
+    "authored-hero-smoke": "node scripts/validate_authored_hero_asset.mjs",
+    "visual-qa:hero-tank": "node scripts/validate_hero_tank_cloud_gate.mjs",
+    "blender-visibility:hero": "node scripts/render_hero_blender_visibility.mjs",
+    "blender-visibility:hero-smoke": "node scripts/validate_hero_blender_visibility.mjs",
+    "export:authored-armored": "node scripts/export_authored_sherman_armored.mjs",
+    "authored-armored-smoke": "node scripts/validate_authored_armored_asset.mjs",
+    "visual-qa:armored-tank": "node scripts/validate_armored_tank_cloud_gate.mjs",
+    "blender-visibility:armored": "node scripts/render_armored_blender_visibility.mjs",
+    "blender-visibility:armored-smoke": "node scripts/validate_armored_blender_visibility.mjs"
   },
   "dependencies": {
     "three": "^0.166.1"

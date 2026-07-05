@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES, AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL, AUTHORED_SHERMAN_RETOPO_FACE_PLATES, AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL, SHERMAN_DEFAULT_OLIVE_ALBEDO_URL, SHERMAN_DEFAULT_TREAD_ALBEDO_URL } from './sherman-asset-links';
+import { AUTHORED_SHERMAN_ARMORED_FACE_PLATES, AUTHORED_SHERMAN_ARMORED_TEXTURE_BASE_URL, AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES, AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL, AUTHORED_SHERMAN_HERO_FACE_PLATES, AUTHORED_SHERMAN_HERO_TEXTURE_BASE_URL, AUTHORED_SHERMAN_RETOPO_FACE_PLATES, AUTHORED_SHERMAN_RETOPO_TEXTURE_BASE_URL, SHERMAN_DEFAULT_OLIVE_ALBEDO_URL, SHERMAN_DEFAULT_TREAD_ALBEDO_URL } from './sherman-asset-links';
 
 type MaterialTarget = 'olive' | 'tread';
 
@@ -119,7 +119,17 @@ export function applyAuthoredRetopoTexturePlates(root: THREE.Object3D) {
   root.userData.authoredRetopoTextureSet = root.userData.authoredTextureSet;
 }
 
+export function applyAuthoredArmoredTexturePlates(root: THREE.Object3D) {
+  applyAuthoredTexturePlates(root, AUTHORED_SHERMAN_ARMORED_FACE_PLATES, AUTHORED_SHERMAN_ARMORED_TEXTURE_BASE_URL, 'authored_sherman_armored_v1');
+  root.userData.authoredArmoredTextureSet = root.userData.authoredTextureSet;
+}
+
 export function applyAuthoredBoxmodelTexturePlates(root: THREE.Object3D) {
-  applyAuthoredTexturePlates(root, AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES, AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL, 'authored_sherman_boxmodel_v1');
+  applyAuthoredTexturePlates(root, AUTHORED_SHERMAN_ARMORED_FACE_PLATES, AUTHORED_SHERMAN_ARMORED_TEXTURE_BASE_URL, AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES, AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL, 'authored_sherman_boxmodel_v1');
   root.userData.authoredBoxmodelTextureSet = root.userData.authoredTextureSet;
+}
+
+export function applyAuthoredHeroTexturePlates(root: THREE.Object3D) {
+  applyAuthoredTexturePlates(root, AUTHORED_SHERMAN_HERO_FACE_PLATES, AUTHORED_SHERMAN_HERO_TEXTURE_BASE_URL, 'authored_sherman_hero_v1');
+  root.userData.authoredHeroTextureSet = root.userData.authoredTextureSet;
 }

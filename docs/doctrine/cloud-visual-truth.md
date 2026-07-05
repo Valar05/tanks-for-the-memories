@@ -94,6 +94,22 @@ For the current red build, the named false-change relationships are:
 - proof UI text claims more than the visible artifact proves
 - page-level cache bust is insufficient if bundled JS/CSS asset URLs are stable
 
+### Authored Armored V1 False-Green Case
+
+`authored_sherman_armored_v1` is red/unaccepted until a fresh cloud/Sense comparison proves otherwise. It passed exporter, manifest, route, and bbox-style checks while the same front and rear armor gaps remained visible.
+
+The failed visible relationship is: front and rear lower sponson armor must visually bridge hull/glacis/rear plate to the outer track skirt. The actual visible result left black air in the same corner slots.
+
+Future Sherman geometry gates must include a cloud/Sense visible-relationship comparison against the prior baseline and the rejected build. The report must state:
+
+- expected visible relationship
+- actual visible relationship
+- what visibly changed
+- what did not change
+- whether telemetry and validators support or contradict the visible read
+
+Do not accept a guard that only proves node presence, route wiring, object names, material slots, source strings, or internal bbox overlap. The guard must fail when the exterior viewer-facing armor slot is still open.
+
 ## Authored Retopo Replacement Gate
 
 Close-up review has rejected the current Meshy chassis/turret as production geometry. The next replacement target is `authored_sherman_retopo_v1`: fully authored hard-surface hull and turret geometry, separable turret/barrel/tread/wheel nodes, and split face PNG texture plates for DALL-E-friendly paint passes. The old Meshy chassis/turret remain reference ore and red-build evidence, not the production base.

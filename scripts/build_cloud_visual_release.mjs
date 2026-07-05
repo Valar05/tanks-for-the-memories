@@ -8,6 +8,8 @@ const tankManifestPath = 'public/tftm/models/m4a3_75_vvss_sherman_alpha_mobile/m
 const shermanSourceManifestPath = 'assets/generated/meshy/sherman_part_meshy_kit_v1/assembly_manifest.json';
 const authoredRetopoManifestPath = 'public/tftm/models/authored_sherman_retopo_v1/model_manifest.json';
 const authoredBoxmodelManifestPath = 'public/tftm/models/authored_sherman_boxmodel_v1/model_manifest.json';
+const authoredHeroManifestPath = 'public/tftm/models/authored_sherman_hero_v1/model_manifest.json';
+const authoredArmoredManifestPath = 'public/tftm/models/authored_sherman_armored_v1/model_manifest.json';
 
 const build = spawnSync('npm', ['run', 'build'], { stdio: 'inherit' });
 if ((build.status ?? 1) !== 0) {
@@ -34,11 +36,21 @@ if (!existsSync(authoredBoxmodelManifestPath)) {
   console.error('missing authored boxmodel manifest ' + authoredBoxmodelManifestPath);
   process.exit(1);
 }
+if (!existsSync(authoredHeroManifestPath)) {
+  console.error('missing authored hero manifest ' + authoredHeroManifestPath);
+  process.exit(1);
+}
+if (!existsSync(authoredArmoredManifestPath)) {
+  console.error('missing authored armored manifest ' + authoredArmoredManifestPath);
+  process.exit(1);
+}
 
 const tankManifest = JSON.parse(readFileSync(tankManifestPath, 'utf8'));
 const shermanSourceManifest = JSON.parse(readFileSync(shermanSourceManifestPath, 'utf8'));
 const authoredRetopoManifest = JSON.parse(readFileSync(authoredRetopoManifestPath, 'utf8'));
 const authoredBoxmodelManifest = JSON.parse(readFileSync(authoredBoxmodelManifestPath, 'utf8'));
+const authoredHeroManifest = JSON.parse(readFileSync(authoredHeroManifestPath, 'utf8'));
+const authoredArmoredManifest = JSON.parse(readFileSync(authoredArmoredManifestPath, 'utf8'));
 const gitHead = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8' });
 const gitStatus = spawnSync('git', ['status', '--short'], { encoding: 'utf8' });
 
@@ -55,9 +67,31 @@ const releaseManifest = {
     asset_policy: 'one linked vanilla Sherman GLB; existing constrained albedo texture set linked at runtime; no copied model or texture variant',
     acceptance: 'Sense Simulation must confirm one Sherman with visible olive armor albedo, visible tread albedo, no fused/parade/assay scene, and right-side camera interaction.'
   },
+  authored_armored_review: {
+    route: 'armored-tank.html',
+    expected_build: 'tftm-authored-sherman-armored-v1-20260705',
+    asset_id: authoredArmoredManifest.asset_id,
+    output_glb: authoredArmoredManifest.output_glb,
+    source_blend: authoredArmoredManifest.source_blend,
+    approximate_triangles: authoredArmoredManifest.approximate_triangles,
+    uv_policy: authoredArmoredManifest.uv_policy,
+    face_plate_ids: authoredArmoredManifest.face_plate_ids,
+    acceptance: 'Sense Simulation must compare new armored tank against boxmodel v1-13 and rejected hero v1: confirm armor-covered watertight-looking hull/track relationship, no exposed comb-like track blocks, no front/rear side air gaps, non-cube turret, mantlet-owned barrel and coaxial MG, and preserved turret/gun/track/wheel pivots. Local capture is not acceptance.'
+  },
+  authored_hero_review: {
+    route: 'hero-tank.html',
+    expected_build: 'tftm-authored-sherman-hero-v1-20260705',
+    asset_id: authoredHeroManifest.asset_id,
+    output_glb: authoredHeroManifest.output_glb,
+    source_blend: authoredHeroManifest.source_blend,
+    approximate_triangles: authoredHeroManifest.approximate_triangles,
+    uv_policy: authoredHeroManifest.uv_policy,
+    face_plate_ids: authoredHeroManifest.face_plate_ids,
+    acceptance: 'Sense Simulation must confirm animatable static hero tank: visually joined Sherman-family armor, not fused garbage, no visible hull/track air holes, non-cube turret, mantlet owns barrel and coaxial MG, turret/gun/track/wheel pivots are preserved, and local capture was not used.'
+  },
   authored_boxmodel_review: {
     route: 'boxmodel-tank.html',
-    expected_build: 'tftm-authored-sherman-boxmodel-v1-9-20260704',
+    expected_build: 'tftm-authored-sherman-boxmodel-v1-13-20260705',
     tuner_route: 'boxmodel-tank.html?tune=1',
     tuner_expected_build: 'tftm-authored-sherman-boxmodel-tuner-v9-20260704',
     asset_id: authoredBoxmodelManifest.asset_id,
@@ -68,8 +102,8 @@ const releaseManifest = {
     uv_policy: authoredBoxmodelManifest.uv_policy,
     face_plate_ids: authoredBoxmodelManifest.face_plate_ids,
     asset_policy: 'fully authored Blender box-model chassis with solidified overlapping armor plates, non-cube cast turret silhouette, and coaxial MG; no Meshy chassis or turret imports; box UV PNG plates for DALL-E paintability',
-    acceptance: 'Sense Simulation must confirm Sherman silhouette, non-cube turret massing, exterior front gap coverage closes the triangular top void and lower rectangular void at the visible outside track/glacis side plane without floating boxes or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.',
-    tuner_acceptance: 'Sense Simulation must review boxmodel-tank.html?tune=1 as a preserved future-use gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored flat armor panels are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected panel is highlighted for editing, already enabled panels remain visible, Move/Rotate/Scale are one active mode at a time, Scale exposes explicit All/X/Y/Z axis buttons, drag/pinch/twist gestures visibly change the selected panel, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and panels share the same unskewed model frame, no object transform handles appear, and local capture was not used.'
+    acceptance: 'Sense Simulation must confirm Sherman silhouette, non-cube turret massing, recessed under-sponson shadow backing closes the front and larger rear corner voids without pasted exterior side slabs without floating boxes or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.',
+    tuner_acceptance: 'Sense Simulation must review boxmodel-tank.html?tune=1 as a preserved future-use gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored recessed backing panels are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected panel is highlighted for editing, already enabled panels remain visible, Move/Rotate/Scale are one active mode at a time, Scale exposes explicit All/X/Y/Z axis buttons, drag/pinch/twist gestures visibly change the selected panel, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and panels share the same unskewed model frame, no object transform handles appear, and local capture was not used.'
   },
   authored_retopo_review: {
     route: 'retopo-tank.html',
@@ -107,9 +141,15 @@ const releaseManifest = {
     }]))
   },
   required_cloud_captures: [
-    'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-9-20260704',
-    'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, exterior front track/glacis gap coverage, and no local capture',
-    'boxmodel-tank close-up review showing exterior front gap coverage as attached armor, solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability',
+    'armored-tank phone portrait showing authored_sherman_armored_v1 and build token tftm-authored-sherman-armored-v1-20260705',
+    'armored-tank phone landscape comparing against old boxmodel and rejected hero: armor-covered watertight-looking hull/track relationship, no comb-like exposed track blocks, and no front/rear side air gaps',
+    'armored-tank close-up review showing continuous outer skirt, recessed track cleats, front/rear armored returns, non-cube turret, mantlet-owned barrel and coaxial MG',
+    'hero-tank phone portrait showing authored_sherman_hero_v1 and build token tftm-authored-sherman-hero-v1-20260705',
+    'hero-tank phone landscape showing animatable static hero tank, joined hull/track armor relationship, and not fused garbage',
+    'hero-tank close-up review showing non-cube turret, mantlet-owned barrel/coaxial MG, and no front/rear hull-track air holes',
+    'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-13-20260705',
+    'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, recessed under-sponson shadow backing, and no local capture',
+    'boxmodel-tank close-up review showing recessed under-sponson shadow backing as attached armor, solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability',
     'boxmodel-tank.html?tune=1 phone portrait showing gesture-only part tuner with collapsed parts drawer, front-right/front-left/rear-right/rear-left hull-colored flat armor panel parts aligned parallel to the tracks, flush to the side plane, and not protruding like blocks, selected panel highlight, camera orientation widget, explicit All/X/Y/Z scale axis buttons, square unskewed tank frame, and build token tftm-authored-sherman-boxmodel-tuner-v9-20260704',
     'boxmodel-tank.html?tune=1 cloud interaction evidence showing one selected flat armor panel visibly move/rotate/scale through drag/pinch/twist while other enabled panels remain placed, OrbitControls camera orbit/dolly/pan preserved from an unskewed model frame, and no object transform handles',
     'retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-1-20260704',
@@ -126,14 +166,21 @@ const releaseManifest = {
   ],
   false_change_penalty: {
     status: 'active',
-    reason: 'Fresh cloud screenshots showed no visible delta after v1-8 front-gap coverage. Root cause: coverage nodes existed but were placed inboard of the visible exterior side plane, and the GLB used a stable asset URL vulnerable to browser cache.',
-    required_next_evidence: 'Next tank visual pass must show cloud/Sense evidence that v1-9 exterior side-plane coverage visibly closes the front track/glacis gap.'
+    reason: 'Fresh cloud screenshots showed no visible delta after v1-8 four-corner gap coverage. Root cause: coverage nodes existed but were placed inboard of the visible exterior side plane, and the GLB used a stable asset URL vulnerable to browser cache.',
+    required_next_evidence: 'Next tank visual pass must show cloud/Sense evidence that authored_sherman_armored_v1 beats boxmodel v1-13 and rejected hero v1 by preserving a watertight-looking armor-covered hull/track relationship with no exposed comb-track silhouette.'
   },
   sense_simulation_questions: [
-    'Does authored_sherman_boxmodel_v1 build v1-9 preserve the Sherman silhouette while adding only exterior front track/glacis gap coverage?',
-    'On boxmodel-tank.html?tune=1, does the gesture-only parts workflow provide four hull-colored front-right/front-left/rear-right/rear-left flat armor panels aligned parallel to the tracks and reading like armor skin, not blocks while using a collapsed drawer, one active transform mode, explicit All/X/Y/Z scale axes, direct gestures, OrbitControls camera, and a camera orientation widget without object transform handles?',
+    'Does authored_sherman_armored_v1 build tftm-authored-sherman-armored-v1-20260705 visibly improve over authored_sherman_boxmodel_v1 v1-13 without repeating authored_sherman_hero_v1 exposed comb-track failure?',
+    'Do continuous outer skirts, under-sponson backing, and front/rear armored returns make the hull/track relationship read as watertight armor coverage from front, side, rear, and quarter views?',
+    'Are track cleats recessed behind the skirt silhouette rather than protruding outward as vertical comb blocks?',
+    'Is the coaxial MG visible, seated in the mantlet beside the main barrel, and parented to the cannon elevation assembly?',
+    'Does authored_sherman_hero_v1 build tftm-authored-sherman-hero-v1-20260705 read as an animatable static Sherman-family hero tank rather than fused garbage?',
+    'Are turret_traverse_pivot and cannon_elevation_pivot visually coherent: turret owns turret shell, mantlet owns barrel and coaxial MG, and the tank is not a single fused blob?',
+    'Does the hero tank eliminate the visible hull/track air-hole relationship that made boxmodel v1-13 a visual no-op?',
+    'Does authored_sherman_boxmodel_v1 build v1-13 preserve the Sherman silhouette while adding only recessed under-sponson shadow backing?',
+    'On boxmodel-tank.html?tune=1, does the gesture-only parts workflow provide four hull-colored front-right/front-left/rear-right/rear-left recessed backing panels reading as under-sponson armor inside the track wells, not exterior blocks while using a collapsed drawer, one active transform mode, explicit All/X/Y/Z scale axes, direct gestures, OrbitControls camera, and a camera orientation widget without object transform handles?',
     'Does the turret read as a non-cube cast turret form with cheek mass, roof flattening, and rear bustle?',
-    'Do the new exterior front gap covers sit on the visible outside side plane and close the triangular top void plus lower rectangular void, not hide inboard as another false-green?',
+    'Does the recessed under-sponson backing close the visible horizontal shadow slot without protruding outside the skirt silhouette?',
     'Do the armor plates read as joined metal mass rather than separated cardboard planes?',
     'Is the coaxial MG visible and owned by the mantlet/gun assembly?' ,
     'Do the box UV plates stay paintable without obvious runtime guide seams or DALL-E-unpaintable UV spaghetti?',
