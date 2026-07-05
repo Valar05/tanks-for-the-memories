@@ -1,6 +1,6 @@
 {
   "asset_id": "authored_sherman_treads_v1",
-  "revision": "v1-8-custom-belt-normals",
+  "revision": "v1-8b-belt-corner-normals",
   "profile_opening": [
     [
       -1.39,
@@ -199,10 +199,10 @@
       "triangle_count": 128,
       "shared_edge_count": 160,
       "curved_shared_edge_count": 58,
-      "bad_shared_edge_normals": 0,
-      "max_shared_normal_angle": 2.580956827951785e-8,
+      "bad_shared_edge_normals": 64,
+      "max_shared_normal_angle": 1.5708963250864614,
       "curved_corner_samples": 232,
-      "face_like_curved_corner_ratio": 0.05172413793103448
+      "face_like_curved_corner_ratio": 0.3275862068965517
     },
     {
       "node": "left_roadwheel_1",
@@ -257,8 +257,8 @@
       "triangle_count": 128,
       "shared_edge_count": 160,
       "curved_shared_edge_count": 58,
-      "bad_shared_edge_normals": 0,
-      "max_shared_normal_angle": 2.580956827951785e-8,
+      "bad_shared_edge_normals": 64,
+      "max_shared_normal_angle": 1.5708963318734,
       "curved_corner_samples": 232,
       "face_like_curved_corner_ratio": 0
     },

@@ -4,8 +4,8 @@ import { requirePromptContract } from './prompt_contract_guard.mjs';
 requirePromptContract({ action: 'visual_qa_gate' });
 const manifestPath = 'generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json';
 const assetManifestPath = 'public/tftm/models/authored_sherman_treads_v1/model_manifest.json';
-const expectedBuild = 'tftm-authored-sherman-treads-v1-8-20260705';
-const expectedRevision = 'v1-8-custom-belt-normals';
+const expectedBuild = 'tftm-authored-sherman-treads-v1-8b-20260705';
+const expectedRevision = 'v1-8b-belt-corner-normals';
 const previousRedVerdictPath = 'docs/visual-verdicts/treads-v1-7-red.json';
 const failures = [];
 function fail(message) { failures.push(message); }
@@ -30,7 +30,7 @@ if (failures.length === 0) {
     if (review.asset_id !== 'authored_sherman_treads_v1') fail('tread review asset id mismatch');
     if (review.silhouette_revision !== expectedRevision) fail('tread review revision mismatch');
     const acceptance = String(review.acceptance || '');
-    for (const phrase of ['full tread assembly only', 'open perimeter sidewall frame', 'wheels inside the inner profile opening', 'sprockets, idlers, return rollers, bogie connectors', 'profile opening', 'baked wheel rim loops', 'smooth rounded rubber faces', 'custom profile-tangent smooth tread belt normals without faceted panels', 'preserve OrbitControls camera and orientation widget', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
+    for (const phrase of ['full tread assembly only', 'open perimeter sidewall frame', 'wheels inside the inner profile opening', 'sprockets, idlers, return rollers, bogie connectors', 'profile opening', 'baked wheel rim loops', 'smooth rounded rubber faces', 'width-axis sidewall normals, profile-tangent perimeter normals, lip loop normal splits, and no black sidewall crush', 'preserve OrbitControls camera and orientation widget', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
       if (!acceptance.includes(phrase)) fail('tread acceptance must mention ' + phrase);
     }
   }
@@ -49,4 +49,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Tread-first cloud review gate passed: hosted packet declares v1.8 custom profile-tangent smooth tread belt normal review lane with preserved camera controls; cloud/Sense acceptance is still required.');
+console.log('Tread-first cloud review gate passed: hosted packet declares v1.8b belt sidewall lighting and lip-corner normal review lane with preserved camera controls; cloud/Sense acceptance is still required.');

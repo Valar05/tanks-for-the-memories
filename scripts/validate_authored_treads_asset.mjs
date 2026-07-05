@@ -348,7 +348,7 @@ if (failures.length === 0) {
   const runtime = readFileSync('src/treadfirst-treads.ts', 'utf8') + readFileSync('src/sherman-asset-links.ts', 'utf8');
   const build = readFileSync('scripts/build.mjs', 'utf8');
   if (manifest.asset_id !== assetId) fail('manifest asset_id mismatch');
-  if (manifest.silhouette_revision !== 'v1-8-custom-belt-normals') fail('unexpected revision ' + manifest.silhouette_revision);
+  if (manifest.silhouette_revision !== 'v1-8b-belt-corner-normals') fail('unexpected revision ' + manifest.silhouette_revision);
   const v11Verdict = JSON.parse(readFileSync(v11RedVerdictPath, 'utf8'));
   const v12Verdict = JSON.parse(readFileSync(v12RedVerdictPath, 'utf8'));
   const v14Verdict = JSON.parse(readFileSync(v14RedVerdictPath, 'utf8'));
@@ -361,8 +361,9 @@ if (failures.length === 0) {
   if (v17Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.7 red verdict must remain explicit before accepting v1.8 diagnostics');
   if (manifest.profile?.old_reference_point_count !== 8) fail('manifest must record old subdivision-0 profile point count');
   if ((manifest.profile?.outer_profile_point_count || 0) < 16) fail('outer profile must add one silhouette subdivision layer beyond the old 8-point profile');
-  if (!String(manifest.shading_contract || '').includes('custom loop normals')) fail('manifest must declare custom loop normal tread belt shading');
-  for (const sourceMarker of ['bake_mesh_modifiers_for_export', 'modifier_apply', 'mark_circular_crease_edges', 'smooth_continuous_tread_belt_surface', 'nonrendered_segment_marker_for_review', 'Do not bevel or weighted-normal the tire ring', 'normals_split_custom_set', 'profile_normals', 'custom loop normals']) if (!exporter.includes(sourceMarker)) fail('exporter missing shading marker ' + sourceMarker);
+  if (!String(manifest.shading_contract || '').includes('width-axis sidewall normals')) fail('manifest must declare width-axis sidewall tread belt normals');
+  if (!String(manifest.shading_contract || '').includes('lip loop normal splits')) fail('manifest must declare lip loop normal splits for readable corners');
+  for (const sourceMarker of ['bake_mesh_modifiers_for_export', 'modifier_apply', 'mark_circular_crease_edges', 'continuous_tread_belt_surface', 'nonrendered_segment_marker_for_review', 'Do not bevel or weighted-normal the tire ring', 'normals_split_custom_set', 'profile_normals', 'width-axis sidewalls light symmetrically', 'lip loop normal splits']) if (!exporter.includes(sourceMarker)) fail('exporter missing shading marker ' + sourceMarker);
   for (const node of ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_continuous_tread_belt_surface','right_continuous_tread_belt_surface','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors','left_front_sprocket','right_front_sprocket','left_rear_idler','right_rear_idler']) if (!(json.nodes || []).some((entry) => entry.name === node)) fail('missing required node ' + node);
   for (const forbidden of ['hull','turret','barrel','coax','mantlet','cannon','tank_root']) {
     const hit = (json.nodes || []).find((node) => String(node.name || '').toLowerCase().includes(forbidden));
@@ -393,8 +394,8 @@ if (failures.length === 0) {
       diagnostic.normal_shading.push(beltContinuity);
       if (beltContinuity.shared_edge_count < 40) fail(`${side} continuous tread belt lacks enough shared GLB triangle edges for smooth validation: ${beltContinuity.shared_edge_count}`);
       if (beltContinuity.curved_shared_edge_count < 12) fail(`${side} continuous tread belt lacks curved shared edges for smooth validation: ${beltContinuity.curved_shared_edge_count}`);
-      if (beltContinuity.bad_shared_edge_normals > 0) fail(`${side} continuous tread belt has split normals across shared curved edges: ${beltContinuity.bad_shared_edge_normals}`);
-      if (beltContinuity.face_like_curved_corner_ratio > 0.42) fail(`${side} continuous tread belt exports face-like normals on curved belt corners: ${(beltContinuity.face_like_curved_corner_ratio * 100).toFixed(0)}%`);
+      if (beltContinuity.bad_shared_edge_normals < 48 || beltContinuity.bad_shared_edge_normals > 96) fail(`${side} continuous tread belt must have bounded lip normal splits for readable corners, saw ${beltContinuity.bad_shared_edge_normals}`);
+      if (beltContinuity.face_like_curved_corner_ratio > 0.48) fail(`${side} continuous tread belt exports too many face-like normals away from the intentional lip breaks: ${(beltContinuity.face_like_curved_corner_ratio * 100).toFixed(0)}%`);
     }
     const names = descendants(json, `${side}_tread_connector_mounts`).join('\n');
     if ((names.match(/connector_mount_/g) || []).length < 4) fail(`${side} connector mounts must expose four subordinate mount blocks`);
@@ -435,7 +436,7 @@ if (failures.length === 0) {
     const bogieNames = descendants(json, `${side}_bogie_connectors`).join('\n');
     if ((bogieNames.match(/vvss_bogie_arm_/g) || []).length < 3) fail(`${side} bogie connectors must expose three bogie arm blocks`);
   }
-  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-8-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
+  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-8b-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
   if (!build.includes("buildEntry('treadfirst-treads.ts', 'treadfirst-treads')")) fail('build must bundle treadfirst-treads.ts');
   if (!build.includes("writeBundledHtml('treadfirst-treads.html', 'treadfirst-treads.html', 'treadfirst-treads')")) fail('build must write treadfirst-treads.html');
 }
@@ -446,4 +447,4 @@ if (failures.length) {
   process.exit(1);
 }
 await import('node:fs').then(({ mkdirSync, writeFileSync }) => { mkdirSync('generated/diagnostics/authored_sherman_treads_v1', { recursive: true }); writeFileSync(diagnosticPath, JSON.stringify(diagnostic, null, 2) + '\n'); });
-console.log('Authored tread assembly validation passed: v1.8 keeps wheels in the profile opening with baked rim splits and custom profile-tangent smooth tread belt normals; cloud/Sense visual acceptance is still required.');
+console.log('Authored tread assembly validation passed: v1.8b keeps continuous geometry while adding width-lit sidewalls, readable lip corners, and baked rim splits; cloud/Sense visual acceptance is still required.');
