@@ -1,0 +1,7 @@
+{
+  "route": "treadfirst-treads.html",
+  "revision": "v1-9-open-running-gear-rebuild",
+  "status": "red_unaccepted_wrong_geometry_rebuild",
+  "reason": "Rejected by direct user correction: the request was to change tread shading mode on sufficient old geometry, not remodel the treads into segmented/open-running-gear geometry.",
+  "forbidden_reuse": "Do not continue from v1.9 segmented track-run meshes unless a later prompt explicitly asks for geometry redesign."
+}
