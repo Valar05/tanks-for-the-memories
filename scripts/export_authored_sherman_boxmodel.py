@@ -19,7 +19,7 @@ def R(rx, ry, rz):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_boxmodel_v1'
-REVISION = 'v1-10-integrated-sponson-skirt-skins'
+REVISION = 'v1-11-raycast-closed-sponson-shells'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -113,6 +113,42 @@ def armor_face(name, plate_id, verts, parent, thickness=0.05):
     obj['armor_plate_thickness'] = thickness
     return obj
 
+def sponson_shell(name, plate_id, side_sign, parent):
+    # One joined hull-side shell, not a gap cover: side skin, top return, and
+    # front/rear caps all belong to the same named sponson armor object.
+    s = side_sign
+    verts = [
+        (1.72,-0.40,s*1.045),   # 0 front lower outside, overlaps skirt plane
+        (-1.76,-0.40,s*1.045),  # 1 rear lower outside, overlaps skirt plane
+        (-1.70,0.56,s*0.600),   # 2 rear upper hull edge
+        (1.72,0.56,s*0.600),    # 3 front upper hull edge
+        (-1.46,0.620,s*0.560),  # 4 rear deck tie-in
+        (0.78,0.675,s*0.530),   # 5 glacis/deck tie-in
+        (1.54,-0.04,s*0.690),   # 6 lower visible front slot tie-in
+        (1.54,0.16,s*0.610),    # 7 upper visible front slot tie-in
+        (-1.69,-0.30,s*0.630),  # 8 rear lower plate tie-in
+        (-1.49,0.585,s*0.570),  # 9 rear upper plate tie-in
+    ]
+    faces = [
+        (0,1,2,3),      # continuous exterior side armor from skirt to upper hull
+        (3,2,4,5),      # top weld return into deck/hull shoulder
+        (0,3,7,6),      # front cap into glacis slot wall
+        (1,8,9,2),      # rear cap into rear armor/idler corner
+        (6,7,5,3),      # upper front shoulder transition
+        (2,9,4),        # upper rear shoulder transition
+    ]
+    obj = mesh_obj(name, plate_id, verts, faces, parent)
+    solid = obj.modifiers.new('joined_sponson_shell_thickness', 'SOLIDIFY')
+    solid.thickness = 0.065
+    solid.offset = 0
+    bevel = obj.modifiers.new('welded_sponson_shell_edges', 'BEVEL')
+    bevel.width = 0.012
+    bevel.segments = 1
+    obj.modifiers.new('weighted_sponson_shell_normals', 'WEIGHTED_NORMAL')
+    obj['armor_plate_thickness'] = 0.065
+    obj['raycast_closure_shell'] = True
+    return obj
+
 def box(name, plate_id, size, loc, parent, rot=(0,0,0), bevel=0.0):
     sx, sy, sz = size
     x, y, z = sx/2, sy/2, sz/2
@@ -178,8 +214,8 @@ box('hull_lower_tub__hull_left', 'hull_left', (3.48,0.42,1.16), (-0.08,-0.11,0),
 box('rounded_transmission_cover__hull_glacis', 'hull_glacis', (0.28,0.36,1.02), (1.62,0.05,0), hull_root, bevel=0.055)
 quad('hull_glacis_slope__hull_glacis', 'hull_glacis', [(1.56,0.13,-0.59),(0.66,0.685,-0.515),(0.66,0.685,0.515),(1.56,0.13,0.59)], hull_root)
 quad('engine_deck_flat__engine_deck', 'engine_deck', [(0.72,0.675,-0.55),(-1.58,0.635,-0.59),(-1.58,0.635,0.59),(0.72,0.675,0.55)], hull_root)
-quad('left_sloped_sponson__hull_left', 'hull_left', [(1.60,-0.36,-1.035),(-1.70,-0.38,-1.035),(-1.46,0.585,-0.625),(0.78,0.655,-0.545)], hull_root, thickness=0.06)
-quad('right_sloped_sponson__hull_right', 'hull_right', [(-1.70,-0.38,1.035),(1.60,-0.36,1.035),(0.78,0.655,0.545),(-1.46,0.585,0.625)], hull_root, thickness=0.06)
+sponson_shell('left_sloped_sponson__hull_left', 'hull_left', -1, hull_root)
+sponson_shell('right_sloped_sponson__hull_right', 'hull_right', 1, hull_root)
 quad('rear_armor_plate__hull_rear', 'hull_rear', [(-1.69,-0.30,0.63),(-1.69,-0.30,-0.63),(-1.49,0.585,-0.57),(-1.49,0.585,0.57)], hull_root)
 for z, side, plate in [(-0.80,'left','hull_left'), (0.80,'right','hull_right')]:
     box(f'{side}_front_fender__{plate}', plate, (0.54,0.035,0.14), (1.34,0.20,z), hull_root, rot=(0,0,-0.16))
@@ -280,7 +316,7 @@ manifest = {
         'authored_axes': 'X forward/back, Y up/down, Z left/right',
         'blender_axes': 'X forward/back, Y left/right, Z up/down after P/S/R conversion helpers',
         'threejs_axes_after_gltf': 'X forward/back, Y up/down, Z left/right',
-        'visual_regression_prevented': 'tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front and rear lower sponson sides must be integrated hull-side armor skins that bridge into the outer track skirts; no pasted cover panels, blockers, wing plates, or runtime overlays'
+        'visual_regression_prevented': 'tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front and rear lower sponson sides must be joined multi-face hull-side shells that bridge into the outer track skirts and stop exterior gap rays before they reach the tank interior; no pasted cover panels, blockers, wing plates, or runtime overlays'
     },
     'runtime_contract': {
         'turret_traverse': 'rotate turret_traverse_pivot around Y',
@@ -289,7 +325,8 @@ manifest = {
         'tread_motion': 'scroll material maps on left_track_motion and right_track_motion',
         'wheel_motion': 'rotate children of left_roadwheel_group and right_roadwheel_group',
         'side_skirt_occlusion': 'roadwheel discs sit inside track skirt volume; exterior track cover hides tire backs from front and side views',
-        'integrated_sponson_skirt_armor': 'sloped sponson skins reshape the hull side so front and rear hull/track gaps belong to continuous armor; no exterior cover panels, blockers, side wings, or runtime overlays',
+        'integrated_sponson_skirt_armor': 'joined multi-face sponson shells reshape the hull side so front and rear hull/track gaps belong to continuous armor; no exterior cover panels, blockers, side wings, or runtime overlays',
+        'raycast_exterior_closure': 'outside gap rays hit exterior armor before interior at front-left, front-right, rear-left, and rear-right hull/track corners',
         'commander_hatch': 'commander_hatch__turret_top is a named posture marker'
     },
     'budget': {'target_triangles': '2500-4500', 'hard_cap_triangles': 6000, 'actual_triangles': triangles, 'mesh_count': mesh_count},

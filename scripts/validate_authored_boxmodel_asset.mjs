@@ -12,17 +12,25 @@ const facePlateIds = ['hull_glacis','hull_left','hull_right','hull_rear','engine
 const requiredNodes = ['tank_root','hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','left_track_motion','right_track_motion','left_roadwheel_group','right_roadwheel_group','commander_hatch__turret_top','left_flush_glacis_shoulder__hull_left','right_flush_glacis_shoulder__hull_right','left_low_front_track_cheek__hull_left','right_low_front_track_cheek__hull_right','left_vertical_shoulder_gap_web__hull_left','right_vertical_shoulder_gap_web__hull_right','left_visible_glacis_slot_wall__hull_left','right_visible_glacis_slot_wall__hull_right','left_sloped_sponson__hull_left','right_sloped_sponson__hull_right'];
 function fail(message) { failures.push(message); }
 function read(file) { return readFileSync(file, 'utf8'); }
-function parseGlbJson(file) {
+function parseGlbChunks(file) {
   const data = readFileSync(file);
   if (data.toString('utf8', 0, 4) !== 'glTF') throw new Error('not a GLB');
   let offset = 12;
+  let json = null;
+  let binary = null;
   while (offset + 8 <= data.length) {
     const length = data.readUInt32LE(offset);
     const type = data.toString('utf8', offset + 4, offset + 8);
-    if (type === 'JSON') return JSON.parse(data.toString('utf8', offset + 8, offset + 8 + length).trim());
+    const start = offset + 8;
+    if (type === 'JSON') json = JSON.parse(data.toString('utf8', start, start + length).trim());
+    if (type === 'BIN\0') binary = data.subarray(start, start + length);
     offset += 8 + length;
   }
-  throw new Error('GLB JSON chunk missing');
+  if (!json) throw new Error('GLB JSON chunk missing');
+  return { json, binary };
+}
+function parseGlbJson(file) {
+  return parseGlbChunks(file).json;
 }
 function glbTriangles(json) {
   let triangles = 0;
@@ -121,6 +129,151 @@ function nodeWorldBoundsByName(json, nodeName) {
   return { min, max, size: max.map((value, axis) => value - min[axis]) };
 }
 
+const componentByteSize = { 5120: 1, 5121: 1, 5122: 2, 5123: 2, 5125: 4, 5126: 4 };
+const accessorComponents = { SCALAR: 1, VEC2: 2, VEC3: 3, VEC4: 4, MAT4: 16 };
+function readComponent(buffer, offset, componentType) {
+  if (componentType === 5126) return buffer.readFloatLE(offset);
+  if (componentType === 5125) return buffer.readUInt32LE(offset);
+  if (componentType === 5123) return buffer.readUInt16LE(offset);
+  if (componentType === 5122) return buffer.readInt16LE(offset);
+  if (componentType === 5121) return buffer.readUInt8(offset);
+  if (componentType === 5120) return buffer.readInt8(offset);
+  throw new Error('unsupported accessor component type ' + componentType);
+}
+function accessorValues(json, binary, accessorIndex) {
+  const accessor = json.accessors?.[accessorIndex];
+  const view = json.bufferViews?.[accessor?.bufferView];
+  if (!accessor || !view || !binary) return [];
+  const componentSize = componentByteSize[accessor.componentType];
+  const componentCount = accessorComponents[accessor.type];
+  const stride = view.byteStride || componentSize * componentCount;
+  const base = (view.byteOffset || 0) + (accessor.byteOffset || 0);
+  const values = [];
+  for (let row = 0; row < accessor.count; row += 1) {
+    const tuple = [];
+    for (let component = 0; component < componentCount; component += 1) {
+      tuple.push(readComponent(binary, base + row * stride + component * componentSize, accessor.componentType));
+    }
+    values.push(componentCount === 1 ? tuple[0] : tuple);
+  }
+  return values;
+}
+function quatMultiply(a, b) {
+  return [
+    a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1],
+    a[3] * b[1] - a[0] * b[2] + a[1] * b[3] + a[2] * b[0],
+    a[3] * b[2] + a[0] * b[1] - a[1] * b[0] + a[2] * b[3],
+    a[3] * b[3] - a[0] * b[0] - a[1] * b[1] - a[2] * b[2]
+  ];
+}
+function composeFullTransform(parent, node) {
+  const t = node.translation || [0, 0, 0];
+  const r = node.rotation || [0, 0, 0, 1];
+  const s = node.scale || [1, 1, 1];
+  const scaledT = [t[0] * parent.scale[0], t[1] * parent.scale[1], t[2] * parent.scale[2]];
+  const rotatedT = quatTransformVector(parent.rotation, scaledT);
+  return {
+    translation: [parent.translation[0] + rotatedT[0], parent.translation[1] + rotatedT[1], parent.translation[2] + rotatedT[2]],
+    rotation: quatMultiply(parent.rotation, r),
+    scale: [parent.scale[0] * s[0], parent.scale[1] * s[1], parent.scale[2] * s[2]]
+  };
+}
+function nodeFullWorldTransforms(json) {
+  const transforms = new Map();
+  const visit = (index, parent) => {
+    const transform = composeFullTransform(parent, json.nodes[index]);
+    transforms.set(index, transform);
+    for (const child of json.nodes[index].children || []) visit(child, transform);
+  };
+  const childSet = new Set((json.nodes || []).flatMap((node) => node.children || []));
+  for (let index = 0; index < (json.nodes || []).length; index += 1) {
+    if (!childSet.has(index)) visit(index, { translation: [0, 0, 0], rotation: [0, 0, 0, 1], scale: [1, 1, 1] });
+  }
+  return transforms;
+}
+function transformPoint(transform, value) {
+  const scaled = [value[0] * transform.scale[0], value[1] * transform.scale[1], value[2] * transform.scale[2]];
+  const rotated = quatTransformVector(transform.rotation, scaled);
+  return [rotated[0] + transform.translation[0], rotated[1] + transform.translation[1], rotated[2] + transform.translation[2]];
+}
+function vectorSub(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
+function vectorCross(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }
+function vectorDot(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+function rayTriangleDistance(origin, direction, a, b, c) {
+  const edge1 = vectorSub(b, a);
+  const edge2 = vectorSub(c, a);
+  const p = vectorCross(direction, edge2);
+  const determinant = vectorDot(edge1, p);
+  if (Math.abs(determinant) < 1e-7) return null;
+  const inverse = 1 / determinant;
+  const t = vectorSub(origin, a);
+  const u = vectorDot(t, p) * inverse;
+  if (u < 0 || u > 1) return null;
+  const q = vectorCross(t, edge1);
+  const v = vectorDot(direction, q) * inverse;
+  if (v < 0 || u + v > 1) return null;
+  const distance = vectorDot(edge2, q) * inverse;
+  return distance > 1e-7 ? distance : null;
+}
+function glbWorldTriangles(json, binary) {
+  const transforms = nodeFullWorldTransforms(json);
+  const triangles = [];
+  for (let nodeIndex = 0; nodeIndex < (json.nodes || []).length; nodeIndex += 1) {
+    const node = json.nodes[nodeIndex];
+    if (node.mesh == null) continue;
+    const mesh = json.meshes?.[node.mesh];
+    const transform = transforms.get(nodeIndex);
+    for (const primitive of mesh?.primitives || []) {
+      const positions = accessorValues(json, binary, primitive.attributes?.POSITION).map((value) => transformPoint(transform, value));
+      const indices = primitive.indices != null ? accessorValues(json, binary, primitive.indices) : positions.map((_, index) => index);
+      const material = json.materials?.[primitive.material]?.name || '';
+      for (let index = 0; index + 2 < indices.length; index += 3) {
+        triangles.push({ nodeName: node.name || '', material, a: positions[indices[index]], b: positions[indices[index + 1]], c: positions[indices[index + 2]] });
+      }
+    }
+  }
+  return triangles;
+}
+function isQualifyingExteriorArmor(hit) {
+  return /(sloped_sponson|outer_track_skirt|hull_lower_tub|hull_glacis|flush_glacis|visible_glacis|vertical_shoulder|rear_armor|engine_deck|rounded_transmission|front_fender|rear_fender)/.test(hit.nodeName)
+    || /^(hull_left|hull_right|hull_glacis|hull_rear|engine_deck)$/.test(hit.material);
+}
+function formatRayPoint(point) { return point.map((n) => n.toFixed(3)).join(','); }
+function raycastClosureFailures(json, binary) {
+  const triangles = glbWorldTriangles(json, binary);
+  const failures = [];
+  const zones = [
+    { side: 'left', sideSign: 1, xValues: [1.42, 1.58, 1.68], yValues: [0.02, 0.22, 0.44], zone: 'front' },
+    { side: 'left', sideSign: 1, xValues: [-1.42, -1.62, -1.72], yValues: [0.02, 0.22, 0.44], zone: 'rear' },
+    { side: 'right', sideSign: -1, xValues: [1.42, 1.58, 1.68], yValues: [0.02, 0.22, 0.44], zone: 'front' },
+    { side: 'right', sideSign: -1, xValues: [-1.42, -1.62, -1.72], yValues: [0.02, 0.22, 0.44], zone: 'rear' }
+  ];
+  for (const spec of zones) {
+    const startZ = spec.sideSign * 1.18;
+    const interiorZ = spec.sideSign * 0.50;
+    const direction = [0, 0, -spec.sideSign];
+    const interiorDistance = Math.abs(startZ - interiorZ);
+    for (const x of spec.xValues) {
+      for (const y of spec.yValues) {
+        const origin = [x, y, startZ];
+        let firstHit = null;
+        let firstQualifying = null;
+        for (const triangle of triangles) {
+          const distance = rayTriangleDistance(origin, direction, triangle.a, triangle.b, triangle.c);
+          if (distance == null || distance > interiorDistance) continue;
+          const hit = { ...triangle, distance };
+          if (!firstHit || distance < firstHit.distance) firstHit = hit;
+          if (isQualifyingExteriorArmor(hit) && (!firstQualifying || distance < firstQualifying.distance)) firstQualifying = hit;
+        }
+        if (!firstQualifying) {
+          failures.push(spec.side + ' ' + spec.zone + ' hull/track ray entered interior before exterior armor; origin ' + formatRayPoint(origin) + '; direction ' + formatRayPoint(direction) + '; first hit ' + (firstHit ? firstHit.nodeName + '/' + firstHit.material + '@' + firstHit.distance.toFixed(3) : 'none') + '; interior distance ' + interiorDistance.toFixed(3));
+        }
+      }
+    }
+  }
+  return failures;
+}
+
 function axisString(bounds) {
   return bounds ? bounds.size.map((n) => n.toFixed(3)).join(' x ') : 'missing';
 }
@@ -139,7 +292,7 @@ if (!String(blender.stdout || '').includes('BLENDER_BOXMODEL_SMOKE')) fail('Debi
 
 if (failures.length === 0) {
   const manifest = JSON.parse(read(manifestPath));
-  const json = parseGlbJson(glbPath);
+  const { json, binary } = parseGlbChunks(glbPath);
   const nodeNames = new Set((json.nodes || []).map((node, index) => node.name || 'node_' + index));
   const materialNames = new Set((json.materials || []).map((material, index) => material.name || 'material_' + index));
   const triangleCount = glbTriangles(json);
@@ -161,9 +314,10 @@ if (failures.length === 0) {
   if (!String(manifest.source_policy || '').includes('Blender Z-up basis conversion')) fail('manifest must identify Blender Z-up basis conversion');
   if (!manifest.orientation_contract || !String(manifest.orientation_contract.visual_regression_prevented || '').includes('wheels must sit inside side skirts')) fail('manifest must preserve upright/gun/skirt orientation contract');
   if (!manifest.runtime_contract?.side_skirt_occlusion) fail('manifest must preserve side skirt occlusion contract');
-  if (!String(manifest.silhouette_revision || '').includes('v1-10-integrated-sponson-skirt-skins')) fail('manifest must record integrated sponson/skirt skin revision');
-  if (!String(manifest.runtime_contract?.integrated_sponson_skirt_armor || '').includes('sloped sponson skins reshape the hull side')) fail('manifest must describe integrated sponson/skirt hull-side armor, not cover panels');
+  if (!String(manifest.silhouette_revision || '').includes('v1-11-raycast-closed-sponson-shells')) fail('manifest must record raycast-closed sponson shell revision');
+  if (!String(manifest.runtime_contract?.integrated_sponson_skirt_armor || '').includes('joined multi-face sponson shells reshape the hull side')) fail('manifest must describe joined multi-face sponson/skirt hull-side shells, not cover panels');
   if (!String(manifest.runtime_contract?.raycast_exterior_closure || '').includes('outside gap rays hit exterior armor before interior')) fail('raycast closure rule missing: outside gap rays must hit exterior armor before they can enter the tank interior');
+  for (const rayFailure of raycastClosureFailures(json, binary)) fail(rayFailure);
   if (!String(manifest.source_policy || '').includes('no Meshy chassis or turret')) fail('manifest must reject Meshy chassis/turret imports');
   if (!String(manifest.uv_policy || '').includes('box and planar UV plates')) fail('manifest must use box/planar UV plate policy');
   if (triangleCount > 6000) fail('GLB must stay below 6000 triangles, saw ' + triangleCount);
@@ -201,11 +355,11 @@ if (failures.length === 0) {
     if (blenderScript.includes(forbidden) || wrapper.includes(forbidden)) fail('boxmodel exporter must not use rejected/import marker ' + forbidden);
   }
   if (!blenderScript.includes('def P(') || !blenderScript.includes('Blender is Z-up')) fail('boxmodel exporter must declare Blender basis conversion helpers');
-  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-10-20260705']) {
+  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-11-20260705']) {
     if (!runtime.includes(marker)) fail('boxmodel runtime missing marker ' + marker);
   }
   if (!build.includes("buildEntry('boxmodel-tank.ts', 'boxmodel-tank')")) fail('build must bundle boxmodel-tank.ts');
-  if (!runtime.includes('authored_sherman_boxmodel_v1.glb?v=v1-10-integrated-sponson-skirt-skins')) fail('runtime must version the authored boxmodel GLB URL so asset caching cannot hide geometry changes');
+  if (!runtime.includes('authored_sherman_boxmodel_v1.glb?v=v1-11-raycast-closed-sponson-shells')) fail('runtime must version the authored boxmodel GLB URL so asset caching cannot hide geometry changes');
   if (!build.includes("writeBundledHtml('boxmodel-tank.html', 'boxmodel-tank.html', 'boxmodel-tank')")) fail('build must write boxmodel-tank.html');
 }
 
