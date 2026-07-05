@@ -1,14 +1,14 @@
 {
   "asset_id": "authored_sherman_treads_v1",
   "artifact_type": "tread_only_blender_asset",
-  "silhouette_revision": "v1-7-smooth-continuous-tread-belt",
+  "silhouette_revision": "v1-8-custom-belt-normals",
   "generator": "scripts/export_authored_sherman_treads.py",
   "source_blend": "assets/authored/authored_sherman_treads_v1/authored_sherman_treads_v1.blend",
   "output_glb": "public/tftm/models/authored_sherman_treads_v1/authored_sherman_treads_v1.glb",
   "approximate_triangles": 26920,
   "coordinate_contract": "runtime X length, Y height, Z width; Blender Z-up converted through P()",
   "component_scope": "full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant",
-  "shading_contract": "wheels keep baked hard rim-loop normal splits; tread belt is one smooth continuous shaded surface so texture, not hard panel normals, sells tread detail",
+  "shading_contract": "wheels keep baked hard rim-loop normal splits; tread belt uses exported custom loop normals from profile tangents so texture, not hard panel normals, sells tread detail",
   "reference_source": "src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only",
   "profile": {
     "old_reference_point_count": 8,
@@ -137,5 +137,5 @@
     "coaxial_mg",
     "tank_root"
   ],
-  "acceptance": "Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; exported GLB normals must prove hard wheel rim-loop splits, smooth rounded rubber faces, and a smooth continuous tread belt without faceted tread panels; no hull/turret/full-tank salvage."
+  "acceptance": "Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; exported GLB normals must prove hard wheel rim-loop splits, smooth rounded rubber faces, and custom profile-tangent tread belt normals without faceted tread panels; no hull/turret/full-tank salvage."
 }

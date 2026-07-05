@@ -8,6 +8,7 @@ const v11RedVerdictPath = 'docs/visual-verdicts/treads-v1-1-red.json';
 const v12RedVerdictPath = 'docs/visual-verdicts/treads-v1-2-red.json';
 const v14RedVerdictPath = 'docs/visual-verdicts/treads-v1-4-red.json';
 const v15RedVerdictPath = 'docs/visual-verdicts/treads-v1-5-red.json';
+const v17RedVerdictPath = 'docs/visual-verdicts/treads-v1-7-red.json';
 const diagnosticPath = 'generated/diagnostics/authored_sherman_treads_v1/profile-opening-diagnostic.json';
 const exporterPath = 'scripts/export_authored_sherman_treads.py';
 const failures = [];
@@ -254,27 +255,79 @@ function meshPrimitiveSummary(json, nodeName) {
   }));
 }
 
-function normalContinuityDiagnostic(parsed, nodeName) {
-  const records = primitiveVertexRecords(parsed, nodeName);
-  const byPosition = new Map();
-  for (const record of records) {
-    const key = keyFor(record.position);
-    if (!byPosition.has(key)) byPosition.set(key, []);
-    byPosition.get(key).push(record);
-  }
-  let duplicateGroups = 0;
-  let badSplitGroups = 0;
-  let maxAngle = 0;
-  for (const group of byPosition.values()) {
-    if (group.length < 2) continue;
-    duplicateGroups += 1;
-    for (let i = 0; i < group.length; i += 1) for (let j = i + 1; j < group.length; j += 1) {
-      const angle = angleBetween(group[i].normal, group[j].normal);
-      maxAngle = Math.max(maxAngle, angle);
-      if (angle > 0.20) badSplitGroups += 1;
+function primitiveTriangles(parsed, nodeName) {
+  const node = (parsed.json.nodes || []).find((entry) => entry.name === nodeName);
+  const mesh = node?.mesh != null ? parsed.json.meshes?.[node.mesh] : null;
+  if (!mesh) return [];
+  const out = [];
+  for (const primitive of mesh.primitives || []) {
+    const positions = readAccessor(parsed, primitive.attributes.POSITION);
+    const normals = readAccessor(parsed, primitive.attributes.NORMAL);
+    const material = materialName(parsed.json, primitive.material);
+    const indices = primitive.indices != null ? readAccessor(parsed, primitive.indices) : positions.map((_entry, index) => index);
+    for (let i = 0; i + 2 < indices.length; i += 3) {
+      const triIndices = [indices[i], indices[i + 1], indices[i + 2]];
+      out.push({
+        material,
+        corners: triIndices.map((index) => ({ index, position: positions[index], normal: normalize(normals[index]) })),
+      });
     }
   }
-  return { node: nodeName, duplicate_groups: duplicateGroups, bad_split_groups: badSplitGroups, max_duplicate_normal_angle: maxAngle };
+  return out;
+}
+function sub(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
+function cross(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }
+function faceNormal(tri) { return normalize(cross(sub(tri.corners[1].position, tri.corners[0].position), sub(tri.corners[2].position, tri.corners[0].position))); }
+function edgeKey(a, b) { return [a, b].sort().join('|'); }
+function normalContinuityDiagnostic(parsed, nodeName) {
+  const trianglesForNode = primitiveTriangles(parsed, nodeName).map((tri, index) => ({ ...tri, index, face_normal: faceNormal(tri) }));
+  const edges = new Map();
+  for (const tri of trianglesForNode) {
+    const keys = tri.corners.map((corner) => keyFor(corner.position));
+    for (const pair of [[0, 1], [1, 2], [2, 0]]) {
+      const key = edgeKey(keys[pair[0]], keys[pair[1]]);
+      if (!edges.has(key)) edges.set(key, []);
+      edges.get(key).push({ tri, keys: [keys[pair[0]], keys[pair[1]]] });
+    }
+  }
+  let sharedEdgeCount = 0;
+  let curvedSharedEdgeCount = 0;
+  let badSharedEdgeNormals = 0;
+  let maxSharedNormalAngle = 0;
+  let faceLikeCurvedCorners = 0;
+  let curvedCornerSamples = 0;
+  for (const entries of edges.values()) {
+    if (entries.length !== 2) continue;
+    const [a, b] = entries;
+    if (a.tri.material !== b.tri.material) continue;
+    sharedEdgeCount += 1;
+    const faceAngle = angleBetween(a.tri.face_normal, b.tri.face_normal);
+    if (faceAngle <= 0.08) continue;
+    curvedSharedEdgeCount += 1;
+    const sharedKeys = new Set(a.keys);
+    for (const key of b.keys) sharedKeys.add(key);
+    for (const key of sharedKeys) {
+      const aCorner = a.tri.corners.find((corner) => keyFor(corner.position) === key);
+      const bCorner = b.tri.corners.find((corner) => keyFor(corner.position) === key);
+      if (!aCorner || !bCorner) continue;
+      const sharedNormalAngle = angleBetween(aCorner.normal, bCorner.normal);
+      maxSharedNormalAngle = Math.max(maxSharedNormalAngle, sharedNormalAngle);
+      if (sharedNormalAngle > 0.12) badSharedEdgeNormals += 1;
+      curvedCornerSamples += 2;
+      if (angleBetween(aCorner.normal, a.tri.face_normal) < 0.035) faceLikeCurvedCorners += 1;
+      if (angleBetween(bCorner.normal, b.tri.face_normal) < 0.035) faceLikeCurvedCorners += 1;
+    }
+  }
+  return {
+    node: nodeName,
+    triangle_count: trianglesForNode.length,
+    shared_edge_count: sharedEdgeCount,
+    curved_shared_edge_count: curvedSharedEdgeCount,
+    bad_shared_edge_normals: badSharedEdgeNormals,
+    max_shared_normal_angle: maxSharedNormalAngle,
+    curved_corner_samples: curvedCornerSamples,
+    face_like_curved_corner_ratio: curvedCornerSamples ? faceLikeCurvedCorners / curvedCornerSamples : 1,
+  };
 }
 
 function descendants(json, nodeName) {
@@ -285,7 +338,7 @@ function descendants(json, nodeName) {
   return out;
 }
 
-for (const file of [glbPath, manifestPath, blendPath, exporterPath, v11RedVerdictPath, v12RedVerdictPath, v14RedVerdictPath, v15RedVerdictPath, 'treadfirst-treads.html', 'src/treadfirst-treads.ts', 'src/sherman-asset-links.ts', 'scripts/build.mjs']) if (!existsSync(file)) fail('missing ' + file);
+for (const file of [glbPath, manifestPath, blendPath, exporterPath, v11RedVerdictPath, v12RedVerdictPath, v14RedVerdictPath, v15RedVerdictPath, v17RedVerdictPath, 'treadfirst-treads.html', 'src/treadfirst-treads.ts', 'src/sherman-asset-links.ts', 'scripts/build.mjs']) if (!existsSync(file)) fail('missing ' + file);
 
 if (failures.length === 0) {
   const parsed = parseGlb(glbPath);
@@ -295,19 +348,21 @@ if (failures.length === 0) {
   const runtime = readFileSync('src/treadfirst-treads.ts', 'utf8') + readFileSync('src/sherman-asset-links.ts', 'utf8');
   const build = readFileSync('scripts/build.mjs', 'utf8');
   if (manifest.asset_id !== assetId) fail('manifest asset_id mismatch');
-  if (manifest.silhouette_revision !== 'v1-7-smooth-continuous-tread-belt') fail('unexpected revision ' + manifest.silhouette_revision);
+  if (manifest.silhouette_revision !== 'v1-8-custom-belt-normals') fail('unexpected revision ' + manifest.silhouette_revision);
   const v11Verdict = JSON.parse(readFileSync(v11RedVerdictPath, 'utf8'));
   const v12Verdict = JSON.parse(readFileSync(v12RedVerdictPath, 'utf8'));
   const v14Verdict = JSON.parse(readFileSync(v14RedVerdictPath, 'utf8'));
   const v15Verdict = JSON.parse(readFileSync(v15RedVerdictPath, 'utf8'));
+  const v17Verdict = JSON.parse(readFileSync(v17RedVerdictPath, 'utf8'));
   if (v11Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.1 red verdict must remain explicit before accepting v1.3 diagnostics');
   if (v12Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.2 red verdict must remain explicit before accepting v1.3 diagnostics');
   if (v14Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.4 red verdict must remain explicit before accepting v1.5 diagnostics');
   if (v15Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.5 red verdict must remain explicit before accepting v1.6 diagnostics');
+  if (v17Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.7 red verdict must remain explicit before accepting v1.8 diagnostics');
   if (manifest.profile?.old_reference_point_count !== 8) fail('manifest must record old subdivision-0 profile point count');
   if ((manifest.profile?.outer_profile_point_count || 0) < 16) fail('outer profile must add one silhouette subdivision layer beyond the old 8-point profile');
-  if (!String(manifest.shading_contract || '').includes('smooth continuous shaded surface')) fail('manifest must declare smooth continuous tread belt shading');
-  for (const sourceMarker of ['bake_mesh_modifiers_for_export', 'modifier_apply', 'mark_circular_crease_edges', 'smooth_continuous_tread_belt_surface', 'nonrendered_segment_marker_for_review', 'Do not bevel or weighted-normal the tire ring']) if (!exporter.includes(sourceMarker)) fail('exporter missing shading marker ' + sourceMarker);
+  if (!String(manifest.shading_contract || '').includes('custom loop normals')) fail('manifest must declare custom loop normal tread belt shading');
+  for (const sourceMarker of ['bake_mesh_modifiers_for_export', 'modifier_apply', 'mark_circular_crease_edges', 'smooth_continuous_tread_belt_surface', 'nonrendered_segment_marker_for_review', 'Do not bevel or weighted-normal the tire ring', 'normals_split_custom_set', 'profile_normals', 'custom loop normals']) if (!exporter.includes(sourceMarker)) fail('exporter missing shading marker ' + sourceMarker);
   for (const node of ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_continuous_tread_belt_surface','right_continuous_tread_belt_surface','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors','left_front_sprocket','right_front_sprocket','left_rear_idler','right_rear_idler']) if (!(json.nodes || []).some((entry) => entry.name === node)) fail('missing required node ' + node);
   for (const forbidden of ['hull','turret','barrel','coax','mantlet','cannon','tank_root']) {
     const hit = (json.nodes || []).find((node) => String(node.name || '').toLowerCase().includes(forbidden));
@@ -336,7 +391,10 @@ if (failures.length === 0) {
       }
       const beltContinuity = normalContinuityDiagnostic(parsed, `${side}_continuous_tread_belt_surface`);
       diagnostic.normal_shading.push(beltContinuity);
-      if (beltContinuity.bad_split_groups > 0) fail(`${side} continuous tread belt has faceted duplicate-normal splits: ${beltContinuity.bad_split_groups}`);
+      if (beltContinuity.shared_edge_count < 40) fail(`${side} continuous tread belt lacks enough shared GLB triangle edges for smooth validation: ${beltContinuity.shared_edge_count}`);
+      if (beltContinuity.curved_shared_edge_count < 12) fail(`${side} continuous tread belt lacks curved shared edges for smooth validation: ${beltContinuity.curved_shared_edge_count}`);
+      if (beltContinuity.bad_shared_edge_normals > 0) fail(`${side} continuous tread belt has split normals across shared curved edges: ${beltContinuity.bad_shared_edge_normals}`);
+      if (beltContinuity.face_like_curved_corner_ratio > 0.42) fail(`${side} continuous tread belt exports face-like normals on curved belt corners: ${(beltContinuity.face_like_curved_corner_ratio * 100).toFixed(0)}%`);
     }
     const names = descendants(json, `${side}_tread_connector_mounts`).join('\n');
     if ((names.match(/connector_mount_/g) || []).length < 4) fail(`${side} connector mounts must expose four subordinate mount blocks`);
@@ -377,7 +435,7 @@ if (failures.length === 0) {
     const bogieNames = descendants(json, `${side}_bogie_connectors`).join('\n');
     if ((bogieNames.match(/vvss_bogie_arm_/g) || []).length < 3) fail(`${side} bogie connectors must expose three bogie arm blocks`);
   }
-  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-7-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
+  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-8-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
   if (!build.includes("buildEntry('treadfirst-treads.ts', 'treadfirst-treads')")) fail('build must bundle treadfirst-treads.ts');
   if (!build.includes("writeBundledHtml('treadfirst-treads.html', 'treadfirst-treads.html', 'treadfirst-treads')")) fail('build must write treadfirst-treads.html');
 }
@@ -388,4 +446,4 @@ if (failures.length) {
   process.exit(1);
 }
 await import('node:fs').then(({ mkdirSync, writeFileSync }) => { mkdirSync('generated/diagnostics/authored_sherman_treads_v1', { recursive: true }); writeFileSync(diagnosticPath, JSON.stringify(diagnostic, null, 2) + '\n'); });
-console.log('Authored tread assembly validation passed: v1.7 keeps wheels in the profile opening with baked rim splits and smooth continuous tread belt; cloud/Sense visual acceptance is still required.');
+console.log('Authored tread assembly validation passed: v1.8 keeps wheels in the profile opening with baked rim splits and custom profile-tangent smooth tread belt normals; cloud/Sense visual acceptance is still required.');

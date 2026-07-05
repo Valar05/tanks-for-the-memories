@@ -11,7 +11,7 @@ def P(x, y, z):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_treads_v1'
-REVISION = 'v1-7-smooth-continuous-tread-belt'
+REVISION = 'v1-8-custom-belt-normals'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -115,6 +115,41 @@ def smooth_all_faces(mesh):
     for poly in mesh.polygons:
         poly.use_smooth = True
 
+def normal_from_authored(nx, ny, nz):
+    length = math.sqrt(nx * nx + ny * ny + nz * nz) or 1.0
+    # Normals follow the same authoring-to-Blender axis conversion as positions.
+    return (nx / length, nz / length, ny / length)
+
+def profile_normals(profile, outward=True):
+    cx = sum(point[0] for point in profile) / len(profile)
+    cy = sum(point[1] for point in profile) / len(profile)
+    normals = []
+    for index, point in enumerate(profile):
+        prev_point = profile[index - 1]
+        next_point = profile[(index + 1) % len(profile)]
+        tx = next_point[0] - prev_point[0]
+        ty = next_point[1] - prev_point[1]
+        length = math.sqrt(tx * tx + ty * ty) or 1.0
+        tx /= length
+        ty /= length
+        nx, ny = -ty, tx
+        away_x = point[0] - cx
+        away_y = point[1] - cy
+        if nx * away_x + ny * away_y < 0:
+            nx, ny = -nx, -ny
+        if not outward:
+            nx, ny = -nx, -ny
+        normals.append((nx, ny, 0.0))
+    return normals
+
+def assign_custom_loop_normals(mesh, loop_normal_by_vertex):
+    custom_normals = []
+    for poly in mesh.polygons:
+        for loop_index in poly.loop_indices:
+            custom_normals.append(loop_normal_by_vertex[mesh.loops[loop_index].vertex_index])
+    mesh.normals_split_custom_set(custom_normals)
+    mesh.update()
+
 def add_weighted_normals(obj, name):
     weighted = obj.modifiers.new(name, 'WEIGHTED_NORMAL')
     weighted.keep_sharp = True
@@ -169,6 +204,14 @@ def make_belt(side_name, side_sign):
         outer_inner.append(add((ox, oy, inner_z)))
         inner_inner.append(add((ix, iy, inner_z)))
     point_count = len(OUTER_PROFILE)
+    outer_profile_normals = profile_normals(OUTER_PROFILE, outward=True)
+    inner_profile_normals = profile_normals(INNER_PROFILE, outward=False)
+    loop_normal_by_vertex = {}
+    for i in range(point_count):
+        loop_normal_by_vertex[outer_outer[i]] = normal_from_authored(*outer_profile_normals[i])
+        loop_normal_by_vertex[outer_inner[i]] = normal_from_authored(*outer_profile_normals[i])
+        loop_normal_by_vertex[inner_outer[i]] = normal_from_authored(*inner_profile_normals[i])
+        loop_normal_by_vertex[inner_inner[i]] = normal_from_authored(*inner_profile_normals[i])
     for i in range(point_count):
         j = (i + 1) % point_count
         faces.append((outer_outer[i], outer_outer[j], inner_outer[j], inner_outer[i])); face_mats.append('track_outer')
@@ -183,16 +226,17 @@ def make_belt(side_name, side_sign):
     for poly, mat_name in zip(mesh.polygons, face_mats):
         poly.material_index = 0 if mat_name == 'track_outer' else 1
     smooth_all_faces(mesh)
+    assign_custom_loop_normals(mesh, loop_normal_by_vertex)
     assign_uvs(mesh)
     obj = bpy.data.objects.new(side_name + '_continuous_tread_belt_surface', mesh)
-    obj['component_role'] = 'smooth_continuous_tread_belt_surface_texture_driven_links'
+    obj['component_role'] = 'custom_normal_smooth_continuous_tread_belt_surface_texture_driven_links'
     obj['profile_point_count'] = len(OUTER_PROFILE)
     obj['source_reference'] = 'src/model-assay.ts createTreadGeometry subdivision-0 reference only'
     obj['contains_hull'] = False
     obj['contains_turret'] = False
     bpy.context.collection.objects.link(obj)
     obj.parent = belt_root
-    add_weighted_normals(obj, 'smooth_continuous_tread_normals')
+    obj['normal_contract'] = 'custom loop normals from adjacent tread profile tangents; no weighted-normal modifier on belt'
 
     for role, segment_indices in SEGMENT_MARKERS.items():
         marker = empty(side_name + '_tread_' + role, belt_root)
@@ -362,7 +406,7 @@ manifest = {
     'approximate_triangles': triangle_count,
     'coordinate_contract': 'runtime X length, Y height, Z width; Blender Z-up converted through P()',
     'component_scope': 'full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
-    'shading_contract': 'wheels keep baked hard rim-loop normal splits; tread belt is one smooth continuous shaded surface so texture, not hard panel normals, sells tread detail',
+    'shading_contract': 'wheels keep baked hard rim-loop normal splits; tread belt uses exported custom loop normals from profile tangents so texture, not hard panel normals, sells tread detail',
     'reference_source': 'src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only',
     'profile': {
         'old_reference_point_count': 8,
@@ -374,7 +418,7 @@ manifest = {
     },
     'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors'],
     'forbidden_nodes': ['hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','tank_root'],
-    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; exported GLB normals must prove hard wheel rim-loop splits, smooth rounded rubber faces, and a smooth continuous tread belt without faceted tread panels; no hull/turret/full-tank salvage.'
+    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; exported GLB normals must prove hard wheel rim-loop splits, smooth rounded rubber faces, and custom profile-tangent tread belt normals without faceted tread panels; no hull/turret/full-tank salvage.'
 }
 MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({'asset_id': ASSET_ID, 'revision': REVISION, 'triangles': triangle_count, 'glb': str(GLB_PATH)}, indent=2))

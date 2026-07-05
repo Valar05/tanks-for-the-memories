@@ -111,7 +111,7 @@ const releaseManifest = {
 
   authored_treads_review: {
     route: 'treadfirst-treads.html',
-    expected_build: 'tftm-authored-sherman-treads-v1-7-20260705',
+    expected_build: 'tftm-authored-sherman-treads-v1-8-20260705',
     asset_id: authoredTreadsManifest.asset_id,
     silhouette_revision: authoredTreadsManifest.silhouette_revision,
     output_glb: authoredTreadsManifest.output_glb,
@@ -120,7 +120,7 @@ const releaseManifest = {
     component_scope: authoredTreadsManifest.component_scope,
     profile: authoredTreadsManifest.profile,
     asset_policy: 'new isolated Blender tread component; failed boxmodel and textureable full-tank exporters are red evidence only and are not source architecture for this pass',
-    acceptance: 'Sense Simulation must confirm full tread assembly only: open perimeter sidewall frame with wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, one silhouette subdivision layer beyond the old 8-point profile, connector mounts subordinate to belt mass, smooth continuous tread belt without faceted panels, baked wheel rim loops, smooth rounded rubber faces without radial tire facets and smooth continuous tread belt panels, preserve OrbitControls camera and orientation widget, no rail/cage/box-pod read, no hull, turret, barrel, coaxial MG, or full tank scene, and local capture was not used.'
+    acceptance: 'Sense Simulation must confirm full tread assembly only: open perimeter sidewall frame with wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, one silhouette subdivision layer beyond the old 8-point profile, connector mounts subordinate to belt mass, custom profile-tangent smooth tread belt normals without faceted panels, baked wheel rim loops, smooth rounded rubber faces without radial tire facets, preserve OrbitControls camera and orientation widget, no rail/cage/box-pod read, no hull, turret, barrel, coaxial MG, or full tank scene, and local capture was not used.'
   },
   authored_textureable_review: {
     route: 'textureable-tank.html',
@@ -172,8 +172,8 @@ const releaseManifest = {
     }]))
   },
   required_cloud_captures: [
-    'treadfirst-treads phone portrait showing authored_sherman_treads_v1 and build token tftm-authored-sherman-treads-v1-7-20260705, with wheels/sprockets/idlers/rollers/bogie connectors occupying the inner profile opening with baked wheel rim loops and smooth tire bands and smooth continuous tread belt and no hull/turret/full tank geometry',
-    'treadfirst-treads phone landscape showing full tread assembly showing an open perimeter sidewall frame, wheels/sprockets/idlers/return rollers/bogie arms occupying the inner profile opening, smooth continuous tread belt without faceted panels, baked wheel rim loops, smooth tire bands and smooth continuous tread belt, connector mounts subordinate, one silhouette subdivision layer beyond the old 8-point tread, preserved OrbitControls camera/orientation widget, no rail/cage/box-pod read, and no local capture',
+    'treadfirst-treads phone portrait showing authored_sherman_treads_v1 and build token tftm-authored-sherman-treads-v1-8-20260705, with wheels/sprockets/idlers/rollers/bogie connectors occupying the inner profile opening with baked wheel rim loops and smooth tire bands and custom profile-tangent smooth tread belt normals and no hull/turret/full tank geometry',
+    'treadfirst-treads phone landscape showing full tread assembly showing an open perimeter sidewall frame, wheels/sprockets/idlers/return rollers/bogie arms occupying the inner profile opening, custom profile-tangent smooth tread belt normals without faceted panels, baked wheel rim loops, smooth tire bands, connector mounts subordinate, one silhouette subdivision layer beyond the old 8-point tread, preserved OrbitControls camera/orientation widget, no rail/cage/box-pod read, and no local capture',
     'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-15-20260705',
     'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, smaller integrated track-well slot-wall coverage at front-left, front-right, rear-left, and rear-right lower hull/track cracks, and no local capture',
     'boxmodel-tank close-up review showing smaller integrated track-well slot-wall coverage at front-left, front-right, rear-left, and rear-right as attached armor, no raycast-accessible interior through those cracks, no side-wing silhouette deformation, solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability',

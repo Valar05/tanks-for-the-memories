@@ -1,0 +1,11 @@
+{
+  "asset_id": "authored_sherman_treads_v1",
+  "revision": "v1-7-smooth-continuous-tread-belt",
+  "status": "red_unaccepted_no_op_churn",
+  "reported_by": "user_visual_review",
+  "date": "2026-07-05",
+  "expected_visible_relationship": "tread belt panels should shade as a smooth continuous belt surface while texture later sells link detail",
+  "actual_visible_relationship": "tread belt still read as faceted/panelled despite source and duplicate-normal diagnostics passing",
+  "false_green_cause": "validator only checked duplicate-position normal splits and did not prove adjacent triangle normals or face-like exported normals",
+  "required_next_gate": "v1.8 must export custom profile-tangent belt normals and validate adjacency/face-like normal behavior in the GLB"
+}
