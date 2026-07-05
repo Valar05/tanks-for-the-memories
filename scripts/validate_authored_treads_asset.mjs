@@ -5,8 +5,11 @@ const glbPath = 'public/tftm/models/authored_sherman_treads_v1/authored_sherman_
 const manifestPath = 'public/tftm/models/authored_sherman_treads_v1/model_manifest.json';
 const blendPath = 'assets/authored/authored_sherman_treads_v1/authored_sherman_treads_v1.blend';
 const v11RedVerdictPath = 'docs/visual-verdicts/treads-v1-1-red.json';
+const v12RedVerdictPath = 'docs/visual-verdicts/treads-v1-2-red.json';
+const diagnosticPath = 'generated/diagnostics/authored_sherman_treads_v1/profile-opening-diagnostic.json';
 const exporterPath = 'scripts/export_authored_sherman_treads.py';
 const failures = [];
+let diagnostic = null;
 function fail(message) { failures.push(message); }
 function parseGlb(file) {
   const data = readFileSync(file);
@@ -90,9 +93,33 @@ function descendantBounds(json, name) {
   if (!Number.isFinite(min[0])) return null;
   return { min, max, size: max.map((v, i) => v - min[i]) };
 }
-function exteriorZ(side, bounds) { return side === 'left' ? bounds.min[2] : bounds.max[2]; }
-function inboardGap(side, belt, wheel) {
-  return side === 'left' ? wheel.min[2] - belt.min[2] : belt.max[2] - wheel.max[2];
+function pointInPolygon(point, polygon) {
+  const [x, y] = point;
+  let inside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const [xi, yi] = polygon[i];
+    const [xj, yj] = polygon[j];
+    const intersect = ((yi > y) !== (yj > y)) && (x < ((xj - xi) * (y - yi)) / ((yj - yi) || 1e-9) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+function circleMostlyInside(center, radius, polygon) {
+  const samples = 16;
+  let inside = 0;
+  for (let i = 0; i < samples; i += 1) {
+    const angle = Math.PI * 2 * i / samples;
+    const point = [center[0] + Math.cos(angle) * radius, center[1] + Math.sin(angle) * radius];
+    if (pointInPolygon(point, polygon)) inside += 1;
+  }
+  return inside / samples;
+}
+function wheelProfile(json, name) {
+  const bounds = nodeMeshBounds(json, name);
+  if (!bounds) return null;
+  const center = [(bounds.min[0] + bounds.max[0]) * 0.5, (bounds.min[1] + bounds.max[1]) * 0.5];
+  const radius = Math.max(bounds.size[0], bounds.size[1]) * 0.5;
+  return { name, center, radius, bounds };
 }
 
 function descendants(json, nodeName) {
@@ -103,7 +130,7 @@ function descendants(json, nodeName) {
   return out;
 }
 
-for (const file of [glbPath, manifestPath, blendPath, exporterPath, v11RedVerdictPath, 'treadfirst-treads.html', 'src/treadfirst-treads.ts', 'src/sherman-asset-links.ts', 'scripts/build.mjs']) if (!existsSync(file)) fail('missing ' + file);
+for (const file of [glbPath, manifestPath, blendPath, exporterPath, v11RedVerdictPath, v12RedVerdictPath, 'treadfirst-treads.html', 'src/treadfirst-treads.ts', 'src/sherman-asset-links.ts', 'scripts/build.mjs']) if (!existsSync(file)) fail('missing ' + file);
 
 if (failures.length === 0) {
   const json = parseGlb(glbPath);
@@ -112,9 +139,11 @@ if (failures.length === 0) {
   const runtime = readFileSync('src/treadfirst-treads.ts', 'utf8') + readFileSync('src/sherman-asset-links.ts', 'utf8');
   const build = readFileSync('scripts/build.mjs', 'utf8');
   if (manifest.asset_id !== assetId) fail('manifest asset_id mismatch');
-  if (manifest.silhouette_revision !== 'v1-2-visible-running-gear') fail('unexpected revision ' + manifest.silhouette_revision);
+  if (manifest.silhouette_revision !== 'v1-3-wheels-in-profile-opening') fail('unexpected revision ' + manifest.silhouette_revision);
   const v11Verdict = JSON.parse(readFileSync(v11RedVerdictPath, 'utf8'));
-  if (v11Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.1 red verdict must remain explicit before accepting v1.2 diagnostics');
+  const v12Verdict = JSON.parse(readFileSync(v12RedVerdictPath, 'utf8'));
+  if (v11Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.1 red verdict must remain explicit before accepting v1.3 diagnostics');
+  if (v12Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.2 red verdict must remain explicit before accepting v1.3 diagnostics');
   if (manifest.profile?.old_reference_point_count !== 8) fail('manifest must record old subdivision-0 profile point count');
   if ((manifest.profile?.outer_profile_point_count || 0) < 16) fail('outer profile must add one silhouette subdivision layer beyond the old 8-point profile');
   for (const node of ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors','left_front_sprocket','right_front_sprocket','left_rear_idler','right_rear_idler']) if (!(json.nodes || []).some((entry) => entry.name === node)) fail('missing required node ' + node);
@@ -127,6 +156,9 @@ if (failures.length === 0) {
   }
   const tri = triangles(json);
   if (tri < 1800 || tri > 7600) fail('unexpected full tread assembly triangle count ' + tri);
+  const innerProfile = manifest.profile?.inner_profile_xy;
+  if (!Array.isArray(innerProfile) || innerProfile.length < 8) fail('manifest must expose inner_profile_xy for profile-opening validation');
+  diagnostic = { asset_id: assetId, revision: manifest.silhouette_revision, profile_opening: innerProfile, sides: {} };
   const bounds = allBounds(json);
   if (!(bounds.size[0] > 3.0 && bounds.size[2] > 1.8 && bounds.size[1] < 0.9)) fail('tread assembly bounds should be long/wide/low, saw ' + bounds.size.map((n) => n.toFixed(3)).join(' x '));
   for (const side of ['left', 'right']) {
@@ -142,23 +174,27 @@ if (failures.length === 0) {
     if ((names.match(/connector_mount_/g) || []).length < 4) fail(`${side} connector mounts must expose four subordinate mount blocks`);
     const wheelNames = descendants(json, `${side}_wheel_group`).join('\n');
     if ((wheelNames.match(/roadwheel_/g) || []).length < 6) fail(`${side} wheel group must expose six side-facing road wheels`);
-    if (belt) {
-      for (const wheelName of [`${side}_roadwheel_1`, `${side}_roadwheel_3`, `${side}_roadwheel_6`, `${side}_front_sprocket`, `${side}_rear_idler`]) {
-        const wheel = nodeMeshBounds(json, wheelName);
-        if (!wheel) fail(`${side} missing wheel exposure bounds for ${wheelName}`);
+    if (innerProfile) {
+      const checked = [];
+      for (const wheelName of [`${side}_roadwheel_1`, `${side}_roadwheel_3`, `${side}_roadwheel_6`, `${side}_front_sprocket`, `${side}_rear_idler`, `${side}_return_roller_1`]) {
+        const wheel = wheelProfile(json, wheelName);
+        if (!wheel) fail(`${side} missing profile-opening bounds for ${wheelName}`);
         else {
-          const gap = inboardGap(side, belt, wheel);
-          if (gap > 0.065) fail(`${wheelName} exterior face is buried ${gap.toFixed(3)} inboard from ${side} belt exterior plane; v1.1 no-op repeated`);
-          if (gap < -0.15) fail(`${wheelName} protrudes too far outside ${side} belt exterior plane: ${gap.toFixed(3)}`);
+          const centerInside = pointInPolygon(wheel.center, innerProfile);
+          const insideRatio = circleMostlyInside(wheel.center, wheel.radius * 0.72, innerProfile);
+          checked.push({ name: wheelName, center: wheel.center, radius: wheel.radius, center_inside: centerInside, useful_disc_inside_ratio: insideRatio });
+          if (!centerInside) fail(`${wheelName} center is outside the inner tread profile opening; v1.2 no-op repeated`);
+          if (insideRatio < 0.58) fail(`${wheelName} useful disc area is not in the tread opening: ${(insideRatio * 100).toFixed(0)}% inside`);
         }
       }
+      diagnostic.sides[side] = checked;
     }
     if (!wheelNames.includes(`${side}_front_sprocket`) || !wheelNames.includes(`${side}_rear_idler`)) fail(`${side} wheel group must expose front sprocket and rear idler`);
     if ((wheelNames.match(/return_roller_/g) || []).length < 3) fail(`${side} wheel group must expose return rollers`);
     const bogieNames = descendants(json, `${side}_bogie_connectors`).join('\n');
     if ((bogieNames.match(/vvss_bogie_arm_/g) || []).length < 3) fail(`${side} bogie connectors must expose three bogie arm blocks`);
   }
-  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-2-20260705', 'OrbitControls', 'orientation-widget', 'exposed wheels']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
+  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-3-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
   if (!build.includes("buildEntry('treadfirst-treads.ts', 'treadfirst-treads')")) fail('build must bundle treadfirst-treads.ts');
   if (!build.includes("writeBundledHtml('treadfirst-treads.html', 'treadfirst-treads.html', 'treadfirst-treads')")) fail('build must write treadfirst-treads.html');
 }
@@ -168,4 +204,5 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Authored tread assembly validation passed: v1.2 split belts expose side-facing wheels/sprockets/idlers near the exterior side plane; cloud/Sense visual acceptance is still required.');
+await import('node:fs').then(({ mkdirSync, writeFileSync }) => { mkdirSync('generated/diagnostics/authored_sherman_treads_v1', { recursive: true }); writeFileSync(diagnosticPath, JSON.stringify(diagnostic, null, 2) + '\n'); });
+console.log('Authored tread assembly validation passed: v1.3 wheels occupy the inner profile opening; cloud/Sense visual acceptance is still required.');

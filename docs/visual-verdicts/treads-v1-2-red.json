@@ -1,0 +1,13 @@
+{
+  "artifact_type": "tread_assembly_visual_verdict",
+  "route": "treadfirst-treads.html",
+  "build_token": "tftm-authored-sherman-treads-v1-2-20260705",
+  "asset_id": "authored_sherman_treads_v1",
+  "silhouette_revision": "v1-2-visible-running-gear",
+  "status": "red_unaccepted_no_op_churn",
+  "expected_visible_relationship": "Wheels, sprocket, idler, rollers, and bogie arms must occupy the open inner tread profile in side view, where the mesh visibly leaves empty space for running gear.",
+  "actual_visible_diagnosis": "v1.2 changed exterior side-plane exposure but did not make the wheels and sidewall read inside the profile opening; the visible result was still no-op churn.",
+  "root_cause": "The guard optimized the wrong relationship: exterior plane exposure instead of X/Y profile-opening occupancy.",
+  "forbidden_next_green": "Do not accept a tread revision unless wheel centers and useful disc area are inside the inner tread profile opening and the sidewall is an open perimeter frame, not an opaque face.",
+  "visual_acceptance": "Cloud/Sense only; local capture is forbidden."
+}

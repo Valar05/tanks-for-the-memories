@@ -124,3 +124,5 @@ Use `src/model-assay.ts` `createTreadGeometry()` only as the subdivision-0 refer
 
 
 The v1.1 tread assembly is red/no-op evidence: it added wheel nodes, but those faces were inboard from the belt exterior side plane, so node presence did not guarantee visible running gear. v1.2 must expose wheels, sprockets, idlers, return rollers, and bogie arms near the exterior side plane and split the belt into named visible segments before cloud/Sense review.
+
+The v1.2 tread assembly is also red/no-op evidence: moving wheels toward an exterior side plane did not satisfy the corrected target. The tread component must expose an open perimeter sidewall frame, and the road wheels, sprockets, idlers, return rollers, and bogie arms must occupy the empty inner tread profile opening in side view. v1.3 gates this with a profile-opening polygon diagnostic instead of object-name, route, or exterior-plane checks. The pass remains unaccepted until cloud/Sense review sees the wheels in that profile opening without losing the Pose Lab camera controls.

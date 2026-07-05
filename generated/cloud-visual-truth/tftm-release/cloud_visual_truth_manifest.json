@@ -136,6 +136,116 @@
     "acceptance": "Sense Simulation must confirm Sherman silhouette, connected cast turret massing with no cheek/side/roof pasted panels, smaller integrated track-well slot walls plus joined sponson shells close the front-left, front-right, rear-left, and rear-right lower hull/track cracks as joined metal, pass targeted no-wing slot-wall, no-pasted-turret-panel, and readable wheel/hub/bogie checks, and crack rays from outside those visible gaps hit exterior armor before entering the tank interior, with no pasted panels, blockers, floating boxes, or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.",
     "tuner_acceptance": "Sense Simulation must review boxmodel-tank.html?tune=1 as a preserved future-use gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored flat armor panels are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected panel is highlighted for editing, already enabled panels remain visible, Move/Rotate/Scale are one active mode at a time, Scale exposes explicit All/X/Y/Z axis buttons, drag/pinch/twist gestures visibly change the selected panel, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and panels share the same unskewed model frame, no object transform handles appear, and local capture was not used."
   },
+  "authored_treads_review": {
+    "route": "treadfirst-treads.html",
+    "expected_build": "tftm-authored-sherman-treads-v1-3-20260705",
+    "asset_id": "authored_sherman_treads_v1",
+    "silhouette_revision": "v1-3-wheels-in-profile-opening",
+    "output_glb": "public/tftm/models/authored_sherman_treads_v1/authored_sherman_treads_v1.glb",
+    "source_blend": "assets/authored/authored_sherman_treads_v1/authored_sherman_treads_v1.blend",
+    "approximate_triangles": 5528,
+    "component_scope": "full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant",
+    "profile": {
+      "old_reference_point_count": 8,
+      "outer_profile_point_count": 16,
+      "inner_profile_point_count": 16,
+      "inner_profile_xy": [
+        [
+          -1.39,
+          -0.055
+        ],
+        [
+          -1.36,
+          0.005
+        ],
+        [
+          -1.26,
+          0.04
+        ],
+        [
+          -0.86,
+          0.065
+        ],
+        [
+          0.58,
+          0.065
+        ],
+        [
+          0.99,
+          0.04
+        ],
+        [
+          1.23,
+          -0.025
+        ],
+        [
+          1.34,
+          -0.09
+        ],
+        [
+          1.3,
+          -0.18
+        ],
+        [
+          1.13,
+          -0.26
+        ],
+        [
+          0.92,
+          -0.3
+        ],
+        [
+          0.12,
+          -0.322
+        ],
+        [
+          -0.98,
+          -0.322
+        ],
+        [
+          -1.18,
+          -0.255
+        ],
+        [
+          -1.34,
+          -0.17
+        ],
+        [
+          -1.42,
+          -0.09
+        ]
+      ],
+      "subdivision_layer": "one added silhouette layer around returns and run transitions",
+      "markers": {
+        "top_run": [
+          2,
+          3,
+          4
+        ],
+        "front_return": [
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "bottom_run": [
+          10,
+          11,
+          12
+        ],
+        "rear_return": [
+          13,
+          14,
+          15,
+          0,
+          1
+        ]
+      }
+    },
+    "asset_policy": "new isolated Blender tread component; failed boxmodel and textureable full-tank exporters are red evidence only and are not source architecture for this pass",
+    "acceptance": "Sense Simulation must confirm full tread assembly only: open perimeter sidewall frame with wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, one silhouette subdivision layer beyond the old 8-point profile, connector mounts subordinate to belt mass, preserve OrbitControls camera and orientation widget, no rail/cage/box-pod read, no hull, turret, barrel, coaxial MG, or full tank scene, and local capture was not used."
+  },
   "authored_textureable_review": {
     "route": "textureable-tank.html",
     "expected_build": "tftm-authored-sherman-textureable-v1-1-20260705",
@@ -261,8 +371,8 @@
     "asset_policy": "fully authored hard-surface chassis and turret; no Meshy chassis or turret imports; split face PNG plates for DALL-E paintability",
     "acceptance": "Sense Simulation must confirm close-up chassis and turret read as usable hard-surface armor, barrel belongs to mantlet, split face texture plates map sanely, and local capture was not used."
   },
-  "generated_at": "2026-07-05T14:35:26.525Z",
-  "source_commit": "c38347b",
+  "generated_at": "2026-07-05T15:58:55.844Z",
+  "source_commit": "61be2c2",
   "dirty_status": [],
   "dist": "generated/cloud-visual-truth/tftm-release/dist",
   "tank_asset": "m4a3_75_vvss_sherman_alpha_mobile",
@@ -424,6 +534,8 @@
     }
   },
   "required_cloud_captures": [
+    "treadfirst-treads phone portrait showing authored_sherman_treads_v1 and build token tftm-authored-sherman-treads-v1-3-20260705, with wheels/sprockets/idlers/rollers/bogie connectors occupying the inner profile opening and no hull/turret/full tank geometry",
+    "treadfirst-treads phone landscape showing full tread assembly showing an open perimeter sidewall frame, wheels/sprockets/idlers/return rollers/bogie arms occupying the inner profile opening, connector mounts subordinate, one silhouette subdivision layer beyond the old 8-point tread, preserved OrbitControls camera/orientation widget, no rail/cage/box-pod read, and no local capture",
     "boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-15-20260705",
     "boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, smaller integrated track-well slot-wall coverage at front-left, front-right, rear-left, and rear-right lower hull/track cracks, and no local capture",
     "boxmodel-tank close-up review showing smaller integrated track-well slot-wall coverage at front-left, front-right, rear-left, and rear-right as attached armor, no raycast-accessible interior through those cracks, no side-wing silhouette deformation, solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability",
@@ -451,6 +563,9 @@
     "required_next_evidence": "Next tank visual pass must show cloud/Sense evidence that v1-15 cast-turret/readable-wheel armor visibly closes the front and rear lower hull/track cracks on all four corners without side-wing deformation and with visible enlarged roadwheel/hub/bogie band."
   },
   "sense_simulation_questions": [
+    "Does authored_sherman_treads_v1 show a full tread assembly only: open perimeter sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts, with no hull, turret, barrel, coaxial MG, or full tank scene?",
+    "Do the wheels occupy the empty inner tread profile opening in side view rather than exterior-plane space, hidden sidewall space, or an opaque side face?",
+    "Does the extra silhouette subdivision layer improve the old subdivision-0 tread profile without creating fused garbage or cardboard planes, and does the route preserve the established OrbitControls camera plus orientation widget?",
     "Does authored_sherman_textureable_v1 build v1-1 show wheels contained inside closed track pods, with no skirt-through-wheel collision and no pasted coin wheels?",
     "Does authored_sherman_textureable_v1 hide the turret ring gap, integrate the hatches into the turret roof, and preserve barrel/coaxial MG ownership by the mantlet/elevation pivot?",
     "Do authored_sherman_textureable_v1 split UV plates map sanely enough to become the paint/decal base for Alpha and later commander identities?",

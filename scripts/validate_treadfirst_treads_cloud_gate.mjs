@@ -2,8 +2,8 @@ import { existsSync, readFileSync } from 'node:fs';
 
 const manifestPath = 'generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json';
 const assetManifestPath = 'public/tftm/models/authored_sherman_treads_v1/model_manifest.json';
-const expectedBuild = 'tftm-authored-sherman-treads-v1-2-20260705';
-const expectedRevision = 'v1-2-visible-running-gear';
+const expectedBuild = 'tftm-authored-sherman-treads-v1-3-20260705';
+const expectedRevision = 'v1-3-wheels-in-profile-opening';
 const failures = [];
 function fail(message) { failures.push(message); }
 
@@ -22,7 +22,7 @@ if (failures.length === 0) {
     if (review.asset_id !== 'authored_sherman_treads_v1') fail('tread review asset id mismatch');
     if (review.silhouette_revision !== expectedRevision) fail('tread review revision mismatch');
     const acceptance = String(review.acceptance || '');
-    for (const phrase of ['full tread assembly only', 'closed trapezoid tread belt volumes', 'exterior-exposed side-facing road wheels', 'sprockets, idlers, return rollers, bogie connectors', 'split tread belt segments', 'preserve OrbitControls camera and orientation widget', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
+    for (const phrase of ['full tread assembly only', 'open perimeter sidewall frame', 'wheels inside the inner profile opening', 'sprockets, idlers, return rollers, bogie connectors', 'profile opening', 'preserve OrbitControls camera and orientation widget', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
       if (!acceptance.includes(phrase)) fail('tread acceptance must mention ' + phrase);
     }
   }
@@ -41,4 +41,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Tread-first cloud review gate passed: hosted packet declares v1.2 exposed-running-gear review lane with preserved camera controls; cloud/Sense acceptance is still required.');
+console.log('Tread-first cloud review gate passed: hosted packet declares v1.3 wheels-in-profile-opening review lane with preserved camera controls; cloud/Sense acceptance is still required.');

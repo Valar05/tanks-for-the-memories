@@ -11,7 +11,7 @@ def P(x, y, z):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_treads_v1'
-REVISION = 'v1-2-visible-running-gear'
+REVISION = 'v1-3-wheels-in-profile-opening'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -146,7 +146,7 @@ def make_belt(side_name, side_sign):
             poly.material_index = 0 if mat_name == 'track_outer' else 1
         assign_uvs(mesh)
         obj = bpy.data.objects.new(side_name + '_tread_' + role, mesh)
-        obj['component_role'] = 'split_visible_tread_' + role
+        obj['component_role'] = 'open_perimeter_sidewall_' + role
         obj['profile_point_count'] = len(OUTER_PROFILE)
         obj['source_reference'] = 'src/model-assay.ts createTreadGeometry subdivision-0 reference only'
         obj['contains_hull'] = False
@@ -242,19 +242,21 @@ for side_name, side_sign, mount_parent, wheel_parent, bogie_parent in [
     ('right', -1, right_mount_root, right_wheel_root, right_bogie_root),
 ]:
     mount_z = side_sign * 0.94
-    wheel_z = side_sign * 1.08
+    wheel_z = side_sign * 1.02
     for x in [-1.08, -0.42, 0.24, 0.90]:
         box_mesh(f'{side_name}_tread_connector_mount_{x:+.2f}', (x, 0.045, mount_z), (0.30, 0.16, 0.16), mount_parent)
     box_mesh(f'{side_name}_upper_return_connector_rail', (-0.04, 0.055, mount_z), (2.48, 0.08, 0.08), mount_parent)
-    box_mesh(f'{side_name}_lower_bogie_tie_beam', (-0.10, -0.255, mount_z), (2.72, 0.075, 0.10), bogie_parent)
-    for index, x in enumerate([-1.12, -0.70, -0.28, 0.14, 0.56, 0.98]):
-        disc_mesh(f'{side_name}_roadwheel_{index + 1}', (x, -0.255, wheel_z), 0.205, 0.105, wheel_parent, 'wheel_metal', 30, 0.082)
-    disc_mesh(f'{side_name}_front_sprocket', (1.28, -0.155, wheel_z), 0.285, 0.12, wheel_parent, 'wheel_metal', 32, 0.10)
-    disc_mesh(f'{side_name}_rear_idler', (-1.38, -0.155, wheel_z), 0.245, 0.11, wheel_parent, 'wheel_metal', 32, 0.09)
-    for index, x in enumerate([-0.92, -0.18, 0.58]):
-        disc_mesh(f'{side_name}_return_roller_{index + 1}', (x, 0.035, wheel_z), 0.105, 0.09, wheel_parent, 'wheel_metal', 24, 0.045)
-    for x in [-0.91, -0.07, 0.77]:
-        box_mesh(f'{side_name}_vvss_bogie_arm_{x:+.2f}', (x, -0.17, mount_z), (0.32, 0.18, 0.09), bogie_parent)
+    box_mesh(f'{side_name}_lower_bogie_tie_beam', (-0.10, -0.205, mount_z), (2.58, 0.065, 0.10), bogie_parent)
+    # Wheel centers deliberately occupy the side-view inner-profile opening;
+    # they are not exterior-plane decorations.
+    for index, x in enumerate([-1.04, -0.63, -0.22, 0.19, 0.60, 0.96]):
+        disc_mesh(f'{side_name}_roadwheel_{index + 1}', (x, -0.205, wheel_z), 0.135, 0.105, wheel_parent, 'wheel_metal', 30, 0.064)
+    disc_mesh(f'{side_name}_front_sprocket', (1.17, -0.130, wheel_z), 0.155, 0.12, wheel_parent, 'wheel_metal', 32, 0.066)
+    disc_mesh(f'{side_name}_rear_idler', (-1.25, -0.118, wheel_z), 0.145, 0.11, wheel_parent, 'wheel_metal', 32, 0.060)
+    for index, x in enumerate([-0.84, -0.12, 0.56]):
+        disc_mesh(f'{side_name}_return_roller_{index + 1}', (x, -0.020, wheel_z), 0.065, 0.09, wheel_parent, 'wheel_metal', 24, 0.030)
+    for x in [-0.84, -0.02, 0.78]:
+        box_mesh(f'{side_name}_vvss_bogie_arm_{x:+.2f}', (x, -0.155, mount_z), (0.27, 0.11, 0.09), bogie_parent)
 
 bpy.ops.wm.save_as_mainfile(filepath=str(BLEND_PATH))
 bpy.ops.export_scene.gltf(filepath=str(GLB_PATH), export_format='GLB', use_selection=False)
@@ -273,18 +275,19 @@ manifest = {
     'output_glb': str(GLB_PATH.relative_to(ROOT)),
     'approximate_triangles': triangle_count,
     'coordinate_contract': 'runtime X length, Y height, Z width; Blender Z-up converted through P()',
-    'component_scope': 'full tread assembly only: split tread belt segments, sidewalls, exterior-exposed side-facing wheels, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
+    'component_scope': 'full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
     'reference_source': 'src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only',
     'profile': {
         'old_reference_point_count': 8,
         'outer_profile_point_count': len(OUTER_PROFILE),
         'inner_profile_point_count': len(INNER_PROFILE),
+        'inner_profile_xy': [[x, y] for x, y, _u in INNER_PROFILE],
         'subdivision_layer': 'one added silhouette layer around returns and run transitions',
         'markers': SEGMENT_MARKERS,
     },
     'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors'],
     'forbidden_nodes': ['hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','tank_root'],
-    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with split closed trapezoid tread belt segments, sidewalls, exterior-exposed side-facing road wheels, sprockets, idlers, return rollers, bogie connectors, visible top, bottom, front, rear, inner, and outer thickness; no hull/turret/full-tank salvage.'
+    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; no hull/turret/full-tank salvage.'
 }
 MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({'asset_id': ASSET_ID, 'revision': REVISION, 'triangles': triangle_count, 'glb': str(GLB_PATH)}, indent=2))
