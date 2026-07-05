@@ -114,3 +114,10 @@ The active recovery path after the red boxmodel screenshots is `authored_sherman
 The textureable base is required to keep separate animatable nodes for hull, left/right track pods, left/right tread motion, left/right roadwheel groups, turret traverse, cannon elevation, mantlet, barrel, and coaxial MG. Its first guard is `npm run authored-textureable-smoke`, which checks contained wheels, closed 3D track pod relationships, turret ring overlap, integrated hatches, gun/coax pivot ownership, and split UV plate completeness. This is still diagnostic only; cloud/Sense visual review of `textureable-tank.html` is required before accepting the model as usable.
 
 Commander identity should bind through the new split UV plates and decal anchors, not through geometry variants. The first texture pass may paint plates directly; later Alpha/Whiskey/Tango/Delta markings should use the manifest decal anchors for glacis stripe, turret stripe, turret side symbol, and rear hull accent.
+
+
+### Tread-First Blender Pass - 2026-07-05
+
+The next clean recovery step is `authored_sherman_treads_v1`, reviewed through `treadfirst-treads.html`. This is a component pass, not a full tank pass: it may contain only `treads_root`, `left_tread_belt`, `right_tread_belt`, `left_tread_connector_mounts`, and `right_tread_connector_mounts` plus subordinate connector meshes. Hull, turret, barrel, mantlet, coaxial MG, complete running gear, and texture-variant work are forbidden in this pass.
+
+Use `src/model-assay.ts` `createTreadGeometry()` only as the subdivision-0 reference for tread proportions. The authored tread asset must add one silhouette subdivision layer around the front/rear returns and top/bottom transitions, while preserving a closed Sherman-like trapezoid belt volume with visible top, bottom, front, rear, inner, and outer thickness. Failed `authored_sherman_boxmodel_v1` and `authored_sherman_textureable_v1` exporters are red evidence only and must not be copied as architecture for this pass.
