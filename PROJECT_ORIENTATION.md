@@ -60,6 +60,7 @@ For sponson, glacis, and track-well repairs:
 - The front and rear lower sponson armor must visually bridge hull/glacis/rear plate to the outer track skirt.
 - The repair must cover the exterior visible armor skin, not merely place boxes behind the skirt or inside the track well.
 - The closure must cover triangular upper voids and lower rectangular shadow slots when both are visible.
+- If a raycast from outside the visible gap can enter the tank interior without hitting exterior armor first, the model is red. This is true even when one camera angle looks covered.
 - Freestanding blockers, internal returns, pasted slabs, or boxes that leave the silhouette showing air are red.
 - A validator that checks only node names, object presence, manifest text, route wiring, or internal bbox overlap is false-green.
 

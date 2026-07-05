@@ -163,6 +163,7 @@ if (failures.length === 0) {
   if (!manifest.runtime_contract?.side_skirt_occlusion) fail('manifest must preserve side skirt occlusion contract');
   if (!String(manifest.silhouette_revision || '').includes('v1-10-integrated-sponson-skirt-skins')) fail('manifest must record integrated sponson/skirt skin revision');
   if (!String(manifest.runtime_contract?.integrated_sponson_skirt_armor || '').includes('sloped sponson skins reshape the hull side')) fail('manifest must describe integrated sponson/skirt hull-side armor, not cover panels');
+  if (!String(manifest.runtime_contract?.raycast_exterior_closure || '').includes('outside gap rays hit exterior armor before interior')) fail('raycast closure rule missing: outside gap rays must hit exterior armor before they can enter the tank interior');
   if (!String(manifest.source_policy || '').includes('no Meshy chassis or turret')) fail('manifest must reject Meshy chassis/turret imports');
   if (!String(manifest.uv_policy || '').includes('box and planar UV plates')) fail('manifest must use box/planar UV plate policy');
   if (triangleCount > 6000) fail('GLB must stay below 6000 triangles, saw ' + triangleCount);

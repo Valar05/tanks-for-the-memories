@@ -17,6 +17,7 @@ if (failures.length === 0) {
   if (!captures.includes('non-cube turret')) fail('cloud captures must require non-cube turret review');
   if (!rules.includes('integrated sponson/skirt hull-side coverage')) fail('cloud manifest must require integrated sponson/skirt hull-side coverage review');
   if (!rules.includes('front-left, front-right, rear-left, and rear-right')) fail('cloud manifest must require all four hull/track corner review');
+  if (!rules.includes('raycasts from outside those visible gaps hit exterior armor before entering the tank interior') && !rules.includes('no raycast-accessible interior through those gaps')) fail('cloud manifest must require raycast no-interior-access review for the visible hull/track gaps');
   if (!rules.includes('no pasted panels, blockers, floating boxes, or runtime overlays')) fail('cloud manifest must reject pasted panels/blockers/floating boxes/runtime overlays as the coverage fix');
   if (!captures.includes('box UV')) fail('cloud captures must require box UV review');
   if (!captures.includes('gesture-only part tuner')) fail('cloud captures must require gesture-only tuner review');

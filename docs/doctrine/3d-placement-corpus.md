@@ -68,9 +68,11 @@ Good framing:
 
 - `front lower sponson armor must visually become the side skin that bridges the glacis edge into the outer track skirt`
 - `rear hull side must taper into the idler/track cover without a black corner slot`
+- `a ray cast from outside the visible gap must hit armor before it can enter the tank interior`
 - `mantlet must occlude the barrel base from the review camera`
 
 If a repair reads as a separate rectangle, slab, plug, cheek, blocker, wing, or pasted panel, it failed even if it covers pixels.
+If a raycast can get inside the tank through the repaired gap, the repair failed even if the surface looks covered from one view.
 
 ## Forbidden Repeat Mistakes
 
@@ -93,6 +95,7 @@ For front/rear sponson, glacis, and track-well gaps:
 
 - The repair must be part of the hull/track armor form, not a cover sitting on top of it.
 - The silhouette must improve from the camera where the failure was reported.
+- A side, front, rear, or oblique ray through the reported opening must hit exterior armor before it reaches the tank interior.
 - Rear gaps may require a different shape than front gaps; symmetry is not proof.
 - The part must overlap or interlock with neighboring armor so it reads as joined metal.
 - Thin planar faces are acceptable only when they are natural armor plates with believable seams, thickness, and attachment.
@@ -118,6 +121,8 @@ Minimum guard for hard-surface placement:
 
 - parse the exported GLB
 - compute world-space bboxes for the changed part and neighboring parts
+- cast diagnostic rays from outside each reported opening toward the tank interior
+- assert each ray hits exterior armor before it reaches the interior volume
 - assert side-specific plane relationship
 - assert enough span for the visible surface
 - assert parent ownership if animation matters
