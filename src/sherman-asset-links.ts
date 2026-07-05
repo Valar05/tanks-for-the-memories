@@ -25,7 +25,7 @@ export const AUTHORED_SHERMAN_RETOPO_FACE_PLATES = [
   'bogie_side'
 ] as const;
 
-export const AUTHORED_SHERMAN_BOXMODEL_GLB_URL = './tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb?v=v1-9-front-gap-exterior-cover';
+export const AUTHORED_SHERMAN_BOXMODEL_GLB_URL = './tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb?v=v1-10-integrated-sponson-skirt-skins';
 export const AUTHORED_SHERMAN_BOXMODEL_TEXTURE_BASE_URL = './tftm/models/authored_sherman_boxmodel_v1/texture_plates/';
 export const AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES = [
   'hull_glacis',

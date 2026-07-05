@@ -10,7 +10,7 @@ if (!root) throw new Error('missing #boxmodel-tank-root');
 
 const query = new URLSearchParams(window.location.search);
 const isTuneMode = query.get('tune') === '1';
-const baseVisualBuild = 'tftm-authored-sherman-boxmodel-v1-9-20260704';
+const baseVisualBuild = 'tftm-authored-sherman-boxmodel-v1-10-20260705';
 const tunerVisualBuild = 'tftm-authored-sherman-boxmodel-tuner-v9-20260704';
 const visualBuild = isTuneMode ? tunerVisualBuild : baseVisualBuild;
 

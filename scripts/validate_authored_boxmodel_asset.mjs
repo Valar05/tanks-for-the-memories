@@ -9,7 +9,7 @@ const blendPath = 'assets/authored/authored_sherman_boxmodel_v1/authored_sherman
 const blenderScriptPath = 'scripts/export_authored_sherman_boxmodel.py';
 const wrapperPath = 'scripts/export_authored_sherman_boxmodel.mjs';
 const facePlateIds = ['hull_glacis','hull_left','hull_right','hull_rear','engine_deck','turret_front','turret_left','turret_right','turret_top','turret_bustle','mantlet','barrel_strip','coaxial_mg','track_outer','track_inner_top_bottom','wheel_disc','bogie_side'];
-const requiredNodes = ['tank_root','hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','left_track_motion','right_track_motion','left_roadwheel_group','right_roadwheel_group','commander_hatch__turret_top','left_flush_glacis_shoulder__hull_left','right_flush_glacis_shoulder__hull_right','left_low_front_track_cheek__hull_left','right_low_front_track_cheek__hull_right','left_vertical_shoulder_gap_web__hull_left','right_vertical_shoulder_gap_web__hull_right','left_visible_glacis_slot_wall__hull_left','right_visible_glacis_slot_wall__hull_right','left_exterior_front_gap_cover__hull_left','right_exterior_front_gap_cover__hull_right'];
+const requiredNodes = ['tank_root','hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','left_track_motion','right_track_motion','left_roadwheel_group','right_roadwheel_group','commander_hatch__turret_top','left_flush_glacis_shoulder__hull_left','right_flush_glacis_shoulder__hull_right','left_low_front_track_cheek__hull_left','right_low_front_track_cheek__hull_right','left_vertical_shoulder_gap_web__hull_left','right_vertical_shoulder_gap_web__hull_right','left_visible_glacis_slot_wall__hull_left','right_visible_glacis_slot_wall__hull_right','left_sloped_sponson__hull_left','right_sloped_sponson__hull_right'];
 function fail(message) { failures.push(message); }
 function read(file) { return readFileSync(file, 'utf8'); }
 function parseGlbJson(file) {
@@ -161,8 +161,8 @@ if (failures.length === 0) {
   if (!String(manifest.source_policy || '').includes('Blender Z-up basis conversion')) fail('manifest must identify Blender Z-up basis conversion');
   if (!manifest.orientation_contract || !String(manifest.orientation_contract.visual_regression_prevented || '').includes('wheels must sit inside side skirts')) fail('manifest must preserve upright/gun/skirt orientation contract');
   if (!manifest.runtime_contract?.side_skirt_occlusion) fail('manifest must preserve side skirt occlusion contract');
-  if (!String(manifest.silhouette_revision || '').includes('v1-9-exterior-front-gap-coverage')) fail('manifest must record exterior front gap coverage revision');
-  if (!String(manifest.runtime_contract?.front_shoulder_armor || '').includes('outside track-skirt side plane')) fail('manifest must describe exterior front gap covers on the outside side plane');
+  if (!String(manifest.silhouette_revision || '').includes('v1-10-integrated-sponson-skirt-skins')) fail('manifest must record integrated sponson/skirt skin revision');
+  if (!String(manifest.runtime_contract?.integrated_sponson_skirt_armor || '').includes('sloped sponson skins reshape the hull side')) fail('manifest must describe integrated sponson/skirt hull-side armor, not cover panels');
   if (!String(manifest.source_policy || '').includes('no Meshy chassis or turret')) fail('manifest must reject Meshy chassis/turret imports');
   if (!String(manifest.uv_policy || '').includes('box and planar UV plates')) fail('manifest must use box/planar UV plate policy');
   if (triangleCount > 6000) fail('GLB must stay below 6000 triangles, saw ' + triangleCount);
@@ -173,10 +173,19 @@ if (failures.length === 0) {
   if (!coaxBounds || !(coaxBounds.size[0] > 0.45 && coaxBounds.size[0] > coaxBounds.size[1] * 6 && coaxBounds.size[0] > coaxBounds.size[2] * 6)) fail('coaxial MG mesh must be visible and long on X; saw ' + axisString(coaxBounds));
   if (!roadwheelBounds || !(roadwheelBounds.size[2] < roadwheelBounds.size[0] * 0.45 && roadwheelBounds.size[2] < roadwheelBounds.size[1] * 0.45)) fail('roadwheel disc must be thin on Z so it faces the hull side; saw ' + axisString(roadwheelBounds));
 
-  const leftExteriorCover = nodeWorldBoundsByName(json, 'left_exterior_front_gap_cover__hull_left');
-  const rightExteriorCover = nodeWorldBoundsByName(json, 'right_exterior_front_gap_cover__hull_right');
-  if (!leftExteriorCover || !(leftExteriorCover.min[2] > 1.0 && leftExteriorCover.size[0] > 0.9 && leftExteriorCover.size[1] > 0.8)) fail('left exterior front gap cover must sit outside the exported positive-Z skirt and visibly cover front/vertical gap; saw ' + axisString(leftExteriorCover));
-  if (!rightExteriorCover || !(rightExteriorCover.max[2] < -1.0 && rightExteriorCover.size[0] > 0.9 && rightExteriorCover.size[1] > 0.8)) fail('right exterior front gap cover must sit outside the exported negative-Z skirt and visibly cover front/vertical gap; saw ' + axisString(rightExteriorCover));
+  const sideSkinSpecs = [
+    { label: 'left integrated sponson/skirt skin', node: 'left_sloped_sponson__hull_left', skirt: 'left_outer_track_skirt__track_outer', side: 'left' },
+    { label: 'right integrated sponson/skirt skin', node: 'right_sloped_sponson__hull_right', skirt: 'right_outer_track_skirt__track_outer', side: 'right' }
+  ];
+  for (const spec of sideSkinSpecs) {
+    const skin = nodeWorldBoundsByName(json, spec.node);
+    const skirt = nodeWorldBoundsByName(json, spec.skirt);
+    if (!skin) fail(spec.label + ' is missing; hull side must own the front/rear hull-to-track surface');
+    if (!skirt) fail(spec.label + ' cannot be checked because the outer track skirt is missing');
+    if (skin && !(skin.size[0] > 3.0 && skin.size[1] > 0.85)) fail(spec.label + ' must span the hull side from front glacis corner to rear armor/idler corner and down to the skirt; saw ' + axisString(skin));
+    if (skin && skirt && spec.side === 'left' && !(skin.max[2] > skirt.max[2] - 0.04 && skin.min[2] < 0.66)) fail(spec.label + ' must bridge upper hull side into the positive-Z skirt plane, not stop inboard; skin ' + axisString(skin) + '; skirt ' + axisString(skirt));
+    if (skin && skirt && spec.side === 'right' && !(skin.min[2] < skirt.min[2] + 0.04 && skin.max[2] > -0.66)) fail(spec.label + ' must bridge upper hull side into the negative-Z skirt plane, not stop inboard; skin ' + axisString(skin) + '; skirt ' + axisString(skirt));
+  }
   for (const id of facePlateIds) {
     if (!manifest.face_plate_ids?.includes(id)) fail('manifest missing face plate id ' + id);
     if (!materialNames.has(id)) fail('GLB missing material slot ' + id);
@@ -184,18 +193,18 @@ if (failures.length === 0) {
   for (const nodeName of requiredNodes) {
     if (!nodeNames.has(nodeName)) fail('GLB missing required node ' + nodeName);
   }
-  for (const forbiddenNode of ['left_front_shoulder_armor_filler__hull_left', 'right_front_shoulder_armor_filler__hull_right', 'left_front_track_to_glacis_cover__hull_left', 'right_front_track_to_glacis_cover__hull_right']) {
+  for (const forbiddenNode of ['left_front_shoulder_armor_filler__hull_left', 'right_front_shoulder_armor_filler__hull_right', 'left_front_track_to_glacis_cover__hull_left', 'right_front_track_to_glacis_cover__hull_right', 'left_exterior_front_gap_cover__hull_left', 'right_exterior_front_gap_cover__hull_right']) {
     if (nodeNames.has(forbiddenNode)) fail('front wing filler regression: remove old raised gap filler node ' + forbiddenNode);
   }
   for (const forbidden of ['sherman_part_meshy_kit_v1', 'hull.glb', 'turret.glb', 'SimplifyModifier', 'RoundedBoxGeometry']) {
     if (blenderScript.includes(forbidden) || wrapper.includes(forbidden)) fail('boxmodel exporter must not use rejected/import marker ' + forbidden);
   }
   if (!blenderScript.includes('def P(') || !blenderScript.includes('Blender is Z-up')) fail('boxmodel exporter must declare Blender basis conversion helpers');
-  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-9-20260704']) {
+  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-10-20260705']) {
     if (!runtime.includes(marker)) fail('boxmodel runtime missing marker ' + marker);
   }
   if (!build.includes("buildEntry('boxmodel-tank.ts', 'boxmodel-tank')")) fail('build must bundle boxmodel-tank.ts');
-  if (!runtime.includes('authored_sherman_boxmodel_v1.glb?v=v1-9-front-gap-exterior-cover')) fail('runtime must version the authored boxmodel GLB URL so asset caching cannot hide geometry changes');
+  if (!runtime.includes('authored_sherman_boxmodel_v1.glb?v=v1-10-integrated-sponson-skirt-skins')) fail('runtime must version the authored boxmodel GLB URL so asset caching cannot hide geometry changes');
   if (!build.includes("writeBundledHtml('boxmodel-tank.html', 'boxmodel-tank.html', 'boxmodel-tank')")) fail('build must write boxmodel-tank.html');
 }
 
