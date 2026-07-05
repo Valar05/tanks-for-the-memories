@@ -11,7 +11,7 @@ def P(x, y, z):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_treads_v1'
-REVISION = 'v1-8-custom-belt-normals'
+REVISION = 'v1-9-open-running-gear-rebuild'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -181,69 +181,80 @@ def mark_circular_crease_edges(mesh, center_x, center_y, radii, z_values, tolera
             marked += 1
     return marked
 
-def make_belt(side_name, side_sign):
-    belt_root = empty(side_name + '_tread_belt', treads_root)
-    outer_z = side_sign * 1.14
+def make_track_run_mesh(name, role, points, side_sign, parent, band=0.065):
+    outer_z = side_sign * 1.16
     inner_z = side_sign * 0.72
-
     verts = []
     faces = []
-    face_mats = []
-    outer_outer = []
-    inner_outer = []
-    outer_inner = []
-    inner_inner = []
     def add(v):
         verts.append(v)
         return len(verts) - 1
-    for (outer, inner) in zip(OUTER_PROFILE, INNER_PROFILE):
-        ox, oy, _ = outer
-        ix, iy, _ = inner
-        outer_outer.append(add((ox, oy, outer_z)))
-        inner_outer.append(add((ix, iy, outer_z)))
-        outer_inner.append(add((ox, oy, inner_z)))
-        inner_inner.append(add((ix, iy, inner_z)))
-    point_count = len(OUTER_PROFILE)
-    outer_profile_normals = profile_normals(OUTER_PROFILE, outward=True)
-    inner_profile_normals = profile_normals(INNER_PROFILE, outward=False)
-    loop_normal_by_vertex = {}
-    for i in range(point_count):
-        loop_normal_by_vertex[outer_outer[i]] = normal_from_authored(*outer_profile_normals[i])
-        loop_normal_by_vertex[outer_inner[i]] = normal_from_authored(*outer_profile_normals[i])
-        loop_normal_by_vertex[inner_outer[i]] = normal_from_authored(*inner_profile_normals[i])
-        loop_normal_by_vertex[inner_inner[i]] = normal_from_authored(*inner_profile_normals[i])
-    for i in range(point_count):
-        j = (i + 1) % point_count
-        faces.append((outer_outer[i], outer_outer[j], inner_outer[j], inner_outer[i])); face_mats.append('track_outer')
-        faces.append((outer_inner[j], outer_inner[i], inner_inner[i], inner_inner[j])); face_mats.append('track_inner')
-        faces.append((outer_outer[i], outer_inner[i], outer_inner[j], outer_outer[j])); face_mats.append('track_outer')
-        faces.append((inner_outer[j], inner_inner[j], inner_inner[i], inner_outer[i])); face_mats.append('track_inner')
-    mesh = bpy.data.meshes.new(side_name + '_continuous_tread_belt_mesh')
+    for index in range(len(points) - 1):
+        x0, y0 = points[index]
+        x1, y1 = points[index + 1]
+        dx = x1 - x0
+        dy = y1 - y0
+        length = math.sqrt(dx * dx + dy * dy) or 1.0
+        nx = -dy / length
+        ny = dx / length
+        # Slight overlap keeps adjacent return pieces from reading as separated cardboard.
+        overlap = 0.018
+        tx = dx / length * overlap
+        ty = dy / length * overlap
+        x0 -= tx; y0 -= ty; x1 += tx; y1 += ty
+        oo0 = add((x0 + nx * band, y0 + ny * band, outer_z))
+        oi0 = add((x0 - nx * band, y0 - ny * band, outer_z))
+        oo1 = add((x1 + nx * band, y1 + ny * band, outer_z))
+        oi1 = add((x1 - nx * band, y1 - ny * band, outer_z))
+        io0 = add((x0 + nx * band, y0 + ny * band, inner_z))
+        ii0 = add((x0 - nx * band, y0 - ny * band, inner_z))
+        io1 = add((x1 + nx * band, y1 + ny * band, inner_z))
+        ii1 = add((x1 - nx * band, y1 - ny * band, inner_z))
+        faces.extend([
+            (oo0, oo1, oi1, oi0),
+            (io1, io0, ii0, ii1),
+            (oo0, io0, io1, oo1),
+            (oi1, ii1, ii0, oi0),
+            (oo1, io1, ii1, oi1),
+            (io0, oo0, oi0, ii0),
+        ])
+    mesh = bpy.data.meshes.new(name + '_mesh')
     mesh.from_pydata([P(*v) for v in verts], [], faces)
     mesh.update(calc_edges=True)
     mesh.materials.append(materials['track_outer'])
-    mesh.materials.append(materials['track_inner'])
-    for poly, mat_name in zip(mesh.polygons, face_mats):
-        poly.material_index = 0 if mat_name == 'track_outer' else 1
-    smooth_all_faces(mesh)
-    assign_custom_loop_normals(mesh, loop_normal_by_vertex)
     assign_uvs(mesh)
-    obj = bpy.data.objects.new(side_name + '_continuous_tread_belt_surface', mesh)
-    obj['component_role'] = 'custom_normal_smooth_continuous_tread_belt_surface_texture_driven_links'
-    obj['profile_point_count'] = len(OUTER_PROFILE)
-    obj['source_reference'] = 'src/model-assay.ts createTreadGeometry subdivision-0 reference only'
-    obj['contains_hull'] = False
-    obj['contains_turret'] = False
+    obj = bpy.data.objects.new(name, mesh)
+    obj['component_role'] = 'visible_open_running_gear_track_' + role
+    obj['surface_id'] = 'track_outer'
+    obj['open_running_gear'] = True
     bpy.context.collection.objects.link(obj)
-    obj.parent = belt_root
-    obj['normal_contract'] = 'custom loop normals from adjacent tread profile tangents; no weighted-normal modifier on belt'
+    obj.parent = parent
+    bevel = obj.modifiers.new(role + '_track_run_soft_edge_bevel', 'BEVEL')
+    bevel.width = 0.018
+    bevel.segments = 1
+    obj.modifiers.new(role + '_track_run_weighted_normals', 'WEIGHTED_NORMAL')
+    return obj
 
-    for role, segment_indices in SEGMENT_MARKERS.items():
-        marker = empty(side_name + '_tread_' + role, belt_root)
-        marker['component_role'] = 'nonrendered_segment_marker_for_review_' + role
-        marker['profile_indices'] = segment_indices
-    belt_root['component_role'] = 'smooth_continuous_subdivided_tread_belt_with_segment_markers'
+def make_side_guide_band(name, center, size, side_sign, parent):
+    return box_mesh(name, center, size, parent, material_name='track_inner', role='visible_open_side_guide_band')
+
+def make_belt(side_name, side_sign):
+    belt_root = empty(side_name + '_tread_belt', treads_root)
+    # These are visible track masses around an open wheel bay, not a filled annular side plate.
+    runs = {
+        'top_run': [(-1.34, 0.105), (-0.62, 0.126), (0.35, 0.126), (1.05, 0.092)],
+        'front_return': [(1.05, 0.092), (1.34, 0.005), (1.48, -0.130), (1.38, -0.285), (1.08, -0.372)],
+        'bottom_run': [(1.08, -0.372), (0.42, -0.404), (-0.58, -0.404), (-1.20, -0.372)],
+        'rear_return': [(-1.20, -0.372), (-1.46, -0.285), (-1.58, -0.125), (-1.49, 0.015), (-1.34, 0.105)],
+    }
+    for role, points in runs.items():
+        make_track_run_mesh(side_name + '_tread_' + role, role, points, side_sign, belt_root, band=0.062 if role in ['top_run', 'bottom_run'] else 0.070)
+    guide_z = side_sign * 0.925
+    make_side_guide_band(side_name + '_upper_inner_guide_band', (-0.08, 0.035, guide_z), (2.72, 0.045, 0.055), side_sign, belt_root)
+    make_side_guide_band(side_name + '_lower_inner_guide_band', (-0.08, -0.322, guide_z), (2.52, 0.050, 0.060), side_sign, belt_root)
+    belt_root['component_role'] = 'open_running_gear_track_runs_with_visible_wheel_bay'
     belt_root['profile_point_count'] = len(OUTER_PROFILE)
+    belt_root['open_wheel_bay'] = True
     return belt_root
 
 def disc_mesh(name, center, radius, depth, parent, material_name='wheel_metal', segments=48, hub_radius=0.12):
@@ -323,7 +334,7 @@ def disc_mesh(name, center, radius, depth, parent, material_name='wheel_metal', 
     add_marked_edge_split(obj, 'marked_wheel_rim_edge_split')
     return obj
 
-def box_mesh(name, center, size, parent):
+def box_mesh(name, center, size, parent, material_name='connector_mount', role='subordinate_connector_mount'):
     cx, cy, cz = center
     sx, sy, sz = size
     x0, x1 = cx - sx / 2, cx + sx / 2
@@ -334,10 +345,10 @@ def box_mesh(name, center, size, parent):
     mesh = bpy.data.meshes.new(name + '_mesh')
     mesh.from_pydata([P(*v) for v in verts], [], faces)
     mesh.update(calc_edges=True)
-    mesh.materials.append(materials['connector_mount'])
+    mesh.materials.append(materials[material_name])
     assign_uvs(mesh)
     obj = bpy.data.objects.new(name, mesh)
-    obj['component_role'] = 'subordinate_connector_mount'
+    obj['component_role'] = role
     obj['not_hull'] = True
     bpy.context.collection.objects.link(obj)
     obj.parent = parent
@@ -355,7 +366,7 @@ for side_name, side_sign, mount_parent, wheel_parent, bogie_parent in [
     ('right', -1, right_mount_root, right_wheel_root, right_bogie_root),
 ]:
     mount_z = side_sign * 0.94
-    wheel_z = side_sign * 1.02
+    wheel_z = side_sign * 1.155
     for x in [-1.08, -0.42, 0.24, 0.90]:
         box_mesh(f'{side_name}_tread_connector_mount_{x:+.2f}', (x, 0.045, mount_z), (0.30, 0.16, 0.16), mount_parent)
     box_mesh(f'{side_name}_upper_return_connector_rail', (-0.04, 0.055, mount_z), (2.48, 0.08, 0.08), mount_parent)
@@ -363,11 +374,11 @@ for side_name, side_sign, mount_parent, wheel_parent, bogie_parent in [
     # Wheel centers deliberately occupy the side-view inner-profile opening;
     # they are not exterior-plane decorations.
     for index, x in enumerate([-1.04, -0.63, -0.22, 0.19, 0.60, 0.96]):
-        disc_mesh(f'{side_name}_roadwheel_{index + 1}', (x, -0.205, wheel_z), 0.135, 0.105, wheel_parent, 'wheel_metal', 56, 0.064)
-    disc_mesh(f'{side_name}_front_sprocket', (1.17, -0.130, wheel_z), 0.155, 0.12, wheel_parent, 'wheel_metal', 60, 0.066)
-    disc_mesh(f'{side_name}_rear_idler', (-1.25, -0.118, wheel_z), 0.145, 0.11, wheel_parent, 'wheel_metal', 60, 0.060)
+        disc_mesh(f'{side_name}_roadwheel_{index + 1}', (x, -0.205, wheel_z), 0.165, 0.125, wheel_parent, 'wheel_metal', 64, 0.072)
+    disc_mesh(f'{side_name}_front_sprocket', (1.08, -0.150, wheel_z), 0.178, 0.135, wheel_parent, 'wheel_metal', 68, 0.074)
+    disc_mesh(f'{side_name}_rear_idler', (-1.25, -0.118, wheel_z), 0.188, 0.130, wheel_parent, 'wheel_metal', 68, 0.072)
     for index, x in enumerate([-0.84, -0.12, 0.56]):
-        disc_mesh(f'{side_name}_return_roller_{index + 1}', (x, -0.020, wheel_z), 0.065, 0.09, wheel_parent, 'wheel_metal', 44, 0.030)
+        disc_mesh(f'{side_name}_return_roller_{index + 1}', (x, -0.020, wheel_z), 0.082, 0.105, wheel_parent, 'wheel_metal', 48, 0.036)
     for x in [-0.84, -0.02, 0.78]:
         box_mesh(f'{side_name}_vvss_bogie_arm_{x:+.2f}', (x, -0.155, mount_z), (0.27, 0.11, 0.09), bogie_parent)
 
@@ -405,20 +416,20 @@ manifest = {
     'output_glb': str(GLB_PATH.relative_to(ROOT)),
     'approximate_triangles': triangle_count,
     'coordinate_contract': 'runtime X length, Y height, Z width; Blender Z-up converted through P()',
-    'component_scope': 'full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
-    'shading_contract': 'wheels keep baked hard rim-loop normal splits; tread belt uses exported custom loop normals from profile tangents so texture, not hard panel normals, sells tread detail',
+    'component_scope': 'full tread assembly only: open top/bottom/front/rear track runs with a visible wheel bay, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
+    'shading_contract': 'open track-run masses expose the wheel bay; wheels keep baked hard rim-loop normal splits and texture/material contrast sells tread detail',
     'reference_source': 'src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only',
     'profile': {
         'old_reference_point_count': 8,
         'outer_profile_point_count': len(OUTER_PROFILE),
         'inner_profile_point_count': len(INNER_PROFILE),
         'inner_profile_xy': [[x, y] for x, y, _u in INNER_PROFILE],
-        'subdivision_layer': 'one added silhouette layer around returns and run transitions',
+        'subdivision_layer': 'open running gear rebuild from the subdivision-0 tread profile with explicit track runs',
         'markers': SEGMENT_MARKERS,
     },
     'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors'],
     'forbidden_nodes': ['hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','tank_root'],
-    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; exported GLB normals must prove hard wheel rim-loop splits, smooth rounded rubber faces, and custom profile-tangent tread belt normals without faceted tread panels; no hull/turret/full-tank salvage.'
+    'acceptance': 'Offline Blender contact sheet may judge this pass: full tread assembly with open top/bottom/front/rear track runs, visible side/back/top/bottom thickness, and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the open wheel bay; no filled side plate hiding running gear; no hull/turret/full-tank salvage.'
 }
 MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({'asset_id': ASSET_ID, 'revision': REVISION, 'triangles': triangle_count, 'glb': str(GLB_PATH)}, indent=2))

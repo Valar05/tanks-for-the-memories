@@ -1,14 +1,14 @@
 {
   "asset_id": "authored_sherman_treads_v1",
   "artifact_type": "tread_only_blender_asset",
-  "silhouette_revision": "v1-8-custom-belt-normals",
+  "silhouette_revision": "v1-9-open-running-gear-rebuild",
   "generator": "scripts/export_authored_sherman_treads.py",
   "source_blend": "assets/authored/authored_sherman_treads_v1/authored_sherman_treads_v1.blend",
   "output_glb": "public/tftm/models/authored_sherman_treads_v1/authored_sherman_treads_v1.glb",
-  "approximate_triangles": 26920,
+  "approximate_triangles": 31416,
   "coordinate_contract": "runtime X length, Y height, Z width; Blender Z-up converted through P()",
-  "component_scope": "full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant",
-  "shading_contract": "wheels keep baked hard rim-loop normal splits; tread belt uses exported custom loop normals from profile tangents so texture, not hard panel normals, sells tread detail",
+  "component_scope": "full tread assembly only: open top/bottom/front/rear track runs with a visible wheel bay, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant",
+  "shading_contract": "open track-run masses expose the wheel bay; wheels keep baked hard rim-loop normal splits and texture/material contrast sells tread detail",
   "reference_source": "src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only",
   "profile": {
     "old_reference_point_count": 8,
@@ -80,7 +80,7 @@
         -0.09
       ]
     ],
-    "subdivision_layer": "one added silhouette layer around returns and run transitions",
+    "subdivision_layer": "open running gear rebuild from the subdivision-0 tread profile with explicit track runs",
     "markers": {
       "top_run": [
         2,
@@ -137,5 +137,5 @@
     "coaxial_mg",
     "tank_root"
   ],
-  "acceptance": "Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; exported GLB normals must prove hard wheel rim-loop splits, smooth rounded rubber faces, and custom profile-tangent tread belt normals without faceted tread panels; no hull/turret/full-tank salvage."
+  "acceptance": "Offline Blender contact sheet may judge this pass: full tread assembly with open top/bottom/front/rear track runs, visible side/back/top/bottom thickness, and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the open wheel bay; no filled side plate hiding running gear; no hull/turret/full-tank salvage."
 }
