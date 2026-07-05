@@ -11,7 +11,7 @@ def P(x, y, z):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_treads_v1'
-REVISION = 'v1-5-smooth-shade-creased-rims'
+REVISION = 'v1-6-baked-smooth-shade-creased-rims'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -235,14 +235,14 @@ def disc_mesh(name, center, radius, depth, parent, material_name='wheel_metal', 
         a = math.tau * i / segments
         co = math.cos(a)
         si = math.sin(a)
-        front_hub.append(add((cx + co * hub_radius, cy + si * hub_radius, z1 + 0.012)))
-        back_hub.append(add((cx + co * hub_radius, cy + si * hub_radius, z0 - 0.012)))
-        front_rim_inner.append(add((cx + co * rim_inner, cy + si * rim_inner, z1 + 0.006)))
-        back_rim_inner.append(add((cx + co * rim_inner, cy + si * rim_inner, z0 - 0.006)))
-        front_tire_inner.append(add((cx + co * tire_inner, cy + si * tire_inner, z1 + 0.003)))
-        back_tire_inner.append(add((cx + co * tire_inner, cy + si * tire_inner, z0 - 0.003)))
-        front_lip.append(add((cx + co * rim_lip_outer, cy + si * rim_lip_outer, z1 + 0.002)))
-        back_lip.append(add((cx + co * rim_lip_outer, cy + si * rim_lip_outer, z0 - 0.002)))
+        front_hub.append(add((cx + co * hub_radius, cy + si * hub_radius, z1 + 0.020)))
+        back_hub.append(add((cx + co * hub_radius, cy + si * hub_radius, z0 - 0.020)))
+        front_rim_inner.append(add((cx + co * rim_inner, cy + si * rim_inner, z1 + 0.018)))
+        back_rim_inner.append(add((cx + co * rim_inner, cy + si * rim_inner, z0 - 0.018)))
+        front_tire_inner.append(add((cx + co * tire_inner, cy + si * tire_inner, z1 + 0.016)))
+        back_tire_inner.append(add((cx + co * tire_inner, cy + si * tire_inner, z0 - 0.016)))
+        front_lip.append(add((cx + co * rim_lip_outer, cy + si * rim_lip_outer, z1 + 0.014)))
+        back_lip.append(add((cx + co * rim_lip_outer, cy + si * rim_lip_outer, z0 - 0.014)))
         front_outer.append(add((cx + co * radius, cy + si * radius, z1)))
         back_outer.append(add((cx + co * radius, cy + si * radius, z0)))
     for i in range(segments):
@@ -269,7 +269,7 @@ def disc_mesh(name, center, radius, depth, parent, material_name='wheel_metal', 
     for poly, mat_name in zip(mesh.polygons, face_mats):
         poly.material_index = 1 if mat_name == 'wheel_rubber' else 0
     smooth_all_faces(mesh)
-    sharp_edges = mark_circular_crease_edges(mesh, cx, cy, [hub_radius, rim_inner, tire_inner, rim_lip_outer, radius], [z0, z1, z0 - 0.012, z1 + 0.012, z0 - 0.006, z1 + 0.006, z0 - 0.003, z1 + 0.003, z0 - 0.002, z1 + 0.002])
+    sharp_edges = mark_circular_crease_edges(mesh, cx, cy, [hub_radius, rim_inner, tire_inner, rim_lip_outer], [z0, z1, z0 - 0.020, z1 + 0.020, z0 - 0.018, z1 + 0.018, z0 - 0.016, z1 + 0.016, z0 - 0.014, z1 + 0.014])
     assign_uvs(mesh)
     obj = bpy.data.objects.new(name, mesh)
     obj['component_role'] = 'side_facing_running_gear_wheel_smooth_shaded_with_creased_rim_loops'
@@ -278,13 +278,8 @@ def disc_mesh(name, center, radius, depth, parent, material_name='wheel_metal', 
     obj['marked_rim_crease_edges'] = sharp_edges
     bpy.context.collection.objects.link(obj)
     obj.parent = parent
-    bevel = obj.modifiers.new('creased_rim_micro_bevel', 'BEVEL')
-    bevel.width = 0.004
-    bevel.segments = 1
-    bevel.affect = 'EDGES'
-    bevel.harden_normals = True
+    # Do not bevel or weighted-normal the tire ring: v1.5 softened the rim break and split rubber faces.
     add_marked_edge_split(obj, 'marked_wheel_rim_edge_split')
-    add_weighted_normals(obj, 'weighted_wheel_crease_normals')
     return obj
 
 def box_mesh(name, center, size, parent):
@@ -335,8 +330,25 @@ for side_name, side_sign, mount_parent, wheel_parent, bogie_parent in [
     for x in [-0.84, -0.02, 0.78]:
         box_mesh(f'{side_name}_vvss_bogie_arm_{x:+.2f}', (x, -0.155, mount_z), (0.27, 0.11, 0.09), bogie_parent)
 
+
+def bake_mesh_modifiers_for_export():
+    # The source of truth for v1.6 is the baked GLB, not Blender modifier names.
+    for obj in list(bpy.context.scene.objects):
+        if obj.type != 'MESH':
+            continue
+        bpy.ops.object.select_all(action='DESELECT')
+        obj.select_set(True)
+        bpy.context.view_layer.objects.active = obj
+        for modifier in list(obj.modifiers):
+            try:
+                bpy.ops.object.modifier_apply(modifier=modifier.name)
+            except Exception as exc:
+                raise RuntimeError(f'failed to bake modifier {modifier.name} on {obj.name}: {exc}')
+
+bake_mesh_modifiers_for_export()
 bpy.ops.wm.save_as_mainfile(filepath=str(BLEND_PATH))
-bpy.ops.export_scene.gltf(filepath=str(GLB_PATH), export_format='GLB', use_selection=False)
+bpy.ops.export_scene.gltf(filepath=str(GLB_PATH), export_format='GLB', use_selection=False, export_extras=True)
+
 
 triangle_count = 0
 for obj in bpy.context.scene.objects:
@@ -353,7 +365,7 @@ manifest = {
     'approximate_triangles': triangle_count,
     'coordinate_contract': 'runtime X length, Y height, Z width; Blender Z-up converted through P()',
     'component_scope': 'full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
-    'shading_contract': 'smooth shade wheel and tread forms first, then mark only desired circular rim/corner loops sharp; rims and tread corners read hard while rounded rubber faces remain smooth',
+    'shading_contract': 'bake smooth shaded wheel and tread forms into the exported GLB, with raised metal rim lips producing hard duplicate-normal splits only on desired circular rim/corner loops and smooth normals on rounded rubber faces',
     'reference_source': 'src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only',
     'profile': {
         'old_reference_point_count': 8,
@@ -365,7 +377,7 @@ manifest = {
     },
     'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors'],
     'forbidden_nodes': ['hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','tank_root'],
-    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; smooth shaded wheel/tread forms must show hard creased rim/corner loops without faceted rubber tire faces; no hull/turret/full-tank salvage.'
+    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; exported GLB normals must prove hard rim/corner loop splits and smooth rounded rubber faces; no hull/turret/full-tank salvage.'
 }
 MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({'asset_id': ASSET_ID, 'revision': REVISION, 'triangles': triangle_count, 'glb': str(GLB_PATH)}, indent=2))

@@ -2,9 +2,9 @@ import { existsSync, readFileSync } from 'node:fs';
 
 const manifestPath = 'generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json';
 const assetManifestPath = 'public/tftm/models/authored_sherman_treads_v1/model_manifest.json';
-const expectedBuild = 'tftm-authored-sherman-treads-v1-5-20260705';
-const expectedRevision = 'v1-5-smooth-shade-creased-rims';
-const previousRedVerdictPath = 'docs/visual-verdicts/treads-v1-4-red.json';
+const expectedBuild = 'tftm-authored-sherman-treads-v1-6-20260705';
+const expectedRevision = 'v1-6-baked-smooth-shade-creased-rims';
+const previousRedVerdictPath = 'docs/visual-verdicts/treads-v1-5-red.json';
 const failures = [];
 function fail(message) { failures.push(message); }
 
@@ -18,8 +18,8 @@ if (failures.length === 0) {
   const asset = JSON.parse(readFileSync(assetManifestPath, 'utf8'));
   const previousRedVerdict = JSON.parse(readFileSync(previousRedVerdictPath, 'utf8'));
   const review = release.authored_treads_review;
-  if (previousRedVerdict.build_token !== 'tftm-authored-sherman-treads-v1-4-20260705' || previousRedVerdict.status !== 'red_unaccepted_no_op_churn') {
-    fail('previous v1.4 red/no-op verdict must remain explicit before v1.5 review');
+  if (previousRedVerdict.build_token !== 'tftm-authored-sherman-treads-v1-5-20260705' || previousRedVerdict.status !== 'red_unaccepted_no_op_churn') {
+    fail('previous v1.5 red/no-op verdict must remain explicit before v1.6 review');
   }
   if (!review) fail('cloud manifest must include authored_treads_review');
   else {
@@ -28,7 +28,7 @@ if (failures.length === 0) {
     if (review.asset_id !== 'authored_sherman_treads_v1') fail('tread review asset id mismatch');
     if (review.silhouette_revision !== expectedRevision) fail('tread review revision mismatch');
     const acceptance = String(review.acceptance || '');
-    for (const phrase of ['full tread assembly only', 'open perimeter sidewall frame', 'wheels inside the inner profile opening', 'sprockets, idlers, return rollers, bogie connectors', 'profile opening', 'creased rim loops', 'smooth rounded rubber faces', 'smooth shaded tread forms with hard corner loops', 'preserve OrbitControls camera and orientation widget', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
+    for (const phrase of ['full tread assembly only', 'open perimeter sidewall frame', 'wheels inside the inner profile opening', 'sprockets, idlers, return rollers, bogie connectors', 'profile opening', 'baked creased rim loops', 'smooth rounded rubber faces', 'baked smooth shaded tread forms with hard corner loops', 'preserve OrbitControls camera and orientation widget', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
       if (!acceptance.includes(phrase)) fail('tread acceptance must mention ' + phrase);
     }
   }
@@ -47,4 +47,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Tread-first cloud review gate passed: hosted packet declares v1.5 smooth-shade/creased-rims review lane with preserved camera controls; cloud/Sense acceptance is still required.');
+console.log('Tread-first cloud review gate passed: hosted packet declares v1.6 baked smooth-shade/creased-rims review lane with preserved camera controls; cloud/Sense acceptance is still required.');

@@ -1,0 +1,13 @@
+{
+  "artifact_type": "tread_assembly_visual_verdict",
+  "route": "treadfirst-treads.html",
+  "build_token": "tftm-authored-sherman-treads-v1-5-20260705",
+  "asset_id": "authored_sherman_treads_v1",
+  "silhouette_revision": "v1-5-smooth-shade-creased-rims",
+  "status": "red_unaccepted_no_op_churn",
+  "expected_visible_relationship": "Smooth shaded wheel and tread forms should show hard rim/corner loop distinction while rounded rubber tire faces stay smooth and unfaceted.",
+  "actual_visible_diagnosis": "User cloud review reports no-op churn. The selected edges were wrong or the exported change did not create a visible difference.",
+  "root_cause": "The v1.5 gate still proved source markers and primitive counts, not that the exported GLB contains the intended normal discontinuity at rim loops and smooth continuity across tire-band segments.",
+  "forbidden_next_green": "Do not accept v1.6 unless the exported GLB buffer itself proves hard normal splits at rim/corner loops and smooth tire-band radial continuity. Source text, material names, extras, modifiers, and build tokens are insufficient.",
+  "visual_acceptance": "Cloud/Sense only; local capture is forbidden."
+}

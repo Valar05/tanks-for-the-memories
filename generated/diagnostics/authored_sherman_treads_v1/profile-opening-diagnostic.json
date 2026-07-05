@@ -1,6 +1,6 @@
 {
   "asset_id": "authored_sherman_treads_v1",
-  "revision": "v1-5-smooth-shade-creased-rims",
+  "revision": "v1-6-baked-smooth-shade-creased-rims",
   "profile_opening": [
     [
       -1.39,
@@ -192,5 +192,103 @@
         "useful_disc_inside_ratio": 1
       }
     ]
-  }
+  },
+  "normal_shading": [
+    {
+      "node": "left_roadwheel_1",
+      "hard_rim_split_groups": 112,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 224,
+      "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "left_roadwheel_3",
+      "hard_rim_split_groups": 112,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 224,
+      "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "left_roadwheel_6",
+      "hard_rim_split_groups": 112,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 224,
+      "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "left_front_sprocket",
+      "hard_rim_split_groups": 120,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 240,
+      "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "left_rear_idler",
+      "hard_rim_split_groups": 120,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 240,
+      "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "left_return_roller_1",
+      "hard_rim_split_groups": 88,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 176,
+      "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "right_roadwheel_1",
+      "hard_rim_split_groups": 112,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 224,
+      "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "right_roadwheel_3",
+      "hard_rim_split_groups": 112,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 224,
+      "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "right_roadwheel_6",
+      "hard_rim_split_groups": 112,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 224,
+      "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "right_front_sprocket",
+      "hard_rim_split_groups": 120,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 240,
+      "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "right_rear_idler",
+      "hard_rim_split_groups": 120,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 240,
+      "rubber_radial_good_ratio": 0
+    },
+    {
+      "node": "right_return_roller_1",
+      "hard_rim_split_groups": 88,
+      "rubber_duplicate_groups": 0,
+      "rubber_bad_split_groups": 0,
+      "rubber_radial_samples": 176,
+      "rubber_radial_good_ratio": 0
+    }
+  ]
 }

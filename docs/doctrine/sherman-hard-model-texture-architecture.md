@@ -132,3 +132,7 @@ The v1.4 tread refinement preserves the v1.3 wheel/profile placement and changes
 The v1.4 tread refinement is red/no-op by user cloud review. Material splits, weighted normals, bevel flags, normal accessors, and higher wheel segment counts are not sufficient evidence of visible shading improvement. Future tread shading work must define the visible lighting relationship first and require accepted-lane comparison evidence before the gate can pass.
 
 The v1.5 tread shading attempt uses the Blender correction suggested after v1.4: smooth shade wheel and tread forms first, then mark only desired circular rim/corner loops sharp. Creases belong on rim loops and tread corners, not on rounded rubber faces. This remains diagnostic until cloud/Sense comparison shows visible rim/tread distinction without tire ring facets.
+
+The v1.5 tread shading attempt is red/no-op. Future gates must inspect exported GLB buffer normals directly: hard rim/corner loops require duplicate-position normal discontinuities, while rounded tire-band radial segments must remain smooth. Blender source markers, modifier names, custom properties, material primitives, and vertex counts are not enough.
+
+The v1.6 tread shading gate implements that correction: it bakes Blender modifiers before GLB export, parses exported GLB buffers, and requires hard duplicate-normal groups at rim/corner loops with zero bad duplicate-normal groups on rounded rubber faces. This is still diagnostic only; cloud/Sense must decide whether the visible rim/tire distinction actually improves.
