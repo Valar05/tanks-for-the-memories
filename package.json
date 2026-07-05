@@ -28,7 +28,8 @@
     "boxmodel-no-op-smoke": "node scripts/validate_boxmodel_no_op_churn.mjs",
     "blender-visibility:boxmodel": "node scripts/render_boxmodel_blender_visibility.mjs",
     "blender-visibility:boxmodel-smoke": "node scripts/validate_boxmodel_blender_visibility.mjs",
-    "cloud-review:boxmodel": "node scripts/deploy_boxmodel_cloud_review.mjs"
+    "cloud-review:boxmodel": "node scripts/deploy_boxmodel_cloud_review.mjs",
+    "tank-visual-repair-preflight": "node scripts/validate_tank_visual_repair_preflight.mjs"
   },
   "dependencies": {
     "three": "^0.166.1"

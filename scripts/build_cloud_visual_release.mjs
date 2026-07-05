@@ -9,6 +9,7 @@ const shermanSourceManifestPath = 'assets/generated/meshy/sherman_part_meshy_kit
 const authoredRetopoManifestPath = 'public/tftm/models/authored_sherman_retopo_v1/model_manifest.json';
 const authoredBoxmodelManifestPath = 'public/tftm/models/authored_sherman_boxmodel_v1/model_manifest.json';
 const authoredBoxmodelVisualVerdictPath = 'docs/visual-verdicts/boxmodel-v1-15-red.json';
+const authoredBoxmodelRepairIntakePath = 'docs/visual-repair-intakes/boxmodel-after-v1-15-no-op.json';
 
 const build = spawnSync('npm', ['run', 'build'], { stdio: 'inherit' });
 if ((build.status ?? 1) !== 0) {
@@ -39,12 +40,17 @@ if (!existsSync(authoredBoxmodelVisualVerdictPath)) {
   console.error('missing authored boxmodel visual verdict ' + authoredBoxmodelVisualVerdictPath);
   process.exit(1);
 }
+if (!existsSync(authoredBoxmodelRepairIntakePath)) {
+  console.error('missing authored boxmodel visual repair intake ' + authoredBoxmodelRepairIntakePath);
+  process.exit(1);
+}
 
 const tankManifest = JSON.parse(readFileSync(tankManifestPath, 'utf8'));
 const shermanSourceManifest = JSON.parse(readFileSync(shermanSourceManifestPath, 'utf8'));
 const authoredRetopoManifest = JSON.parse(readFileSync(authoredRetopoManifestPath, 'utf8'));
 const authoredBoxmodelManifest = JSON.parse(readFileSync(authoredBoxmodelManifestPath, 'utf8'));
 const authoredBoxmodelVisualVerdict = JSON.parse(readFileSync(authoredBoxmodelVisualVerdictPath, 'utf8'));
+const authoredBoxmodelRepairIntake = JSON.parse(readFileSync(authoredBoxmodelRepairIntakePath, 'utf8'));
 const gitHead = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8', timeout: 5000 });
 const gitStatus = spawnSync('git', ['status', '--short'], { encoding: 'utf8', timeout: 5000 });
 
@@ -76,6 +82,8 @@ const releaseManifest = {
     asset_policy: 'fully authored Blender box-model chassis with solidified overlapping armor plates, connected multi-material cast turret shell with no pasted turret panels, and coaxial MG; no Meshy chassis or turret imports; box UV PNG plates for DALL-E paintability',
     visual_verdict_path: authoredBoxmodelVisualVerdictPath,
     visual_verdict: authoredBoxmodelVisualVerdict,
+    visual_repair_intake_path: authoredBoxmodelRepairIntakePath,
+    visual_repair_intake: authoredBoxmodelRepairIntake,
     acceptance: 'Sense Simulation must confirm Sherman silhouette, connected cast turret massing with no cheek/side/roof pasted panels, smaller integrated track-well slot walls plus joined sponson shells close the front-left, front-right, rear-left, and rear-right lower hull/track cracks as joined metal, pass targeted no-wing slot-wall, no-pasted-turret-panel, and readable wheel/hub/bogie checks, and crack rays from outside those visible gaps hit exterior armor before entering the tank interior, with no pasted panels, blockers, floating boxes, or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.',
     tuner_acceptance: 'Sense Simulation must review boxmodel-tank.html?tune=1 as a preserved future-use gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored flat armor panels are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected panel is highlighted for editing, already enabled panels remain visible, Move/Rotate/Scale are one active mode at a time, Scale exposes explicit All/X/Y/Z axis buttons, drag/pinch/twist gestures visibly change the selected panel, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and panels share the same unskewed model frame, no object transform handles appear, and local capture was not used.'
   },

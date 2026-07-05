@@ -3,16 +3,20 @@ import { existsSync, readFileSync } from 'node:fs';
 const expectedBuild = 'tftm-authored-sherman-boxmodel-v1-15-20260705';
 const expectedGlbToken = 'v1-15-cast-turret-readable-wheels';
 const verdictPath = 'docs/visual-verdicts/boxmodel-v1-15-red.json';
+const intakePath = 'docs/visual-repair-intakes/boxmodel-after-v1-15-no-op.json';
 
 const failures = [];
 function fail(message) { failures.push(message); }
 if (!existsSync('generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json')) fail('missing generated cloud visual truth manifest; run npm run cloud-visual-release');
 if (!existsSync('generated/cloud-visual-truth/tftm-release/dist/boxmodel-tank.html')) fail('cloud release missing dist/boxmodel-tank.html');
 if (!existsSync(verdictPath)) fail('missing boxmodel visual verdict ' + verdictPath + '; no-op churn cannot be gated by source tokens alone');
+if (!existsSync(intakePath)) fail('missing boxmodel visual repair intake ' + intakePath + '; future geometry work must be constrained before cloud review');
 if (failures.length === 0) {
   const manifest = JSON.parse(readFileSync('generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json', 'utf8'));
   const verdict = JSON.parse(readFileSync(verdictPath, 'utf8'));
+  const intake = JSON.parse(readFileSync(intakePath, 'utf8'));
   const releaseVerdict = manifest.authored_boxmodel_review?.visual_verdict;
+  const releaseIntake = manifest.authored_boxmodel_review?.visual_repair_intake;
   const rules = JSON.stringify(manifest);
   const captures = (manifest.required_cloud_captures || []).join('\\n');
 
@@ -30,6 +34,15 @@ if (failures.length === 0) {
     if (releaseVerdict.status !== verdict.status) fail('cloud manifest visual verdict status does not match source verdict');
   }
   if (verdict.status === 'red_unaccepted_no_op_churn' && !String(verdict.actual_visible_relationship || '').includes('no-op churn')) fail('red verdict must explicitly name no-op churn');
+  if (intake.controlling_visual_verdict !== verdictPath) fail('visual repair intake must point at the controlling verdict');
+  if (intake.current_build_token !== verdict.build_token) fail('visual repair intake build token must match verdict build token');
+  if (intake.current_glb_token !== verdict.glb_token) fail('visual repair intake GLB token must match verdict GLB token');
+  if (!String(intake.forbidden_old_mistake || '').includes('pasted') || !String(intake.forbidden_old_mistake || '').includes('stale diagnostic')) fail('visual repair intake must forbid pasted geometry and stale diagnostic proof paths');
+  if (!releaseIntake) fail('cloud manifest must embed authored_boxmodel_review.visual_repair_intake');
+  else {
+    if (releaseIntake.current_build_token !== intake.current_build_token) fail('cloud manifest visual repair intake build token does not match source intake');
+    if (releaseIntake.current_glb_token !== intake.current_glb_token) fail('cloud manifest visual repair intake GLB token does not match source intake');
+  }
   if (!rules.includes('authored_sherman_boxmodel_v1')) fail('cloud manifest must name authored_sherman_boxmodel_v1');
   if (!rules.includes(expectedBuild)) fail('cloud manifest must require the boxmodel build token');
   if (!rules.includes('tftm-authored-sherman-boxmodel-tuner-v9-20260704')) fail('cloud manifest must require the boxmodel tuner build token');

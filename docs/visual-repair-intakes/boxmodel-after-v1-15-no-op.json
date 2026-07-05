@@ -1,0 +1,28 @@
+{
+  "artifact_type": "tank_visual_repair_intake",
+  "id": "boxmodel-after-v1-15-no-op",
+  "created_at": "2026-07-05T14:05:00Z",
+  "target_route": "boxmodel-tank.html",
+  "current_build_token": "tftm-authored-sherman-boxmodel-v1-15-20260705",
+  "current_glb_token": "v1-15-cast-turret-readable-wheels",
+  "controlling_visual_verdict": "docs/visual-verdicts/boxmodel-v1-15-red.json",
+  "visible_target": "A single authored Sherman-family tank whose hull, turret, wheels, track wells, barrel, and coaxial MG read as coherent joined metal, with no visible no-op from prior rejected builds.",
+  "current_actual_read": "User reports v1-15 is no-op churn: source and tokens changed, but the visible tank did not materially improve.",
+  "forbidden_old_mistake": "Do not add small panels, plugs, blockers, pasted turret plates, source-token proofs, stale diagnostic renders, or browser wake as a substitute for visible relationship change.",
+  "single_edit_class": "Evidence-gated redesign or one named exterior surface repair only; no broad tank improvement pass and no multiple speculative geometry tweaks in one commit.",
+  "accepted_evidence_needed": "Cloud-hosted Sense Simulation verdict for the exact build token, naming expected relationship, actual relationship, what visibly changed, what did not change, and whether diagnostics agree or contradict the visual read.",
+  "what_would_prove_no_op": "A fresh cloud/Sense or user visual report says the visible silhouette, turret/wheel/gap relationship, or armor continuity is materially unchanged despite source, GLB, or token changes.",
+  "next_allowed_actions": [
+    "Refresh diagnostic renders only to understand failure, not to claim success.",
+    "Choose repair versus replacement from visual evidence before editing geometry.",
+    "If repairing, alter the exterior armor surface itself rather than adding blockers or decorative panels.",
+    "If replacing, build fewer larger coherent metal volumes with Sherman-readable silhouette."
+  ],
+  "disallowed_success_language": [
+    "fixed",
+    "visually changed",
+    "accepted",
+    "ready for wake",
+    "green"
+  ]
+}

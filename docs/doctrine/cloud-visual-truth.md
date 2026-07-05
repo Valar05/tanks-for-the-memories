@@ -118,6 +118,8 @@ Do not accept a guard that only proves node presence, route wiring, object names
 
 The required verdict artifact is `docs/visual-verdicts/boxmodel-v1-15-red.json`. Boxmodel cloud gates and no-op diagnostics must require a verdict artifact for the exact build token and GLB token before they pass. A red verdict may allow diagnostic commands to complete, but it must print that the build is unaccepted and must not authorize fixed/changed/ready-for-acceptance language.
 
+Before another boxmodel geometry edit, run `npm run tank-visual-repair-preflight`. The preflight intake at `docs/visual-repair-intakes/boxmodel-after-v1-15-no-op.json` must name the visible target, current actual read, forbidden old mistake, single edit class, accepted evidence needed, and what would prove no-op. If the preflight fails, do not edit geometry.
+
 The stale Blender visibility failure is part of the bug: diagnostic renders for `authored_sherman_boxmodel_v1` must fail if their recorded `model_revision` differs from the current model manifest revision. Offline renders remain diagnostic only even when current.
 
 
