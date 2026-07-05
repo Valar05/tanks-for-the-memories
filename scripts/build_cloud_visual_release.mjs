@@ -15,6 +15,7 @@ const authoredBoxmodelRepairIntakePath = 'docs/visual-repair-intakes/boxmodel-af
 const authoredBoxmodelFailurePacketPath = 'docs/visual-failure-packets/boxmodel-v1-15-identical-mesh-read.json';
 const authoredTextureableManifestPath = 'public/tftm/models/authored_sherman_textureable_v1/model_manifest.json';
 const authoredTreadsManifestPath = 'public/tftm/models/authored_sherman_treads_v1/model_manifest.json';
+const authoredChassisManifestPath = 'public/tftm/models/authored_sherman_chassis_v1/model_manifest.json';
 
 const build = spawnSync('npm', ['run', 'build'], { stdio: 'inherit' });
 if ((build.status ?? 1) !== 0) {
@@ -61,6 +62,10 @@ if (!existsSync(authoredTreadsManifestPath)) {
   console.error('missing authored tread-only manifest ' + authoredTreadsManifestPath);
   process.exit(1);
 }
+if (!existsSync(authoredChassisManifestPath)) {
+  console.error('missing authored chassis-only manifest ' + authoredChassisManifestPath);
+  process.exit(1);
+}
 
 const tankManifest = JSON.parse(readFileSync(tankManifestPath, 'utf8'));
 const shermanSourceManifest = JSON.parse(readFileSync(shermanSourceManifestPath, 'utf8'));
@@ -71,6 +76,7 @@ const authoredBoxmodelRepairIntake = JSON.parse(readFileSync(authoredBoxmodelRep
 const authoredBoxmodelFailurePacket = JSON.parse(readFileSync(authoredBoxmodelFailurePacketPath, 'utf8'));
 const authoredTextureableManifest = JSON.parse(readFileSync(authoredTextureableManifestPath, 'utf8'));
 const authoredTreadsManifest = JSON.parse(readFileSync(authoredTreadsManifestPath, 'utf8'));
+const authoredChassisManifest = JSON.parse(readFileSync(authoredChassisManifestPath, 'utf8'));
 const gitHead = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8', timeout: 5000 });
 const gitStatus = spawnSync('git', ['status', '--short'], { encoding: 'utf8', timeout: 5000 });
 
@@ -124,6 +130,21 @@ const releaseManifest = {
     asset_policy: 'new isolated Blender tread component; failed boxmodel and textureable full-tank exporters are red evidence only and are not source architecture for this pass',
     acceptance: 'Sense Simulation must confirm full tread assembly only: open perimeter sidewall frame with wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, one silhouette subdivision layer beyond the old 8-point profile, connector mounts subordinate to belt mass, left/right tread nodes share mesh data as mirrored instances, baked wheel rim loops, smooth rounded rubber faces without radial tire facets, preserve OrbitControls camera and orientation widget, no rail/cage/box-pod read, no hull, turret, barrel, coaxial MG, or full tank scene, and local capture was not used.'
   },
+  authored_chassis_review: {
+    route: 'chassisfirst-chassis.html',
+    expected_build: 'tftm-authored-sherman-chassis-v1-1-20260705',
+    asset_id: authoredChassisManifest.asset_id,
+    silhouette_revision: authoredChassisManifest.silhouette_revision,
+    output_glb: authoredChassisManifest.output_glb,
+    source_blend: authoredChassisManifest.source_blend,
+    approximate_triangles: authoredChassisManifest.approximate_triangles,
+    component_scope: authoredChassisManifest.component_scope,
+    golden_tread_revision: authoredChassisManifest.golden_tread_reference?.silhouette_revision,
+    mesh_contract: authoredChassisManifest.mesh_contract,
+    fit_contract: authoredChassisManifest.fit_contract,
+    asset_policy: 'new isolated Blender chassis component; existing Meshy Sherman is locked reference only; frozen authored_sherman_treads_v1 v1-8c is loaded beside it only for fit review and is not modified',
+    acceptance: 'Sense Simulation must confirm one watertight chassis mesh fitting frozen authored_sherman_treads_v1 v1-8c with no visible tread-interface gaps, no pasted panels or blockers, sponson armor reads as joined metal wrapping the golden tread assembly, no turret, barrel, coaxial MG, wheels, or tread edits, preserved OrbitControls camera and orientation widget, and local capture was not used.'
+  },
   authored_textureable_review: {
     route: 'textureable-tank.html',
     expected_build: 'tftm-authored-sherman-textureable-v1-1-20260705',
@@ -176,6 +197,8 @@ const releaseManifest = {
   required_cloud_captures: [
     'treadfirst-treads phone portrait showing authored_sherman_treads_v1 and build token tftm-authored-sherman-treads-v1-8c-20260705, with wheels/sprockets/idlers/rollers/bogie connectors occupying the inner profile opening with baked wheel rim loops and smooth tire bands and linked mirrored tread nodes sharing mesh data, readable lip corners, no black sidewall crush, and no hull/turret/full tank geometry',
     'treadfirst-treads phone landscape showing full tread assembly showing an open perimeter sidewall frame, wheels/sprockets/idlers/return rollers/bogie arms occupying the inner profile opening, left/right tread nodes share mesh data as mirrored instances, baked wheel rim loops, smooth tire bands, connector mounts subordinate, one silhouette subdivision layer beyond the old 8-point tread, preserved OrbitControls camera/orientation widget, no rail/cage/box-pod read, and no local capture',
+    'chassisfirst-chassis phone portrait showing authored_sherman_chassis_v1 build token tftm-authored-sherman-chassis-v1-1-20260705 fitted around frozen authored_sherman_treads_v1 v1-8c-linked-mirror-tread-assembly, one watertight chassis mesh, no turret/barrel/wheel/tread edits, and no local capture',
+    'chassisfirst-chassis phone landscape showing one joined chassis shell bridging the lower sponson and track-interface relationship with no visible tread-interface gaps at front, rear, side, or oblique views, golden treads unchanged, preserved OrbitControls camera/orientation widget, and no local capture',
     'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-15-20260705',
     'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, smaller integrated track-well slot-wall coverage at front-left, front-right, rear-left, and rear-right lower hull/track cracks, and no local capture',
     'boxmodel-tank close-up review showing smaller integrated track-well slot-wall coverage at front-left, front-right, rear-left, and rear-right as attached armor, no raycast-accessible interior through those cracks, no side-wing silhouette deformation, solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability',
@@ -203,6 +226,8 @@ const releaseManifest = {
     required_next_evidence: 'Next tank visual pass must show cloud/Sense evidence that v1-15 cast-turret/readable-wheel armor visibly closes the front and rear lower hull/track cracks on all four corners without side-wing deformation and with visible enlarged roadwheel/hub/bogie band.'
   },
   sense_simulation_questions: [
+    'Does authored_sherman_chassis_v1 show one watertight chassis mesh fitted to frozen authored_sherman_treads_v1 v1-8c, with no visible tread-interface gaps, no pasted panels or blockers, and no turret, barrel, coaxial MG, wheels, or tread edits?',
+    'Does the chassis sponson/track-interface armor read as joined metal wrapping the golden tread assembly from front, rear, side, and oblique views while preserving the accepted tread geometry?',
     'Does authored_sherman_treads_v1 show a full tread assembly only: open perimeter sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts, with no hull, turret, barrel, coaxial MG, or full tank scene?',
     'Do the wheels occupy the empty inner tread profile opening in side view, with baked wheel rim loops and smooth rounded rubber faces rather than faceted tire rings or exterior-plane decoration?',
     'Does the extra silhouette subdivision layer improve the old subdivision-0 tread profile without creating fused garbage or cardboard planes, and does the route preserve the established OrbitControls camera plus orientation widget?',

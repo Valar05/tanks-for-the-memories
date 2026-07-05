@@ -1,9 +1,9 @@
 # Current Prompt Contract
 
-latest_user_command: left tread needs to be symmetrical copy. not separate mesh. separate texture mapping sure. but not dup geo
-controlling_user_correction: The tread sides must be linked mirror instances of the same authored geometry, not independently generated left/right belt meshes; the black tread is a symmetry/dup-geometry failure, not a rollback request.
-forbidden_stale_premise: Any rollback, modeled/open-running-gear tread state, independently generated left/right tread belt geometry, boxmodel baseline handoff, browser wake, or validation claim that leaves left/right tread meshes unlinked.
-allowed_mutation_type: asset_export; cloud_visual_release; visual_qa_gate; cloud_review_deploy
-allowed_target_artifact: authored_sherman_treads_v1 v1-8c linked mirrored tread assembly using shared left/right mesh data, treadfirst-treads hosted review surface, and no boxmodel/full-tank handoff.
-required_evidence_lane: export v1-8c without make_track_run_mesh or v1-9 tokens, prove left/right tread-side nodes share mesh indices with mirrored right transforms, rebuild cloud release, run tread cloud gate, deploy, verify hosted tread bundle token, commit and push; visual acceptance still requires fresh screenshot/cloud review.
+latest_user_command: Implement the plan for authored_sherman_chassis_v1 after locking golden tread v1.8c and requiring one watertight chassis mesh with no tread gaps.
+controlling_user_correction: The accepted tread record is golden and must not be touched; the new artifact is chassis-only, one watertight Blender-authored shell, using existing Meshy only as reference ore and fitting the frozen tread component without gaps.
+forbidden_stale_premise: Any full-tank retopo, copied or modified tread geometry, turret/barrel/coax work, Meshy topology exported as final chassis, pasted panel/blocker gap fixes, browser wake, or validation claim that does not prove chassis/tread fit against the golden tread GLB.
+allowed_mutation_type: doctrine_update; asset_export; runtime_review_surface; validation_gate; cloud_visual_release; visual_qa_gate; cloud_review_deploy
+allowed_target_artifact: authored_sherman_chassis_v1 chassis-only watertight shell, chassisfirst-chassis review surface composed with read-only authored_sherman_treads_v1 v1-8c linked mirrored golden tread reference.
+required_evidence_lane: export chassis v1-1 without changing golden tread files, prove one visible watertight chassis mesh with no boundary edges and no forbidden turret/barrel/tread/wheel nodes, raycast chassis/tread interface against frozen tread bounds, rebuild cloud release, run chassis cloud gate, deploy, verify hosted chassis bundle and golden tread tokens; visual acceptance still requires cloud/Sense review.
 updated_at: 2026-07-05

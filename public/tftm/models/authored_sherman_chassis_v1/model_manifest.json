@@ -1,0 +1,49 @@
+{
+  "asset_id": "authored_sherman_chassis_v1",
+  "artifact_type": "chassis_only_blender_asset",
+  "silhouette_revision": "v1-1-watertight-chassis-shell",
+  "generator": "scripts/export_authored_sherman_chassis.py",
+  "source_blend": "assets/authored/authored_sherman_chassis_v1/authored_sherman_chassis_v1.blend",
+  "output_glb": "public/tftm/models/authored_sherman_chassis_v1/authored_sherman_chassis_v1.glb",
+  "approximate_triangles": 116,
+  "coordinate_contract": "runtime X length, Y height, Z width; Blender Z-up converted through P()",
+  "component_scope": "one visible watertight chassis shell only; no treads, wheels, bogies, turret, mantlet, barrel, coaxial MG, or full tank scene",
+  "mesh_contract": "exactly one exported visible mesh node named chassis_watertight_shell; closed manifold shell with no boundary edges or pasted panels",
+  "golden_tread_reference": {
+    "asset_id": "authored_sherman_treads_v1",
+    "silhouette_revision": "v1-8c-linked-mirror-tread-assembly",
+    "output_glb": "public/tftm/models/authored_sherman_treads_v1/authored_sherman_treads_v1.glb",
+    "policy": "read-only fit reference; exporter does not open, copy, modify, append, or re-export tread geometry"
+  },
+  "source_policy": "Existing Meshy Sherman assets are visual reference ore only. No Meshy chassis topology is exported as the final chassis.",
+  "uv_policy": "box/planar face plate UVs per surface family; no atlas packing",
+  "face_plate_ids": [
+    "hull_glacis",
+    "hull_left",
+    "hull_right",
+    "hull_rear",
+    "engine_deck",
+    "sponson_left",
+    "sponson_right",
+    "turret_ring_cap",
+    "belly_shadow"
+  ],
+  "fit_contract": "chassis side/sponson exterior overlaps the frozen tread width and outside-to-inside rays at front, rear, side, and oblique track-interface samples hit chassis exterior before interior",
+  "forbidden_nodes": [
+    "treads_root",
+    "left_tread_belt",
+    "right_tread_belt",
+    "left_wheel_group",
+    "right_wheel_group",
+    "turret",
+    "mantlet",
+    "barrel",
+    "coaxial_mg",
+    "cannon",
+    "roadwheel",
+    "sprocket",
+    "idler",
+    "bogie"
+  ],
+  "acceptance": "Cloud/Sense must judge chassisfirst-chassis.html only: one watertight chassis mesh fitting frozen authored_sherman_treads_v1 v1-8c with no visible tread-interface gaps, no pasted panels/blockers, no turret/barrel/tread/wheel edits, and no local capture."
+}

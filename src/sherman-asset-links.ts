@@ -71,3 +71,5 @@ export const AUTHORED_SHERMAN_TEXTUREABLE_FACE_PLATES = [
 ] as const;
 
 export const AUTHORED_SHERMAN_TREADS_GLB_URL = './tftm/models/authored_sherman_treads_v1/authored_sherman_treads_v1.glb?v=v1-8c-linked-mirror-tread-assembly';
+
+export const AUTHORED_SHERMAN_CHASSIS_GLB_URL = './tftm/models/authored_sherman_chassis_v1/authored_sherman_chassis_v1.glb?v=v1-1-watertight-chassis-shell';
