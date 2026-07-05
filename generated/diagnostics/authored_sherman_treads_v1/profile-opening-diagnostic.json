@@ -1,6 +1,6 @@
 {
   "asset_id": "authored_sherman_treads_v1",
-  "revision": "v1-8b-belt-corner-normals",
+  "revision": "v1-8c-linked-mirror-tread-assembly",
   "profile_opening": [
     [
       -1.39,
@@ -258,9 +258,9 @@
       "shared_edge_count": 160,
       "curved_shared_edge_count": 58,
       "bad_shared_edge_normals": 64,
-      "max_shared_normal_angle": 1.5708963318734,
+      "max_shared_normal_angle": 1.5708963250864614,
       "curved_corner_samples": 232,
-      "face_like_curved_corner_ratio": 0
+      "face_like_curved_corner_ratio": 0.3275862068965517
     },
     {
       "node": "right_roadwheel_1",
@@ -310,5 +310,55 @@
       "rubber_radial_samples": 176,
       "rubber_radial_good_ratio": 0
     }
-  ]
+  ],
+  "linked_mirror": {
+    "checked_pairs": [
+      [
+        "left_continuous_tread_belt_surface",
+        "right_continuous_tread_belt_surface"
+      ],
+      [
+        "left_front_sprocket",
+        "right_front_sprocket"
+      ],
+      [
+        "left_rear_idler",
+        "right_rear_idler"
+      ],
+      [
+        "left_return_roller_1",
+        "right_return_roller_1"
+      ],
+      [
+        "left_roadwheel_1",
+        "right_roadwheel_1"
+      ],
+      [
+        "left_roadwheel_3",
+        "right_roadwheel_3"
+      ],
+      [
+        "left_roadwheel_6",
+        "right_roadwheel_6"
+      ],
+      [
+        "left_tread_connector_mount_+0.24",
+        "right_tread_connector_mount_+0.24"
+      ],
+      [
+        "left_upper_return_connector_rail",
+        "right_upper_return_connector_rail"
+      ],
+      [
+        "left_lower_bogie_tie_beam",
+        "right_lower_bogie_tie_beam"
+      ],
+      [
+        "left_vvss_bogie_arm_-0.02",
+        "right_vvss_bogie_arm_-0.02"
+      ]
+    ],
+    "unique_mesh_indices": 21,
+    "mesh_node_refs": 42
+  }
 }

@@ -11,7 +11,7 @@ def P(x, y, z):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_treads_v1'
-REVISION = 'v1-8b-belt-corner-normals'
+REVISION = 'v1-8c-linked-mirror-tread-assembly'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -185,10 +185,10 @@ def mark_circular_crease_edges(mesh, center_x, center_y, radii, z_values, tolera
             marked += 1
     return marked
 
-def make_belt(side_name, side_sign):
+def make_belt(side_name):
     belt_root = empty(side_name + '_tread_belt', treads_root)
-    outer_z = side_sign * 1.14
-    inner_z = side_sign * 0.72
+    outer_z = 1.14
+    inner_z = 0.72
 
     verts = []
     faces = []
@@ -210,11 +210,10 @@ def make_belt(side_name, side_sign):
     point_count = len(OUTER_PROFILE)
     outer_profile_normals = [normal_from_authored(*normal) for normal in profile_normals(OUTER_PROFILE, outward=True)]
     inner_profile_normals = [normal_from_authored(*normal) for normal in profile_normals(INNER_PROFILE, outward=False)]
-    # Sidewall faces need true width-axis normals. The previous v1.8 vertex-normal
-    # contract reused profile-tangent normals on these faces, which made the mirrored
-    # side collapse to black and smeared away the belt lip/corner edge.
-    outer_side_normal = normal_from_authored(0.0, 0.0, side_sign)
-    inner_side_normal = normal_from_authored(0.0, 0.0, -side_sign)
+    # Build one positive-width belt mesh. The opposite side is a linked mirrored
+    # node that references this same mesh data, so lighting and geometry cannot drift.
+    outer_side_normal = normal_from_authored(0.0, 0.0, 1.0)
+    inner_side_normal = normal_from_authored(0.0, 0.0, -1.0)
     loop_normals_by_face = []
     for i in range(point_count):
         j = (i + 1) % point_count
@@ -244,13 +243,13 @@ def make_belt(side_name, side_sign):
     obj['contains_turret'] = False
     bpy.context.collection.objects.link(obj)
     obj.parent = belt_root
-    obj['normal_contract'] = 'custom loop normals: width-axis sidewalls light symmetrically; profile-tangent perimeter faces keep the continuous belt smooth; lip loop normal splits define corners without modeled track-run geometry'
+    obj['normal_contract'] = 'single shared mesh: left side is the authored positive-width tread; right side is a linked mirrored instance using identical geometry and normals transformed by node scale'
 
     for role, segment_indices in SEGMENT_MARKERS.items():
         marker = empty(side_name + '_tread_' + role, belt_root)
         marker['component_role'] = 'nonrendered_segment_marker_for_review_' + role
         marker['profile_indices'] = segment_indices
-    belt_root['component_role'] = 'smooth_continuous_subdivided_tread_belt_with_segment_markers'
+    belt_root['component_role'] = 'smooth_continuous_subdivided_tread_belt_with_segment_markers_linkable_source'
     belt_root['profile_point_count'] = len(OUTER_PROFILE)
     return belt_root
 
@@ -355,29 +354,77 @@ def box_mesh(name, center, size, parent):
     obj.modifiers.new('weighted_mount_normals', 'WEIGHTED_NORMAL')
     return obj
 
-left_belt = make_belt('left', 1)
-right_belt = make_belt('right', -1)
+def apply_modifiers_to_object(obj):
+    if obj.type != 'MESH':
+        return
+    bpy.ops.object.select_all(action='DESELECT')
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    for modifier in list(obj.modifiers):
+        try:
+            bpy.ops.object.modifier_apply(modifier=modifier.name)
+        except Exception as exc:
+            raise RuntimeError(f'failed to bake modifier {modifier.name} on {obj.name}: {exc}')
 
-for side_name, side_sign, mount_parent, wheel_parent, bogie_parent in [
-    ('left', 1, left_mount_root, left_wheel_root, left_bogie_root),
-    ('right', -1, right_mount_root, right_wheel_root, right_bogie_root),
-]:
-    mount_z = side_sign * 0.94
-    wheel_z = side_sign * 1.02
-    for x in [-1.08, -0.42, 0.24, 0.90]:
-        box_mesh(f'{side_name}_tread_connector_mount_{x:+.2f}', (x, 0.045, mount_z), (0.30, 0.16, 0.16), mount_parent)
-    box_mesh(f'{side_name}_upper_return_connector_rail', (-0.04, 0.055, mount_z), (2.48, 0.08, 0.08), mount_parent)
-    box_mesh(f'{side_name}_lower_bogie_tie_beam', (-0.10, -0.205, mount_z), (2.58, 0.065, 0.10), bogie_parent)
-    # Wheel centers deliberately occupy the side-view inner-profile opening;
-    # they are not exterior-plane decorations.
-    for index, x in enumerate([-1.04, -0.63, -0.22, 0.19, 0.60, 0.96]):
-        disc_mesh(f'{side_name}_roadwheel_{index + 1}', (x, -0.205, wheel_z), 0.135, 0.105, wheel_parent, 'wheel_metal', 56, 0.064)
-    disc_mesh(f'{side_name}_front_sprocket', (1.17, -0.130, wheel_z), 0.155, 0.12, wheel_parent, 'wheel_metal', 60, 0.066)
-    disc_mesh(f'{side_name}_rear_idler', (-1.25, -0.118, wheel_z), 0.145, 0.11, wheel_parent, 'wheel_metal', 60, 0.060)
-    for index, x in enumerate([-0.84, -0.12, 0.56]):
-        disc_mesh(f'{side_name}_return_roller_{index + 1}', (x, -0.020, wheel_z), 0.065, 0.09, wheel_parent, 'wheel_metal', 44, 0.030)
-    for x in [-0.84, -0.02, 0.78]:
-        box_mesh(f'{side_name}_vvss_bogie_arm_{x:+.2f}', (x, -0.155, mount_z), (0.27, 0.11, 0.09), bogie_parent)
+def linked_mirror_object(source_obj, new_name, parent):
+    apply_modifiers_to_object(source_obj)
+    obj = bpy.data.objects.new(new_name, source_obj.data)
+    obj.scale.y = -1.0
+    for key in source_obj.keys():
+        obj[key] = source_obj[key]
+    obj['linked_mirror_source'] = source_obj.name
+    obj['mirror_contract'] = 'right side mirrors the left source by node transform and shares the exact mesh data; no duplicate right-side geometry'
+    bpy.context.collection.objects.link(obj)
+    obj.parent = parent
+    return obj
+
+def make_mirrored_marker(source_marker, new_name, parent):
+    marker = empty(new_name, parent)
+    for key in source_marker.keys():
+        marker[key] = source_marker[key]
+    marker['linked_mirror_source'] = source_marker.name
+    return marker
+
+left_belt = make_belt('left')
+right_belt = empty('right_tread_belt', treads_root)
+right_belt['component_role'] = 'mirrored_linked_tread_belt_instance_with_segment_markers'
+right_belt['profile_point_count'] = len(OUTER_PROFILE)
+left_belt_surface = bpy.data.objects['left_continuous_tread_belt_surface']
+linked_mirror_object(left_belt_surface, 'right_continuous_tread_belt_surface', right_belt)
+for role in SEGMENT_MARKERS.keys():
+    make_mirrored_marker(bpy.data.objects['left_tread_' + role], 'right_tread_' + role, right_belt)
+
+created_left_parts = []
+
+def remember(obj):
+    created_left_parts.append(obj)
+    return obj
+
+mount_z = 0.94
+wheel_z = 1.02
+for x in [-1.08, -0.42, 0.24, 0.90]:
+    remember(box_mesh(f'left_tread_connector_mount_{x:+.2f}', (x, 0.045, mount_z), (0.30, 0.16, 0.16), left_mount_root))
+remember(box_mesh('left_upper_return_connector_rail', (-0.04, 0.055, mount_z), (2.48, 0.08, 0.08), left_mount_root))
+remember(box_mesh('left_lower_bogie_tie_beam', (-0.10, -0.205, mount_z), (2.58, 0.065, 0.10), left_bogie_root))
+# Wheel centers deliberately occupy the side-view inner-profile opening;
+# they are not exterior-plane decorations.
+for index, x in enumerate([-1.04, -0.63, -0.22, 0.19, 0.60, 0.96]):
+    remember(disc_mesh(f'left_roadwheel_{index + 1}', (x, -0.205, wheel_z), 0.135, 0.105, left_wheel_root, 'wheel_metal', 56, 0.064))
+remember(disc_mesh('left_front_sprocket', (1.17, -0.130, wheel_z), 0.155, 0.12, left_wheel_root, 'wheel_metal', 60, 0.066))
+remember(disc_mesh('left_rear_idler', (-1.25, -0.118, wheel_z), 0.145, 0.11, left_wheel_root, 'wheel_metal', 60, 0.060))
+for index, x in enumerate([-0.84, -0.12, 0.56]):
+    remember(disc_mesh(f'left_return_roller_{index + 1}', (x, -0.020, wheel_z), 0.065, 0.09, left_wheel_root, 'wheel_metal', 44, 0.030))
+for x in [-0.84, -0.02, 0.78]:
+    remember(box_mesh(f'left_vvss_bogie_arm_{x:+.2f}', (x, -0.155, mount_z), (0.27, 0.11, 0.09), left_bogie_root))
+
+for source_obj in created_left_parts:
+    if source_obj.parent == left_mount_root:
+        mirror_parent = right_mount_root
+    elif source_obj.parent == left_wheel_root:
+        mirror_parent = right_wheel_root
+    else:
+        mirror_parent = right_bogie_root
+    linked_mirror_object(source_obj, source_obj.name.replace('left_', 'right_', 1), mirror_parent)
 
 
 def bake_mesh_modifiers_for_export():
@@ -400,8 +447,10 @@ bpy.ops.export_scene.gltf(filepath=str(GLB_PATH), export_format='GLB', use_selec
 
 
 triangle_count = 0
+counted_meshes = set()
 for obj in bpy.context.scene.objects:
-    if obj.type == 'MESH':
+    if obj.type == 'MESH' and obj.data.name not in counted_meshes:
+        counted_meshes.add(obj.data.name)
         triangle_count += sum(max(1, len(poly.vertices) - 2) for poly in obj.data.polygons)
 
 manifest = {
@@ -413,8 +462,8 @@ manifest = {
     'output_glb': str(GLB_PATH.relative_to(ROOT)),
     'approximate_triangles': triangle_count,
     'coordinate_contract': 'runtime X length, Y height, Z width; Blender Z-up converted through P()',
-    'component_scope': 'full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
-    'shading_contract': 'wheels keep baked hard rim-loop normal splits; tread belt uses width-axis sidewall normals, profile-tangent perimeter normals, and lip loop normal splits so corners read without modeled track-run geometry or black side crush',
+    'component_scope': 'full tread assembly only: one authored left-side continuous tread/running-gear mesh set mirrored as linked right-side nodes sharing mesh data; no hull, turret, barrel, coaxial MG, full tank scene, duplicate right-side tread geometry, or texture variant',
+    'shading_contract': 'left and right tread assemblies are linked mirror nodes sharing the same mesh data; wheel rim splits and belt lip normal splits remain, but no independent right-side tread geometry is generated',
     'reference_source': 'src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only',
     'profile': {
         'old_reference_point_count': 8,
@@ -424,9 +473,10 @@ manifest = {
         'subdivision_layer': 'one added silhouette layer around returns and run transitions',
         'markers': SEGMENT_MARKERS,
     },
+    'geometry_reuse_contract': 'right-side tread belt, wheels, sprockets, rollers, mounts, and bogie arms are linked mirrored nodes sharing the left-side mesh data; per-side animation must use node/material state, not duplicate geometry',
     'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors'],
     'forbidden_nodes': ['hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','tank_root'],
-    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; exported GLB normals must prove hard wheel rim-loop splits, smooth rounded rubber faces, and width-axis sidewall normals, profile-tangent perimeter normals, lip loop normal splits, and no black sidewall crush without faceted tread panels; no hull/turret/full-tank salvage.'
+    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; left/right tread nodes must share mesh data as mirrored instances, corners must retain lip normal splits, neither side may collapse to black, and no modeled track-run rebuild or full-tank salvage is allowed.'
 }
 MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({'asset_id': ASSET_ID, 'revision': REVISION, 'triangles': triangle_count, 'glb': str(GLB_PATH)}, indent=2))

@@ -348,7 +348,7 @@ if (failures.length === 0) {
   const runtime = readFileSync('src/treadfirst-treads.ts', 'utf8') + readFileSync('src/sherman-asset-links.ts', 'utf8');
   const build = readFileSync('scripts/build.mjs', 'utf8');
   if (manifest.asset_id !== assetId) fail('manifest asset_id mismatch');
-  if (manifest.silhouette_revision !== 'v1-8b-belt-corner-normals') fail('unexpected revision ' + manifest.silhouette_revision);
+  if (manifest.silhouette_revision !== 'v1-8c-linked-mirror-tread-assembly') fail('unexpected revision ' + manifest.silhouette_revision);
   const v11Verdict = JSON.parse(readFileSync(v11RedVerdictPath, 'utf8'));
   const v12Verdict = JSON.parse(readFileSync(v12RedVerdictPath, 'utf8'));
   const v14Verdict = JSON.parse(readFileSync(v14RedVerdictPath, 'utf8'));
@@ -361,9 +361,9 @@ if (failures.length === 0) {
   if (v17Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.7 red verdict must remain explicit before accepting v1.8 diagnostics');
   if (manifest.profile?.old_reference_point_count !== 8) fail('manifest must record old subdivision-0 profile point count');
   if ((manifest.profile?.outer_profile_point_count || 0) < 16) fail('outer profile must add one silhouette subdivision layer beyond the old 8-point profile');
-  if (!String(manifest.shading_contract || '').includes('width-axis sidewall normals')) fail('manifest must declare width-axis sidewall tread belt normals');
-  if (!String(manifest.shading_contract || '').includes('lip loop normal splits')) fail('manifest must declare lip loop normal splits for readable corners');
-  for (const sourceMarker of ['bake_mesh_modifiers_for_export', 'modifier_apply', 'mark_circular_crease_edges', 'continuous_tread_belt_surface', 'nonrendered_segment_marker_for_review', 'Do not bevel or weighted-normal the tire ring', 'normals_split_custom_set', 'profile_normals', 'width-axis sidewalls light symmetrically', 'lip loop normal splits']) if (!exporter.includes(sourceMarker)) fail('exporter missing shading marker ' + sourceMarker);
+  if (!String(manifest.shading_contract || '').includes('linked mirror nodes')) fail('manifest must declare linked mirror tread geometry reuse');
+  if (!String(manifest.geometry_reuse_contract || '').includes('sharing the left-side mesh data')) fail('manifest must declare left/right shared mesh data');
+  for (const sourceMarker of ['bake_mesh_modifiers_for_export', 'modifier_apply', 'mark_circular_crease_edges', 'continuous_tread_belt_surface', 'nonrendered_segment_marker_for_review', 'Do not bevel or weighted-normal the tire ring', 'normals_split_custom_set', 'profile_normals', 'linked mirrored instance', 'no duplicate right-side geometry']) if (!exporter.includes(sourceMarker)) fail('exporter missing linked-mirror marker ' + sourceMarker);
   for (const node of ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_continuous_tread_belt_surface','right_continuous_tread_belt_surface','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors','left_front_sprocket','right_front_sprocket','left_rear_idler','right_rear_idler']) if (!(json.nodes || []).some((entry) => entry.name === node)) fail('missing required node ' + node);
   for (const forbidden of ['hull','turret','barrel','coax','mantlet','cannon','tank_root']) {
     const hit = (json.nodes || []).find((node) => String(node.name || '').toLowerCase().includes(forbidden));
@@ -373,12 +373,41 @@ if (failures.length === 0) {
     if (exporter.includes(forbidden)) fail('tread exporter must not copy failed exporter marker ' + forbidden);
   }
   const tri = triangles(json);
-  if (tri < 18000 || tri > 38000) fail('unexpected full tread assembly triangle count ' + tri);
+  if (tri < 9000 || tri > 22000) fail('unexpected unique-geometry tread assembly triangle count ' + tri);
+  const sharedPairs = [
+    ['left_continuous_tread_belt_surface', 'right_continuous_tread_belt_surface'],
+    ['left_front_sprocket', 'right_front_sprocket'],
+    ['left_rear_idler', 'right_rear_idler'],
+    ['left_return_roller_1', 'right_return_roller_1'],
+    ['left_roadwheel_1', 'right_roadwheel_1'],
+    ['left_roadwheel_3', 'right_roadwheel_3'],
+    ['left_roadwheel_6', 'right_roadwheel_6'],
+    ['left_tread_connector_mount_+0.24', 'right_tread_connector_mount_+0.24'],
+    ['left_upper_return_connector_rail', 'right_upper_return_connector_rail'],
+    ['left_lower_bogie_tie_beam', 'right_lower_bogie_tie_beam'],
+    ['left_vvss_bogie_arm_-0.02', 'right_vvss_bogie_arm_-0.02'],
+  ];
+  const nodeByName = new Map((json.nodes || []).map((node) => [node.name, node]));
+  for (const [leftName, rightName] of sharedPairs) {
+    const leftNode = nodeByName.get(leftName);
+    const rightNode = nodeByName.get(rightName);
+    if (!leftNode || !rightNode) fail('missing linked mirror pair ' + leftName + ' / ' + rightName);
+    else {
+      if (leftNode.mesh == null || rightNode.mesh == null) fail('linked mirror pair lacks mesh indices ' + leftName + ' / ' + rightName);
+      else if (leftNode.mesh !== rightNode.mesh) fail('left/right pair must share one mesh index: ' + leftName + ' / ' + rightName);
+      const scale = rightNode.scale || [1, 1, 1];
+      if (!(scale.some((value) => value < -0.99))) fail('right linked mirror node must use a negative mirror scale: ' + rightName);
+    }
+  }
+  const uniqueMeshIndices = new Set((json.nodes || []).filter((node) => node.mesh != null).map((node) => node.mesh));
+  const meshNodeRefs = (json.nodes || []).filter((node) => node.mesh != null).length;
+  if (!(meshNodeRefs > uniqueMeshIndices.size)) fail('GLB must reuse mesh data through multiple node references, not duplicate every side');
+  const linkedMirrorDiagnostic = { checked_pairs: sharedPairs, unique_mesh_indices: uniqueMeshIndices.size, mesh_node_refs: meshNodeRefs };
   const innerProfile = manifest.profile?.inner_profile_xy;
   if (!Array.isArray(innerProfile) || innerProfile.length < 8) fail('manifest must expose inner_profile_xy for profile-opening validation');
-  diagnostic = { asset_id: assetId, revision: manifest.silhouette_revision, profile_opening: innerProfile, sides: {}, normal_shading: [] };
+  diagnostic = { asset_id: assetId, revision: manifest.silhouette_revision, profile_opening: innerProfile, sides: {}, normal_shading: [], linked_mirror: linkedMirrorDiagnostic };
   const bounds = allBounds(json);
-  if (!(bounds.size[0] > 3.0 && bounds.size[2] > 1.8 && bounds.size[1] < 0.9)) fail('tread assembly bounds should be long/wide/low, saw ' + bounds.size.map((n) => n.toFixed(3)).join(' x '));
+  if (!(bounds.size[0] > 3.0 && bounds.size[2] > 0.35 && bounds.size[1] < 0.9)) fail('unique linked tread source bounds should be long/low/one-side-thick, saw ' + bounds.size.map((n) => n.toFixed(3)).join(' x '));
   for (const side of ['left', 'right']) {
     const belt = descendantBounds(json, `${side}_tread_belt`);
     if (!belt) fail(`missing ${side} belt bounds`);
@@ -436,7 +465,7 @@ if (failures.length === 0) {
     const bogieNames = descendants(json, `${side}_bogie_connectors`).join('\n');
     if ((bogieNames.match(/vvss_bogie_arm_/g) || []).length < 3) fail(`${side} bogie connectors must expose three bogie arm blocks`);
   }
-  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-8b-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
+  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-8c-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
   if (!build.includes("buildEntry('treadfirst-treads.ts', 'treadfirst-treads')")) fail('build must bundle treadfirst-treads.ts');
   if (!build.includes("writeBundledHtml('treadfirst-treads.html', 'treadfirst-treads.html', 'treadfirst-treads')")) fail('build must write treadfirst-treads.html');
 }
@@ -447,4 +476,4 @@ if (failures.length) {
   process.exit(1);
 }
 await import('node:fs').then(({ mkdirSync, writeFileSync }) => { mkdirSync('generated/diagnostics/authored_sherman_treads_v1', { recursive: true }); writeFileSync(diagnosticPath, JSON.stringify(diagnostic, null, 2) + '\n'); });
-console.log('Authored tread assembly validation passed: v1.8b keeps continuous geometry while adding width-lit sidewalls, readable lip corners, and baked rim splits; cloud/Sense visual acceptance is still required.');
+console.log('Authored tread assembly validation passed: v1.8c keeps one linked mirrored tread geometry set while preserving visible wheels and lip corners; cloud/Sense visual acceptance is still required.');

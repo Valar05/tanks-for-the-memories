@@ -7,7 +7,7 @@ import { AUTHORED_SHERMAN_TREADS_GLB_URL } from './sherman-asset-links';
 const root = document.querySelector<HTMLDivElement>('#treadfirst-treads-root');
 if (!root) throw new Error('missing #treadfirst-treads-root');
 
-const visualBuild = 'tftm-authored-sherman-treads-v1-8b-20260705';
+const visualBuild = 'tftm-authored-sherman-treads-v1-8c-20260705';
 
 root.innerHTML = '<main class="single-tank-shell">' +
   '<div class="single-tank-stage"><canvas aria-label="Tread-first Sherman running gear review"></canvas></div>' +
@@ -96,7 +96,7 @@ new GLTFLoader().load(AUTHORED_SHERMAN_TREADS_GLB_URL, (gltf) => {
   model.position.y += size.y * 0.5 - 0.46;
   model.rotation.y = -Math.PI / 2 - 0.12;
   scene.add(model);
-  statusEl.textContent = 'loaded v1.8b tread assembly: continuous belt, width-lit sidewalls, readable lip corners, baked rim loops, profile opening preserved; no hull or turret';
+  statusEl.textContent = 'loaded v1.8c tread assembly: linked mirrored treads, shared mesh data, readable lip corners, profile opening preserved; no hull or turret';
   postVisualBeacon('loaded');
 }, undefined, (error) => {
   statusEl.textContent = 'tread-only assembly load failed';

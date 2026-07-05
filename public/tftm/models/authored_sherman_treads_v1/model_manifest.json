@@ -1,14 +1,14 @@
 {
   "asset_id": "authored_sherman_treads_v1",
   "artifact_type": "tread_only_blender_asset",
-  "silhouette_revision": "v1-8b-belt-corner-normals",
+  "silhouette_revision": "v1-8c-linked-mirror-tread-assembly",
   "generator": "scripts/export_authored_sherman_treads.py",
   "source_blend": "assets/authored/authored_sherman_treads_v1/authored_sherman_treads_v1.blend",
   "output_glb": "public/tftm/models/authored_sherman_treads_v1/authored_sherman_treads_v1.glb",
-  "approximate_triangles": 26920,
+  "approximate_triangles": 13460,
   "coordinate_contract": "runtime X length, Y height, Z width; Blender Z-up converted through P()",
-  "component_scope": "full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant",
-  "shading_contract": "wheels keep baked hard rim-loop normal splits; tread belt uses width-axis sidewall normals, profile-tangent perimeter normals, and lip loop normal splits so corners read without modeled track-run geometry or black side crush",
+  "component_scope": "full tread assembly only: one authored left-side continuous tread/running-gear mesh set mirrored as linked right-side nodes sharing mesh data; no hull, turret, barrel, coaxial MG, full tank scene, duplicate right-side tread geometry, or texture variant",
+  "shading_contract": "left and right tread assemblies are linked mirror nodes sharing the same mesh data; wheel rim splits and belt lip normal splits remain, but no independent right-side tread geometry is generated",
   "reference_source": "src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only",
   "profile": {
     "old_reference_point_count": 8,
@@ -108,6 +108,7 @@
       ]
     }
   },
+  "geometry_reuse_contract": "right-side tread belt, wheels, sprockets, rollers, mounts, and bogie arms are linked mirrored nodes sharing the left-side mesh data; per-side animation must use node/material state, not duplicate geometry",
   "required_nodes": [
     "treads_root",
     "left_tread_belt",
@@ -137,5 +138,5 @@
     "coaxial_mg",
     "tank_root"
   ],
-  "acceptance": "Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; exported GLB normals must prove hard wheel rim-loop splits, smooth rounded rubber faces, and width-axis sidewall normals, profile-tangent perimeter normals, lip loop normal splits, and no black sidewall crush without faceted tread panels; no hull/turret/full-tank salvage."
+  "acceptance": "Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; left/right tread nodes must share mesh data as mirrored instances, corners must retain lip normal splits, neither side may collapse to black, and no modeled track-run rebuild or full-tank salvage is allowed."
 }
