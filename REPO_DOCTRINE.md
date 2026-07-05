@@ -32,6 +32,16 @@ Boxmodel geometry tuning must use the hosted gesture-only tuner (`boxmodel-tank.
 
 The authored boxmodel v1.8 front track/glacis gap is a structural coverage problem, not a manual-positioning task. Preserve the tuner for future part authoring, but do not ask the user to place runtime panels to cover that known gap; add narrow integrated coverage in the exporter and validate it through cloud/Sense review.
 
+### Tank Hard-Surface Red-Build Rule
+
+A tank visual fix is only real when the visible hull/track/turret/barrel relationship changes. Validators that check object names, route wiring, manifest text, material slots, or internal bbox overlap are diagnostic only; they do not prove visual success.
+
+For front/rear sponson and track-well gaps, the fix must cover the exterior visible armor skin that bridges hull, glacis or rear plate, and outer track skirt. Do not count boxes placed behind the skirt, internal returns, freestanding blockers, or pasted slabs as coverage if the silhouette still shows black air.
+
+`authored_sherman_armored_v1` is the current false-green example. It passed checks while omitting the visible front slot-wall faces and leaving the same armor gaps visible. Treat it as red/unaccepted until cloud/Sense evidence proves a real visible relationship change.
+
+If a screenshot or cloud/Sense review shows unchanged gaps, stop geometry edits. State the expected relationship, actual visible relationship, unchanged evidence, and exporter/validator cause before any further model work.
+
 ## Commander Identity
 
 Tanks For The Memories is a tank commander operation game about managing uncertainty from inside and around a crewed machine.
