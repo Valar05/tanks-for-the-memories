@@ -1,0 +1,20 @@
+{
+  "artifact_type": "boxmodel_visual_verdict",
+  "route": "boxmodel-tank.html",
+  "build_token": "tftm-authored-sherman-boxmodel-v1-15-20260705",
+  "glb_token": "v1-15-cast-turret-readable-wheels",
+  "status": "red_unaccepted_no_op_churn",
+  "source": "user_visual_report",
+  "recorded_at": "2026-07-05T13:45:00Z",
+  "expected_visible_relationship": "The hosted boxmodel tank should visibly differ from the rejected build: one connected cast turret shell should replace pasted turret panels, roadwheel/hub/bogie band should visibly read outside the track slab, and lower hull/track cracks should look materially covered as joined armor.",
+  "actual_visible_relationship": "User reported no-op churn after v1-15: the visible tank did not materially improve enough to count as a visible delta.",
+  "visibly_changed": [],
+  "did_not_change": [
+    "No accepted cloud/Sense evidence shows a visible improvement for the turret-panel relationship.",
+    "No accepted cloud/Sense evidence shows a visible improvement for the wheel-band relationship.",
+    "No accepted cloud/Sense evidence shows the lower hull/track cracks visually closed as joined armor."
+  ],
+  "diagnostics_assessment": "Source, GLB, manifest, and hosted token checks changed, but those diagnostics contradict the user visual read and cannot prove visual success. The existing Blender visibility diagnostic was stale at v1-13 and cannot validate v1-15.",
+  "acceptance_blocker": "Requires fresh cloud/Sense verdict for this exact build token before any fixed/changed/ready-for-acceptance claim.",
+  "next_allowed_work": "Repair the evidence gate and visual-delta measurement before making another geometry tweak."
+}

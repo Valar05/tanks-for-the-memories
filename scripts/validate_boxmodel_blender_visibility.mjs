@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 
 const root = 'generated/blender-visibility/authored_sherman_boxmodel_v1';
 const manifestPath = root + '/manifest.json';
+const modelManifestPath = 'public/tftm/models/authored_sherman_boxmodel_v1/model_manifest.json';
 const failures = [];
 function fail(message) { failures.push(message); }
 function pngSize(path) {
@@ -11,9 +12,12 @@ function pngSize(path) {
 }
 
 if (!existsSync(manifestPath)) fail('missing Blender visibility manifest; run npm run blender-visibility:boxmodel');
+if (!existsSync(modelManifestPath)) fail('missing authored boxmodel model manifest ' + modelManifestPath);
 let manifest = null;
 if (failures.length === 0) manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 if (manifest) {
+  const modelManifest = JSON.parse(readFileSync(modelManifestPath, 'utf8'));
+  if (manifest.model_revision !== modelManifest.silhouette_revision) fail('stale Blender visibility diagnostic: render revision ' + manifest.model_revision + ' does not match current model revision ' + modelManifest.silhouette_revision + '; rerun npm run blender-visibility:boxmodel before using these diagnostics');
   if (manifest.type !== 'offline_blender_visibility_diagnostic') fail('manifest must identify offline Blender visibility diagnostic');
   if (manifest.diagnostic_only !== true) fail('manifest must mark renders diagnostic_only');
   if (!String(manifest.acceptance_note || '').includes('not browser/cloud acceptance proof')) fail('manifest must reject acceptance-proof use');
@@ -54,4 +58,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Blender visibility diagnostic validation passed: offline renders, contact sheet, and manifest are present.');
+console.log('Blender visibility diagnostic validation passed: offline renders match current model revision, remain diagnostic_only, and are not acceptance proof.');

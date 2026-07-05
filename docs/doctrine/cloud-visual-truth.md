@@ -111,6 +111,16 @@ Future Sherman geometry gates must include a cloud/Sense visible-relationship co
 
 Do not accept a guard that only proves node presence, route wiring, object names, material slots, source strings, or internal bbox overlap. The guard must fail when the exterior viewer-facing armor slot is still open.
 
+
+### Boxmodel V1-15 No-Op Churn Verdict
+
+`authored_sherman_boxmodel_v1` revision `v1-15-cast-turret-readable-wheels` is red/unaccepted by user visual report. Source, GLB, manifest, and hosted token checks changed, but the visible tank did not materially improve enough to count as a visible delta.
+
+The required verdict artifact is `docs/visual-verdicts/boxmodel-v1-15-red.json`. Boxmodel cloud gates and no-op diagnostics must require a verdict artifact for the exact build token and GLB token before they pass. A red verdict may allow diagnostic commands to complete, but it must print that the build is unaccepted and must not authorize fixed/changed/ready-for-acceptance language.
+
+The stale Blender visibility failure is part of the bug: diagnostic renders for `authored_sherman_boxmodel_v1` must fail if their recorded `model_revision` differs from the current model manifest revision. Offline renders remain diagnostic only even when current.
+
+
 ## Authored Retopo Replacement Gate
 
 Close-up review has rejected the current Meshy chassis/turret as production geometry. The next replacement target is `authored_sherman_retopo_v1`: fully authored hard-surface hull and turret geometry, separable turret/barrel/tread/wheel nodes, and split face PNG texture plates for DALL-E-friendly paint passes. The old Meshy chassis/turret remain reference ore and red-build evidence, not the production base.

@@ -59,7 +59,9 @@ function expectedGlbToken() {
 async function verifyCloudBundle() {
   const manifest = JSON.parse(readFileSync(releaseManifestPath, 'utf8'));
   const expectedBuild = manifest.authored_boxmodel_review?.expected_build;
+  const visualVerdict = manifest.authored_boxmodel_review?.visual_verdict;
   if (!expectedBuild) fail('release manifest missing authored_boxmodel_review.expected_build');
+  if (!visualVerdict?.status) fail('release manifest missing authored_boxmodel_review.visual_verdict.status');
   const glbToken = expectedGlbToken();
   const pageUrl = reviewBaseUrl + '/' + route;
   console.log('\n## cloud token verification');
@@ -75,11 +77,17 @@ async function verifyCloudBundle() {
   if (js.includes('v1-12-watertight-visible-sponson-shells')) fail('hosted JS still contains rejected v1-12 token');
   console.log('verified build token: ' + expectedBuild);
   console.log('verified GLB token: ' + glbToken);
+  console.log('visual verdict: ' + visualVerdict.status);
+  if (visualVerdict.status === 'red_unaccepted_no_op_churn') {
+    console.log('hosted-current-unaccepted: token checks passed, but visual verdict is red/no-op; do not claim fixed or wake for acceptance.');
+  } else {
+    console.log('hosted-current-visual-verdict: ' + visualVerdict.status);
+  }
   console.log('review URL: ' + pageUrl);
 }
 
 if (dryRun) {
-  console.log('dry run: would build release, run cloud gate, deploy existing channel, and verify hosted bundle tokens');
+  console.log('dry run: would build release, run cloud gate, deploy existing channel, verify hosted bundle tokens, and report explicit visual verdict status');
   console.log('project: ' + project);
   console.log('channel: ' + channel);
   console.log('review URL: ' + reviewBaseUrl + '/' + route);

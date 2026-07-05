@@ -1,15 +1,37 @@
 import { existsSync, readFileSync } from 'node:fs';
 
+const expectedBuild = 'tftm-authored-sherman-boxmodel-v1-15-20260705';
+const expectedGlbToken = 'v1-15-cast-turret-readable-wheels';
+const verdictPath = 'docs/visual-verdicts/boxmodel-v1-15-red.json';
+
 const failures = [];
 function fail(message) { failures.push(message); }
 if (!existsSync('generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json')) fail('missing generated cloud visual truth manifest; run npm run cloud-visual-release');
 if (!existsSync('generated/cloud-visual-truth/tftm-release/dist/boxmodel-tank.html')) fail('cloud release missing dist/boxmodel-tank.html');
+if (!existsSync(verdictPath)) fail('missing boxmodel visual verdict ' + verdictPath + '; no-op churn cannot be gated by source tokens alone');
 if (failures.length === 0) {
   const manifest = JSON.parse(readFileSync('generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json', 'utf8'));
+  const verdict = JSON.parse(readFileSync(verdictPath, 'utf8'));
+  const releaseVerdict = manifest.authored_boxmodel_review?.visual_verdict;
   const rules = JSON.stringify(manifest);
   const captures = (manifest.required_cloud_captures || []).join('\\n');
+
+  if (verdict.artifact_type !== 'boxmodel_visual_verdict') fail('boxmodel visual verdict must identify artifact_type boxmodel_visual_verdict');
+  if (verdict.build_token !== expectedBuild) fail('boxmodel visual verdict build token mismatch: ' + verdict.build_token);
+  if (verdict.glb_token !== expectedGlbToken) fail('boxmodel visual verdict GLB token mismatch: ' + verdict.glb_token);
+  if (verdict.status !== 'red_unaccepted_no_op_churn' && verdict.status !== 'accepted_cloud_sense') fail('boxmodel visual verdict must be explicit red or accepted, saw ' + verdict.status);
+  for (const field of ['expected_visible_relationship','actual_visible_relationship','visibly_changed','did_not_change','diagnostics_assessment','acceptance_blocker']) {
+    if (verdict[field] == null || (Array.isArray(verdict[field]) && verdict[field].length === 0 && field !== 'visibly_changed')) fail('boxmodel visual verdict missing required field ' + field);
+  }
+  if (!releaseVerdict) fail('cloud manifest must embed authored_boxmodel_review.visual_verdict');
+  else {
+    if (releaseVerdict.build_token !== verdict.build_token) fail('cloud manifest visual verdict build token does not match source verdict');
+    if (releaseVerdict.glb_token !== verdict.glb_token) fail('cloud manifest visual verdict GLB token does not match source verdict');
+    if (releaseVerdict.status !== verdict.status) fail('cloud manifest visual verdict status does not match source verdict');
+  }
+  if (verdict.status === 'red_unaccepted_no_op_churn' && !String(verdict.actual_visible_relationship || '').includes('no-op churn')) fail('red verdict must explicitly name no-op churn');
   if (!rules.includes('authored_sherman_boxmodel_v1')) fail('cloud manifest must name authored_sherman_boxmodel_v1');
-  if (!rules.includes('tftm-authored-sherman-boxmodel-v1-15-20260705')) fail('cloud manifest must require the boxmodel build token');
+  if (!rules.includes(expectedBuild)) fail('cloud manifest must require the boxmodel build token');
   if (!rules.includes('tftm-authored-sherman-boxmodel-tuner-v9-20260704')) fail('cloud manifest must require the boxmodel tuner build token');
   if (!rules.includes('boxmodel-tank.html?tune=1')) fail('cloud manifest must require hosted tuner route review');
   if (!rules.includes('Blender box-model')) fail('cloud manifest must identify Blender box-model source');
@@ -35,4 +57,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Boxmodel tank cloud review gate passed: release packet is ready for cloud deploy and Sense Simulation; no local capture was used.');
+console.log('Boxmodel tank cloud review gate passed: hosted-current gate includes explicit visual verdict; v1-15 remains red/unaccepted until cloud/Sense accepts it.');

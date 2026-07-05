@@ -38,6 +38,27 @@
       "bogie_side"
     ],
     "asset_policy": "fully authored Blender box-model chassis with solidified overlapping armor plates, connected multi-material cast turret shell with no pasted turret panels, and coaxial MG; no Meshy chassis or turret imports; box UV PNG plates for DALL-E paintability",
+    "visual_verdict_path": "docs/visual-verdicts/boxmodel-v1-15-red.json",
+    "visual_verdict": {
+      "artifact_type": "boxmodel_visual_verdict",
+      "route": "boxmodel-tank.html",
+      "build_token": "tftm-authored-sherman-boxmodel-v1-15-20260705",
+      "glb_token": "v1-15-cast-turret-readable-wheels",
+      "status": "red_unaccepted_no_op_churn",
+      "source": "user_visual_report",
+      "recorded_at": "2026-07-05T13:45:00Z",
+      "expected_visible_relationship": "The hosted boxmodel tank should visibly differ from the rejected build: one connected cast turret shell should replace pasted turret panels, roadwheel/hub/bogie band should visibly read outside the track slab, and lower hull/track cracks should look materially covered as joined armor.",
+      "actual_visible_relationship": "User reported no-op churn after v1-15: the visible tank did not materially improve enough to count as a visible delta.",
+      "visibly_changed": [],
+      "did_not_change": [
+        "No accepted cloud/Sense evidence shows a visible improvement for the turret-panel relationship.",
+        "No accepted cloud/Sense evidence shows a visible improvement for the wheel-band relationship.",
+        "No accepted cloud/Sense evidence shows the lower hull/track cracks visually closed as joined armor."
+      ],
+      "diagnostics_assessment": "Source, GLB, manifest, and hosted token checks changed, but those diagnostics contradict the user visual read and cannot prove visual success. The existing Blender visibility diagnostic was stale at v1-13 and cannot validate v1-15.",
+      "acceptance_blocker": "Requires fresh cloud/Sense verdict for this exact build token before any fixed/changed/ready-for-acceptance claim.",
+      "next_allowed_work": "Repair the evidence gate and visual-delta measurement before making another geometry tweak."
+    },
     "acceptance": "Sense Simulation must confirm Sherman silhouette, connected cast turret massing with no cheek/side/roof pasted panels, smaller integrated track-well slot walls plus joined sponson shells close the front-left, front-right, rear-left, and rear-right lower hull/track cracks as joined metal, pass targeted no-wing slot-wall, no-pasted-turret-panel, and readable wheel/hub/bogie checks, and crack rays from outside those visible gaps hit exterior armor before entering the tank interior, with no pasted panels, blockers, floating boxes, or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.",
     "tuner_acceptance": "Sense Simulation must review boxmodel-tank.html?tune=1 as a preserved future-use gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored flat armor panels are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected panel is highlighted for editing, already enabled panels remain visible, Move/Rotate/Scale are one active mode at a time, Scale exposes explicit All/X/Y/Z axis buttons, drag/pinch/twist gestures visibly change the selected panel, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and panels share the same unskewed model frame, no object transform handles appear, and local capture was not used."
   },
@@ -68,8 +89,8 @@
     "asset_policy": "fully authored hard-surface chassis and turret; no Meshy chassis or turret imports; split face PNG plates for DALL-E paintability",
     "acceptance": "Sense Simulation must confirm close-up chassis and turret read as usable hard-surface armor, barrel belongs to mantlet, split face texture plates map sanely, and local capture was not used."
   },
-  "generated_at": "2026-07-05T13:24:08.787Z",
-  "source_commit": "d0381d7",
+  "generated_at": "2026-07-05T13:33:39.687Z",
+  "source_commit": "e0d1fa5",
   "dirty_status": [],
   "dist": "generated/cloud-visual-truth/tftm-release/dist",
   "tank_asset": "m4a3_75_vvss_sherman_alpha_mobile",
@@ -250,7 +271,8 @@
   ],
   "false_change_penalty": {
     "status": "active",
-    "reason": "Fresh cloud screenshots showed no visible delta after v1-8 front-gap coverage. Root cause: coverage nodes existed but were placed inboard of the visible exterior side plane, and the GLB used a stable asset URL vulnerable to browser cache.",
+    "reason": "Fresh cloud screenshots showed no visible delta after v1-8 front-gap coverage. v1-15 is also red by user report: source and GLB changed, but the visible relationship was no-op churn. Root causes include weak evidence gates that accepted source/token changes and stale diagnostic renders as progress.",
+    "current_boxmodel_verdict": "red_unaccepted_no_op_churn",
     "required_next_evidence": "Next tank visual pass must show cloud/Sense evidence that v1-15 cast-turret/readable-wheel armor visibly closes the front and rear lower hull/track cracks on all four corners without side-wing deformation and with visible enlarged roadwheel/hub/bogie band."
   },
   "sense_simulation_questions": [

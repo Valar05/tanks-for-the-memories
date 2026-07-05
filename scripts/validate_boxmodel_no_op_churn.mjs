@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 const failures = [];
 const glbPath = 'public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb';
 const manifestPath = 'public/tftm/models/authored_sherman_boxmodel_v1/model_manifest.json';
+const verdictPath = 'docs/visual-verdicts/boxmodel-v1-15-red.json';
 function fail(message) { failures.push(message); }
 function parseGlbJson(file) {
   const data = readFileSync(file);
@@ -75,12 +76,18 @@ function nodeBounds(json, nodeName) {
 function axisString(bounds) { return bounds ? bounds.size.map((n) => n.toFixed(3)).join(' x ') : 'missing'; }
 if (!existsSync(glbPath)) fail('missing current GLB ' + glbPath);
 if (!existsSync(manifestPath)) fail('missing manifest ' + manifestPath);
+if (!existsSync(verdictPath)) fail('missing boxmodel visual verdict ' + verdictPath + '; no-op guard cannot pass on source geometry alone');
 if (failures.length === 0) {
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+  const verdict = JSON.parse(readFileSync(verdictPath, 'utf8'));
   const revision = String(manifest.silhouette_revision || '');
   if (revision.includes('v1-11-raycast-closed-sponson-shells')) fail('v1-11 is explicitly visual-red/unaccepted; targeted slot-wall repair revision required');
   if (revision.includes('v1-12-watertight-visible-sponson-shells')) fail('v1-12 is visual-red wing deformation; must not pass no-op guard');
   if (!revision.includes('v1-15-cast-turret-readable-wheels')) fail('manifest must identify v1-15 cast-turret/readable-wheel repair');
+  if (verdict.build_token !== 'tftm-authored-sherman-boxmodel-v1-15-20260705') fail('visual verdict build token does not match current v1-15 review token');
+  if (verdict.glb_token !== revision) fail('visual verdict GLB token must match current model revision; saw ' + verdict.glb_token + ' vs ' + revision);
+  if (verdict.status !== 'red_unaccepted_no_op_churn' && verdict.status !== 'accepted_cloud_sense') fail('visual verdict must be explicit red or accepted before no-op guard can pass, saw ' + verdict.status);
+  if (verdict.status === 'red_unaccepted_no_op_churn') console.log('boxmodel visual verdict: red/unaccepted no-op churn; geometry diagnostics are not visual acceptance');
   const json = parseGlbJson(glbPath);
 
   for (const forbiddenNode of ['turret_front_cheek__turret_front', 'turret_left_side_skin__turret_left', 'turret_right_side_skin__turret_right', 'turret_roof_flat_panel__turret_top']) {
@@ -138,4 +145,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Boxmodel targeted no-op/wing validation passed: v1-15 keeps four smaller slot walls, removes pasted turret panels, without repeating v1-12 side-wing deformation.');
+console.log('Boxmodel targeted no-op/wing validation passed as diagnostics only: v1-15 has an explicit visual verdict and remains red unless accepted by cloud/Sense.');

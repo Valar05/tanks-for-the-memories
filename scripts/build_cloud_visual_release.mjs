@@ -8,6 +8,7 @@ const tankManifestPath = 'public/tftm/models/m4a3_75_vvss_sherman_alpha_mobile/m
 const shermanSourceManifestPath = 'assets/generated/meshy/sherman_part_meshy_kit_v1/assembly_manifest.json';
 const authoredRetopoManifestPath = 'public/tftm/models/authored_sherman_retopo_v1/model_manifest.json';
 const authoredBoxmodelManifestPath = 'public/tftm/models/authored_sherman_boxmodel_v1/model_manifest.json';
+const authoredBoxmodelVisualVerdictPath = 'docs/visual-verdicts/boxmodel-v1-15-red.json';
 
 const build = spawnSync('npm', ['run', 'build'], { stdio: 'inherit' });
 if ((build.status ?? 1) !== 0) {
@@ -34,11 +35,16 @@ if (!existsSync(authoredBoxmodelManifestPath)) {
   console.error('missing authored boxmodel manifest ' + authoredBoxmodelManifestPath);
   process.exit(1);
 }
+if (!existsSync(authoredBoxmodelVisualVerdictPath)) {
+  console.error('missing authored boxmodel visual verdict ' + authoredBoxmodelVisualVerdictPath);
+  process.exit(1);
+}
 
 const tankManifest = JSON.parse(readFileSync(tankManifestPath, 'utf8'));
 const shermanSourceManifest = JSON.parse(readFileSync(shermanSourceManifestPath, 'utf8'));
 const authoredRetopoManifest = JSON.parse(readFileSync(authoredRetopoManifestPath, 'utf8'));
 const authoredBoxmodelManifest = JSON.parse(readFileSync(authoredBoxmodelManifestPath, 'utf8'));
+const authoredBoxmodelVisualVerdict = JSON.parse(readFileSync(authoredBoxmodelVisualVerdictPath, 'utf8'));
 const gitHead = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8', timeout: 5000 });
 const gitStatus = spawnSync('git', ['status', '--short'], { encoding: 'utf8', timeout: 5000 });
 
@@ -68,6 +74,8 @@ const releaseManifest = {
     uv_policy: authoredBoxmodelManifest.uv_policy,
     face_plate_ids: authoredBoxmodelManifest.face_plate_ids,
     asset_policy: 'fully authored Blender box-model chassis with solidified overlapping armor plates, connected multi-material cast turret shell with no pasted turret panels, and coaxial MG; no Meshy chassis or turret imports; box UV PNG plates for DALL-E paintability',
+    visual_verdict_path: authoredBoxmodelVisualVerdictPath,
+    visual_verdict: authoredBoxmodelVisualVerdict,
     acceptance: 'Sense Simulation must confirm Sherman silhouette, connected cast turret massing with no cheek/side/roof pasted panels, smaller integrated track-well slot walls plus joined sponson shells close the front-left, front-right, rear-left, and rear-right lower hull/track cracks as joined metal, pass targeted no-wing slot-wall, no-pasted-turret-panel, and readable wheel/hub/bogie checks, and crack rays from outside those visible gaps hit exterior armor before entering the tank interior, with no pasted panels, blockers, floating boxes, or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.',
     tuner_acceptance: 'Sense Simulation must review boxmodel-tank.html?tune=1 as a preserved future-use gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored flat armor panels are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected panel is highlighted for editing, already enabled panels remain visible, Move/Rotate/Scale are one active mode at a time, Scale exposes explicit All/X/Y/Z axis buttons, drag/pinch/twist gestures visibly change the selected panel, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and panels share the same unskewed model frame, no object transform handles appear, and local capture was not used.'
   },
@@ -126,7 +134,8 @@ const releaseManifest = {
   ],
   false_change_penalty: {
     status: 'active',
-    reason: 'Fresh cloud screenshots showed no visible delta after v1-8 front-gap coverage. Root cause: coverage nodes existed but were placed inboard of the visible exterior side plane, and the GLB used a stable asset URL vulnerable to browser cache.',
+    reason: 'Fresh cloud screenshots showed no visible delta after v1-8 front-gap coverage. v1-15 is also red by user report: source and GLB changed, but the visible relationship was no-op churn. Root causes include weak evidence gates that accepted source/token changes and stale diagnostic renders as progress.',
+    current_boxmodel_verdict: authoredBoxmodelVisualVerdict.status,
     required_next_evidence: 'Next tank visual pass must show cloud/Sense evidence that v1-15 cast-turret/readable-wheel armor visibly closes the front and rear lower hull/track cracks on all four corners without side-wing deformation and with visible enlarged roadwheel/hub/bogie band.'
   },
   sense_simulation_questions: [
