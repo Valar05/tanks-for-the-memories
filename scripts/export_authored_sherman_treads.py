@@ -11,7 +11,7 @@ def P(x, y, z):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_treads_v1'
-REVISION = 'v1-4-crisp-rims-smooth-tires'
+REVISION = 'v1-5-smooth-shade-creased-rims'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -111,6 +111,41 @@ def assign_uvs(mesh):
             # Blender coords are X, Z(width), Y(height) after P conversion.
             uv_layer.data[loop_index].uv = (vert.x * 0.31 + vert.z * 0.12, vert.y * 1.65)
 
+def smooth_all_faces(mesh):
+    for poly in mesh.polygons:
+        poly.use_smooth = True
+
+def add_weighted_normals(obj, name):
+    weighted = obj.modifiers.new(name, 'WEIGHTED_NORMAL')
+    weighted.keep_sharp = True
+    return weighted
+
+def add_marked_edge_split(obj, name):
+    edge_split = obj.modifiers.new(name, 'EDGE_SPLIT')
+    if hasattr(edge_split, 'use_edge_angle'):
+        edge_split.use_edge_angle = False
+    if hasattr(edge_split, 'use_edge_sharp'):
+        edge_split.use_edge_sharp = True
+    return edge_split
+
+def mark_circular_crease_edges(mesh, center_x, center_y, radii, z_values, tolerance=0.0025):
+    # Mark only circumferential rim/corner loops sharp. Radial segment edges stay smooth.
+    marked = 0
+    radius_values = [round(value, 5) for value in radii]
+    z_marks = [round(value, 5) for value in z_values]
+    for edge in mesh.edges:
+        v0 = mesh.vertices[edge.vertices[0]].co
+        v1 = mesh.vertices[edge.vertices[1]].co
+        r0 = math.hypot(v0.x - center_x, v0.z - center_y)
+        r1 = math.hypot(v1.x - center_x, v1.z - center_y)
+        same_radius = any(abs(r0 - radius) <= tolerance and abs(r1 - radius) <= tolerance for radius in radius_values)
+        same_side = any(abs(v0.y - z_mark) <= tolerance and abs(v1.y - z_mark) <= tolerance for z_mark in z_marks)
+        circumferential = abs(r0 - r1) <= tolerance and abs(v0.y - v1.y) <= tolerance
+        if same_radius and same_side and circumferential:
+            edge.use_edge_sharp = True
+            marked += 1
+    return marked
+
 def make_belt(side_name, side_sign):
     belt_root = empty(side_name + '_tread_belt', treads_root)
     outer_z = side_sign * 1.14
@@ -153,15 +188,15 @@ def make_belt(side_name, side_sign):
         obj['contains_turret'] = False
         bpy.context.collection.objects.link(obj)
         obj.parent = belt_root
-        for poly in mesh.polygons:
-            poly.use_smooth = False
+        smooth_all_faces(mesh)
+        # Segment meshes duplicate their plate vertices, so smooth faces still keep plate boundaries visible.
         bevel = obj.modifiers.new('worn_tread_edge_micro_bevel', 'BEVEL')
         bevel.width = 0.018
         bevel.segments = 1
         bevel.affect = 'EDGES'
         bevel.harden_normals = True
-        weighted = obj.modifiers.new('weighted_tread_plate_normals', 'WEIGHTED_NORMAL')
-        weighted.keep_sharp = True
+        add_marked_edge_split(obj, 'marked_tread_corner_edge_split')
+        add_weighted_normals(obj, 'weighted_tread_plate_normals')
         return obj
 
     for role, segment_indices in SEGMENT_MARKERS.items():
@@ -233,21 +268,23 @@ def disc_mesh(name, center, radius, depth, parent, material_name='wheel_metal', 
     mesh.materials.append(materials['wheel_rubber'])
     for poly, mat_name in zip(mesh.polygons, face_mats):
         poly.material_index = 1 if mat_name == 'wheel_rubber' else 0
-        poly.use_smooth = poly.index in smooth_faces
+    smooth_all_faces(mesh)
+    sharp_edges = mark_circular_crease_edges(mesh, cx, cy, [hub_radius, rim_inner, tire_inner, rim_lip_outer, radius], [z0, z1, z0 - 0.012, z1 + 0.012, z0 - 0.006, z1 + 0.006, z0 - 0.003, z1 + 0.003, z0 - 0.002, z1 + 0.002])
     assign_uvs(mesh)
     obj = bpy.data.objects.new(name, mesh)
-    obj['component_role'] = 'side_facing_running_gear_wheel_with_crisp_rim_and_smooth_tire_band'
+    obj['component_role'] = 'side_facing_running_gear_wheel_smooth_shaded_with_creased_rim_loops'
     obj['wheel_axis'] = 'runtime_Z_width_axis'
-    obj['shading_contract'] = 'flat metal rim faces and hard rim corners; smooth rubber tire sidewall to avoid ring facets'
+    obj['shading_contract'] = 'all wheel faces smooth shaded; only circular rim/corner loops are marked sharp so rubber tire faces do not facet'
+    obj['marked_rim_crease_edges'] = sharp_edges
     bpy.context.collection.objects.link(obj)
     obj.parent = parent
-    bevel = obj.modifiers.new('crisp_wheel_rim_micro_bevel', 'BEVEL')
-    bevel.width = 0.006
+    bevel = obj.modifiers.new('creased_rim_micro_bevel', 'BEVEL')
+    bevel.width = 0.004
     bevel.segments = 1
     bevel.affect = 'EDGES'
     bevel.harden_normals = True
-    weighted = obj.modifiers.new('weighted_wheel_rim_normals', 'WEIGHTED_NORMAL')
-    weighted.keep_sharp = True
+    add_marked_edge_split(obj, 'marked_wheel_rim_edge_split')
+    add_weighted_normals(obj, 'weighted_wheel_crease_normals')
     return obj
 
 def box_mesh(name, center, size, parent):
@@ -316,7 +353,7 @@ manifest = {
     'approximate_triangles': triangle_count,
     'coordinate_contract': 'runtime X length, Y height, Z width; Blender Z-up converted through P()',
     'component_scope': 'full tread assembly only: open perimeter tread sidewall frame, wheels inside the inner profile opening, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
-    'shading_contract': 'track plates keep flat hard-surface normals with crisp bevel corners; wheels use flat metal rim faces, crisp rim corners, and smooth rubber tire sidewalls so the tire ring does not read as faceted',
+    'shading_contract': 'smooth shade wheel and tread forms first, then mark only desired circular rim/corner loops sharp; rims and tread corners read hard while rounded rubber faces remain smooth',
     'reference_source': 'src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only',
     'profile': {
         'old_reference_point_count': 8,
@@ -328,7 +365,7 @@ manifest = {
     },
     'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors'],
     'forbidden_nodes': ['hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','tank_root'],
-    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; flat tread plate normals and crisp rim corners must read while rubber tire bands do not show radial facets; no hull/turret/full-tank salvage.'
+    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with an open perimeter sidewall frame and wheels, sprockets, idlers, return rollers, and bogie arms visibly occupying the inner tread profile opening; smooth shaded wheel/tread forms must show hard creased rim/corner loops without faceted rubber tire faces; no hull/turret/full-tank salvage.'
 }
 MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({'asset_id': ASSET_ID, 'revision': REVISION, 'triangles': triangle_count, 'glb': str(GLB_PATH)}, indent=2))

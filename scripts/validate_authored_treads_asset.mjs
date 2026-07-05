@@ -6,6 +6,7 @@ const manifestPath = 'public/tftm/models/authored_sherman_treads_v1/model_manife
 const blendPath = 'assets/authored/authored_sherman_treads_v1/authored_sherman_treads_v1.blend';
 const v11RedVerdictPath = 'docs/visual-verdicts/treads-v1-1-red.json';
 const v12RedVerdictPath = 'docs/visual-verdicts/treads-v1-2-red.json';
+const v14RedVerdictPath = 'docs/visual-verdicts/treads-v1-4-red.json';
 const diagnosticPath = 'generated/diagnostics/authored_sherman_treads_v1/profile-opening-diagnostic.json';
 const exporterPath = 'scripts/export_authored_sherman_treads.py';
 const failures = [];
@@ -142,7 +143,7 @@ function descendants(json, nodeName) {
   return out;
 }
 
-for (const file of [glbPath, manifestPath, blendPath, exporterPath, v11RedVerdictPath, v12RedVerdictPath, 'treadfirst-treads.html', 'src/treadfirst-treads.ts', 'src/sherman-asset-links.ts', 'scripts/build.mjs']) if (!existsSync(file)) fail('missing ' + file);
+for (const file of [glbPath, manifestPath, blendPath, exporterPath, v11RedVerdictPath, v12RedVerdictPath, v14RedVerdictPath, 'treadfirst-treads.html', 'src/treadfirst-treads.ts', 'src/sherman-asset-links.ts', 'scripts/build.mjs']) if (!existsSync(file)) fail('missing ' + file);
 
 if (failures.length === 0) {
   const json = parseGlb(glbPath);
@@ -151,15 +152,17 @@ if (failures.length === 0) {
   const runtime = readFileSync('src/treadfirst-treads.ts', 'utf8') + readFileSync('src/sherman-asset-links.ts', 'utf8');
   const build = readFileSync('scripts/build.mjs', 'utf8');
   if (manifest.asset_id !== assetId) fail('manifest asset_id mismatch');
-  if (manifest.silhouette_revision !== 'v1-4-crisp-rims-smooth-tires') fail('unexpected revision ' + manifest.silhouette_revision);
+  if (manifest.silhouette_revision !== 'v1-5-smooth-shade-creased-rims') fail('unexpected revision ' + manifest.silhouette_revision);
   const v11Verdict = JSON.parse(readFileSync(v11RedVerdictPath, 'utf8'));
   const v12Verdict = JSON.parse(readFileSync(v12RedVerdictPath, 'utf8'));
+  const v14Verdict = JSON.parse(readFileSync(v14RedVerdictPath, 'utf8'));
   if (v11Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.1 red verdict must remain explicit before accepting v1.3 diagnostics');
   if (v12Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.2 red verdict must remain explicit before accepting v1.3 diagnostics');
+  if (v14Verdict.status !== 'red_unaccepted_no_op_churn') fail('v1.4 red verdict must remain explicit before accepting v1.5 diagnostics');
   if (manifest.profile?.old_reference_point_count !== 8) fail('manifest must record old subdivision-0 profile point count');
   if ((manifest.profile?.outer_profile_point_count || 0) < 16) fail('outer profile must add one silhouette subdivision layer beyond the old 8-point profile');
-  if (!String(manifest.shading_contract || '').includes('smooth rubber tire sidewalls')) fail('manifest must declare smooth tire sidewalls and hard rim/tread corners');
-  for (const sourceMarker of ['weighted_tread_plate_normals', 'poly.use_smooth = False', 'crisp_wheel_rim_micro_bevel', 'smooth rubber tire sidewall']) if (!exporter.includes(sourceMarker)) fail('exporter missing shading marker ' + sourceMarker);
+  if (!String(manifest.shading_contract || '').includes('mark only desired circular rim/corner loops sharp')) fail('manifest must declare smooth shade first and creased rim/corner loops');
+  for (const sourceMarker of ['smooth_all_faces', 'mark_circular_crease_edges', 'edge.use_edge_sharp = True', 'marked_rim_crease_edges', 'marked_wheel_rim_edge_split', 'weighted_wheel_crease_normals']) if (!exporter.includes(sourceMarker)) fail('exporter missing shading marker ' + sourceMarker);
   for (const node of ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors','left_front_sprocket','right_front_sprocket','left_rear_idler','right_rear_idler']) if (!(json.nodes || []).some((entry) => entry.name === node)) fail('missing required node ' + node);
   for (const forbidden of ['hull','turret','barrel','coax','mantlet','cannon','tank_root']) {
     const hit = (json.nodes || []).find((node) => String(node.name || '').toLowerCase().includes(forbidden));
@@ -216,7 +219,7 @@ if (failures.length === 0) {
     const bogieNames = descendants(json, `${side}_bogie_connectors`).join('\n');
     if ((bogieNames.match(/vvss_bogie_arm_/g) || []).length < 3) fail(`${side} bogie connectors must expose three bogie arm blocks`);
   }
-  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-4-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
+  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-5-20260705', 'OrbitControls', 'orientation-widget', 'profile opening']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
   if (!build.includes("buildEntry('treadfirst-treads.ts', 'treadfirst-treads')")) fail('build must bundle treadfirst-treads.ts');
   if (!build.includes("writeBundledHtml('treadfirst-treads.html', 'treadfirst-treads.html', 'treadfirst-treads')")) fail('build must write treadfirst-treads.html');
 }
@@ -227,4 +230,4 @@ if (failures.length) {
   process.exit(1);
 }
 await import('node:fs').then(({ mkdirSync, writeFileSync }) => { mkdirSync('generated/diagnostics/authored_sherman_treads_v1', { recursive: true }); writeFileSync(diagnosticPath, JSON.stringify(diagnostic, null, 2) + '\n'); });
-console.log('Authored tread assembly validation passed: v1.4 keeps wheels in the profile opening with crisp rims and smooth tire bands; cloud/Sense visual acceptance is still required.');
+console.log('Authored tread assembly validation passed: v1.5 keeps wheels in the profile opening with smooth shading and creased rim loops; cloud/Sense visual acceptance is still required.');

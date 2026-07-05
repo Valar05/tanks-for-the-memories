@@ -70,4 +70,4 @@ export const AUTHORED_SHERMAN_TEXTUREABLE_FACE_PLATES = [
   'bogie_side'
 ] as const;
 
-export const AUTHORED_SHERMAN_TREADS_GLB_URL = './tftm/models/authored_sherman_treads_v1/authored_sherman_treads_v1.glb?v=v1-4-crisp-rims-smooth-tires';
+export const AUTHORED_SHERMAN_TREADS_GLB_URL = './tftm/models/authored_sherman_treads_v1/authored_sherman_treads_v1.glb?v=v1-5-smooth-shade-creased-rims';
