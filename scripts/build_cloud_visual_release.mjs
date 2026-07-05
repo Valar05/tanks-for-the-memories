@@ -57,7 +57,7 @@ const releaseManifest = {
   },
   authored_boxmodel_review: {
     route: 'boxmodel-tank.html',
-    expected_build: 'tftm-authored-sherman-boxmodel-v1-14-20260705',
+    expected_build: 'tftm-authored-sherman-boxmodel-v1-15-20260705',
     tuner_route: 'boxmodel-tank.html?tune=1',
     tuner_expected_build: 'tftm-authored-sherman-boxmodel-tuner-v9-20260704',
     asset_id: authoredBoxmodelManifest.asset_id,
@@ -67,8 +67,8 @@ const releaseManifest = {
     glb_hard_cap_triangles: authoredBoxmodelManifest.budget?.hard_cap_triangles,
     uv_policy: authoredBoxmodelManifest.uv_policy,
     face_plate_ids: authoredBoxmodelManifest.face_plate_ids,
-    asset_policy: 'fully authored Blender box-model chassis with solidified overlapping armor plates, non-cube cast turret silhouette, and coaxial MG; no Meshy chassis or turret imports; box UV PNG plates for DALL-E paintability',
-    acceptance: 'Sense Simulation must confirm Sherman silhouette, non-cube turret massing, smaller integrated track-well slot walls plus joined sponson shells close the front-left, front-right, rear-left, and rear-right lower hull/track cracks as joined metal, pass targeted no-wing slot-wall and wheel-band checks, and crack rays from outside those visible gaps hit exterior armor before entering the tank interior, with no pasted panels, blockers, floating boxes, or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.',
+    asset_policy: 'fully authored Blender box-model chassis with solidified overlapping armor plates, connected multi-material cast turret shell with no pasted turret panels, and coaxial MG; no Meshy chassis or turret imports; box UV PNG plates for DALL-E paintability',
+    acceptance: 'Sense Simulation must confirm Sherman silhouette, connected cast turret massing with no cheek/side/roof pasted panels, smaller integrated track-well slot walls plus joined sponson shells close the front-left, front-right, rear-left, and rear-right lower hull/track cracks as joined metal, pass targeted no-wing slot-wall, no-pasted-turret-panel, and readable wheel/hub/bogie checks, and crack rays from outside those visible gaps hit exterior armor before entering the tank interior, with no pasted panels, blockers, floating boxes, or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.',
     tuner_acceptance: 'Sense Simulation must review boxmodel-tank.html?tune=1 as a preserved future-use gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored flat armor panels are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected panel is highlighted for editing, already enabled panels remain visible, Move/Rotate/Scale are one active mode at a time, Scale exposes explicit All/X/Y/Z axis buttons, drag/pinch/twist gestures visibly change the selected panel, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and panels share the same unskewed model frame, no object transform handles appear, and local capture was not used.'
   },
   authored_retopo_review: {
@@ -107,7 +107,7 @@ const releaseManifest = {
     }]))
   },
   required_cloud_captures: [
-    'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-14-20260705',
+    'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-15-20260705',
     'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, smaller integrated track-well slot-wall coverage at front-left, front-right, rear-left, and rear-right lower hull/track cracks, and no local capture',
     'boxmodel-tank close-up review showing smaller integrated track-well slot-wall coverage at front-left, front-right, rear-left, and rear-right as attached armor, no raycast-accessible interior through those cracks, no side-wing silhouette deformation, solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability',
     'boxmodel-tank.html?tune=1 phone portrait showing gesture-only part tuner with collapsed parts drawer, front-right/front-left/rear-right/rear-left hull-colored flat armor panel parts aligned parallel to the tracks, flush to the side plane, and not protruding like blocks, selected panel highlight, camera orientation widget, explicit All/X/Y/Z scale axis buttons, square unskewed tank frame, and build token tftm-authored-sherman-boxmodel-tuner-v9-20260704',
@@ -127,12 +127,12 @@ const releaseManifest = {
   false_change_penalty: {
     status: 'active',
     reason: 'Fresh cloud screenshots showed no visible delta after v1-8 front-gap coverage. Root cause: coverage nodes existed but were placed inboard of the visible exterior side plane, and the GLB used a stable asset URL vulnerable to browser cache.',
-    required_next_evidence: 'Next tank visual pass must show cloud/Sense evidence that v1-14 smaller slot-wall armor visibly closes the front and rear lower hull/track cracks on all four corners without side-wing deformation and with visible roadwheel/bogie band.'
+    required_next_evidence: 'Next tank visual pass must show cloud/Sense evidence that v1-15 cast-turret/readable-wheel armor visibly closes the front and rear lower hull/track cracks on all four corners without side-wing deformation and with visible enlarged roadwheel/hub/bogie band.'
   },
   sense_simulation_questions: [
-    'Does authored_sherman_boxmodel_v1 build v1-14 preserve the Sherman silhouette while using smaller integrated slot walls across all four lower hull/track cracks?',
+    'Does authored_sherman_boxmodel_v1 build v1-15 preserve the Sherman silhouette while using smaller integrated slot walls across all four lower hull/track cracks?',
     'On boxmodel-tank.html?tune=1, does the gesture-only parts workflow provide four hull-colored front-right/front-left/rear-right/rear-left flat armor panels aligned parallel to the tracks and reading like armor skin, not blocks while using a collapsed drawer, one active transform mode, explicit All/X/Y/Z scale axes, direct gestures, OrbitControls camera, and a camera orientation widget without object transform handles?',
-    'Does the turret read as a non-cube cast turret form with cheek mass, roof flattening, and rear bustle?',
+    'Does the turret read as one connected cast turret shell with cheek mass, roof flattening, rear bustle, and no pasted side/roof/front panels?',
     'Do the smaller integrated slot walls and joined sponson shells bridge the hull side into the outer track skirt at front-left, front-right, rear-left, and rear-right lower cracks, visibly differ from the rejected screenshot, and do outside crack raycasts hit exterior armor before entering the tank interior, without pasted panels, blockers, or side wings?',
     'Do the armor plates read as joined metal mass rather than separated cardboard planes?',
     'Is the coaxial MG visible and owned by the mantlet/gun assembly?' ,

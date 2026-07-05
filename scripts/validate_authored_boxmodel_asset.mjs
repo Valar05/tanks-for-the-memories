@@ -333,6 +333,8 @@ if (failures.length === 0) {
   const barrelBounds = nodeWorldBoundsByName(json, 'barrel');
   const coaxBounds = nodeWorldBoundsByName(json, 'coaxial_mg');
   const roadwheelBounds = nodeWorldBoundsByName(json, 'left_roadwheel_0.00__wheel_disc');
+  const roadwheelHubBounds = nodeWorldBoundsByName(json, 'left_roadwheel_hub_0.00__bogie_side');
+  const turretCastBounds = nodeWorldBoundsByName(json, 'turret_cast_oval_shell__turret_left');
   const blenderScript = read(blenderScriptPath);
   const wrapper = read(wrapperPath);
   const runtime = read('src/boxmodel-tank.ts') + read('src/sherman-asset-links.ts') + read('src/sherman-runtime-materials.ts');
@@ -347,7 +349,9 @@ if (failures.length === 0) {
   if (!String(manifest.source_policy || '').includes('Blender Z-up basis conversion')) fail('manifest must identify Blender Z-up basis conversion');
   if (!manifest.orientation_contract || !String(manifest.orientation_contract.visual_regression_prevented || '').includes('wheels must sit inside side skirts')) fail('manifest must preserve upright/gun/skirt orientation contract');
   if (!manifest.runtime_contract?.side_skirt_occlusion) fail('manifest must preserve side skirt occlusion contract');
-  if (!String(manifest.silhouette_revision || '').includes('v1-14-readable-wheel-band-smaller-slot-walls')) fail('manifest must record v1-14 smaller slot-wall/readable-wheel-band revision');
+  if (!String(manifest.orientation_contract.visual_regression_prevented || '').includes('one connected multi-material cast shell')) fail('manifest must require a connected cast turret shell, not pasted turret panels');
+  if (!String(manifest.runtime_contract?.integrated_sponson_skirt_armor || '').includes('enlarged visible roadwheel, hub, and bogie read')) fail('manifest must record readable wheel/hub/bogie repair');
+  if (!String(manifest.silhouette_revision || '').includes('v1-15-cast-turret-readable-wheels')) fail('manifest must record v1-15 cast-turret/readable-wheel revision');
   if (!String(manifest.runtime_contract?.integrated_sponson_skirt_armor || '').includes('smaller integrated track-well slot walls')) fail('manifest must describe smaller integrated slot walls, not expanded side wings');
   if (!String(manifest.runtime_contract?.raycast_exterior_closure || '').includes('outside gap rays hit exterior armor before interior')) fail('raycast closure rule missing: outside gap rays must hit exterior armor before they can enter the tank interior');
   for (const rayFailure of raycastClosureFailures(json, binary)) fail(rayFailure);
@@ -361,6 +365,9 @@ if (failures.length === 0) {
   if (!barrelBounds || !(barrelBounds.size[0] > 1.0 && barrelBounds.size[0] > barrelBounds.size[1] * 6 && barrelBounds.size[0] > barrelBounds.size[2] * 6)) fail('barrel mesh must be long on X, not vertical/perpendicular; saw ' + axisString(barrelBounds));
   if (!coaxBounds || !(coaxBounds.size[0] > 0.45 && coaxBounds.size[0] > coaxBounds.size[1] * 6 && coaxBounds.size[0] > coaxBounds.size[2] * 6)) fail('coaxial MG mesh must be visible and long on X; saw ' + axisString(coaxBounds));
   if (!roadwheelBounds || !(roadwheelBounds.size[2] < roadwheelBounds.size[0] * 0.45 && roadwheelBounds.size[2] < roadwheelBounds.size[1] * 0.45)) fail('roadwheel disc must be thin on Z so it faces the hull side; saw ' + axisString(roadwheelBounds));
+  if (!roadwheelBounds || Math.max(roadwheelBounds.size[0], roadwheelBounds.size[1]) < 0.34) fail('roadwheel face is too small to read; expected visible diameter >= 0.34, saw ' + axisString(roadwheelBounds));
+  if (!roadwheelHubBounds) fail('roadwheel hub missing; visible wheel band needs actual hub geometry, not only a flat disc');
+  if (!turretCastBounds || !(turretCastBounds.size[0] > 1.20 && turretCastBounds.size[1] > 0.48 && turretCastBounds.size[2] > 0.90)) fail('connected cast turret shell must carry the turret mass; saw ' + axisString(turretCastBounds));
 
   const sideSkinSpecs = [
     { label: 'left integrated sponson/skirt skin', node: 'left_sloped_sponson__hull_left', skirt: 'left_outer_track_skirt__track_outer', side: 'left' },
@@ -405,7 +412,9 @@ if (failures.length === 0) {
     if (!wheel || !track) fail(label + ' cannot be checked because wheel or track volume is missing');
     else {
       const exposure = side === 'left' ? wheel.max[2] - track.max[2] : track.min[2] - wheel.min[2];
-      if (exposure < 0.025) fail(label + ' is buried inside the track slab; wheel must protrude at least 0.025 beyond track side, saw ' + exposure.toFixed(3));
+      const faceDiameter = Math.max(wheel.size[0], wheel.size[1]);
+      if (exposure < 0.14) fail(label + ' is buried inside the track slab; wheel must protrude at least 0.140 beyond track side, saw ' + exposure.toFixed(3));
+      if (faceDiameter < 0.34) fail(label + ' wheel face is too small to read, saw diameter ' + faceDiameter.toFixed(3));
     }
   }
 
@@ -416,18 +425,18 @@ if (failures.length === 0) {
   for (const nodeName of requiredNodes) {
     if (!nodeNames.has(nodeName)) fail('GLB missing required node ' + nodeName);
   }
-  for (const forbiddenNode of ['left_front_shoulder_armor_filler__hull_left', 'right_front_shoulder_armor_filler__hull_right', 'left_front_track_to_glacis_cover__hull_left', 'right_front_track_to_glacis_cover__hull_right', 'left_exterior_front_gap_cover__hull_left', 'right_exterior_front_gap_cover__hull_right']) {
-    if (nodeNames.has(forbiddenNode)) fail('front wing filler regression: remove old raised gap filler node ' + forbiddenNode);
+  for (const forbiddenNode of ['left_front_shoulder_armor_filler__hull_left', 'right_front_shoulder_armor_filler__hull_right', 'left_front_track_to_glacis_cover__hull_left', 'right_front_track_to_glacis_cover__hull_right', 'left_exterior_front_gap_cover__hull_left', 'right_exterior_front_gap_cover__hull_right', 'turret_front_cheek__turret_front', 'turret_left_side_skin__turret_left', 'turret_right_side_skin__turret_right', 'turret_roof_flat_panel__turret_top']) {
+    if (nodeNames.has(forbiddenNode)) fail('forbidden pasted panel/filler regression: remove old node ' + forbiddenNode);
   }
   for (const forbidden of ['sherman_part_meshy_kit_v1', 'hull.glb', 'turret.glb', 'SimplifyModifier', 'RoundedBoxGeometry']) {
     if (blenderScript.includes(forbidden) || wrapper.includes(forbidden)) fail('boxmodel exporter must not use rejected/import marker ' + forbidden);
   }
   if (!blenderScript.includes('def P(') || !blenderScript.includes('Blender is Z-up')) fail('boxmodel exporter must declare Blender basis conversion helpers');
-  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-14-20260705']) {
+  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-15-20260705']) {
     if (!runtime.includes(marker)) fail('boxmodel runtime missing marker ' + marker);
   }
   if (!build.includes("buildEntry('boxmodel-tank.ts', 'boxmodel-tank')")) fail('build must bundle boxmodel-tank.ts');
-  if (!runtime.includes('authored_sherman_boxmodel_v1.glb?v=v1-14-readable-wheel-band-smaller-slot-walls')) fail('runtime must version the authored boxmodel GLB URL so asset caching cannot hide geometry changes');
+  if (!runtime.includes('authored_sherman_boxmodel_v1.glb?v=v1-15-cast-turret-readable-wheels')) fail('runtime must version the authored boxmodel GLB URL so asset caching cannot hide geometry changes');
   if (!build.includes("writeBundledHtml('boxmodel-tank.html', 'boxmodel-tank.html', 'boxmodel-tank')")) fail('build must write boxmodel-tank.html');
 }
 

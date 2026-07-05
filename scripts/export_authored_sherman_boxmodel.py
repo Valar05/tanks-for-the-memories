@@ -19,7 +19,7 @@ def R(rx, ry, rz):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_boxmodel_v1'
-REVISION = 'v1-14-readable-wheel-band-smaller-slot-walls'
+REVISION = 'v1-15-cast-turret-readable-wheels'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -81,6 +81,26 @@ def mesh_obj(name, plate_id, verts, faces, parent, shade=False):
     assign_uvs(mesh)
     obj = bpy.data.objects.new(name, mesh)
     obj['surface_id'] = plate_id
+    bpy.context.collection.objects.link(obj)
+    obj.parent = parent
+    if shade:
+        for p in mesh.polygons:
+            p.use_smooth = True
+        obj.modifiers.new('weighted_armor_normals', 'WEIGHTED_NORMAL')
+    return obj
+
+def mesh_obj_multi(name, plate_ids, verts, faces, face_plate_ids, parent, shade=False):
+    mesh = bpy.data.meshes.new(name + '_mesh')
+    mesh.from_pydata([P(*v) for v in verts], [], faces)
+    mesh.update(calc_edges=True)
+    for plate_id in plate_ids:
+        mesh.materials.append(materials[plate_id])
+    material_index = {plate_id: index for index, plate_id in enumerate(plate_ids)}
+    for poly, plate_id in zip(mesh.polygons, face_plate_ids):
+        poly.material_index = material_index[plate_id]
+    assign_uvs(mesh)
+    obj = bpy.data.objects.new(name, mesh)
+    obj['surface_id'] = '+'.join(plate_ids)
     bpy.context.collection.objects.link(obj)
     obj.parent = parent
     if shade:
@@ -191,24 +211,47 @@ def cylinder(name, plate_id, radius, depth, vertices, loc, parent, rot=(0,0,0)):
 def turret_cast_mesh():
     verts = []
     faces = []
-    ring_specs = [(-0.52,0.12,0.34,0.34),(-0.22,0.18,0.45,0.43),(0.18,0.19,0.54,0.39),(0.58,0.15,0.38,0.30)]
-    sides = 12
+    face_plate_ids = []
+    ring_specs = [
+        (-0.58,0.12,0.33,0.31),
+        (-0.31,0.17,0.47,0.42),
+        (0.05,0.20,0.55,0.41),
+        (0.38,0.18,0.50,0.35),
+        (0.72,0.13,0.35,0.27),
+    ]
+    sides = 16
     for x, cy, rz, ry in ring_specs:
         for i in range(sides):
             a = math.tau * i / sides
             y = cy + math.sin(a) * ry
             z = math.cos(a) * rz
             if y < -0.02:
-                y = -0.02 + (y + 0.02) * 0.32
+                y = -0.02 + (y + 0.02) * 0.30
+            if y > 0.47:
+                y = 0.47 + (y - 0.47) * 0.20
             verts.append((x, y, z))
     for r in range(len(ring_specs)-1):
         base = r * sides
         nxt = (r+1) * sides
         for i in range(sides):
-            faces.append((base+i, base+(i+1)%sides, nxt+(i+1)%sides, nxt+i))
+            face = (base+i, base+(i+1)%sides, nxt+(i+1)%sides, nxt+i)
+            faces.append(face)
+            cx = sum(verts[index][0] for index in face) / 4
+            cy = sum(verts[index][1] for index in face) / 4
+            cz = sum(verts[index][2] for index in face) / 4
+            if cx > 0.48:
+                face_plate_ids.append('turret_front')
+            elif cy > 0.39:
+                face_plate_ids.append('turret_top')
+            elif cz > 0:
+                face_plate_ids.append('turret_right')
+            else:
+                face_plate_ids.append('turret_left')
     faces.append(tuple(range(sides-1, -1, -1)))
+    face_plate_ids.append('turret_bustle')
     faces.append(tuple(range((len(ring_specs)-1)*sides, len(ring_specs)*sides)))
-    return mesh_obj('turret_cast_oval_shell__turret_left', 'turret_left', verts, faces, turret_shell, shade=True)
+    face_plate_ids.append('turret_front')
+    return mesh_obj_multi('turret_cast_oval_shell__turret_left', ['turret_left','turret_right','turret_front','turret_top','turret_bustle'], verts, faces, face_plate_ids, turret_shell, shade=True)
 
 box('hull_lower_tub__hull_left', 'hull_left', (3.48,0.42,1.16), (-0.08,-0.11,0), hull_root, bevel=0.015)
 box('rounded_transmission_cover__hull_glacis', 'hull_glacis', (0.28,0.36,1.02), (1.62,0.05,0), hull_root, bevel=0.055)
@@ -246,29 +289,26 @@ quad('right_rear_track_well_slot_wall__hull_right', 'hull_right', [(-0.82,-0.42,
 
 for z, side, wheel_parent in [(-0.83,'left',left_wheels),(0.83,'right',right_wheels)]:
     sign = -1 if z < 0 else 1
-    box(f'{side}_track_motion', 'track_outer', (3.48,0.48,0.30), (-0.05,-0.27,z), hull_root, bevel=0.045)
-    box(f'{side}_outer_track_skirt__track_outer', 'track_outer', (3.34,0.12,0.055), (-0.08,-0.02,z+sign*0.175), hull_root, bevel=0.018)
+    box(f'{side}_track_motion', 'track_outer', (3.48,0.48,0.22), (-0.05,-0.27,z), hull_root, bevel=0.045)
+    box(f'{side}_outer_track_skirt__track_outer', 'track_outer', (3.34,0.115,0.050), (-0.08,-0.02,z+sign*0.165), hull_root, bevel=0.018)
     box(f'{side}_track_top_inner__track_inner_top_bottom', 'track_inner_top_bottom', (3.02,0.10,0.22), (-0.06,0.08,z), hull_root)
     box(f'{side}_track_ground_run__track_inner_top_bottom', 'track_inner_top_bottom', (3.12,0.10,0.22), (-0.06,-0.50,z), hull_root)
     for x in [-1.50,-1.15,-0.80,-0.45,-0.10,0.25,0.60,0.95,1.30]:
         box(f'{side}_track_cleat_{x:.2f}__track_outer', 'track_outer', (0.035,0.60,0.29), (x,-0.22,z), hull_root, rot=(0,0,0.05))
     for bx in [-0.96,-0.16,0.64]:
-        box(f'{side}_vvss_bogie_{bx:.2f}__bogie_side', 'bogie_side', (0.46,0.16,0.08), (bx,-0.08,z+sign*0.190), wheel_parent, bevel=0.015)
-        box(f'{side}_vvss_arm_front_{bx:.2f}__bogie_side', 'bogie_side', (0.28,0.04,0.07), (bx+0.12,-0.20,z+sign*0.190), wheel_parent, rot=(0,0,-0.45))
-        box(f'{side}_vvss_arm_rear_{bx:.2f}__bogie_side', 'bogie_side', (0.28,0.04,0.07), (bx-0.12,-0.20,z+sign*0.190), wheel_parent, rot=(0,0,0.45))
+        box(f'{side}_vvss_bogie_{bx:.2f}__bogie_side', 'bogie_side', (0.48,0.17,0.09), (bx,-0.08,z+sign*0.225), wheel_parent, bevel=0.015)
+        box(f'{side}_vvss_arm_front_{bx:.2f}__bogie_side', 'bogie_side', (0.30,0.045,0.075), (bx+0.12,-0.20,z+sign*0.225), wheel_parent, rot=(0,0,-0.45))
+        box(f'{side}_vvss_arm_rear_{bx:.2f}__bogie_side', 'bogie_side', (0.30,0.045,0.075), (bx-0.12,-0.20,z+sign*0.225), wheel_parent, rot=(0,0,0.45))
         for dx in [-0.16,0.16]:
-            cylinder(f'{side}_roadwheel_{bx+dx:.2f}__wheel_disc', 'wheel_disc', 0.145, 0.07, 18, (bx+dx,-0.32,z+sign*0.205), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_front_sprocket__bogie_side', 'bogie_side', 0.25, 0.085, 20, (1.48,-0.20,z+sign*0.205), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_rear_idler__bogie_side', 'bogie_side', 0.22, 0.085, 20, (-1.50,-0.23,z+sign*0.205), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_return_roller_front__wheel_disc', 'wheel_disc', 0.08, 0.055, 16, (0.56,0.0,z+sign*0.205), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_return_roller_rear__wheel_disc', 'wheel_disc', 0.08, 0.055, 16, (-0.78,0.0,z+sign*0.205), wheel_parent, rot=(math.pi/2,0,0))
+            cylinder(f'{side}_roadwheel_{bx+dx:.2f}__wheel_disc', 'wheel_disc', 0.185, 0.095, 24, (bx+dx,-0.32,z+sign*0.245), wheel_parent, rot=(math.pi/2,0,0))
+            cylinder(f'{side}_roadwheel_hub_{bx+dx:.2f}__bogie_side', 'bogie_side', 0.060, 0.110, 18, (bx+dx,-0.32,z+sign*0.255), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_front_sprocket__bogie_side', 'bogie_side', 0.27, 0.105, 24, (1.48,-0.20,z+sign*0.245), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_rear_idler__bogie_side', 'bogie_side', 0.245, 0.105, 24, (-1.50,-0.23,z+sign*0.245), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_return_roller_front__wheel_disc', 'wheel_disc', 0.095, 0.075, 18, (0.56,0.0,z+sign*0.245), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_return_roller_rear__wheel_disc', 'wheel_disc', 0.095, 0.075, 18, (-0.78,0.0,z+sign*0.245), wheel_parent, rot=(math.pi/2,0,0))
 
 turret_cast_mesh()
 box('turret_rear_bustle__turret_bustle', 'turret_bustle', (0.48,0.26,0.58), (-0.50,0.18,0), turret_shell, bevel=0.045)
-quad('turret_front_cheek__turret_front', 'turret_front', [(0.43,0.005,-0.39),(0.755,0.18,-0.285),(0.755,0.18,0.285),(0.43,0.005,0.39)], turret_shell)
-quad('turret_left_side_skin__turret_left', 'turret_left', [(0.47,0.0,-0.39),(-0.52,0.045,-0.455),(-0.33,0.425,-0.325),(0.62,0.36,-0.265)], turret_shell)
-quad('turret_right_side_skin__turret_right', 'turret_right', [(-0.52,0.045,0.455),(0.47,0.0,0.39),(0.62,0.36,0.265),(-0.33,0.425,0.325)], turret_shell)
-quad('turret_roof_flat_panel__turret_top', 'turret_top', [(0.58,0.45,-0.245),(-0.34,0.505,-0.285),(-0.34,0.505,0.285),(0.58,0.45,0.245)], turret_shell)
 cylinder('commander_hatch__turret_top', 'turret_top', 0.19, 0.07, 24, (-0.23,0.56,-0.18), turret_shell)
 cylinder('loader_hatch__turret_top', 'turret_top', 0.145, 0.055, 20, (0.16,0.53,0.22), turret_shell)
 box('turret_periscope_left__turret_top', 'turret_top', (0.18,0.055,0.08), (0.18,0.55,-0.17), turret_shell)
@@ -320,7 +360,7 @@ manifest = {
         'authored_axes': 'X forward/back, Y up/down, Z left/right',
         'blender_axes': 'X forward/back, Y left/right, Z up/down after P/S/R conversion helpers',
         'threejs_axes_after_gltf': 'X forward/back, Y up/down, Z left/right',
-        'visual_regression_prevented': 'tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front and rear lower sponson sides must use narrow integrated slot walls plus joined hull-side shells to bridge into the outer track skirts and stop exterior/oblique gap rays before they reach the tank interior; no pasted cover panels, blockers, wing plates, or runtime overlays'
+        'visual_regression_prevented': 'tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front and rear lower sponson sides must use narrow integrated slot walls plus joined hull-side shells to bridge into the outer track skirts and stop exterior/oblique gap rays before they reach the tank interior; turret must be one connected multi-material cast shell with no pasted cheek/side/roof plates; wheel faces and hubs must remain readable outside the track slab; no pasted cover panels, blockers, wing plates, or runtime overlays'
     },
     'runtime_contract': {
         'turret_traverse': 'rotate turret_traverse_pivot around Y',
@@ -329,7 +369,7 @@ manifest = {
         'tread_motion': 'scroll material maps on left_track_motion and right_track_motion',
         'wheel_motion': 'rotate children of left_roadwheel_group and right_roadwheel_group',
         'side_skirt_occlusion': 'roadwheel discs sit inside track skirt volume; exterior track cover hides tire backs from front and side views',
-        'integrated_sponson_skirt_armor': 'smaller integrated track-well slot walls plus joined sponson shells close the front/rear hull-track cracks while preserving visible roadwheel and bogie read; no exterior cover panels, blockers, side wings, or runtime overlays',
+        'integrated_sponson_skirt_armor': 'smaller integrated track-well slot walls plus joined sponson shells close the front/rear hull-track cracks while preserving enlarged visible roadwheel, hub, and bogie read; no exterior cover panels, blockers, side wings, pasted turret panels, or runtime overlays',
         'raycast_exterior_closure': 'outside gap rays hit exterior armor before interior at front-left, front-right, rear-left, and rear-right hull/track corners',
         'commander_hatch': 'commander_hatch__turret_top is a named posture marker'
     },

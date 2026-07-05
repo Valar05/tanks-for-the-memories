@@ -6,7 +6,8 @@ const project = 'home-center-dclar';
 const channel = 'tftm-boxmodel-v1-13';
 const reviewBaseUrl = 'https://pose-lab-visual-truth--tftm-boxmodel-v1-13-ncn1csrf.web.app';
 const route = 'boxmodel-tank.html';
-const releaseManifestPath = 'generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json';
+const releaseRoot = 'generated/cloud-visual-truth/tftm-release';
+const releaseManifestPath = releaseRoot + '/cloud_visual_truth_manifest.json';
 const assetLinksPath = 'src/sherman-asset-links.ts';
 const dryRun = process.argv.includes('--dry-run');
 const verifyOnly = process.argv.includes('--verify-only');
@@ -19,7 +20,7 @@ function run(label, command, args, options = {}) {
   console.log('\n## ' + label);
   console.log([command, ...args].join(' '));
   if (dryRun) return { status: 0, stdout: '', stderr: '' };
-  const result = spawnSync(command, args, { stdio: options.capture ? 'pipe' : 'inherit', encoding: 'utf8', timeout: options.timeout ?? 120000 });
+  const result = spawnSync(command, args, { stdio: options.capture ? 'pipe' : 'inherit', encoding: 'utf8', timeout: options.timeout ?? 120000, cwd: options.cwd });
   if ((result.status ?? 1) !== 0) {
     const output = [result.stdout, result.stderr].filter(Boolean).join('\n').trim();
     fail(label + ' exited ' + (result.status ?? 'unknown') + (output ? '\n' + output : ''));
@@ -88,7 +89,7 @@ if (dryRun) {
 if (!verifyOnly) {
   run('build cloud visual truth release packet', 'npm', ['run', 'cloud-visual-release']);
   run('validate boxmodel cloud gate', 'npm', ['run', 'visual-qa:boxmodel-tank']);
-  run('deploy existing Firebase review channel', 'firebase', ['hosting:channel:deploy', channel, '--project', project], { timeout: 180000 });
+  run('deploy existing Firebase review channel', 'firebase', ['hosting:channel:deploy', channel, '--project', project], { timeout: 180000, cwd: releaseRoot });
 }
 
 verifyCloudBundle().catch((error) => fail(error.message));

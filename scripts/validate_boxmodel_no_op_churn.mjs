@@ -80,8 +80,30 @@ if (failures.length === 0) {
   const revision = String(manifest.silhouette_revision || '');
   if (revision.includes('v1-11-raycast-closed-sponson-shells')) fail('v1-11 is explicitly visual-red/unaccepted; targeted slot-wall repair revision required');
   if (revision.includes('v1-12-watertight-visible-sponson-shells')) fail('v1-12 is visual-red wing deformation; must not pass no-op guard');
-  if (!revision.includes('v1-14-readable-wheel-band-smaller-slot-walls')) fail('manifest must identify v1-14 smaller slot-wall/readable-wheel-band repair');
+  if (!revision.includes('v1-15-cast-turret-readable-wheels')) fail('manifest must identify v1-15 cast-turret/readable-wheel repair');
   const json = parseGlbJson(glbPath);
+
+  for (const forbiddenNode of ['turret_front_cheek__turret_front', 'turret_left_side_skin__turret_left', 'turret_right_side_skin__turret_right', 'turret_roof_flat_panel__turret_top']) {
+    if ((json.nodes || []).some((node) => node.name === forbiddenNode)) fail('pasted turret panel regression: forbidden node still exported: ' + forbiddenNode);
+  }
+  const turretCast = nodeBounds(json, 'turret_cast_oval_shell__turret_left');
+  if (!turretCast || !(turretCast.size[0] > 1.20 && turretCast.size[1] > 0.48 && turretCast.size[2] > 0.90)) fail('connected cast turret shell is missing or too small; saw ' + axisString(turretCast));
+  for (const [label, wheelNode, trackNode, side] of [
+    ['left wheel band', 'left_roadwheel_0.00__wheel_disc', 'left_track_motion', 'left'],
+    ['right wheel band', 'right_roadwheel_0.00__wheel_disc', 'right_track_motion', 'right']
+  ]) {
+    const wheel = nodeBounds(json, wheelNode);
+    const track = nodeBounds(json, trackNode);
+    if (!wheel || !track) fail(label + ' missing wheel or track bbox');
+    else {
+      const exposure = side === 'left' ? wheel.max[2] - track.max[2] : track.min[2] - wheel.min[2];
+      const faceDiameter = Math.max(wheel.size[0], wheel.size[1]);
+      console.log(`${label}: exposure ${exposure.toFixed(3)}, face diameter ${faceDiameter.toFixed(3)}`);
+      if (exposure < 0.14) fail(label + ' visually buried in track slab; exposure ' + exposure.toFixed(3));
+      if (faceDiameter < 0.34) fail(label + ' too small to read; diameter ' + faceDiameter.toFixed(3));
+    }
+  }
+
   const checks = [
     ['left sponson shell', 'left_sloped_sponson__hull_left', 'left_outer_track_skirt__track_outer', 'left'],
     ['right sponson shell', 'right_sloped_sponson__hull_right', 'right_outer_track_skirt__track_outer', 'right']
@@ -116,4 +138,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Boxmodel targeted no-op/wing validation passed: v1-14 keeps four smaller slot walls without repeating v1-12 side-wing deformation.');
+console.log('Boxmodel targeted no-op/wing validation passed: v1-15 keeps four smaller slot walls, removes pasted turret panels, without repeating v1-12 side-wing deformation.');
