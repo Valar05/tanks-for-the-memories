@@ -25,6 +25,7 @@
     "authored-boxmodel-smoke": "node scripts/validate_authored_boxmodel_asset.mjs",
     "visual-qa:boxmodel-tank": "node scripts/validate_boxmodel_tank_cloud_gate.mjs",
     "boxmodel-tuner-smoke": "node scripts/validate_boxmodel_tuner.mjs",
+    "boxmodel-no-op-smoke": "node scripts/validate_boxmodel_no_op_churn.mjs",
     "blender-visibility:boxmodel": "node scripts/render_boxmodel_blender_visibility.mjs",
     "blender-visibility:boxmodel-smoke": "node scripts/validate_boxmodel_blender_visibility.mjs"
   },

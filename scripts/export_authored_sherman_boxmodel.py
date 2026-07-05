@@ -19,7 +19,7 @@ def R(rx, ry, rz):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_boxmodel_v1'
-REVISION = 'v1-11-raycast-closed-sponson-shells'
+REVISION = 'v1-12-watertight-visible-sponson-shells'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -118,16 +118,16 @@ def sponson_shell(name, plate_id, side_sign, parent):
     # front/rear caps all belong to the same named sponson armor object.
     s = side_sign
     verts = [
-        (1.72,-0.40,s*1.045),   # 0 front lower outside, overlaps skirt plane
-        (-1.76,-0.40,s*1.045),  # 1 rear lower outside, overlaps skirt plane
-        (-1.70,0.56,s*0.600),   # 2 rear upper hull edge
-        (1.72,0.56,s*0.600),    # 3 front upper hull edge
-        (-1.46,0.620,s*0.560),  # 4 rear deck tie-in
-        (0.78,0.675,s*0.530),   # 5 glacis/deck tie-in
-        (1.54,-0.04,s*0.690),   # 6 lower visible front slot tie-in
-        (1.54,0.16,s*0.610),    # 7 upper visible front slot tie-in
-        (-1.69,-0.30,s*0.630),  # 8 rear lower plate tie-in
-        (-1.49,0.585,s*0.570),  # 9 rear upper plate tie-in
+        (2.08,-0.43,s*1.205),   # 0 front lower outside, visibly past skirt corner
+        (-2.08,-0.43,s*1.205),  # 1 rear lower outside, visibly past idler corner
+        (-2.02,0.80,s*0.640),   # 2 rear upper hull edge, high enough to close silhouette slot
+        (2.08,0.80,s*0.640),    # 3 front upper hull edge, high enough to close silhouette slot
+        (-1.46,0.715,s*0.555),  # 4 rear deck tie-in
+        (0.78,0.735,s*0.525),   # 5 glacis/deck tie-in
+        (1.70,-0.08,s*0.735),   # 6 lower visible front slot tie-in
+        (1.82,0.30,s*0.660),    # 7 upper visible front slot tie-in
+        (-1.82,-0.34,s*0.715),  # 8 rear lower plate tie-in
+        (-1.76,0.66,s*0.620),   # 9 rear upper plate tie-in
     ]
     faces = [
         (0,1,2,3),      # continuous exterior side armor from skirt to upper hull
@@ -316,7 +316,7 @@ manifest = {
         'authored_axes': 'X forward/back, Y up/down, Z left/right',
         'blender_axes': 'X forward/back, Y left/right, Z up/down after P/S/R conversion helpers',
         'threejs_axes_after_gltf': 'X forward/back, Y up/down, Z left/right',
-        'visual_regression_prevented': 'tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front and rear lower sponson sides must be joined multi-face hull-side shells that bridge into the outer track skirts and stop exterior gap rays before they reach the tank interior; no pasted cover panels, blockers, wing plates, or runtime overlays'
+        'visual_regression_prevented': 'tank must not export on its side; barrel and coaxial MG must point forward; wheels must sit inside side skirts; front and rear lower sponson sides must be visibly expanded watertight hull-side shells that bridge into the outer track skirts and stop exterior/oblique gap rays before they reach the tank interior; no pasted cover panels, blockers, wing plates, or runtime overlays'
     },
     'runtime_contract': {
         'turret_traverse': 'rotate turret_traverse_pivot around Y',
@@ -325,7 +325,7 @@ manifest = {
         'tread_motion': 'scroll material maps on left_track_motion and right_track_motion',
         'wheel_motion': 'rotate children of left_roadwheel_group and right_roadwheel_group',
         'side_skirt_occlusion': 'roadwheel discs sit inside track skirt volume; exterior track cover hides tire backs from front and side views',
-        'integrated_sponson_skirt_armor': 'joined multi-face sponson shells reshape the hull side so front and rear hull/track gaps belong to continuous armor; no exterior cover panels, blockers, side wings, or runtime overlays',
+        'integrated_sponson_skirt_armor': 'visibly expanded watertight sponson shells reshape the hull side so front and rear hull/track gaps belong to continuous armor; no exterior cover panels, blockers, side wings, or runtime overlays',
         'raycast_exterior_closure': 'outside gap rays hit exterior armor before interior at front-left, front-right, rear-left, and rear-right hull/track corners',
         'commander_hatch': 'commander_hatch__turret_top is a named posture marker'
     },

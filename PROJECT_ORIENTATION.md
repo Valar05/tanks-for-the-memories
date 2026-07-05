@@ -66,6 +66,8 @@ For sponson, glacis, and track-well repairs:
 
 If a fresh screenshot or cloud/Sense review says the same armor gaps remain, stop geometry edits. Name the failed visible relationship, identify the exporter cause, and strengthen the gate before touching the model again.
 
+The v1-11 boxmodel raycast shell was diagnostic-green but visual-red/no-op: its exterior silhouette moved too little to be trusted. Future tank gap fixes must pass both ray closure and no-op/silhouette-delta guards before cloud review.
+
 ## Authored Sherman Armor Gap Failure
 
 The specific armored-v1 failure was caused by solving the wrong surface:

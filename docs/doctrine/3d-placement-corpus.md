@@ -89,6 +89,8 @@ These are not new mistakes. They are known failures and must not be repeated:
 
 The v1-10 boxmodel failure was a labeled repeat of this class: exterior side-plane covers became giant pasted slabs. The coordinate idea was not enough because the vehicle form was wrong.
 
+The v1-11 boxmodel failure was the next false-green: side raycasts passed, but the visible exterior silhouette barely moved. A hard-surface gap repair now needs a no-op/silhouette-delta guard as well as ray closure.
+
 ## Tank Gap Repair Rules
 
 For front/rear sponson, glacis, and track-well gaps:
@@ -123,6 +125,7 @@ Minimum guard for hard-surface placement:
 - compute world-space bboxes for the changed part and neighboring parts
 - cast diagnostic rays from outside each reported opening toward the tank interior
 - assert each ray hits exterior armor before it reaches the interior volume
+- compare against the prior GLB and fail if the changed shell barely moves the visible front/rear/top/exterior silhouette
 - assert side-specific plane relationship
 - assert enough span for the visible surface
 - assert parent ownership if animation matters

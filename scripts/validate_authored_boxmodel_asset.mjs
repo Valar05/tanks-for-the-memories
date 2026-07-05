@@ -235,40 +235,42 @@ function glbWorldTriangles(json, binary) {
   return triangles;
 }
 function isQualifyingExteriorArmor(hit) {
-  return /(sloped_sponson|outer_track_skirt|hull_lower_tub|hull_glacis|flush_glacis|visible_glacis|vertical_shoulder|rear_armor|engine_deck|rounded_transmission|front_fender|rear_fender)/.test(hit.nodeName)
-    || /^(hull_left|hull_right|hull_glacis|hull_rear|engine_deck)$/.test(hit.material);
+  return /(sloped_sponson|outer_track_skirt|hull_glacis|flush_glacis|visible_glacis|vertical_shoulder|rear_armor|engine_deck|rounded_transmission|front_fender|rear_fender)/.test(hit.nodeName);
 }
 function formatRayPoint(point) { return point.map((n) => n.toFixed(3)).join(','); }
 function raycastClosureFailures(json, binary) {
   const triangles = glbWorldTriangles(json, binary);
   const failures = [];
-  const zones = [
-    { side: 'left', sideSign: 1, xValues: [1.42, 1.58, 1.68], yValues: [0.02, 0.22, 0.44], zone: 'front' },
-    { side: 'left', sideSign: 1, xValues: [-1.42, -1.62, -1.72], yValues: [0.02, 0.22, 0.44], zone: 'rear' },
-    { side: 'right', sideSign: -1, xValues: [1.42, 1.58, 1.68], yValues: [0.02, 0.22, 0.44], zone: 'front' },
-    { side: 'right', sideSign: -1, xValues: [-1.42, -1.62, -1.72], yValues: [0.02, 0.22, 0.44], zone: 'rear' }
+  const raySpecs = [];
+  const sideZones = [
+    { side: 'left', sideSign: 1, xValues: [1.42, 1.58, 1.68, 1.92], yValues: [0.02, 0.22, 0.44, 0.64], zone: 'front' },
+    { side: 'left', sideSign: 1, xValues: [-1.42, -1.62, -1.72, -1.92], yValues: [0.02, 0.22, 0.44, 0.64], zone: 'rear' },
+    { side: 'right', sideSign: -1, xValues: [1.42, 1.58, 1.68, 1.92], yValues: [0.02, 0.22, 0.44, 0.64], zone: 'front' },
+    { side: 'right', sideSign: -1, xValues: [-1.42, -1.62, -1.72, -1.92], yValues: [0.02, 0.22, 0.44, 0.64], zone: 'rear' }
   ];
-  for (const spec of zones) {
-    const startZ = spec.sideSign * 1.18;
-    const interiorZ = spec.sideSign * 0.50;
-    const direction = [0, 0, -spec.sideSign];
-    const interiorDistance = Math.abs(startZ - interiorZ);
-    for (const x of spec.xValues) {
-      for (const y of spec.yValues) {
-        const origin = [x, y, startZ];
-        let firstHit = null;
-        let firstQualifying = null;
-        for (const triangle of triangles) {
-          const distance = rayTriangleDistance(origin, direction, triangle.a, triangle.b, triangle.c);
-          if (distance == null || distance > interiorDistance) continue;
-          const hit = { ...triangle, distance };
-          if (!firstHit || distance < firstHit.distance) firstHit = hit;
-          if (isQualifyingExteriorArmor(hit) && (!firstQualifying || distance < firstQualifying.distance)) firstQualifying = hit;
-        }
-        if (!firstQualifying) {
-          failures.push(spec.side + ' ' + spec.zone + ' hull/track ray entered interior before exterior armor; origin ' + formatRayPoint(origin) + '; direction ' + formatRayPoint(direction) + '; first hit ' + (firstHit ? firstHit.nodeName + '/' + firstHit.material + '@' + firstHit.distance.toFixed(3) : 'none') + '; interior distance ' + interiorDistance.toFixed(3));
-        }
-      }
+  for (const spec of sideZones) {
+    for (const x of spec.xValues) for (const y of spec.yValues) {
+      raySpecs.push({ label: spec.side + ' ' + spec.zone + ' side ray', origin: [x, y, spec.sideSign * 1.28], direction: [0, 0, -spec.sideSign], limit: 0.82 });
+    }
+    for (const y of [0.22, 0.44, 0.64]) {
+      const frontOrigin = [2.16, y, spec.sideSign * 1.26];
+      const rearOrigin = [-2.16, y, spec.sideSign * 1.26];
+      raySpecs.push({ label: spec.side + ' front oblique ray', origin: frontOrigin, direction: [-0.58, 0, -0.82 * spec.sideSign], limit: 1.20 });
+      raySpecs.push({ label: spec.side + ' rear oblique ray', origin: rearOrigin, direction: [0.58, 0, -0.82 * spec.sideSign], limit: 1.20 });
+    }
+  }
+  for (const spec of raySpecs) {
+    let firstHit = null;
+    let firstQualifying = null;
+    for (const triangle of triangles) {
+      const distance = rayTriangleDistance(spec.origin, spec.direction, triangle.a, triangle.b, triangle.c);
+      if (distance == null || distance > spec.limit) continue;
+      const hit = { ...triangle, distance };
+      if (!firstHit || distance < firstHit.distance) firstHit = hit;
+      if (isQualifyingExteriorArmor(hit) && (!firstQualifying || distance < firstQualifying.distance)) firstQualifying = hit;
+    }
+    if (!firstQualifying) {
+      failures.push(spec.label + ' entered interior before exterior armor; origin ' + formatRayPoint(spec.origin) + '; direction ' + formatRayPoint(spec.direction) + '; first hit ' + (firstHit ? firstHit.nodeName + '/' + firstHit.material + '@' + firstHit.distance.toFixed(3) : 'none') + '; limit ' + spec.limit.toFixed(3));
     }
   }
   return failures;
@@ -314,8 +316,8 @@ if (failures.length === 0) {
   if (!String(manifest.source_policy || '').includes('Blender Z-up basis conversion')) fail('manifest must identify Blender Z-up basis conversion');
   if (!manifest.orientation_contract || !String(manifest.orientation_contract.visual_regression_prevented || '').includes('wheels must sit inside side skirts')) fail('manifest must preserve upright/gun/skirt orientation contract');
   if (!manifest.runtime_contract?.side_skirt_occlusion) fail('manifest must preserve side skirt occlusion contract');
-  if (!String(manifest.silhouette_revision || '').includes('v1-11-raycast-closed-sponson-shells')) fail('manifest must record raycast-closed sponson shell revision');
-  if (!String(manifest.runtime_contract?.integrated_sponson_skirt_armor || '').includes('joined multi-face sponson shells reshape the hull side')) fail('manifest must describe joined multi-face sponson/skirt hull-side shells, not cover panels');
+  if (!String(manifest.silhouette_revision || '').includes('v1-12-watertight-visible-sponson-shells')) fail('manifest must record raycast-closed sponson shell revision');
+  if (!String(manifest.runtime_contract?.integrated_sponson_skirt_armor || '').includes('visibly expanded watertight sponson shells reshape the hull side')) fail('manifest must describe joined multi-face sponson/skirt hull-side shells, not cover panels');
   if (!String(manifest.runtime_contract?.raycast_exterior_closure || '').includes('outside gap rays hit exterior armor before interior')) fail('raycast closure rule missing: outside gap rays must hit exterior armor before they can enter the tank interior');
   for (const rayFailure of raycastClosureFailures(json, binary)) fail(rayFailure);
   if (!String(manifest.source_policy || '').includes('no Meshy chassis or turret')) fail('manifest must reject Meshy chassis/turret imports');
@@ -355,11 +357,11 @@ if (failures.length === 0) {
     if (blenderScript.includes(forbidden) || wrapper.includes(forbidden)) fail('boxmodel exporter must not use rejected/import marker ' + forbidden);
   }
   if (!blenderScript.includes('def P(') || !blenderScript.includes('Blender is Z-up')) fail('boxmodel exporter must declare Blender basis conversion helpers');
-  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-11-20260705']) {
+  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-12-20260705']) {
     if (!runtime.includes(marker)) fail('boxmodel runtime missing marker ' + marker);
   }
   if (!build.includes("buildEntry('boxmodel-tank.ts', 'boxmodel-tank')")) fail('build must bundle boxmodel-tank.ts');
-  if (!runtime.includes('authored_sherman_boxmodel_v1.glb?v=v1-11-raycast-closed-sponson-shells')) fail('runtime must version the authored boxmodel GLB URL so asset caching cannot hide geometry changes');
+  if (!runtime.includes('authored_sherman_boxmodel_v1.glb?v=v1-12-watertight-visible-sponson-shells')) fail('runtime must version the authored boxmodel GLB URL so asset caching cannot hide geometry changes');
   if (!build.includes("writeBundledHtml('boxmodel-tank.html', 'boxmodel-tank.html', 'boxmodel-tank')")) fail('build must write boxmodel-tank.html');
 }
 
