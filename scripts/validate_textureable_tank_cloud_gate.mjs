@@ -1,5 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 
+import { requirePromptContract } from './prompt_contract_guard.mjs';
+requirePromptContract({ action: 'visual_qa_gate' });
 const manifestPath = 'generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json';
 const assetManifestPath = 'public/tftm/models/authored_sherman_textureable_v1/model_manifest.json';
 const expectedBuild = 'tftm-authored-sherman-textureable-v1-1-20260705';

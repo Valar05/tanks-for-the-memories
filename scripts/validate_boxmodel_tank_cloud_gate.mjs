@@ -1,5 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 
+import { requirePromptContract } from './prompt_contract_guard.mjs';
+requirePromptContract({ action: 'visual_qa_gate' });
 const expectedBuild = 'tftm-authored-sherman-boxmodel-v1-15-20260705';
 const expectedGlbToken = 'v1-15-cast-turret-readable-wheels';
 const verdictPath = 'docs/visual-verdicts/boxmodel-v1-15-red.json';

@@ -2,6 +2,8 @@ import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } fr
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
+import { requirePromptContract } from './prompt_contract_guard.mjs';
+requirePromptContract({ action: 'cloud_visual_release' });
 const releaseRoot = join('generated', 'cloud-visual-truth', 'tftm-release');
 const distRoot = join(releaseRoot, 'dist');
 const tankManifestPath = 'public/tftm/models/m4a3_75_vvss_sherman_alpha_mobile/model_manifest.json';

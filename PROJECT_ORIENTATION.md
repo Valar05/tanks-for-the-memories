@@ -14,6 +14,15 @@ Start with these files:
 4. The relevant exporter, validator, runtime page, and manifest for the asset under work
 5. `docs/doctrine/3d-placement-corpus.md` before moving, adding, scaling, or rotating any tank part
 
+
+## Current Prompt Authority Gate
+
+The newest user instruction controls every mutation in this project. Older plans, summaries, failed visual loops, generated assets, commits, deployed URLs, diagnostics, and cloud packets are evidence only unless the latest user instruction explicitly imports them.
+
+Before editing code, assets, generated models, doctrine, deploy packets, or visual tooling, state the current user command, the forbidden stale premise, the intended mutation, and why the mutation satisfies the current command. If those four facts do not align, stop. Do not export, deploy, wake, validate, commit, or continue implementation from the stale premise.
+
+User corrections are cancellation events, not advice for later. `Implement the plan` means implement only the plan that matches the latest correction. Work performed after a prompt/premise mismatch is red-build disobedience even if tests, manifests, or deploys pass.
+
 ## Visual Evidence Rule
 
 Tank visual work is cloud-gated. Local screenshots, Android `screencap`, localhost browser capture, and local visual-harness frames are forbidden as visual acceptance evidence. Visual success requires the cloud visual truth release lane plus Sense Simulation review of the named visible relationship.

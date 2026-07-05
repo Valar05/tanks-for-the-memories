@@ -2,6 +2,8 @@ import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { get } from 'node:https';
 
+import { requirePromptContract } from './prompt_contract_guard.mjs';
+if (!process.argv.includes('--dry-run') && !process.argv.includes('--verify-only')) requirePromptContract({ action: 'cloud_review_deploy' });
 const project = 'home-center-dclar';
 const channel = 'tftm-boxmodel-v1-13';
 const reviewBaseUrl = 'https://pose-lab-visual-truth--tftm-boxmodel-v1-13-ncn1csrf.web.app';

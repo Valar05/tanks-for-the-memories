@@ -5,6 +5,8 @@ import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 
+import { requirePromptContract } from './prompt_contract_guard.mjs';
+requirePromptContract({ action: 'asset_export' });
 globalThis.self = globalThis;
 globalThis.FileReader = class {
   readAsArrayBuffer(blob) {

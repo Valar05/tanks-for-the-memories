@@ -24,6 +24,15 @@ The first scope is D-Day plus a few days inland. The beach can matter later, but
 
 The current browser prototype is a commander-station probe, not the full product.
 
+
+## Current Prompt Authority Gate
+
+The newest user instruction is repository truth for the current turn. Prior doctrine, plans, artifacts, screenshots, exports, and cloud packets do not authorize mutation when they conflict with the newest correction.
+
+Before any visual/modeling/export/deploy/browser-wake mutation, the agent must verify a current prompt contract naming the latest command, forbidden stale premise, allowed mutation type, target artifact, and evidence lane. Missing, stale, or mismatched contracts fail closed.
+
+A direct correction cancels the active premise immediately. Continuing to implement the canceled premise is red-build disobedience, not iteration. `Implement the plan` only applies to the latest accepted plan after corrections are incorporated.
+
 ## Visual Evidence Rule
 
 Tank visual work in this repository is cloud-gated. Local screenshots, Android `screencap`, localhost browser capture, and local visual harness frames are forbidden for visual validation and must not be used as acceptance proof. Visual success requires the cloud visual truth release lane plus Sense Simulation review of the named visible relationship. If cloud review is blocked, repair the cloud review surface or report that blocker; do not substitute local capture.
