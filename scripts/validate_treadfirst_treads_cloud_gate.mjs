@@ -4,9 +4,9 @@ import { requirePromptContract } from './prompt_contract_guard.mjs';
 requirePromptContract({ action: 'visual_qa_gate' });
 const manifestPath = 'generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json';
 const assetManifestPath = 'public/tftm/models/authored_sherman_treads_v1/model_manifest.json';
-const expectedBuild = 'tftm-authored-sherman-treads-v1-9-20260705';
-const expectedRevision = 'v1-9-open-running-gear-rebuild';
-const previousRedVerdictPath = 'docs/visual-verdicts/treads-v1-8-red.json';
+const expectedBuild = 'tftm-authored-sherman-treads-v1-8-20260705';
+const expectedRevision = 'v1-8-custom-belt-normals';
+const previousRedVerdictPath = 'docs/visual-verdicts/treads-v1-7-red.json';
 const failures = [];
 function fail(message) { failures.push(message); }
 
@@ -20,8 +20,8 @@ if (failures.length === 0) {
   const asset = JSON.parse(readFileSync(assetManifestPath, 'utf8'));
   const previousRedVerdict = JSON.parse(readFileSync(previousRedVerdictPath, 'utf8'));
   const review = release.authored_treads_review;
-  if (previousRedVerdict.revision !== 'v1-8-custom-belt-normals' || previousRedVerdict.status !== 'red_unaccepted_no_op_churn') {
-    fail('previous v1.8 red/no-op verdict must remain explicit before v1.9 review');
+  if (previousRedVerdict.revision !== 'v1-7-smooth-continuous-tread-belt' || previousRedVerdict.status !== 'red_unaccepted_no_op_churn') {
+    fail('previous v1.7 red/no-op verdict must remain explicit before v1.8 review');
   }
   if (!review) fail('cloud manifest must include authored_treads_review');
   else {
@@ -30,7 +30,7 @@ if (failures.length === 0) {
     if (review.asset_id !== 'authored_sherman_treads_v1') fail('tread review asset id mismatch');
     if (review.silhouette_revision !== expectedRevision) fail('tread review revision mismatch');
     const acceptance = String(review.acceptance || '');
-    for (const phrase of ['full tread assembly only', 'open perimeter sidewall frame', 'wheels inside the inner profile opening', 'sprockets, idlers, return rollers, bogie connectors', 'profile opening', 'baked wheel rim loops', 'smooth rounded rubber faces', 'open running gear with visible track runs and exposed wheels', 'preserve OrbitControls camera and orientation widget', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
+    for (const phrase of ['full tread assembly only', 'open perimeter sidewall frame', 'wheels inside the inner profile opening', 'sprockets, idlers, return rollers, bogie connectors', 'profile opening', 'baked wheel rim loops', 'smooth rounded rubber faces', 'custom profile-tangent smooth tread belt normals without faceted panels', 'preserve OrbitControls camera and orientation widget', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
       if (!acceptance.includes(phrase)) fail('tread acceptance must mention ' + phrase);
     }
   }
@@ -49,4 +49,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Tread-first cloud review gate passed: hosted packet declares v1.9 open running gear review lane with preserved camera controls; cloud/Sense acceptance is still required.');
+console.log('Tread-first cloud review gate passed: hosted packet declares v1.8 custom profile-tangent smooth tread belt normal review lane with preserved camera controls; cloud/Sense acceptance is still required.');

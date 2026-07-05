@@ -38,8 +38,6 @@
     "export:authored-treads": "node scripts/export_authored_sherman_treads.mjs",
     "authored-treads-smoke": "node scripts/validate_authored_treads_asset.mjs",
     "visual-qa:treadfirst-treads": "node scripts/validate_treadfirst_treads_cloud_gate.mjs",
-    "blender-visibility:treads": "node scripts/render_treads_blender_visibility.mjs",
-    "blender-visibility:treads-smoke": "node scripts/validate_treads_blender_visibility.mjs",
     "prompt-contract-smoke": "node scripts/validate_prompt_contract_guard.mjs"
   },
   "dependencies": {
