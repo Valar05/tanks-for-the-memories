@@ -4,17 +4,23 @@ const manifestPath = 'generated/cloud-visual-truth/tftm-release/cloud_visual_tru
 const assetManifestPath = 'public/tftm/models/authored_sherman_treads_v1/model_manifest.json';
 const expectedBuild = 'tftm-authored-sherman-treads-v1-4-20260705';
 const expectedRevision = 'v1-4-crisp-rims-smooth-tires';
+const currentRedVerdictPath = 'docs/visual-verdicts/treads-v1-4-red.json';
 const failures = [];
 function fail(message) { failures.push(message); }
 
 if (!existsSync(manifestPath)) fail('missing cloud release manifest ' + manifestPath);
 if (!existsSync('generated/cloud-visual-truth/tftm-release/dist/treadfirst-treads.html')) fail('cloud release missing dist/treadfirst-treads.html');
 if (!existsSync(assetManifestPath)) fail('missing tread-only asset manifest ' + assetManifestPath);
+if (!existsSync(currentRedVerdictPath)) fail('missing current red verdict ' + currentRedVerdictPath);
 
 if (failures.length === 0) {
   const release = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const asset = JSON.parse(readFileSync(assetManifestPath, 'utf8'));
+  const currentRedVerdict = JSON.parse(readFileSync(currentRedVerdictPath, 'utf8'));
   const review = release.authored_treads_review;
+  if (currentRedVerdict.build_token === expectedBuild && currentRedVerdict.silhouette_revision === expectedRevision && currentRedVerdict.status === 'red_unaccepted_no_op_churn') {
+    fail('current tread build is red/no-op by accepted visual report: ' + currentRedVerdictPath);
+  }
   if (!review) fail('cloud manifest must include authored_treads_review');
   else {
     if (review.route !== 'treadfirst-treads.html') fail('tread review route mismatch');
