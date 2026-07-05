@@ -1,0 +1,33 @@
+{
+  "artifact_type": "tank_visible_failure_packet",
+  "id": "boxmodel-v1-15-identical-mesh-read",
+  "created_at": "2026-07-05T14:20:00Z",
+  "review_url": "https://pose-lab-visual-truth--tftm-boxmodel-v1-13-ncn1csrf.web.app/boxmodel-tank.html",
+  "target_route": "boxmodel-tank.html",
+  "build_token": "tftm-authored-sherman-boxmodel-v1-15-20260705",
+  "glb_token": "v1-15-cast-turret-readable-wheels",
+  "controlling_verdict": "docs/visual-verdicts/boxmodel-v1-15-red.json",
+  "controlling_intake": "docs/visual-repair-intakes/boxmodel-after-v1-15-no-op.json",
+  "visible_failure": "The tank keeps reading as the same mesh because the dominant silhouette-driving forms did not materially change.",
+  "dominant_unchanged_shapes": [
+    "hull_lower_tub__hull_left remains the same broad rectangular hull mass",
+    "left_sloped_sponson__hull_left and right_sloped_sponson__hull_right remain the same side silhouette drivers",
+    "left_track_motion and right_track_motion remain the same long dark track slab drivers",
+    "runtime camera, centering, lighting, material palette, and model rotation remain constant, so small detail changes are visually swallowed"
+  ],
+  "hidden_or_subordinate_changed_shapes": [
+    "roadwheel diameter and hub changes are subordinate to the long dark track slabs and skirts",
+    "turret panel removal changes internal/secondary turret construction but leaves a similar turret mass in the same camera read",
+    "slot-wall and shoulder pieces are too small and too local to dominate the visible hull/track gap read"
+  ],
+  "failed_visible_relationship": "The exterior tank form should visibly change at the silhouette and armor-continuity level; instead only small local components changed while the viewer still sees the same hull, track, and turret read.",
+  "why_prior_change_passed_diagnostics": "Bbox, node, raycast, triangle-count, material-slot, and token checks proved that geometry existed or moved numerically, but none measured whether the silhouette-driving surfaces changed enough to be visible in the hosted review camera.",
+  "next_geometry_rule": "Do not build another mesh unless the edit replaces or materially reshapes a dominant exterior form: hull/sponson shell, track slab/skirt volume, turret mass, or full track-well armor surface.",
+  "repair_vs_replacement_decision": "Default to replacement of dominant exterior forms unless fresh diagnostic evidence isolates one named exterior surface whose replacement can visibly change the silhouette.",
+  "no_build_if": [
+    "The proposed change only adds panels, plugs, blockers, small covers, hubs, or hidden/internal faces.",
+    "The proposed change leaves hull/sponson/track/turret dominant bboxes effectively unchanged.",
+    "The proposed proof relies on tokens, nodes, bboxes, raycasts, or stale diagnostic renders without cloud/Sense visible delta."
+  ],
+  "dominant_shape_baseline": "docs/visual-failure-packets/boxmodel-v1-15-dominant-shape-baseline.json"
+}

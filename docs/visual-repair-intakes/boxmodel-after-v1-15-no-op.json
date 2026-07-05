@@ -24,5 +24,16 @@
     "accepted",
     "ready for wake",
     "green"
-  ]
+  ],
+  "visible_failure_packet": "docs/visual-failure-packets/boxmodel-v1-15-identical-mesh-read.json",
+  "dominant_shape_rule": "Future geometry work must replace or materially reshape a dominant exterior form: hull/sponson shell, track slab/skirt volume, turret mass, or full track-well armor surface. Detail-only mesh changes are forbidden.",
+  "what_not_to_build": [
+    "small panels",
+    "gap plugs",
+    "blockers",
+    "pasted turret plates",
+    "wheel-only readability tweaks while track slabs dominate",
+    "source-token-only or bbox-only proof"
+  ],
+  "dominant_shape_baseline": "docs/visual-failure-packets/boxmodel-v1-15-dominant-shape-baseline.json"
 }

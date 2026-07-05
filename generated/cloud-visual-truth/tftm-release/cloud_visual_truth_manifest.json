@@ -86,7 +86,52 @@
         "accepted",
         "ready for wake",
         "green"
-      ]
+      ],
+      "visible_failure_packet": "docs/visual-failure-packets/boxmodel-v1-15-identical-mesh-read.json",
+      "dominant_shape_rule": "Future geometry work must replace or materially reshape a dominant exterior form: hull/sponson shell, track slab/skirt volume, turret mass, or full track-well armor surface. Detail-only mesh changes are forbidden.",
+      "what_not_to_build": [
+        "small panels",
+        "gap plugs",
+        "blockers",
+        "pasted turret plates",
+        "wheel-only readability tweaks while track slabs dominate",
+        "source-token-only or bbox-only proof"
+      ],
+      "dominant_shape_baseline": "docs/visual-failure-packets/boxmodel-v1-15-dominant-shape-baseline.json"
+    },
+    "visible_failure_packet_path": "docs/visual-failure-packets/boxmodel-v1-15-identical-mesh-read.json",
+    "visible_failure_packet": {
+      "artifact_type": "tank_visible_failure_packet",
+      "id": "boxmodel-v1-15-identical-mesh-read",
+      "created_at": "2026-07-05T14:20:00Z",
+      "review_url": "https://pose-lab-visual-truth--tftm-boxmodel-v1-13-ncn1csrf.web.app/boxmodel-tank.html",
+      "target_route": "boxmodel-tank.html",
+      "build_token": "tftm-authored-sherman-boxmodel-v1-15-20260705",
+      "glb_token": "v1-15-cast-turret-readable-wheels",
+      "controlling_verdict": "docs/visual-verdicts/boxmodel-v1-15-red.json",
+      "controlling_intake": "docs/visual-repair-intakes/boxmodel-after-v1-15-no-op.json",
+      "visible_failure": "The tank keeps reading as the same mesh because the dominant silhouette-driving forms did not materially change.",
+      "dominant_unchanged_shapes": [
+        "hull_lower_tub__hull_left remains the same broad rectangular hull mass",
+        "left_sloped_sponson__hull_left and right_sloped_sponson__hull_right remain the same side silhouette drivers",
+        "left_track_motion and right_track_motion remain the same long dark track slab drivers",
+        "runtime camera, centering, lighting, material palette, and model rotation remain constant, so small detail changes are visually swallowed"
+      ],
+      "hidden_or_subordinate_changed_shapes": [
+        "roadwheel diameter and hub changes are subordinate to the long dark track slabs and skirts",
+        "turret panel removal changes internal/secondary turret construction but leaves a similar turret mass in the same camera read",
+        "slot-wall and shoulder pieces are too small and too local to dominate the visible hull/track gap read"
+      ],
+      "failed_visible_relationship": "The exterior tank form should visibly change at the silhouette and armor-continuity level; instead only small local components changed while the viewer still sees the same hull, track, and turret read.",
+      "why_prior_change_passed_diagnostics": "Bbox, node, raycast, triangle-count, material-slot, and token checks proved that geometry existed or moved numerically, but none measured whether the silhouette-driving surfaces changed enough to be visible in the hosted review camera.",
+      "next_geometry_rule": "Do not build another mesh unless the edit replaces or materially reshapes a dominant exterior form: hull/sponson shell, track slab/skirt volume, turret mass, or full track-well armor surface.",
+      "repair_vs_replacement_decision": "Default to replacement of dominant exterior forms unless fresh diagnostic evidence isolates one named exterior surface whose replacement can visibly change the silhouette.",
+      "no_build_if": [
+        "The proposed change only adds panels, plugs, blockers, small covers, hubs, or hidden/internal faces.",
+        "The proposed change leaves hull/sponson/track/turret dominant bboxes effectively unchanged.",
+        "The proposed proof relies on tokens, nodes, bboxes, raycasts, or stale diagnostic renders without cloud/Sense visible delta."
+      ],
+      "dominant_shape_baseline": "docs/visual-failure-packets/boxmodel-v1-15-dominant-shape-baseline.json"
     },
     "acceptance": "Sense Simulation must confirm Sherman silhouette, connected cast turret massing with no cheek/side/roof pasted panels, smaller integrated track-well slot walls plus joined sponson shells close the front-left, front-right, rear-left, and rear-right lower hull/track cracks as joined metal, pass targeted no-wing slot-wall, no-pasted-turret-panel, and readable wheel/hub/bogie checks, and crack rays from outside those visible gaps hit exterior armor before entering the tank interior, with no pasted panels, blockers, floating boxes, or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.",
     "tuner_acceptance": "Sense Simulation must review boxmodel-tank.html?tune=1 as a preserved future-use gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored flat armor panels are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected panel is highlighted for editing, already enabled panels remain visible, Move/Rotate/Scale are one active mode at a time, Scale exposes explicit All/X/Y/Z axis buttons, drag/pinch/twist gestures visibly change the selected panel, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and panels share the same unskewed model frame, no object transform handles appear, and local capture was not used."
@@ -118,8 +163,8 @@
     "asset_policy": "fully authored hard-surface chassis and turret; no Meshy chassis or turret imports; split face PNG plates for DALL-E paintability",
     "acceptance": "Sense Simulation must confirm close-up chassis and turret read as usable hard-surface armor, barrel belongs to mantlet, split face texture plates map sanely, and local capture was not used."
   },
-  "generated_at": "2026-07-05T13:46:54.849Z",
-  "source_commit": "121109f",
+  "generated_at": "2026-07-05T14:06:19.522Z",
+  "source_commit": "2248747",
   "dirty_status": [],
   "dist": "generated/cloud-visual-truth/tftm-release/dist",
   "tank_asset": "m4a3_75_vvss_sherman_alpha_mobile",

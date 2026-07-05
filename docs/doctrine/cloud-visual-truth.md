@@ -120,6 +120,10 @@ The required verdict artifact is `docs/visual-verdicts/boxmodel-v1-15-red.json`.
 
 Before another boxmodel geometry edit, run `npm run tank-visual-repair-preflight`. The preflight intake at `docs/visual-repair-intakes/boxmodel-after-v1-15-no-op.json` must name the visible target, current actual read, forbidden old mistake, single edit class, accepted evidence needed, and what would prove no-op. If the preflight fails, do not edit geometry.
 
+The visible failure packet at `docs/visual-failure-packets/boxmodel-v1-15-identical-mesh-read.json` is mandatory context: v1-15 looked identical because dominant silhouette-driving forms stayed effectively unchanged while only subordinate detail geometry moved. Any future geometry proposal that leaves hull/sponson shell, track slab/skirt volume, turret mass, and full track-well armor surfaces effectively unchanged is no-op churn by default and must not be built.
+
+`npm run boxmodel-dominant-shape-smoke` compares the current boxmodel GLB against `docs/visual-failure-packets/boxmodel-v1-15-dominant-shape-baseline.json`. A future revision that changes tokens or detail meshes while leaving the dominant hull/sponson/track/turret bboxes within the no-op threshold must fail before cloud review.
+
 The stale Blender visibility failure is part of the bug: diagnostic renders for `authored_sherman_boxmodel_v1` must fail if their recorded `model_revision` differs from the current model manifest revision. Offline renders remain diagnostic only even when current.
 
 

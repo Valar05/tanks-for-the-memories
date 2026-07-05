@@ -4,6 +4,7 @@ const expectedBuild = 'tftm-authored-sherman-boxmodel-v1-15-20260705';
 const expectedGlbToken = 'v1-15-cast-turret-readable-wheels';
 const verdictPath = 'docs/visual-verdicts/boxmodel-v1-15-red.json';
 const intakePath = 'docs/visual-repair-intakes/boxmodel-after-v1-15-no-op.json';
+const failurePacketPath = 'docs/visual-failure-packets/boxmodel-v1-15-identical-mesh-read.json';
 
 const failures = [];
 function fail(message) { failures.push(message); }
@@ -11,12 +12,15 @@ if (!existsSync('generated/cloud-visual-truth/tftm-release/cloud_visual_truth_ma
 if (!existsSync('generated/cloud-visual-truth/tftm-release/dist/boxmodel-tank.html')) fail('cloud release missing dist/boxmodel-tank.html');
 if (!existsSync(verdictPath)) fail('missing boxmodel visual verdict ' + verdictPath + '; no-op churn cannot be gated by source tokens alone');
 if (!existsSync(intakePath)) fail('missing boxmodel visual repair intake ' + intakePath + '; future geometry work must be constrained before cloud review');
+if (!existsSync(failurePacketPath)) fail('missing boxmodel visible failure packet ' + failurePacketPath + '; cannot explain no-op churn without dominant-shape diagnosis');
 if (failures.length === 0) {
   const manifest = JSON.parse(readFileSync('generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json', 'utf8'));
   const verdict = JSON.parse(readFileSync(verdictPath, 'utf8'));
   const intake = JSON.parse(readFileSync(intakePath, 'utf8'));
+  const failurePacket = JSON.parse(readFileSync(failurePacketPath, 'utf8'));
   const releaseVerdict = manifest.authored_boxmodel_review?.visual_verdict;
   const releaseIntake = manifest.authored_boxmodel_review?.visual_repair_intake;
+  const releaseFailurePacket = manifest.authored_boxmodel_review?.visible_failure_packet;
   const rules = JSON.stringify(manifest);
   const captures = (manifest.required_cloud_captures || []).join('\\n');
 
@@ -38,10 +42,20 @@ if (failures.length === 0) {
   if (intake.current_build_token !== verdict.build_token) fail('visual repair intake build token must match verdict build token');
   if (intake.current_glb_token !== verdict.glb_token) fail('visual repair intake GLB token must match verdict GLB token');
   if (!String(intake.forbidden_old_mistake || '').includes('pasted') || !String(intake.forbidden_old_mistake || '').includes('stale diagnostic')) fail('visual repair intake must forbid pasted geometry and stale diagnostic proof paths');
+  if (intake.visible_failure_packet !== failurePacketPath) fail('visual repair intake must point at visible failure packet');
+  if (failurePacket.controlling_intake !== intakePath) fail('visible failure packet must point at controlling intake');
+  if (failurePacket.build_token !== verdict.build_token || failurePacket.glb_token !== verdict.glb_token) fail('visible failure packet tokens must match red verdict');
+  if (!Array.isArray(failurePacket.dominant_unchanged_shapes) || failurePacket.dominant_unchanged_shapes.length < 4) fail('visible failure packet must list dominant unchanged shapes');
+  if (!String(failurePacket.next_geometry_rule || '').includes('dominant exterior form')) fail('visible failure packet must require dominant exterior form change before next build');
   if (!releaseIntake) fail('cloud manifest must embed authored_boxmodel_review.visual_repair_intake');
   else {
     if (releaseIntake.current_build_token !== intake.current_build_token) fail('cloud manifest visual repair intake build token does not match source intake');
     if (releaseIntake.current_glb_token !== intake.current_glb_token) fail('cloud manifest visual repair intake GLB token does not match source intake');
+  }
+  if (!releaseFailurePacket) fail('cloud manifest must embed authored_boxmodel_review.visible_failure_packet');
+  else {
+    if (releaseFailurePacket.build_token !== failurePacket.build_token) fail('cloud manifest visible failure packet build token does not match source packet');
+    if (!String(releaseFailurePacket.visible_failure || '').includes('dominant silhouette-driving forms')) fail('cloud manifest visible failure packet must carry dominant-shape diagnosis');
   }
   if (!rules.includes('authored_sherman_boxmodel_v1')) fail('cloud manifest must name authored_sherman_boxmodel_v1');
   if (!rules.includes(expectedBuild)) fail('cloud manifest must require the boxmodel build token');
