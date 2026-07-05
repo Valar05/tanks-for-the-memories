@@ -28,6 +28,10 @@ The current browser prototype is a commander-station probe, not the full product
 
 Tank visual work in this repository is cloud-gated. Local screenshots, Android `screencap`, localhost browser capture, and local visual harness frames are forbidden for visual validation and must not be used as acceptance proof. Visual success requires the cloud visual truth release lane plus Sense Simulation review of the named visible relationship. If cloud review is blocked, repair the cloud review surface or report that blocker; do not substitute local capture.
 
+Visual QA is mandatory for visual work. A visual change without accepted-lane visual QA is red or blocked, never complete. Diagnostics, tests, bboxes, manifests, deploys, and browser wake are supporting evidence only; they cannot replace visual QA.
+
+Browser wake is not a discovery tool. Never wake the browser so the user can find out whether an unknown visual change worked. Wake only after the accepted cloud/Sense evidence lane already says the named visible relationship passes, or when a real external decision is required and the visual state has already been characterized.
+
 Boxmodel geometry tuning must use the hosted gesture-only tuner (`boxmodel-tank.html?tune=1`) when coordinate placement is uncertain. Do not continue blind mesh edits after a cloud screenshot disproves the visible relationship. Select one named part, adjust location/rotation/scale through the tuner, export the tuning JSON or share URL, then bake only an accepted cloud-reviewed tuning snapshot into source assets.
 
 The authored boxmodel v1.8 front track/glacis gap is a structural coverage problem, not a manual-positioning task. Preserve the tuner for future part authoring, but do not ask the user to place runtime panels to cover that known gap; add narrow integrated coverage in the exporter and validate it through cloud/Sense review.

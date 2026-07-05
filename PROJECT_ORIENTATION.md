@@ -19,6 +19,35 @@ Tank visual work is cloud-gated. Local screenshots, Android `screencap`, localho
 
 Offline Blender renders, GLB bboxes, route checks, source-string checks, and model manifests are diagnostic only. They may explain a failure or guard against regressions, but they cannot close a visual build.
 
+## Visual QA Is Mandatory
+
+Visual QA is not optional for any browser, tank, model, animation, material, camera, or visual workflow change. If the change is judged by what a user sees, the work is red/unaccepted until the accepted visual evidence lane inspects the named visible relationship.
+
+Do not substitute implementation effort, tests, manifests, bboxes, route readiness, deployment, or browser wake for visual QA. If visual QA cannot run, the result is blocked or red; it is not complete.
+
+Every visual report must include:
+
+- expected visible relationship
+- actual visible relationship from the accepted evidence lane
+- what visibly changed
+- what did not change
+- whether diagnostics agree with or contradict the visual read
+
+## Wake Is Not Discovery
+
+Never wake the browser to ask the user whether a tank visual change worked. Wake is not a QA tool, discovery step, or substitute for agent-side visual judgment.
+
+Browser wake is allowed only after the accepted cloud/Sense evidence lane already says the named visible relationship passes. If the agent does not know the visible outcome yet, do not wake. Continue the accepted review workflow, repair the evidence lane, or report the blocker.
+
+Forbidden wake pattern:
+
+1. change geometry, assets, camera, materials, runtime code, or deployment
+2. run validators that only prove source, bbox, route, manifest, or build readiness
+3. deploy a cloud page
+4. wake the browser so the user discovers whether it looks right
+
+That pattern pushes QA onto the user and is a red-build workflow violation.
+
 ## Tank Hard-Surface Red-Build Rule
 
 A tank model fix is only real when the intended visible relationship changes. For hull, track, turret, mantlet, barrel, and coaxial MG work, state the expected relationship and the actual visible relationship before editing.

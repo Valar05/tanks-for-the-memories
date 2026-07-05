@@ -2,6 +2,8 @@
 
 Local screenshots, Android `screencap`, localhost browser capture, and local visual harness frames are forbidden as acceptance evidence for the tank visual workflow. The accepted visual lane is a cloud-hosted build plus Sense Simulation review.
 
+Visual QA is mandatory. Any visual change without accepted-lane visual QA remains red or blocked. Build commands, deploy commands, route checks, manifests, GLB bboxes, source strings, and browser wake do not count as visual QA and cannot close the build.
+
 ## Cloud-Only Attention Rule
 
 Do not present a local browser, localhost URL, local screenshot, Android `screencap`, temporary-server capture, or stale capture as proof for this tank visual pass. When the user needs to see the tank, deploy the current release packet to cloud hosting, then use the cloud review surface and Sense Simulation before waking the browser for attention. Browser wake is blocked unless the cloud-hosted artifact is current and Sense Simulation says the named visible relationships pass.
@@ -21,7 +23,7 @@ npm run visual-qa:boxmodel-tank
 npm run boxmodel-tuner-smoke
 ```
 
-The command result is not visual acceptance by itself. Acceptance requires cloud-hosted Sense Simulation review showing:
+The command result is not visual acceptance by itself. Visual QA is non-optional, and acceptance requires cloud-hosted Sense Simulation review showing:
 
 - cannon visually seated in the turret/mantlet area, not separated from it
 - barrel vertical motion readable around the socket/pivot
@@ -53,26 +55,25 @@ Do not end a turn with only "red build" when there is still an obvious breaker a
 
 Wake rule:
 
-- Wake for acceptance only after the cloud review gate and Sense Simulation pass.
-- Wake for decision only when the breaker loop reaches a real choice or credit spend.
+- Wake for acceptance only after the accepted cloud/Sense evidence lane already says the named visible relationship passes.
+- Wake for decision only when the breaker loop reaches a real choice, credit spend, or external account action and the visual state has already been characterized by the agent.
+- Never wake to discover whether a visual change worked. Wake is not QA, not review capture, and not a request for the user to inspect an unknown outcome.
 - Do not let `ok: true` from the capture harness mean visual success; it only means pixels were captured.
 
-Post-deploy review rule:
+Post-deploy non-wake rule:
 
-- Any time a visual build is deployed and the agent is about to report on that build, wake the browser to the exact cloud URL with a fresh cache-bust token first.
-- After waking, inspect the freshest available cloud/Sense review artifact before final reporting.
-- If the screenshot/capture shows a red build, say so and continue the breaker loop when a next action is available.
-- Do not confuse review wake with acceptance wake: review wake proves the user and agent are looking at the current artifact; acceptance still requires the visible relationships to pass.
-- Do not skip review wake merely because local visual QA is blocked. If cloud/Sense review is blocked, wake the cloud artifact only for review, report the cloud-review blocker, and do not claim acceptance.
+- Deploying a visual build does not justify waking the browser.
+- After deploy, the agent must inspect the accepted cloud/Sense evidence artifact first. If that evidence is missing, stale, blocked, or red, do not wake. Repair the evidence lane, continue the breaker loop, or report the blocker.
+- If the evidence shows a red build, say so and continue the breaker loop when a next action is available; do not wake the user to confirm the failure.
+- If the evidence shows the named visible relationship passes, waking the exact cloud URL with a fresh cache-bust token is allowed as an attention handoff, not as discovery.
 
 Visual-change wake rule:
 
-- Any change that affects visuals and needs user review requires a wake before the agent claims success.
+- Any visual change must pass the accepted evidence lane before browser wake.
 - This includes code, assets, materials, shaders, model composition, animation, camera/framing, deployment, screenshots, generated files, exported files, or any other artifact whose quality is judged by what the user sees.
-- Wake the most direct current review surface for the artifact: cloud URL, hosted viewer, browser page, Android-visible file, upload/import path, or the accepted project review lane.
-- Verification commands, source checks, GLB inspection, manifests, LFS status, tests, and media refresh are diagnostic only. They can support the wake; they cannot replace it.
-- If no trustworthy visual review surface exists yet, state that as the blocker and build or repair the review surface before claiming visual success.
-- If the agent forgets the wake after a user-review visual change, the result is a visual red build even if the files, commit, push, tests, and packaging all succeeded.
+- Verification commands, source checks, GLB inspection, manifests, LFS status, tests, and media refresh are diagnostic only. They cannot authorize wake.
+- If no trustworthy visual review surface exists yet, state that as the blocker and build or repair the review surface before claiming visual success or waking the browser.
+- Waking an unknown visual outcome pushes QA onto the user and is itself a red-build workflow violation, even if files, commit, push, tests, packaging, and deploy succeeded.
 
 ## False-Change Penalty
 
