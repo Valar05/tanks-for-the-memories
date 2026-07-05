@@ -9,14 +9,14 @@ if (failures.length === 0) {
   const rules = JSON.stringify(manifest);
   const captures = (manifest.required_cloud_captures || []).join('\\n');
   if (!rules.includes('authored_sherman_boxmodel_v1')) fail('cloud manifest must name authored_sherman_boxmodel_v1');
-  if (!rules.includes('tftm-authored-sherman-boxmodel-v1-13-20260705')) fail('cloud manifest must require the boxmodel build token');
+  if (!rules.includes('tftm-authored-sherman-boxmodel-v1-14-20260705')) fail('cloud manifest must require the boxmodel build token');
   if (!rules.includes('tftm-authored-sherman-boxmodel-tuner-v9-20260704')) fail('cloud manifest must require the boxmodel tuner build token');
   if (!rules.includes('boxmodel-tank.html?tune=1')) fail('cloud manifest must require hosted tuner route review');
   if (!rules.includes('Blender box-model')) fail('cloud manifest must identify Blender box-model source');
   if (!captures.includes('boxmodel-tank phone portrait')) fail('cloud captures must require boxmodel-tank phone portrait');
   if (!captures.includes('non-cube turret')) fail('cloud captures must require non-cube turret review');
-  if (!rules.includes('narrow integrated track-well slot') && !rules.includes('narrow integrated slot walls')) fail('cloud manifest must require narrow integrated slot-wall review');
-  if (!rules.includes('targeted no-wing slot-wall checks') && !rules.includes('without side-wing deformation')) fail('cloud manifest must require targeted no-wing slot-wall review');
+  if (!rules.includes('narrow integrated track-well slot') && !rules.includes('smaller integrated slot walls')) fail('cloud manifest must require narrow integrated slot-wall review');
+  if (!rules.includes('targeted no-wing slot-wall and wheel-band checks') && !rules.includes('without side-wing deformation and with visible roadwheel/bogie band')) fail('cloud manifest must require targeted no-wing slot-wall review');
   if (!rules.includes('front-left, front-right, rear-left, and rear-right')) fail('cloud manifest must require all four hull/track corner review');
   if (!rules.includes('crack rays from outside those visible gaps hit exterior armor before entering the tank interior') && !rules.includes('no raycast-accessible interior through those cracks')) fail('cloud manifest must require raycast no-interior-access review for the visible hull/track cracks');
   if (!rules.includes('no pasted panels, blockers, floating boxes, or runtime overlays')) fail('cloud manifest must reject pasted panels/blockers/floating boxes/runtime overlays as the coverage fix');

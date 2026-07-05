@@ -347,8 +347,8 @@ if (failures.length === 0) {
   if (!String(manifest.source_policy || '').includes('Blender Z-up basis conversion')) fail('manifest must identify Blender Z-up basis conversion');
   if (!manifest.orientation_contract || !String(manifest.orientation_contract.visual_regression_prevented || '').includes('wheels must sit inside side skirts')) fail('manifest must preserve upright/gun/skirt orientation contract');
   if (!manifest.runtime_contract?.side_skirt_occlusion) fail('manifest must preserve side skirt occlusion contract');
-  if (!String(manifest.silhouette_revision || '').includes('v1-13-slot-wall-closed-no-wing')) fail('manifest must record v1-13 slot-wall/no-wing revision');
-  if (!String(manifest.runtime_contract?.integrated_sponson_skirt_armor || '').includes('narrow integrated track-well slot walls')) fail('manifest must describe narrow integrated slot walls, not expanded side wings');
+  if (!String(manifest.silhouette_revision || '').includes('v1-14-readable-wheel-band-smaller-slot-walls')) fail('manifest must record v1-14 smaller slot-wall/readable-wheel-band revision');
+  if (!String(manifest.runtime_contract?.integrated_sponson_skirt_armor || '').includes('smaller integrated track-well slot walls')) fail('manifest must describe smaller integrated slot walls, not expanded side wings');
   if (!String(manifest.runtime_contract?.raycast_exterior_closure || '').includes('outside gap rays hit exterior armor before interior')) fail('raycast closure rule missing: outside gap rays must hit exterior armor before they can enter the tank interior');
   for (const rayFailure of raycastClosureFailures(json, binary)) fail(rayFailure);
   for (const rayFailure of visibleCrackRayFailures(json, binary)) fail(rayFailure);
@@ -392,8 +392,23 @@ if (failures.length === 0) {
   for (const [label, node] of slotWallSpecs) {
     const bounds = nodeWorldBoundsByName(json, node);
     if (!bounds) fail(label + ' missing; visible crack must be closed by an integrated hull-owned slot wall');
-    else if (!(bounds.size[0] > 0.7 && bounds.size[1] > 0.45 && bounds.size[2] < 0.12)) fail(label + ' must be a narrow vertical track-well wall spanning crack height/length, saw ' + axisString(bounds));
+    else if (!(bounds.size[0] > 0.52 && bounds.size[0] < 1.05 && bounds.size[1] > 0.34 && bounds.size[1] < 0.62 && bounds.size[2] < 0.12)) fail(label + ' must be a smaller vertical track-well wall spanning only the crack band, saw ' + axisString(bounds));
   }
+
+  const visibleWheelSpecs = [
+    ['left visible roadwheel band', 'left_roadwheel_0.00__wheel_disc', 'left_track_motion', 'left'],
+    ['right visible roadwheel band', 'right_roadwheel_0.00__wheel_disc', 'right_track_motion', 'right']
+  ];
+  for (const [label, wheelNode, trackNode, side] of visibleWheelSpecs) {
+    const wheel = nodeWorldBoundsByName(json, wheelNode);
+    const track = nodeWorldBoundsByName(json, trackNode);
+    if (!wheel || !track) fail(label + ' cannot be checked because wheel or track volume is missing');
+    else {
+      const exposure = side === 'left' ? wheel.max[2] - track.max[2] : track.min[2] - wheel.min[2];
+      if (exposure < 0.025) fail(label + ' is buried inside the track slab; wheel must protrude at least 0.025 beyond track side, saw ' + exposure.toFixed(3));
+    }
+  }
+
   for (const id of facePlateIds) {
     if (!manifest.face_plate_ids?.includes(id)) fail('manifest missing face plate id ' + id);
     if (!materialNames.has(id)) fail('GLB missing material slot ' + id);
@@ -408,11 +423,11 @@ if (failures.length === 0) {
     if (blenderScript.includes(forbidden) || wrapper.includes(forbidden)) fail('boxmodel exporter must not use rejected/import marker ' + forbidden);
   }
   if (!blenderScript.includes('def P(') || !blenderScript.includes('Blender is Z-up')) fail('boxmodel exporter must declare Blender basis conversion helpers');
-  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-13-20260705']) {
+  for (const marker of ['AUTHORED_SHERMAN_BOXMODEL_GLB_URL', 'AUTHORED_SHERMAN_BOXMODEL_FACE_PLATES', 'applyAuthoredBoxmodelTexturePlates', 'tftm-authored-sherman-boxmodel-v1-14-20260705']) {
     if (!runtime.includes(marker)) fail('boxmodel runtime missing marker ' + marker);
   }
   if (!build.includes("buildEntry('boxmodel-tank.ts', 'boxmodel-tank')")) fail('build must bundle boxmodel-tank.ts');
-  if (!runtime.includes('authored_sherman_boxmodel_v1.glb?v=v1-13-slot-wall-closed-no-wing')) fail('runtime must version the authored boxmodel GLB URL so asset caching cannot hide geometry changes');
+  if (!runtime.includes('authored_sherman_boxmodel_v1.glb?v=v1-14-readable-wheel-band-smaller-slot-walls')) fail('runtime must version the authored boxmodel GLB URL so asset caching cannot hide geometry changes');
   if (!build.includes("writeBundledHtml('boxmodel-tank.html', 'boxmodel-tank.html', 'boxmodel-tank')")) fail('build must write boxmodel-tank.html');
 }
 

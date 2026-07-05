@@ -19,7 +19,7 @@ def R(rx, ry, rz):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_boxmodel_v1'
-REVISION = 'v1-13-slot-wall-closed-no-wing'
+REVISION = 'v1-14-readable-wheel-band-smaller-slot-walls'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -234,34 +234,34 @@ quad('left_flush_glacis_shoulder__hull_left', 'hull_left', [(1.56,0.128,-0.590),
 quad('right_flush_glacis_shoulder__hull_right', 'hull_right', [(0.66,0.685,0.515),(1.56,0.128,0.590),(1.54,0.095,0.805),(0.64,0.655,0.725)], hull_root, thickness=0.05)
 box('left_low_front_track_cheek__hull_left', 'hull_left', (0.58,0.08,0.10), (1.27,0.11,-0.755), hull_root, rot=(0,0,-0.25), bevel=0.01)
 box('right_low_front_track_cheek__hull_right', 'hull_right', (0.58,0.08,0.10), (1.27,0.11,0.755), hull_root, rot=(0,0,-0.25), bevel=0.01)
-quad('left_vertical_shoulder_gap_web__hull_left', 'hull_left', [(1.50,0.02,-0.805),(0.76,0.52,-0.765),(0.78,0.12,-0.765),(1.50,-0.18,-0.805)], hull_root, thickness=0.045)
-quad('right_vertical_shoulder_gap_web__hull_right', 'hull_right', [(0.76,0.52,0.765),(1.50,0.02,0.805),(1.50,-0.18,0.805),(0.78,0.12,0.765)], hull_root, thickness=0.045)
-quad('left_visible_glacis_slot_wall__hull_left', 'hull_left', [(1.54,0.16,-0.610),(0.58,0.66,-0.585),(0.62,0.30,-0.675),(1.54,-0.04,-0.690)], hull_root, thickness=0.065)
-quad('right_visible_glacis_slot_wall__hull_right', 'hull_right', [(0.58,0.66,0.585),(1.54,0.16,0.610),(1.54,-0.04,0.690),(0.62,0.30,0.675)], hull_root, thickness=0.065)
-quad('left_front_track_well_slot_wall__hull_left', 'hull_left', [(1.66,-0.41,-0.675),(0.72,-0.41,-0.675),(0.72,0.18,-0.675),(1.56,0.06,-0.675)], hull_root, thickness=0.055)
-quad('right_front_track_well_slot_wall__hull_right', 'hull_right', [(0.72,-0.41,0.675),(1.66,-0.41,0.675),(1.56,0.06,0.675),(0.72,0.18,0.675)], hull_root, thickness=0.055)
-quad('left_rear_track_well_slot_wall__hull_left', 'hull_left', [(-1.76,-0.43,-0.675),(-0.56,-0.43,-0.675),(-0.56,0.22,-0.675),(-1.58,0.08,-0.675)], hull_root, thickness=0.055)
-quad('right_rear_track_well_slot_wall__hull_right', 'hull_right', [(-0.56,-0.43,0.675),(-1.76,-0.43,0.675),(-1.58,0.08,0.675),(-0.56,0.22,0.675)], hull_root, thickness=0.055)
+quad('left_vertical_shoulder_gap_web__hull_left', 'hull_left', [(1.50,0.00,-0.805),(0.96,0.32,-0.765),(0.98,0.04,-0.765),(1.50,-0.18,-0.805)], hull_root, thickness=0.045)
+quad('right_vertical_shoulder_gap_web__hull_right', 'hull_right', [(0.96,0.32,0.765),(1.50,0.00,0.805),(1.50,-0.18,0.805),(0.98,0.04,0.765)], hull_root, thickness=0.045)
+quad('left_visible_glacis_slot_wall__hull_left', 'hull_left', [(1.54,0.12,-0.610),(0.86,0.46,-0.585),(0.88,0.14,-0.675),(1.54,-0.08,-0.690)], hull_root, thickness=0.065)
+quad('right_visible_glacis_slot_wall__hull_right', 'hull_right', [(0.86,0.46,0.585),(1.54,0.12,0.610),(1.54,-0.08,0.690),(0.88,0.14,0.675)], hull_root, thickness=0.065)
+quad('left_front_track_well_slot_wall__hull_left', 'hull_left', [(1.62,-0.40,-0.675),(0.98,-0.40,-0.675),(0.98,0.08,-0.675),(1.54,0.00,-0.675)], hull_root, thickness=0.055)
+quad('right_front_track_well_slot_wall__hull_right', 'hull_right', [(0.98,-0.40,0.675),(1.62,-0.40,0.675),(1.54,0.00,0.675),(0.98,0.08,0.675)], hull_root, thickness=0.055)
+quad('left_rear_track_well_slot_wall__hull_left', 'hull_left', [(-1.72,-0.42,-0.675),(-0.82,-0.42,-0.675),(-0.82,0.10,-0.675),(-1.56,0.00,-0.675)], hull_root, thickness=0.055)
+quad('right_rear_track_well_slot_wall__hull_right', 'hull_right', [(-0.82,-0.42,0.675),(-1.72,-0.42,0.675),(-1.56,0.00,0.675),(-0.82,0.10,0.675)], hull_root, thickness=0.055)
 
 
 for z, side, wheel_parent in [(-0.83,'left',left_wheels),(0.83,'right',right_wheels)]:
     sign = -1 if z < 0 else 1
     box(f'{side}_track_motion', 'track_outer', (3.48,0.48,0.30), (-0.05,-0.27,z), hull_root, bevel=0.045)
-    box(f'{side}_outer_track_skirt__track_outer', 'track_outer', (3.34,0.38,0.055), (-0.08,-0.20,z+sign*0.175), hull_root, bevel=0.018)
+    box(f'{side}_outer_track_skirt__track_outer', 'track_outer', (3.34,0.12,0.055), (-0.08,-0.02,z+sign*0.175), hull_root, bevel=0.018)
     box(f'{side}_track_top_inner__track_inner_top_bottom', 'track_inner_top_bottom', (3.02,0.10,0.22), (-0.06,0.08,z), hull_root)
     box(f'{side}_track_ground_run__track_inner_top_bottom', 'track_inner_top_bottom', (3.12,0.10,0.22), (-0.06,-0.50,z), hull_root)
     for x in [-1.50,-1.15,-0.80,-0.45,-0.10,0.25,0.60,0.95,1.30]:
         box(f'{side}_track_cleat_{x:.2f}__track_outer', 'track_outer', (0.035,0.60,0.29), (x,-0.22,z), hull_root, rot=(0,0,0.05))
     for bx in [-0.96,-0.16,0.64]:
-        box(f'{side}_vvss_bogie_{bx:.2f}__bogie_side', 'bogie_side', (0.46,0.16,0.08), (bx,-0.08,z+sign*0.045), wheel_parent, bevel=0.015)
-        box(f'{side}_vvss_arm_front_{bx:.2f}__bogie_side', 'bogie_side', (0.28,0.04,0.07), (bx+0.12,-0.20,z+sign*0.045), wheel_parent, rot=(0,0,-0.45))
-        box(f'{side}_vvss_arm_rear_{bx:.2f}__bogie_side', 'bogie_side', (0.28,0.04,0.07), (bx-0.12,-0.20,z+sign*0.045), wheel_parent, rot=(0,0,0.45))
+        box(f'{side}_vvss_bogie_{bx:.2f}__bogie_side', 'bogie_side', (0.46,0.16,0.08), (bx,-0.08,z+sign*0.190), wheel_parent, bevel=0.015)
+        box(f'{side}_vvss_arm_front_{bx:.2f}__bogie_side', 'bogie_side', (0.28,0.04,0.07), (bx+0.12,-0.20,z+sign*0.190), wheel_parent, rot=(0,0,-0.45))
+        box(f'{side}_vvss_arm_rear_{bx:.2f}__bogie_side', 'bogie_side', (0.28,0.04,0.07), (bx-0.12,-0.20,z+sign*0.190), wheel_parent, rot=(0,0,0.45))
         for dx in [-0.16,0.16]:
-            cylinder(f'{side}_roadwheel_{bx+dx:.2f}__wheel_disc', 'wheel_disc', 0.145, 0.07, 18, (bx+dx,-0.32,z+sign*0.055), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_front_sprocket__bogie_side', 'bogie_side', 0.25, 0.085, 20, (1.48,-0.20,z+sign*0.045), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_rear_idler__bogie_side', 'bogie_side', 0.22, 0.085, 20, (-1.50,-0.23,z+sign*0.045), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_return_roller_front__wheel_disc', 'wheel_disc', 0.08, 0.055, 16, (0.56,0.0,z+sign*0.055), wheel_parent, rot=(math.pi/2,0,0))
-    cylinder(f'{side}_return_roller_rear__wheel_disc', 'wheel_disc', 0.08, 0.055, 16, (-0.78,0.0,z+sign*0.055), wheel_parent, rot=(math.pi/2,0,0))
+            cylinder(f'{side}_roadwheel_{bx+dx:.2f}__wheel_disc', 'wheel_disc', 0.145, 0.07, 18, (bx+dx,-0.32,z+sign*0.205), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_front_sprocket__bogie_side', 'bogie_side', 0.25, 0.085, 20, (1.48,-0.20,z+sign*0.205), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_rear_idler__bogie_side', 'bogie_side', 0.22, 0.085, 20, (-1.50,-0.23,z+sign*0.205), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_return_roller_front__wheel_disc', 'wheel_disc', 0.08, 0.055, 16, (0.56,0.0,z+sign*0.205), wheel_parent, rot=(math.pi/2,0,0))
+    cylinder(f'{side}_return_roller_rear__wheel_disc', 'wheel_disc', 0.08, 0.055, 16, (-0.78,0.0,z+sign*0.205), wheel_parent, rot=(math.pi/2,0,0))
 
 turret_cast_mesh()
 box('turret_rear_bustle__turret_bustle', 'turret_bustle', (0.48,0.26,0.58), (-0.50,0.18,0), turret_shell, bevel=0.045)
@@ -329,7 +329,7 @@ manifest = {
         'tread_motion': 'scroll material maps on left_track_motion and right_track_motion',
         'wheel_motion': 'rotate children of left_roadwheel_group and right_roadwheel_group',
         'side_skirt_occlusion': 'roadwheel discs sit inside track skirt volume; exterior track cover hides tire backs from front and side views',
-        'integrated_sponson_skirt_armor': 'narrow integrated track-well slot walls plus joined sponson shells close the front/rear hull-track cracks without exterior cover panels, blockers, side wings, or runtime overlays',
+        'integrated_sponson_skirt_armor': 'smaller integrated track-well slot walls plus joined sponson shells close the front/rear hull-track cracks while preserving visible roadwheel and bogie read; no exterior cover panels, blockers, side wings, or runtime overlays',
         'raycast_exterior_closure': 'outside gap rays hit exterior armor before interior at front-left, front-right, rear-left, and rear-right hull/track corners',
         'commander_hatch': 'commander_hatch__turret_top is a named posture marker'
     },

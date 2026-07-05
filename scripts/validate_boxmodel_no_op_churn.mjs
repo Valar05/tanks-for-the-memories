@@ -80,7 +80,7 @@ if (failures.length === 0) {
   const revision = String(manifest.silhouette_revision || '');
   if (revision.includes('v1-11-raycast-closed-sponson-shells')) fail('v1-11 is explicitly visual-red/unaccepted; targeted slot-wall repair revision required');
   if (revision.includes('v1-12-watertight-visible-sponson-shells')) fail('v1-12 is visual-red wing deformation; must not pass no-op guard');
-  if (!revision.includes('v1-13-slot-wall-closed-no-wing')) fail('manifest must identify v1-13 targeted slot-wall/no-wing repair');
+  if (!revision.includes('v1-14-readable-wheel-band-smaller-slot-walls')) fail('manifest must identify v1-14 smaller slot-wall/readable-wheel-band repair');
   const json = parseGlbJson(glbPath);
   const checks = [
     ['left sponson shell', 'left_sloped_sponson__hull_left', 'left_outer_track_skirt__track_outer', 'left'],
@@ -108,7 +108,7 @@ if (failures.length === 0) {
     const bounds = nodeBounds(json, node);
     console.log(`${label}: ${axisString(bounds)}`);
     if (!bounds) fail(label + ' missing; current build would be visual no-op at the reported crack');
-    else if (!(bounds.size[0] > 0.7 && bounds.size[1] > 0.45 && bounds.size[2] < 0.12)) fail(label + ' is not a narrow vertical crack-cover wall; saw ' + axisString(bounds));
+    else if (!(bounds.size[0] > 0.52 && bounds.size[0] < 1.05 && bounds.size[1] > 0.34 && bounds.size[1] < 0.62 && bounds.size[2] < 0.12)) fail(label + ' is not a smaller vertical crack-cover wall; saw ' + axisString(bounds));
   }
 }
 if (failures.length) {
@@ -116,4 +116,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Boxmodel targeted no-op/wing validation passed: v1-13 adds four narrow slot walls without repeating v1-12 side-wing deformation.');
+console.log('Boxmodel targeted no-op/wing validation passed: v1-14 keeps four smaller slot walls without repeating v1-12 side-wing deformation.');
