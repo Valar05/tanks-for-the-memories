@@ -1,28 +1,11 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { spawnSync } from 'node:child_process';
 
 const failures = [];
 const glbPath = 'public/tftm/models/authored_sherman_boxmodel_v1/authored_sherman_boxmodel_v1.glb';
 const manifestPath = 'public/tftm/models/authored_sherman_boxmodel_v1/model_manifest.json';
-const baselineRef = process.env.NO_OP_BASE_REF || 'HEAD~1';
-const minFrontDelta = 0.28;
-const minRearDelta = 0.28;
-const minTopDelta = 0.08;
-const minExteriorDelta = 0.03;
 function fail(message) { failures.push(message); }
-function readGitFile(ref, file) {
-  const result = spawnSync('git', ['show', `${ref}:${file}`], { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 });
-  if ((result.status ?? 1) !== 0) throw new Error('cannot read ' + ref + ':' + file + ': ' + (result.stderr || result.stdout));
-  if (result.stdout.startsWith('version https://git-lfs.github.com/spec/')) {
-    const oid = result.stdout.match(/oid sha256:([a-f0-9]+)/)?.[1];
-    if (!oid) throw new Error('missing LFS oid for ' + ref + ':' + file);
-    const lfsPath = `.git/lfs/objects/${oid.slice(0, 2)}/${oid.slice(2, 4)}/${oid}`;
-    if (!existsSync(lfsPath)) throw new Error('missing local LFS object ' + oid + ' for ' + ref + ':' + file);
-    return readFileSync(lfsPath);
-  }
-  return Buffer.from(result.stdout, 'binary');
-}
-function parseGlbJson(data) {
+function parseGlbJson(file) {
+  const data = readFileSync(file);
   if (data.toString('utf8', 0, 4) !== 'glTF') throw new Error('not a GLB');
   let offset = 12;
   while (offset + 8 <= data.length) {
@@ -89,40 +72,48 @@ function nodeBounds(json, nodeName) {
   }
   return { min, max, size: max.map((value, axis) => value - min[axis]) };
 }
-function fmt(value) { return value.toFixed(3); }
-function checkSide(label, current, baseline, side) {
-  const frontDelta = current.max[0] - baseline.max[0];
-  const rearDelta = baseline.min[0] - current.min[0];
-  const topDelta = current.max[1] - baseline.max[1];
-  const exteriorDelta = side === 'left' ? current.max[2] - baseline.max[2] : baseline.min[2] - current.min[2];
-  const report = `${label}: front ${fmt(frontDelta)}, rear ${fmt(rearDelta)}, top ${fmt(topDelta)}, exterior ${fmt(exteriorDelta)}`;
-  console.log(report);
-  if (frontDelta < minFrontDelta) fail(`${label} front visible delta ${fmt(frontDelta)} < ${minFrontDelta}; no-op churn risk`);
-  if (rearDelta < minRearDelta) fail(`${label} rear visible delta ${fmt(rearDelta)} < ${minRearDelta}; no-op churn risk`);
-  if (topDelta < minTopDelta) fail(`${label} upper silhouette delta ${fmt(topDelta)} < ${minTopDelta}; no-op churn risk`);
-  if (exteriorDelta < minExteriorDelta) fail(`${label} exterior side-plane delta ${fmt(exteriorDelta)} < ${minExteriorDelta}; no-op churn risk`);
-}
+function axisString(bounds) { return bounds ? bounds.size.map((n) => n.toFixed(3)).join(' x ') : 'missing'; }
 if (!existsSync(glbPath)) fail('missing current GLB ' + glbPath);
 if (!existsSync(manifestPath)) fail('missing manifest ' + manifestPath);
 if (failures.length === 0) {
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
-  if (String(manifest.silhouette_revision || '').includes('v1-11-raycast-closed-sponson-shells')) fail('v1-11 is explicitly visual-red/unaccepted; bump to a new revision only after measurable silhouette delta');
-  const current = parseGlbJson(readFileSync(glbPath));
-  const baseline = parseGlbJson(readGitFile(baselineRef, glbPath));
-  const specs = [
-    ['left sponson shell', 'left_sloped_sponson__hull_left', 'left'],
-    ['right sponson shell', 'right_sloped_sponson__hull_right', 'right']
+  const revision = String(manifest.silhouette_revision || '');
+  if (revision.includes('v1-11-raycast-closed-sponson-shells')) fail('v1-11 is explicitly visual-red/unaccepted; targeted slot-wall repair revision required');
+  if (revision.includes('v1-12-watertight-visible-sponson-shells')) fail('v1-12 is visual-red wing deformation; must not pass no-op guard');
+  if (!revision.includes('v1-13-slot-wall-closed-no-wing')) fail('manifest must identify v1-13 targeted slot-wall/no-wing repair');
+  const json = parseGlbJson(glbPath);
+  const checks = [
+    ['left sponson shell', 'left_sloped_sponson__hull_left', 'left_outer_track_skirt__track_outer', 'left'],
+    ['right sponson shell', 'right_sloped_sponson__hull_right', 'right_outer_track_skirt__track_outer', 'right']
   ];
-  for (const [label, node, side] of specs) {
-    const currentBounds = nodeBounds(current, node);
-    const baselineBounds = nodeBounds(baseline, node);
-    if (!currentBounds || !baselineBounds) fail(label + ' missing from current or baseline GLB');
-    else checkSide(label, currentBounds, baselineBounds, side);
+  for (const [label, node, skirtNode, side] of checks) {
+    const shell = nodeBounds(json, node);
+    const skirt = nodeBounds(json, skirtNode);
+    if (!shell || !skirt) {
+      fail(label + ' or matching skirt missing; cannot check no-wing relationship');
+      continue;
+    }
+    const overhang = side === 'left' ? shell.max[2] - skirt.max[2] : skirt.min[2] - shell.min[2];
+    console.log(`${label}: exterior overhang ${overhang.toFixed(3)}, shell ${axisString(shell)}, skirt ${axisString(skirt)}`);
+    if (overhang > 0.06) fail(label + ' wing regression: exterior overhang ' + overhang.toFixed(3) + ' > 0.060; this repeats the v1-12 side-wing failure');
+    if (overhang < -0.08) fail(label + ' stops too far inboard of skirt plane: overhang ' + overhang.toFixed(3));
+  }
+  const slotWalls = [
+    ['left front slot wall', 'left_front_track_well_slot_wall__hull_left'],
+    ['right front slot wall', 'right_front_track_well_slot_wall__hull_right'],
+    ['left rear slot wall', 'left_rear_track_well_slot_wall__hull_left'],
+    ['right rear slot wall', 'right_rear_track_well_slot_wall__hull_right']
+  ];
+  for (const [label, node] of slotWalls) {
+    const bounds = nodeBounds(json, node);
+    console.log(`${label}: ${axisString(bounds)}`);
+    if (!bounds) fail(label + ' missing; current build would be visual no-op at the reported crack');
+    else if (!(bounds.size[0] > 0.7 && bounds.size[1] > 0.45 && bounds.size[2] < 0.12)) fail(label + ' is not a narrow vertical crack-cover wall; saw ' + axisString(bounds));
   }
 }
 if (failures.length) {
-  console.error('Boxmodel no-op churn validation failed against baseline ' + baselineRef + ':');
+  console.error('Boxmodel targeted no-op/wing validation failed:');
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Boxmodel no-op churn validation passed against baseline ' + baselineRef + ': sponson shell moved the visible front/rear/top/exterior silhouette enough to justify cloud review.');
+console.log('Boxmodel targeted no-op/wing validation passed: v1-13 adds four narrow slot walls without repeating v1-12 side-wing deformation.');

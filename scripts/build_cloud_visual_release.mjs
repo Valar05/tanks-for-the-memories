@@ -39,8 +39,8 @@ const tankManifest = JSON.parse(readFileSync(tankManifestPath, 'utf8'));
 const shermanSourceManifest = JSON.parse(readFileSync(shermanSourceManifestPath, 'utf8'));
 const authoredRetopoManifest = JSON.parse(readFileSync(authoredRetopoManifestPath, 'utf8'));
 const authoredBoxmodelManifest = JSON.parse(readFileSync(authoredBoxmodelManifestPath, 'utf8'));
-const gitHead = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8' });
-const gitStatus = spawnSync('git', ['status', '--short'], { encoding: 'utf8' });
+const gitHead = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8', timeout: 5000 });
+const gitStatus = spawnSync('git', ['status', '--short'], { encoding: 'utf8', timeout: 5000 });
 
 rmSync(releaseRoot, { recursive: true, force: true });
 mkdirSync(releaseRoot, { recursive: true });
@@ -57,7 +57,7 @@ const releaseManifest = {
   },
   authored_boxmodel_review: {
     route: 'boxmodel-tank.html',
-    expected_build: 'tftm-authored-sherman-boxmodel-v1-12-20260705',
+    expected_build: 'tftm-authored-sherman-boxmodel-v1-13-20260705',
     tuner_route: 'boxmodel-tank.html?tune=1',
     tuner_expected_build: 'tftm-authored-sherman-boxmodel-tuner-v9-20260704',
     asset_id: authoredBoxmodelManifest.asset_id,
@@ -68,7 +68,7 @@ const releaseManifest = {
     uv_policy: authoredBoxmodelManifest.uv_policy,
     face_plate_ids: authoredBoxmodelManifest.face_plate_ids,
     asset_policy: 'fully authored Blender box-model chassis with solidified overlapping armor plates, non-cube cast turret silhouette, and coaxial MG; no Meshy chassis or turret imports; box UV PNG plates for DALL-E paintability',
-    acceptance: 'Sense Simulation must confirm Sherman silhouette, non-cube turret massing, visibly expanded watertight sponson/skirt shells cover the front-left, front-right, rear-left, and rear-right hull/track corners as joined metal, pass no-op silhouette-delta checks, and raycasts from outside those visible gaps hit exterior armor before entering the tank interior, with no pasted panels, blockers, floating boxes, or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.',
+    acceptance: 'Sense Simulation must confirm Sherman silhouette, non-cube turret massing, narrow integrated track-well slot walls plus joined sponson shells close the front-left, front-right, rear-left, and rear-right lower hull/track cracks as joined metal, pass targeted no-wing slot-wall checks, and crack rays from outside those visible gaps hit exterior armor before entering the tank interior, with no pasted panels, blockers, floating boxes, or runtime overlays, armor reads as joined metal rather than separated cardboard planes, barrel and coaxial MG belong to the mantlet, box UV texture plates map sanely, and local capture was not used.',
     tuner_acceptance: 'Sense Simulation must review boxmodel-tank.html?tune=1 as a preserved future-use gesture-only boxmodel part tuner: collapsed parts drawer is usable, four hull-colored flat armor panels are available for front-right, front-left, rear-right, and rear-left track-line holes, one selected panel is highlighted for editing, already enabled panels remain visible, Move/Rotate/Scale are one active mode at a time, Scale exposes explicit All/X/Y/Z axis buttons, drag/pinch/twist gestures visibly change the selected panel, OrbitControls camera orbit/dolly/pan works, the camera orientation widget snaps square front/back/left/right/top views, tank and panels share the same unskewed model frame, no object transform handles appear, and local capture was not used.'
   },
   authored_retopo_review: {
@@ -107,9 +107,9 @@ const releaseManifest = {
     }]))
   },
   required_cloud_captures: [
-    'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-12-20260705',
-    'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, visibly expanded watertight sponson/skirt shell coverage at front-left, front-right, rear-left, and rear-right hull/track corners, and no local capture',
-    'boxmodel-tank close-up review showing visibly expanded watertight sponson/skirt shell coverage at front-left, front-right, rear-left, and rear-right as attached armor, no raycast-accessible interior through those gaps, solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability',
+    'boxmodel-tank phone portrait showing authored_sherman_boxmodel_v1 and build token tftm-authored-sherman-boxmodel-v1-13-20260705',
+    'boxmodel-tank phone landscape showing Sherman silhouette, joined armor mass, non-cube turret, narrow integrated track-well slot-wall coverage at front-left, front-right, rear-left, and rear-right lower hull/track cracks, and no local capture',
+    'boxmodel-tank close-up review showing narrow integrated track-well slot-wall coverage at front-left, front-right, rear-left, and rear-right as attached armor, no raycast-accessible interior through those cracks, no side-wing silhouette deformation, solidified armor plates, barrel/mantlet/coaxial MG ownership, and box UV plate paintability',
     'boxmodel-tank.html?tune=1 phone portrait showing gesture-only part tuner with collapsed parts drawer, front-right/front-left/rear-right/rear-left hull-colored flat armor panel parts aligned parallel to the tracks, flush to the side plane, and not protruding like blocks, selected panel highlight, camera orientation widget, explicit All/X/Y/Z scale axis buttons, square unskewed tank frame, and build token tftm-authored-sherman-boxmodel-tuner-v9-20260704',
     'boxmodel-tank.html?tune=1 cloud interaction evidence showing one selected flat armor panel visibly move/rotate/scale through drag/pinch/twist while other enabled panels remain placed, OrbitControls camera orbit/dolly/pan preserved from an unskewed model frame, and no object transform handles',
     'retopo-tank phone portrait showing authored_sherman_retopo_v1 and build token tftm-authored-sherman-retopo-v1-1-20260704',
@@ -127,13 +127,13 @@ const releaseManifest = {
   false_change_penalty: {
     status: 'active',
     reason: 'Fresh cloud screenshots showed no visible delta after v1-8 front-gap coverage. Root cause: coverage nodes existed but were placed inboard of the visible exterior side plane, and the GLB used a stable asset URL vulnerable to browser cache.',
-    required_next_evidence: 'Next tank visual pass must show cloud/Sense evidence that v1-12 watertight visible sponson shell armor visibly closes the front and rear hull/track corner gaps on all four corners.'
+    required_next_evidence: 'Next tank visual pass must show cloud/Sense evidence that v1-13 narrow slot-wall armor visibly closes the front and rear lower hull/track cracks on all four corners without side-wing deformation.'
   },
   sense_simulation_questions: [
-    'Does authored_sherman_boxmodel_v1 build v1-12 preserve the Sherman silhouette while using visibly expanded watertight sponson shells across all four hull/track corners?',
+    'Does authored_sherman_boxmodel_v1 build v1-13 preserve the Sherman silhouette while using narrow integrated slot walls across all four lower hull/track cracks?',
     'On boxmodel-tank.html?tune=1, does the gesture-only parts workflow provide four hull-colored front-right/front-left/rear-right/rear-left flat armor panels aligned parallel to the tracks and reading like armor skin, not blocks while using a collapsed drawer, one active transform mode, explicit All/X/Y/Z scale axes, direct gestures, OrbitControls camera, and a camera orientation widget without object transform handles?',
     'Does the turret read as a non-cube cast turret form with cheek mass, roof flattening, and rear bustle?',
-    'Do the visibly expanded watertight sponson shells bridge the hull side into the outer track skirt at front-left, front-right, rear-left, and rear-right corners, visibly differ from v1-11, and do outside gap raycasts hit exterior armor before entering the tank interior, without pasted panels or blockers?',
+    'Do the narrow integrated slot walls and joined sponson shells bridge the hull side into the outer track skirt at front-left, front-right, rear-left, and rear-right lower cracks, visibly differ from the rejected screenshot, and do outside crack raycasts hit exterior armor before entering the tank interior, without pasted panels, blockers, or side wings?',
     'Do the armor plates read as joined metal mass rather than separated cardboard planes?',
     'Is the coaxial MG visible and owned by the mantlet/gun assembly?' ,
     'Do the box UV plates stay paintable without obvious runtime guide seams or DALL-E-unpaintable UV spaghetti?',
