@@ -1,0 +1,13 @@
+{
+  "artifact_type": "tread_assembly_visual_verdict",
+  "route": "treadfirst-treads.html",
+  "build_token": "tftm-authored-sherman-treads-v1-1-20260705",
+  "asset_id": "authored_sherman_treads_v1",
+  "silhouette_revision": "v1-1-full-tread-assembly",
+  "status": "red_unaccepted_no_op_churn",
+  "expected_visible_relationship": "The tread-first route should visibly show a full tread assembly from side view: closed track silhouette plus exposed side-facing road wheels, sprocket, idler, return rollers, and bogie arms inside the belt.",
+  "actual_visible_diagnosis": "v1.1 added wheel nodes but placed their exterior faces inboard from the tread belt exterior side plane, so they can be hidden by the outer belt side face and read as no visible assembly change.",
+  "root_cause": "Validator accepted wheel node existence and counts instead of exterior side-plane exposure against the belt silhouette.",
+  "forbidden_next_green": "Do not accept a tread revision where roadwheel/sprocket/idler faces are more than 0.06 units inboard from the belt exterior side plane or where the belt is one opaque side plate hiding running gear.",
+  "visual_acceptance": "Cloud/Sense only; local capture is forbidden."
+}

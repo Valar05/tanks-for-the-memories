@@ -11,7 +11,7 @@ def P(x, y, z):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_treads_v1'
-REVISION = 'v1-1-full-tread-assembly'
+REVISION = 'v1-2-visible-running-gear'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -97,10 +97,10 @@ INNER_PROFILE = [
 ]
 
 SEGMENT_MARKERS = {
-    'top_run': [2, 3, 4, 5],
-    'front_return': [5, 6, 7, 8, 9, 10],
-    'bottom_run': [10, 11, 12, 13],
-    'rear_return': [13, 14, 15, 0, 1, 2],
+    'top_run': [2, 3, 4],
+    'front_return': [5, 6, 7, 8, 9],
+    'bottom_run': [10, 11, 12],
+    'rear_return': [13, 14, 15, 0, 1],
 }
 
 def assign_uvs(mesh):
@@ -112,50 +112,58 @@ def assign_uvs(mesh):
             uv_layer.data[loop_index].uv = (vert.x * 0.31 + vert.z * 0.12, vert.y * 1.65)
 
 def make_belt(side_name, side_sign):
+    belt_root = empty(side_name + '_tread_belt', treads_root)
     outer_z = side_sign * 1.14
     inner_z = side_sign * 0.72
-    verts = []
-    faces = []
-    face_mats = []
-    def add(v):
-        verts.append(v)
-        return len(verts) - 1
-    for i in range(len(OUTER_PROFILE)):
-        j = (i + 1) % len(OUTER_PROFILE)
-        ox0, oy0, u0 = OUTER_PROFILE[i]
-        ox1, oy1, u1 = OUTER_PROFILE[j]
-        ix0, iy0, _ = INNER_PROFILE[i]
-        ix1, iy1, _ = INNER_PROFILE[j]
-        a = add((ox0, oy0, outer_z)); b = add((ox1, oy1, outer_z)); c = add((ix1, iy1, outer_z)); d = add((ix0, iy0, outer_z))
-        faces.append((a, b, c, d)); face_mats.append('track_outer')
-        a = add((ox1, oy1, inner_z)); b = add((ox0, oy0, inner_z)); c = add((ix0, iy0, inner_z)); d = add((ix1, iy1, inner_z))
-        faces.append((a, b, c, d)); face_mats.append('track_inner')
-        a = add((ox0, oy0, outer_z)); b = add((ox0, oy0, inner_z)); c = add((ox1, oy1, inner_z)); d = add((ox1, oy1, outer_z))
-        faces.append((a, b, c, d)); face_mats.append('track_outer')
-        a = add((ix1, iy1, outer_z)); b = add((ix1, iy1, inner_z)); c = add((ix0, iy0, inner_z)); d = add((ix0, iy0, outer_z))
-        faces.append((a, b, c, d)); face_mats.append('track_inner')
-    mesh = bpy.data.meshes.new(side_name + '_mesh')
-    mesh.from_pydata([P(*v) for v in verts], [], faces)
-    mesh.update(calc_edges=True)
-    mesh.materials.append(materials['track_outer'])
-    mesh.materials.append(materials['track_inner'])
-    for poly, mat_name in zip(mesh.polygons, face_mats):
-        poly.material_index = 0 if mat_name == 'track_outer' else 1
-    assign_uvs(mesh)
-    obj = bpy.data.objects.new(side_name + '_tread_belt', mesh)
-    obj['component_role'] = 'closed_subdivided_tread_belt'
-    obj['profile_point_count'] = len(OUTER_PROFILE)
-    obj['source_reference'] = 'src/model-assay.ts createTreadGeometry subdivision-0 reference only'
-    obj['contains_hull'] = False
-    obj['contains_turret'] = False
-    bpy.context.collection.objects.link(obj)
-    obj.parent = treads_root
-    bevel = obj.modifiers.new('worn_tread_edge_micro_bevel', 'BEVEL')
-    bevel.width = 0.018
-    bevel.segments = 1
-    obj.modifiers.new('weighted_tread_normals', 'WEIGHTED_NORMAL')
-    return obj
 
+    def build_segment(role, segment_indices):
+        verts = []
+        faces = []
+        face_mats = []
+        def add(v):
+            verts.append(v)
+            return len(verts) - 1
+        for i in segment_indices:
+            j = (i + 1) % len(OUTER_PROFILE)
+            ox0, oy0, _ = OUTER_PROFILE[i]
+            ox1, oy1, _ = OUTER_PROFILE[j]
+            ix0, iy0, _ = INNER_PROFILE[i]
+            ix1, iy1, _ = INNER_PROFILE[j]
+            a = add((ox0, oy0, outer_z)); b = add((ox1, oy1, outer_z)); c = add((ix1, iy1, outer_z)); d = add((ix0, iy0, outer_z))
+            faces.append((a, b, c, d)); face_mats.append('track_outer')
+            a = add((ox1, oy1, inner_z)); b = add((ox0, oy0, inner_z)); c = add((ix0, iy0, inner_z)); d = add((ix1, iy1, inner_z))
+            faces.append((a, b, c, d)); face_mats.append('track_inner')
+            a = add((ox0, oy0, outer_z)); b = add((ox0, oy0, inner_z)); c = add((ox1, oy1, inner_z)); d = add((ox1, oy1, outer_z))
+            faces.append((a, b, c, d)); face_mats.append('track_outer')
+            a = add((ix1, iy1, outer_z)); b = add((ix1, iy1, inner_z)); c = add((ix0, iy0, inner_z)); d = add((ix0, iy0, outer_z))
+            faces.append((a, b, c, d)); face_mats.append('track_inner')
+        mesh = bpy.data.meshes.new(side_name + '_tread_' + role + '_mesh')
+        mesh.from_pydata([P(*v) for v in verts], [], faces)
+        mesh.update(calc_edges=True)
+        mesh.materials.append(materials['track_outer'])
+        mesh.materials.append(materials['track_inner'])
+        for poly, mat_name in zip(mesh.polygons, face_mats):
+            poly.material_index = 0 if mat_name == 'track_outer' else 1
+        assign_uvs(mesh)
+        obj = bpy.data.objects.new(side_name + '_tread_' + role, mesh)
+        obj['component_role'] = 'split_visible_tread_' + role
+        obj['profile_point_count'] = len(OUTER_PROFILE)
+        obj['source_reference'] = 'src/model-assay.ts createTreadGeometry subdivision-0 reference only'
+        obj['contains_hull'] = False
+        obj['contains_turret'] = False
+        bpy.context.collection.objects.link(obj)
+        obj.parent = belt_root
+        bevel = obj.modifiers.new('worn_tread_edge_micro_bevel', 'BEVEL')
+        bevel.width = 0.018
+        bevel.segments = 1
+        obj.modifiers.new('weighted_tread_normals', 'WEIGHTED_NORMAL')
+        return obj
+
+    for role, segment_indices in SEGMENT_MARKERS.items():
+        build_segment(role, segment_indices)
+    belt_root['component_role'] = 'closed_subdivided_tread_belt_with_split_visible_segments'
+    belt_root['profile_point_count'] = len(OUTER_PROFILE)
+    return belt_root
 
 def disc_mesh(name, center, radius, depth, parent, material_name='wheel_metal', segments=28, hub_radius=0.12):
     cx, cy, cz = center
@@ -233,8 +241,8 @@ for side_name, side_sign, mount_parent, wheel_parent, bogie_parent in [
     ('left', 1, left_mount_root, left_wheel_root, left_bogie_root),
     ('right', -1, right_mount_root, right_wheel_root, right_bogie_root),
 ]:
-    mount_z = side_sign * 0.60
-    wheel_z = side_sign * 0.82
+    mount_z = side_sign * 0.94
+    wheel_z = side_sign * 1.08
     for x in [-1.08, -0.42, 0.24, 0.90]:
         box_mesh(f'{side_name}_tread_connector_mount_{x:+.2f}', (x, 0.045, mount_z), (0.30, 0.16, 0.16), mount_parent)
     box_mesh(f'{side_name}_upper_return_connector_rail', (-0.04, 0.055, mount_z), (2.48, 0.08, 0.08), mount_parent)
@@ -265,7 +273,7 @@ manifest = {
     'output_glb': str(GLB_PATH.relative_to(ROOT)),
     'approximate_triangles': triangle_count,
     'coordinate_contract': 'runtime X length, Y height, Z width; Blender Z-up converted through P()',
-    'component_scope': 'full tread assembly only: tread belts, sidewalls, wheels, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
+    'component_scope': 'full tread assembly only: split tread belt segments, sidewalls, exterior-exposed side-facing wheels, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
     'reference_source': 'src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only',
     'profile': {
         'old_reference_point_count': 8,
@@ -274,9 +282,9 @@ manifest = {
         'subdivision_layer': 'one added silhouette layer around returns and run transitions',
         'markers': SEGMENT_MARKERS,
     },
-    'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors'],
+    'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_top_run','right_tread_top_run','left_tread_bottom_run','right_tread_bottom_run','left_tread_front_return','right_tread_front_return','left_tread_rear_return','right_tread_rear_return','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors'],
     'forbidden_nodes': ['hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','tank_root'],
-    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with closed trapezoid tread belt volumes, sidewalls, side-facing road wheels, sprockets, idlers, return rollers, bogie connectors, visible top, bottom, front, rear, inner, and outer thickness; no hull/turret/full-tank salvage.'
+    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with split closed trapezoid tread belt segments, sidewalls, exterior-exposed side-facing road wheels, sprockets, idlers, return rollers, bogie connectors, visible top, bottom, front, rear, inner, and outer thickness; no hull/turret/full-tank salvage.'
 }
 MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({'asset_id': ASSET_ID, 'revision': REVISION, 'triangles': triangle_count, 'glb': str(GLB_PATH)}, indent=2))
