@@ -1,6 +1,6 @@
 {
   "asset_id": "authored_sherman_treads_v1",
-  "revision": "v1-10-restored-continuous-belt-shading",
+  "revision": "v1-9-open-running-gear-rebuild",
   "profile_opening": [
     [
       -1.39,
@@ -72,12 +72,12 @@
       {
         "name": "left_roadwheel_1",
         "center": [
-          -1.0399999618530273,
+          -1.0400000214576721,
           -0.20500000193715096
         ],
-        "radius": 0.13500000163912773,
+        "radius": 0.16500002145767212,
         "center_inside": true,
-        "useful_disc_inside_ratio": 0.875
+        "useful_disc_inside_ratio": 0.8125
       },
       {
         "name": "left_roadwheel_3",
@@ -85,9 +85,9 @@
           -0.2199999950826168,
           -0.20500000193715096
         ],
-        "radius": 0.13500000163912773,
+        "radius": 0.16500000283122063,
         "center_inside": true,
-        "useful_disc_inside_ratio": 1
+        "useful_disc_inside_ratio": 0.9375
       },
       {
         "name": "left_roadwheel_6",
@@ -95,37 +95,37 @@
           0.9600000083446503,
           -0.20500000193715096
         ],
-        "radius": 0.13500002026557922,
+        "radius": 0.16500000283122063,
         "center_inside": true,
-        "useful_disc_inside_ratio": 0.875
+        "useful_disc_inside_ratio": 0.75
       },
       {
         "name": "left_front_sprocket",
         "center": [
-          1.1700000166893005,
-          -0.12999999802559614
+          1.0800000131130219,
+          -0.15000000409781933
         ],
-        "radius": 0.15500003099441528,
+        "radius": 0.17800000496208668,
         "center_inside": true,
-        "useful_disc_inside_ratio": 0.8125
+        "useful_disc_inside_ratio": 0.875
       },
       {
         "name": "left_rear_idler",
         "center": [
           -1.25,
-          -0.11800000537186861
+          -0.11799999698996544
         ],
-        "radius": 0.1450000060722232,
+        "radius": 0.18799999728798866,
         "center_inside": true,
-        "useful_disc_inside_ratio": 0.8125
+        "useful_disc_inside_ratio": 0.75
       },
       {
         "name": "left_return_roller_1",
         "center": [
-          -0.8399999737739563,
+          -0.8400000035762787,
           -0.019999999552965164
         ],
-        "radius": 0.06500000134110451,
+        "radius": 0.0819999985396862,
         "center_inside": true,
         "useful_disc_inside_ratio": 1
       }
@@ -134,12 +134,12 @@
       {
         "name": "right_roadwheel_1",
         "center": [
-          -1.0399999618530273,
+          -1.0400000214576721,
           -0.20500000193715096
         ],
-        "radius": 0.13500000163912773,
+        "radius": 0.16500002145767212,
         "center_inside": true,
-        "useful_disc_inside_ratio": 0.875
+        "useful_disc_inside_ratio": 0.8125
       },
       {
         "name": "right_roadwheel_3",
@@ -147,9 +147,9 @@
           -0.2199999950826168,
           -0.20500000193715096
         ],
-        "radius": 0.13500000163912773,
+        "radius": 0.16500000283122063,
         "center_inside": true,
-        "useful_disc_inside_ratio": 1
+        "useful_disc_inside_ratio": 0.9375
       },
       {
         "name": "right_roadwheel_6",
@@ -157,37 +157,37 @@
           0.9600000083446503,
           -0.20500000193715096
         ],
-        "radius": 0.13500002026557922,
+        "radius": 0.16500000283122063,
         "center_inside": true,
-        "useful_disc_inside_ratio": 0.875
+        "useful_disc_inside_ratio": 0.75
       },
       {
         "name": "right_front_sprocket",
         "center": [
-          1.1700000166893005,
-          -0.12999999802559614
+          1.0800000131130219,
+          -0.15000000409781933
         ],
-        "radius": 0.15500003099441528,
+        "radius": 0.17800000496208668,
         "center_inside": true,
-        "useful_disc_inside_ratio": 0.8125
+        "useful_disc_inside_ratio": 0.875
       },
       {
         "name": "right_rear_idler",
         "center": [
           -1.25,
-          -0.11800000537186861
+          -0.11799999698996544
         ],
-        "radius": 0.1450000060722232,
+        "radius": 0.18799999728798866,
         "center_inside": true,
-        "useful_disc_inside_ratio": 0.8125
+        "useful_disc_inside_ratio": 0.75
       },
       {
         "name": "right_return_roller_1",
         "center": [
-          -0.8399999737739563,
+          -0.8400000035762787,
           -0.019999999552965164
         ],
-        "radius": 0.06500000134110451,
+        "radius": 0.0819999985396862,
         "center_inside": true,
         "useful_disc_inside_ratio": 1
       }
@@ -195,119 +195,99 @@
   },
   "normal_shading": [
     {
-      "node": "left_continuous_tread_belt_surface",
-      "triangle_count": 128,
-      "shared_edge_count": 160,
-      "curved_shared_edge_count": 58,
-      "bad_shared_edge_normals": 0,
-      "max_shared_normal_angle": 2.580956827951785e-8,
-      "curved_corner_samples": 232,
-      "face_like_curved_corner_ratio": 0.05172413793103448
-    },
-    {
       "node": "left_roadwheel_1",
-      "hard_rim_split_groups": 112,
+      "hard_rim_split_groups": 128,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 224,
+      "rubber_radial_samples": 256,
       "rubber_radial_good_ratio": 0
     },
     {
       "node": "left_roadwheel_3",
-      "hard_rim_split_groups": 112,
+      "hard_rim_split_groups": 128,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 224,
+      "rubber_radial_samples": 256,
       "rubber_radial_good_ratio": 0
     },
     {
       "node": "left_roadwheel_6",
-      "hard_rim_split_groups": 112,
+      "hard_rim_split_groups": 128,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 224,
+      "rubber_radial_samples": 256,
       "rubber_radial_good_ratio": 0
     },
     {
       "node": "left_front_sprocket",
-      "hard_rim_split_groups": 120,
+      "hard_rim_split_groups": 136,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 240,
+      "rubber_radial_samples": 272,
       "rubber_radial_good_ratio": 0
     },
     {
       "node": "left_rear_idler",
-      "hard_rim_split_groups": 120,
+      "hard_rim_split_groups": 136,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 240,
+      "rubber_radial_samples": 272,
       "rubber_radial_good_ratio": 0
     },
     {
       "node": "left_return_roller_1",
-      "hard_rim_split_groups": 88,
+      "hard_rim_split_groups": 96,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 176,
+      "rubber_radial_samples": 192,
       "rubber_radial_good_ratio": 0
     },
     {
-      "node": "right_continuous_tread_belt_surface",
-      "triangle_count": 128,
-      "shared_edge_count": 160,
-      "curved_shared_edge_count": 58,
-      "bad_shared_edge_normals": 0,
-      "max_shared_normal_angle": 2.580956827951785e-8,
-      "curved_corner_samples": 232,
-      "face_like_curved_corner_ratio": 0
-    },
-    {
       "node": "right_roadwheel_1",
-      "hard_rim_split_groups": 112,
+      "hard_rim_split_groups": 128,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 224,
+      "rubber_radial_samples": 256,
       "rubber_radial_good_ratio": 0
     },
     {
       "node": "right_roadwheel_3",
-      "hard_rim_split_groups": 112,
+      "hard_rim_split_groups": 128,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 224,
+      "rubber_radial_samples": 256,
       "rubber_radial_good_ratio": 0
     },
     {
       "node": "right_roadwheel_6",
-      "hard_rim_split_groups": 112,
+      "hard_rim_split_groups": 128,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 224,
+      "rubber_radial_samples": 256,
       "rubber_radial_good_ratio": 0
     },
     {
       "node": "right_front_sprocket",
-      "hard_rim_split_groups": 120,
+      "hard_rim_split_groups": 136,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 240,
+      "rubber_radial_samples": 272,
       "rubber_radial_good_ratio": 0
     },
     {
       "node": "right_rear_idler",
-      "hard_rim_split_groups": 120,
+      "hard_rim_split_groups": 136,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 240,
+      "rubber_radial_samples": 272,
       "rubber_radial_good_ratio": 0
     },
     {
       "node": "right_return_roller_1",
-      "hard_rim_split_groups": 88,
+      "hard_rim_split_groups": 96,
       "rubber_duplicate_groups": 0,
       "rubber_bad_split_groups": 0,
-      "rubber_radial_samples": 176,
+      "rubber_radial_samples": 192,
       "rubber_radial_good_ratio": 0
     }
   ]
