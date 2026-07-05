@@ -1,12 +1,13 @@
 import './single-tank.css';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { AUTHORED_SHERMAN_TREADS_GLB_URL } from './sherman-asset-links';
 
 const root = document.querySelector<HTMLDivElement>('#treadfirst-treads-root');
 if (!root) throw new Error('missing #treadfirst-treads-root');
 
-const visualBuild = 'tftm-authored-sherman-treads-v1-0-20260705';
+const visualBuild = 'tftm-authored-sherman-treads-v1-1-20260705';
 
 root.innerHTML = '<main class="single-tank-shell">' +
   '<div class="single-tank-stage"><canvas aria-label="Tread-first Sherman running gear review"></canvas></div>' +
@@ -15,11 +16,12 @@ root.innerHTML = '<main class="single-tank-shell">' +
     '<p class="single-tank-title">Sherman tread component</p>' +
     '<p class="single-tank-status" data-status>loading tread assemblies only</p>' +
   '</section>' +
-  '<div class="camera-zone" data-camera-zone><span>right side: camera</span></div>' +
+  '<section class="orientation-widget" aria-label="Camera orientation widget" data-orientation-widget>' +
+    '<button type="button" data-camera-view="front">Front</button><button type="button" data-camera-view="left">Left</button><button type="button" data-camera-view="top">Top</button><button type="button" data-camera-view="right">Right</button><button type="button" data-camera-view="back">Back</button>' +
+  '</section>' +
 '</main>';
 
 const canvas = root.querySelector<HTMLCanvasElement>('canvas')!;
-const cameraZone = root.querySelector<HTMLDivElement>('[data-camera-zone]')!;
 const statusEl = root.querySelector<HTMLElement>('[data-status]')!;
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
@@ -33,8 +35,18 @@ scene.background = new THREE.Color(0x151711);
 scene.fog = new THREE.Fog(0x151711, 9, 24);
 
 const camera = new THREE.PerspectiveCamera(35, 1, 0.05, 100);
-const target = new THREE.Vector3(0, -0.08, 0);
-const cameraState = { yaw: -0.84, pitch: 0.36, distance: 5.2 };
+camera.position.set(0, 2.3, -4.9);
+const controls = new OrbitControls(camera, canvas);
+controls.target.set(0, -0.04, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.rotateSpeed = 0.8;
+controls.panSpeed = 0.7;
+controls.zoomSpeed = 0.8;
+controls.minDistance = 1.9;
+controls.maxDistance = 9.5;
+controls.touches.ONE = THREE.TOUCH.ROTATE;
+controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
 
 scene.add(new THREE.HemisphereLight(0xf2ead6, 0x252a20, 2.0));
 const key = new THREE.DirectionalLight(0xffefd1, 3.0);
@@ -52,33 +64,25 @@ floor.rotation.x = -Math.PI * 0.5;
 floor.position.y = -0.47;
 scene.add(floor);
 
-let cameraPointer: number | null = null;
-let lastCameraX = 0;
-let lastCameraY = 0;
-
-cameraZone.addEventListener('pointerdown', (event) => {
-  cameraPointer = event.pointerId;
-  lastCameraX = event.clientX;
-  lastCameraY = event.clientY;
-  cameraZone.setPointerCapture(event.pointerId);
+root.querySelectorAll<HTMLButtonElement>('[data-camera-view]').forEach((button) => {
+  button.addEventListener('click', () => snapCamera(button.dataset.cameraView || 'front'));
 });
 
-cameraZone.addEventListener('pointermove', (event) => {
-  if (event.pointerId !== cameraPointer) return;
-  const dx = event.clientX - lastCameraX;
-  const dy = event.clientY - lastCameraY;
-  lastCameraX = event.clientX;
-  lastCameraY = event.clientY;
-  cameraState.yaw -= dx * 0.006;
-  cameraState.pitch = THREE.MathUtils.clamp(cameraState.pitch + dy * 0.0045, 0.12, 0.86);
-});
-
-function releaseCamera(event: PointerEvent) {
-  if (event.pointerId === cameraPointer) cameraPointer = null;
+function snapCamera(view: string) {
+  const focus = new THREE.Vector3(0, -0.04, 0);
+  const distance = Math.max(3.6, camera.position.distanceTo(controls.target));
+  const offsets: Record<string, THREE.Vector3> = {
+    front: new THREE.Vector3(0, 1.05, -distance),
+    back: new THREE.Vector3(0, 1.05, distance),
+    left: new THREE.Vector3(-distance, 1.05, 0),
+    right: new THREE.Vector3(distance, 1.05, 0),
+    top: new THREE.Vector3(0.01, distance, 0.01)
+  };
+  controls.target.copy(focus);
+  camera.position.copy(focus).add(offsets[view] || offsets.front);
+  controls.update();
+  postVisualBeacon('camera-snap', { view });
 }
-
-cameraZone.addEventListener('pointerup', releaseCamera);
-cameraZone.addEventListener('pointercancel', releaseCamera);
 
 new GLTFLoader().load(AUTHORED_SHERMAN_TREADS_GLB_URL, (gltf) => {
   const model = gltf.scene;
@@ -92,7 +96,7 @@ new GLTFLoader().load(AUTHORED_SHERMAN_TREADS_GLB_URL, (gltf) => {
   model.position.y += size.y * 0.5 - 0.46;
   model.rotation.y = -Math.PI / 2 - 0.12;
   scene.add(model);
-  statusEl.textContent = 'loaded tread-only assemblies with connector mounts; no hull or turret in this pass';
+  statusEl.textContent = 'loaded full tread assembly: belts, sidewalls, wheels, sprockets, idlers, bogies; no hull or turret';
   postVisualBeacon('loaded');
 }, undefined, (error) => {
   statusEl.textContent = 'tread-only assembly load failed';
@@ -123,19 +127,9 @@ function resize() {
   }
 }
 
-function updateCamera() {
-  const orbit = new THREE.Vector3(
-    Math.sin(cameraState.yaw) * Math.cos(cameraState.pitch) * cameraState.distance,
-    Math.sin(cameraState.pitch) * cameraState.distance + 0.6,
-    Math.cos(cameraState.yaw) * Math.cos(cameraState.pitch) * cameraState.distance
-  );
-  camera.position.copy(target).add(orbit);
-  camera.lookAt(target);
-}
-
 function animate() {
   resize();
-  updateCamera();
+  controls.update();
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }

@@ -11,7 +11,7 @@ def P(x, y, z):
 
 ROOT = Path('/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories')
 ASSET_ID = 'authored_sherman_treads_v1'
-REVISION = 'v1-0-subdivided-tread-belts-only'
+REVISION = 'v1-1-full-tread-assembly'
 PUBLIC_DIR = ROOT / 'public' / 'tftm' / 'models' / ASSET_ID
 SOURCE_DIR = ROOT / 'assets' / 'authored' / ASSET_ID
 BLEND_PATH = SOURCE_DIR / (ASSET_ID + '.blend')
@@ -28,6 +28,9 @@ for name, color, roughness, metallic in [
     ('track_outer', (0.15, 0.145, 0.12, 1), 0.94, 0.18),
     ('track_inner', (0.20, 0.19, 0.155, 1), 0.91, 0.12),
     ('connector_mount', (0.26, 0.29, 0.20, 1), 0.88, 0.08),
+    ('wheel_rubber', (0.075, 0.073, 0.064, 1), 0.92, 0.08),
+    ('wheel_metal', (0.31, 0.30, 0.23, 1), 0.86, 0.12),
+    ('bogie_arm', (0.27, 0.285, 0.20, 1), 0.87, 0.10),
 ]:
     mat = bpy.data.materials.new(name)
     mat.use_nodes = True
@@ -48,6 +51,10 @@ def empty(name, parent=None):
 treads_root = empty('treads_root')
 left_mount_root = empty('left_tread_connector_mounts', treads_root)
 right_mount_root = empty('right_tread_connector_mounts', treads_root)
+left_wheel_root = empty('left_wheel_group', treads_root)
+right_wheel_root = empty('right_wheel_group', treads_root)
+left_bogie_root = empty('left_bogie_connectors', treads_root)
+right_bogie_root = empty('right_bogie_connectors', treads_root)
 
 # The old model-assay tread was an 8-point profile. This pass keeps its Sherman-like
 # proportions but adds a silhouette subdivision layer around both returns and the
@@ -149,6 +156,52 @@ def make_belt(side_name, side_sign):
     obj.modifiers.new('weighted_tread_normals', 'WEIGHTED_NORMAL')
     return obj
 
+
+def disc_mesh(name, center, radius, depth, parent, material_name='wheel_metal', segments=28, hub_radius=0.12):
+    cx, cy, cz = center
+    z0 = cz - depth / 2
+    z1 = cz + depth / 2
+    verts = []
+    faces = []
+    def add(v):
+        verts.append(v)
+        return len(verts) - 1
+    front_center = add((cx, cy, z1))
+    back_center = add((cx, cy, z0))
+    front_ring = []
+    back_ring = []
+    front_hub = []
+    back_hub = []
+    for i in range(segments):
+        a = math.tau * i / segments
+        co = math.cos(a)
+        si = math.sin(a)
+        front_ring.append(add((cx + co * radius, cy + si * radius, z1)))
+        back_ring.append(add((cx + co * radius, cy + si * radius, z0)))
+        front_hub.append(add((cx + co * hub_radius, cy + si * hub_radius, z1 + 0.006)))
+        back_hub.append(add((cx + co * hub_radius, cy + si * hub_radius, z0 - 0.006)))
+    for i in range(segments):
+        j = (i + 1) % segments
+        faces.append((front_center, front_hub[i], front_hub[j]))
+        faces.append((back_center, back_hub[j], back_hub[i]))
+        faces.append((front_hub[i], front_ring[i], front_ring[j], front_hub[j]))
+        faces.append((back_hub[j], back_ring[j], back_ring[i], back_hub[i]))
+        faces.append((front_ring[i], back_ring[i], back_ring[j], front_ring[j]))
+    mesh = bpy.data.meshes.new(name + '_mesh')
+    mesh.from_pydata([P(*v) for v in verts], [], faces)
+    mesh.update(calc_edges=True)
+    mesh.materials.append(materials[material_name])
+    assign_uvs(mesh)
+    obj = bpy.data.objects.new(name, mesh)
+    obj['component_role'] = 'side_facing_running_gear_wheel'
+    obj['wheel_axis'] = 'runtime_Z_width_axis'
+    bpy.context.collection.objects.link(obj)
+    obj.parent = parent
+    for poly in mesh.polygons:
+        poly.use_smooth = True
+    obj.modifiers.new('weighted_wheel_normals', 'WEIGHTED_NORMAL')
+    return obj
+
 def box_mesh(name, center, size, parent):
     cx, cy, cz = center
     sx, sy, sz = size
@@ -176,11 +229,24 @@ def box_mesh(name, center, size, parent):
 left_belt = make_belt('left', 1)
 right_belt = make_belt('right', -1)
 
-for side_name, side_sign, parent in [('left', 1, left_mount_root), ('right', -1, right_mount_root)]:
-    z = side_sign * 0.60
+for side_name, side_sign, mount_parent, wheel_parent, bogie_parent in [
+    ('left', 1, left_mount_root, left_wheel_root, left_bogie_root),
+    ('right', -1, right_mount_root, right_wheel_root, right_bogie_root),
+]:
+    mount_z = side_sign * 0.60
+    wheel_z = side_sign * 0.82
     for x in [-1.08, -0.42, 0.24, 0.90]:
-        box_mesh(f'{side_name}_tread_connector_mount_{x:+.2f}', (x, 0.045, z), (0.30, 0.16, 0.16), parent)
-    box_mesh(f'{side_name}_upper_return_connector_rail', (-0.04, 0.055, z), (2.48, 0.08, 0.08), parent)
+        box_mesh(f'{side_name}_tread_connector_mount_{x:+.2f}', (x, 0.045, mount_z), (0.30, 0.16, 0.16), mount_parent)
+    box_mesh(f'{side_name}_upper_return_connector_rail', (-0.04, 0.055, mount_z), (2.48, 0.08, 0.08), mount_parent)
+    box_mesh(f'{side_name}_lower_bogie_tie_beam', (-0.10, -0.255, mount_z), (2.72, 0.075, 0.10), bogie_parent)
+    for index, x in enumerate([-1.12, -0.70, -0.28, 0.14, 0.56, 0.98]):
+        disc_mesh(f'{side_name}_roadwheel_{index + 1}', (x, -0.255, wheel_z), 0.205, 0.105, wheel_parent, 'wheel_metal', 30, 0.082)
+    disc_mesh(f'{side_name}_front_sprocket', (1.28, -0.155, wheel_z), 0.285, 0.12, wheel_parent, 'wheel_metal', 32, 0.10)
+    disc_mesh(f'{side_name}_rear_idler', (-1.38, -0.155, wheel_z), 0.245, 0.11, wheel_parent, 'wheel_metal', 32, 0.09)
+    for index, x in enumerate([-0.92, -0.18, 0.58]):
+        disc_mesh(f'{side_name}_return_roller_{index + 1}', (x, 0.035, wheel_z), 0.105, 0.09, wheel_parent, 'wheel_metal', 24, 0.045)
+    for x in [-0.91, -0.07, 0.77]:
+        box_mesh(f'{side_name}_vvss_bogie_arm_{x:+.2f}', (x, -0.17, mount_z), (0.32, 0.18, 0.09), bogie_parent)
 
 bpy.ops.wm.save_as_mainfile(filepath=str(BLEND_PATH))
 bpy.ops.export_scene.gltf(filepath=str(GLB_PATH), export_format='GLB', use_selection=False)
@@ -199,7 +265,7 @@ manifest = {
     'output_glb': str(GLB_PATH.relative_to(ROOT)),
     'approximate_triangles': triangle_count,
     'coordinate_contract': 'runtime X length, Y height, Z width; Blender Z-up converted through P()',
-    'component_scope': 'treads and connector mounts only; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
+    'component_scope': 'full tread assembly only: tread belts, sidewalls, wheels, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant',
     'reference_source': 'src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only',
     'profile': {
         'old_reference_point_count': 8,
@@ -208,9 +274,9 @@ manifest = {
         'subdivision_layer': 'one added silhouette layer around returns and run transitions',
         'markers': SEGMENT_MARKERS,
     },
-    'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_connector_mounts','right_tread_connector_mounts'],
+    'required_nodes': ['treads_root','left_tread_belt','right_tread_belt','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors'],
     'forbidden_nodes': ['hull_root','turret_traverse_pivot','turret_shell','cannon_elevation_pivot','mantlet','barrel','coaxial_mg','tank_root'],
-    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: closed trapezoid tread belt volumes with visible top, bottom, front, rear, inner, and outer thickness; connector mounts subordinate; no hull/turret/full-tank salvage.'
+    'acceptance': 'Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with closed trapezoid tread belt volumes, sidewalls, side-facing road wheels, sprockets, idlers, return rollers, bogie connectors, visible top, bottom, front, rear, inner, and outer thickness; no hull/turret/full-tank salvage.'
 }
 MANIFEST_PATH.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({'asset_id': ASSET_ID, 'revision': REVISION, 'triangles': triangle_count, 'glb': str(GLB_PATH)}, indent=2))

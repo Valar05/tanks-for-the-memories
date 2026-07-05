@@ -1,13 +1,13 @@
 {
   "asset_id": "authored_sherman_treads_v1",
   "artifact_type": "tread_only_blender_asset",
-  "silhouette_revision": "v1-0-subdivided-tread-belts-only",
+  "silhouette_revision": "v1-1-full-tread-assembly",
   "generator": "scripts/export_authored_sherman_treads.py",
   "source_blend": "assets/authored/authored_sherman_treads_v1/authored_sherman_treads_v1.blend",
   "output_glb": "public/tftm/models/authored_sherman_treads_v1/authored_sherman_treads_v1.glb",
-  "approximate_triangles": 376,
+  "approximate_triangles": 5528,
   "coordinate_contract": "runtime X length, Y height, Z width; Blender Z-up converted through P()",
-  "component_scope": "treads and connector mounts only; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant",
+  "component_scope": "full tread assembly only: tread belts, sidewalls, wheels, sprockets, idlers, return rollers, bogie connectors, and connector mounts; no hull, turret, barrel, coaxial MG, full tank scene, or texture variant",
   "reference_source": "src/model-assay.ts createTreadGeometry 8-point profile used as subdivision-0 reference only",
   "profile": {
     "old_reference_point_count": 8,
@@ -50,7 +50,11 @@
     "left_tread_belt",
     "right_tread_belt",
     "left_tread_connector_mounts",
-    "right_tread_connector_mounts"
+    "right_tread_connector_mounts",
+    "left_wheel_group",
+    "right_wheel_group",
+    "left_bogie_connectors",
+    "right_bogie_connectors"
   ],
   "forbidden_nodes": [
     "hull_root",
@@ -62,5 +66,5 @@
     "coaxial_mg",
     "tank_root"
   ],
-  "acceptance": "Cloud/Sense must judge treadfirst-treads.html only: closed trapezoid tread belt volumes with visible top, bottom, front, rear, inner, and outer thickness; connector mounts subordinate; no hull/turret/full-tank salvage."
+  "acceptance": "Cloud/Sense must judge treadfirst-treads.html only: full tread assembly with closed trapezoid tread belt volumes, sidewalls, side-facing road wheels, sprockets, idlers, return rollers, bogie connectors, visible top, bottom, front, rear, inner, and outer thickness; no hull/turret/full-tank salvage."
 }

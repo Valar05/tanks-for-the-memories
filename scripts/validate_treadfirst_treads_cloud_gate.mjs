@@ -2,8 +2,8 @@ import { existsSync, readFileSync } from 'node:fs';
 
 const manifestPath = 'generated/cloud-visual-truth/tftm-release/cloud_visual_truth_manifest.json';
 const assetManifestPath = 'public/tftm/models/authored_sherman_treads_v1/model_manifest.json';
-const expectedBuild = 'tftm-authored-sherman-treads-v1-0-20260705';
-const expectedRevision = 'v1-0-subdivided-tread-belts-only';
+const expectedBuild = 'tftm-authored-sherman-treads-v1-1-20260705';
+const expectedRevision = 'v1-1-full-tread-assembly';
 const failures = [];
 function fail(message) { failures.push(message); }
 
@@ -22,7 +22,7 @@ if (failures.length === 0) {
     if (review.asset_id !== 'authored_sherman_treads_v1') fail('tread review asset id mismatch');
     if (review.silhouette_revision !== expectedRevision) fail('tread review revision mismatch');
     const acceptance = String(review.acceptance || '');
-    for (const phrase of ['treads and connector mounts only', 'closed trapezoid tread belt volumes', 'visible top, bottom, front, rear, inner, and outer thickness', 'one silhouette subdivision layer', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
+    for (const phrase of ['full tread assembly only', 'closed trapezoid tread belt volumes', 'side-facing road wheels', 'sprockets, idlers, return rollers, bogie connectors', 'preserve OrbitControls camera and orientation widget', 'no hull, turret, barrel, coaxial MG, or full tank scene', 'local capture was not used']) {
       if (!acceptance.includes(phrase)) fail('tread acceptance must mention ' + phrase);
     }
   }
@@ -33,6 +33,7 @@ if (failures.length === 0) {
   const questions = (release.sense_simulation_questions || []).join('\n');
   if (!questions.includes('authored_sherman_treads_v1')) fail('Sense questions must mention authored_sherman_treads_v1');
   if (!questions.includes('no hull, turret, barrel, coaxial MG')) fail('Sense questions must forbid full tank geometry');
+  if (!questions.includes('preserve the established OrbitControls')) fail('Sense questions must ask about preserved camera controls');
 }
 
 if (failures.length) {
@@ -40,4 +41,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Tread-first cloud review gate passed: hosted packet declares isolated tread-only review lane; cloud/Sense acceptance is still required.');
+console.log('Tread-first cloud review gate passed: hosted packet declares full tread assembly review lane with preserved camera controls; cloud/Sense acceptance is still required.');

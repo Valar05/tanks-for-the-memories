@@ -74,10 +74,10 @@ if (failures.length === 0) {
   const runtime = readFileSync('src/treadfirst-treads.ts', 'utf8') + readFileSync('src/sherman-asset-links.ts', 'utf8');
   const build = readFileSync('scripts/build.mjs', 'utf8');
   if (manifest.asset_id !== assetId) fail('manifest asset_id mismatch');
-  if (manifest.silhouette_revision !== 'v1-0-subdivided-tread-belts-only') fail('unexpected revision ' + manifest.silhouette_revision);
+  if (manifest.silhouette_revision !== 'v1-1-full-tread-assembly') fail('unexpected revision ' + manifest.silhouette_revision);
   if (manifest.profile?.old_reference_point_count !== 8) fail('manifest must record old subdivision-0 profile point count');
   if ((manifest.profile?.outer_profile_point_count || 0) < 16) fail('outer profile must add one silhouette subdivision layer beyond the old 8-point profile');
-  for (const node of ['treads_root','left_tread_belt','right_tread_belt','left_tread_connector_mounts','right_tread_connector_mounts']) if (!(json.nodes || []).some((entry) => entry.name === node)) fail('missing required node ' + node);
+  for (const node of ['treads_root','left_tread_belt','right_tread_belt','left_tread_connector_mounts','right_tread_connector_mounts','left_wheel_group','right_wheel_group','left_bogie_connectors','right_bogie_connectors','left_front_sprocket','right_front_sprocket','left_rear_idler','right_rear_idler']) if (!(json.nodes || []).some((entry) => entry.name === node)) fail('missing required node ' + node);
   for (const forbidden of ['hull','turret','barrel','coax','mantlet','cannon','tank_root']) {
     const hit = (json.nodes || []).find((node) => String(node.name || '').toLowerCase().includes(forbidden));
     if (hit) fail('tread-only asset contains forbidden full-tank node ' + hit.name);
@@ -86,7 +86,7 @@ if (failures.length === 0) {
     if (exporter.includes(forbidden)) fail('tread exporter must not copy failed exporter marker ' + forbidden);
   }
   const tri = triangles(json);
-  if (tri < 220 || tri > 1800) fail('unexpected tread-only triangle count ' + tri);
+  if (tri < 1800 || tri > 7000) fail('unexpected full tread assembly triangle count ' + tri);
   const bounds = allBounds(json);
   if (!(bounds.size[0] > 3.0 && bounds.size[2] > 1.8 && bounds.size[1] < 0.9)) fail('tread assembly bounds should be long/wide/low, saw ' + bounds.size.map((n) => n.toFixed(3)).join(' x '));
   for (const side of ['left', 'right']) {
@@ -97,8 +97,14 @@ if (failures.length === 0) {
     }
     const names = descendants(json, `${side}_tread_connector_mounts`).join('\n');
     if ((names.match(/connector_mount_/g) || []).length < 4) fail(`${side} connector mounts must expose four subordinate mount blocks`);
+    const wheelNames = descendants(json, `${side}_wheel_group`).join('\n');
+    if ((wheelNames.match(/roadwheel_/g) || []).length < 6) fail(`${side} wheel group must expose six side-facing road wheels`);
+    if (!wheelNames.includes(`${side}_front_sprocket`) || !wheelNames.includes(`${side}_rear_idler`)) fail(`${side} wheel group must expose front sprocket and rear idler`);
+    if ((wheelNames.match(/return_roller_/g) || []).length < 3) fail(`${side} wheel group must expose return rollers`);
+    const bogieNames = descendants(json, `${side}_bogie_connectors`).join('\n');
+    if ((bogieNames.match(/vvss_bogie_arm_/g) || []).length < 3) fail(`${side} bogie connectors must expose three bogie arm blocks`);
   }
-  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-0-20260705', 'tread assemblies only']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
+  for (const marker of ['AUTHORED_SHERMAN_TREADS_GLB_URL', 'tftm-authored-sherman-treads-v1-1-20260705', 'OrbitControls', 'orientation-widget', 'full tread assembly']) if (!runtime.includes(marker)) fail('runtime missing marker ' + marker);
   if (!build.includes("buildEntry('treadfirst-treads.ts', 'treadfirst-treads')")) fail('build must bundle treadfirst-treads.ts');
   if (!build.includes("writeBundledHtml('treadfirst-treads.html', 'treadfirst-treads.html', 'treadfirst-treads')")) fail('build must write treadfirst-treads.html');
 }
@@ -108,4 +114,4 @@ if (failures.length) {
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
-console.log('Authored tread-only asset validation passed: isolated subdivided belts, subordinate connectors, no full tank geometry. Cloud/Sense visual acceptance is still required.');
+console.log('Authored tread assembly validation passed: subdivided closed belts, side-facing wheels, sprockets, idlers, return rollers, bogie connectors, subordinate mounts, no full tank geometry. Cloud/Sense visual acceptance is still required.');
