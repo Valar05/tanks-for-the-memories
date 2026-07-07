@@ -39,10 +39,10 @@ jobs:
         run: npm ci
 
       - name: Install Playwright for capture
-        run: npm install --no-save @playwright/test@1.61.1
+        run: npm install --no-save playwright@1.61.1
 
       - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+        run: ./node_modules/.bin/playwright install --with-deps chromium
 
       - name: Capture cloud pixels
         run: >-
