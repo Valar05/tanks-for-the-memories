@@ -4,7 +4,7 @@ import { join, resolve } from 'node:path';
 import { chromium } from 'playwright';
 
 const DEFAULT_URL = 'https://pose-lab-visual-truth--tftm-boxmodel-v1-13-ncn1csrf.web.app/hybrid-hull-treads.html?cacheBust=hull-material-v1-20260707';
-const DEFAULT_VARIANTS = ['final', 'edge', 'normal', 'roughness'];
+const DEFAULT_VARIANTS = ['final', 'treadAlbedo', 'treadNormal', 'treadRoughness', 'treadMetalness', 'wheelRoughness', 'lightingNeutral'];
 const VIEWPORTS = [
   { name: 'phone-portrait', width: 390, height: 844, isMobile: true },
   { name: 'phone-landscape', width: 844, height: 390, isMobile: true },
@@ -50,7 +50,7 @@ function printHelp() {
     '',
     'Options:',
     '  --label=hybrid-hull-treads       filename/artifact prefix',
-    '  --variants=final,edge,normal     comma-separated materialDebug variants',
+    '  --variants=final,treadRoughness  comma-separated materialDebug variants',
     '  --wait-ms=6000                   delay after load before screenshot',
     '  --out=cloud-pixel-artifacts      output directory'
   ].join('\n'));
@@ -91,6 +91,8 @@ async function captureOne(browser, args, variant, viewport) {
   let responseOk = false;
   let title = '';
   let canvasCount = 0;
+  let statusText = '';
+  let materialDebugReport = null;
   const fileBase = safeName(args.label + '-' + variant + '-' + viewport.name);
   const screenshotPath = resolve(args.out, fileBase + '.png');
   try {
@@ -101,6 +103,8 @@ async function captureOne(browser, args, variant, viewport) {
     if (args.waitMs > 0) await page.waitForTimeout(args.waitMs);
     title = await page.title().catch(() => '');
     canvasCount = await page.locator('canvas').count().catch(() => 0);
+    statusText = await page.locator('[data-status]').first().textContent({ timeout: 1000 }).catch(() => '');
+    materialDebugReport = await page.evaluate(() => globalThis.__TFTM_MATERIAL_DEBUG_REPORT__ || null).catch(() => null);
     await page.screenshot({ path: screenshotPath, fullPage: false });
   } finally {
     await page.close().catch(() => {});
@@ -119,6 +123,8 @@ async function captureOne(browser, args, variant, viewport) {
     responseOk,
     title,
     canvasCount,
+    statusText,
+    materialDebugReport,
     screenshotPath,
     missingScreenshot,
     consoleMessages,

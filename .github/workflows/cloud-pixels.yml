@@ -18,7 +18,7 @@ on:
       variants:
         description: Comma-separated materialDebug variants; final keeps the URL unchanged
         required: true
-        default: final,edge,normal,roughness
+        default: final,treadAlbedo,treadNormal,treadRoughness,treadMetalness,wheelRoughness,lightingNeutral
 
 jobs:
   capture:
