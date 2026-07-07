@@ -1,0 +1,62 @@
+name: TFTM Cloud Pixels
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Full cloud URL to capture
+        required: true
+        default: https://pose-lab-visual-truth--tftm-boxmodel-v1-13-ncn1csrf.web.app/hybrid-hull-treads.html?cacheBust=hull-material-v1-20260707
+      label:
+        description: Artifact and filename prefix
+        required: true
+        default: hybrid-hull-treads
+      wait_ms:
+        description: Milliseconds to wait after page load before each screenshot
+        required: true
+        default: '6000'
+      variants:
+        description: Comma-separated materialDebug variants; final keeps the URL unchanged
+        required: true
+        default: final,edge,normal,roughness
+
+jobs:
+  capture:
+    name: Capture cloud-rendered pixels
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright for capture
+        run: npm install --no-save @playwright/test@1.61.1
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Capture cloud pixels
+        run: >-
+          node scripts/capture_cloud_pixels.mjs
+          --url "${{ inputs.url }}"
+          --label "${{ inputs.label }}"
+          --wait-ms "${{ inputs.wait_ms }}"
+          --variants "${{ inputs.variants }}"
+          --out cloud-pixel-artifacts
+
+      - name: Upload cloud pixel artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cloud-pixels-${{ inputs.label }}-${{ github.run_id }}
+          path: cloud-pixel-artifacts
+          if-no-files-found: error
