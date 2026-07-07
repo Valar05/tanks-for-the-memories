@@ -53,7 +53,7 @@ function printHelp() {
     '  --variants=final,edge,normal     comma-separated materialDebug variants',
     '  --wait-ms=6000                   delay after load before screenshot',
     '  --out=cloud-pixel-artifacts      output directory'
-  ].join('\\n'));
+  ].join('\n'));
 }
 
 function urlForVariant(baseUrl, variant) {
@@ -162,7 +162,7 @@ async function main() {
     requestedUrl: capture.requestedUrl
   }));
   const reportPath = join(args.out, 'cloud_pixel_report.json');
-  writeFileSync(reportPath, JSON.stringify(report, null, 2) + '\\n');
+  writeFileSync(reportPath, JSON.stringify(report, null, 2) + '\n');
   console.log('report: ' + reportPath);
   if (!report.ok) {
     console.error('one or more cloud pixel captures failed');
