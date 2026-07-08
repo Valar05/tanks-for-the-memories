@@ -1,0 +1,101 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-08T15:25:41+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "enable_pbr": true,
+    "hd_texture": true,
+    "image_url": "<data-uri>",
+    "model_type": "lowpoly",
+    "should_remesh": true,
+    "should_texture": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "target_polycount": 6000,
+    "texture_prompt": "Low-poly game-ready Sherman VVSS tread and running gear envelope, closed track belts with visible road wheels, sprockets, idlers, return rollers, bogie masses, armored tread shoe texture, dark worn painted steel and rubber, PBR albedo normal roughness metalness, intentional low-poly mesh from generation, no high-poly decimation artifacts, no black rubber blob, no plaid texture, no hull, no turret, no text.",
+    "topology": "quad"
+  },
+  "files": [
+    {
+      "bytes": 27502924,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_lowpoly_treads_envelope_v1/fbx.fbx"
+    },
+    {
+      "bytes": 27768512,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_lowpoly_treads_envelope_v1/glb.glb"
+    }
+  ],
+  "last_image_to_3d_task": {
+    "art_style": "",
+    "consumed_credits": 30,
+    "created_at": 1783524364935,
+    "expires_at": 1783783853152,
+    "finished_at": 1783524653152,
+    "hd_texture": true,
+    "id": "019f4256-08b3-7da7-bea7-154550d9a6c0",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783524364963,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "",
+    "texture_image_url": "",
+    "texture_prompt": "Low-poly game-ready Sherman VVSS tread and running gear envelope, closed track belts with visible road wheels, sprockets, idlers, return rollers, bogie masses, armored tread shoe texture, dark worn painted steel and rubber, PBR albedo normal roughness metalness, intentional low-poly mesh from generation, no high-poly decimation artifacts, no black rubber blob, no plaid texture, no hull, no turret, no text.",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "image-to-3d"
+  },
+  "name": "sherman_lowpoly_treads_envelope_v1",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-08T15:26:04+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_pbr": true,
+        "hd_texture": true,
+        "image_url": "<data-uri>",
+        "model_type": "lowpoly",
+        "should_remesh": true,
+        "should_texture": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "target_polycount": 6000,
+        "texture_prompt": "Low-poly game-ready Sherman VVSS tread and running gear envelope, closed track belts with visible road wheels, sprockets, idlers, return rollers, bogie masses, armored tread shoe texture, dark worn painted steel and rubber, PBR albedo normal roughness metalness, intentional low-poly mesh from generation, no high-poly decimation artifacts, no black rubber blob, no plaid texture, no hull, no turret, no text.",
+        "topology": "quad"
+      },
+      "provider": "meshy",
+      "step": "image_to_3d",
+      "task_id": "019f4256-08b3-7da7-bea7-154550d9a6c0"
+    }
+  ],
+  "tasks": {
+    "image_to_3d": "019f4256-08b3-7da7-bea7-154550d9a6c0"
+  },
+  "updated_at": "2026-07-08T15:31:04+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

@@ -1,0 +1,101 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-08T15:25:41+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "enable_pbr": true,
+    "hd_texture": true,
+    "image_url": "<data-uri>",
+    "model_type": "lowpoly",
+    "should_remesh": true,
+    "should_texture": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "target_polycount": 3500,
+    "texture_prompt": "Low-poly game-ready Sherman turret kit envelope, cast turret shell with fused mantlet area, main barrel and coax represented in coherent source grouping, two hatch details, matte olive painted steel, darker gunmetal barrel, PBR albedo normal roughness metalness, clean intentional low-poly topology, no local decimation look, no melted clay, no toy plastic, no text.",
+    "topology": "quad"
+  },
+  "files": [
+    {
+      "bytes": 23741452,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_lowpoly_turret_envelope_v1/fbx.fbx"
+    },
+    {
+      "bytes": 22866228,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_lowpoly_turret_envelope_v1/glb.glb"
+    }
+  ],
+  "last_image_to_3d_task": {
+    "art_style": "",
+    "consumed_credits": 30,
+    "created_at": 1783524364603,
+    "expires_at": 1783783832424,
+    "finished_at": 1783524632424,
+    "hd_texture": true,
+    "id": "019f4256-08a3-750c-acf1-c7d11b590e01",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783524364779,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "",
+    "texture_image_url": "",
+    "texture_prompt": "Low-poly game-ready Sherman turret kit envelope, cast turret shell with fused mantlet area, main barrel and coax represented in coherent source grouping, two hatch details, matte olive painted steel, darker gunmetal barrel, PBR albedo normal roughness metalness, clean intentional low-poly topology, no local decimation look, no melted clay, no toy plastic, no text.",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "image-to-3d"
+  },
+  "name": "sherman_lowpoly_turret_envelope_v1",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-08T15:26:04+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_pbr": true,
+        "hd_texture": true,
+        "image_url": "<data-uri>",
+        "model_type": "lowpoly",
+        "should_remesh": true,
+        "should_texture": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "target_polycount": 3500,
+        "texture_prompt": "Low-poly game-ready Sherman turret kit envelope, cast turret shell with fused mantlet area, main barrel and coax represented in coherent source grouping, two hatch details, matte olive painted steel, darker gunmetal barrel, PBR albedo normal roughness metalness, clean intentional low-poly topology, no local decimation look, no melted clay, no toy plastic, no text.",
+        "topology": "quad"
+      },
+      "provider": "meshy",
+      "step": "image_to_3d",
+      "task_id": "019f4256-08a3-750c-acf1-c7d11b590e01"
+    }
+  ],
+  "tasks": {
+    "image_to_3d": "019f4256-08a3-750c-acf1-c7d11b590e01"
+  },
+  "updated_at": "2026-07-08T15:30:42+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

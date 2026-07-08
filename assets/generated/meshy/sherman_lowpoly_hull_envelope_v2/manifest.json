@@ -1,0 +1,101 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-08T15:32:09+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "enable_pbr": true,
+    "hd_texture": true,
+    "image_url": "<data-uri>",
+    "model_type": "lowpoly",
+    "should_remesh": true,
+    "should_texture": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "target_polycount": 1500,
+    "texture_prompt": "Strict low-poly game-ready M4A3 Sherman hull envelope only, target around 1500 generated polygons, simple clean authored armor planes, sloped glacis, rear deck, side sponson mass, turret ring opening, welded seams via texture/normal map not dense geometry, matte olive drab PBR painted steel. Generate lowpoly directly; do not make a detailed high-poly mesh; no decimation artifacts; no faceted pillow shape; no turret, barrel, wheels, tracks, or text.",
+    "topology": "quad"
+  },
+  "files": [
+    {
+      "bytes": 23616124,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_lowpoly_hull_envelope_v2/fbx.fbx"
+    },
+    {
+      "bytes": 24978592,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_lowpoly_hull_envelope_v2/glb.glb"
+    }
+  ],
+  "last_image_to_3d_task": {
+    "art_style": "",
+    "consumed_credits": 30,
+    "created_at": 1783524752588,
+    "expires_at": 1783784531229,
+    "finished_at": 1783525331229,
+    "hd_texture": true,
+    "id": "019f425b-f34f-7e33-a901-2be0fa5f4dd4",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783524752608,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "",
+    "texture_image_url": "",
+    "texture_prompt": "Strict low-poly game-ready M4A3 Sherman hull envelope only, target around 1500 generated polygons, simple clean authored armor planes, sloped glacis, rear deck, side sponson mass, turret ring opening, welded seams via texture/normal map not dense geometry, matte olive drab PBR painted steel. Generate lowpoly directly; do not make a detailed high-poly mesh; no decimation artifacts; no faceted pillow shape; no turret, barrel, wheels, tracks, or text.",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "image-to-3d"
+  },
+  "name": "sherman_lowpoly_hull_envelope_v2",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-08T15:32:32+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_pbr": true,
+        "hd_texture": true,
+        "image_url": "<data-uri>",
+        "model_type": "lowpoly",
+        "should_remesh": true,
+        "should_texture": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "target_polycount": 1500,
+        "texture_prompt": "Strict low-poly game-ready M4A3 Sherman hull envelope only, target around 1500 generated polygons, simple clean authored armor planes, sloped glacis, rear deck, side sponson mass, turret ring opening, welded seams via texture/normal map not dense geometry, matte olive drab PBR painted steel. Generate lowpoly directly; do not make a detailed high-poly mesh; no decimation artifacts; no faceted pillow shape; no turret, barrel, wheels, tracks, or text.",
+        "topology": "quad"
+      },
+      "provider": "meshy",
+      "step": "image_to_3d",
+      "task_id": "019f425b-f34f-7e33-a901-2be0fa5f4dd4"
+    }
+  ],
+  "tasks": {
+    "image_to_3d": "019f425b-f34f-7e33-a901-2be0fa5f4dd4"
+  },
+  "updated_at": "2026-07-08T15:42:15+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}

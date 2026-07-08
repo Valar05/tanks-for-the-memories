@@ -2,7 +2,7 @@ import './single-tank.css';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { AUTHORED_SHERMAN_TREADS_GLB_URL, MESHY_SHERMAN_ENVELOPE_ASSEMBLY_MANIFEST_URL } from './sherman-asset-links';
+import { AUTHORED_SHERMAN_TREADS_GLB_URL, MESHY_SHERMAN_LOWPOLY_ENVELOPE_MANIFEST_URL } from './sherman-asset-links';
 import { applyAuthoredShermanSharedTextures } from './authored-sherman-shared-materials';
 
 type AssemblyArea = 'hull' | 'treads' | 'turret';
@@ -48,8 +48,12 @@ type AssemblyPart = {
 const root = document.querySelector<HTMLDivElement>('#assembled-tank-root');
 if (!root) throw new Error('missing #assembled-tank-root');
 
-const envelopeManifestUrl = MESHY_SHERMAN_ENVELOPE_ASSEMBLY_MANIFEST_URL;
-const visualBuild = 'tftm-meshy-envelope-assembly-editor-v1-20260708';
+const envelopeManifestUrl = MESHY_SHERMAN_LOWPOLY_ENVELOPE_MANIFEST_URL;
+const visualBuild = 'tftm-meshy-direct-lowpoly-pbr-envelope-editor-v1-20260708';
+const LOWPOLY_HULL_ENVELOPE_ID = 'lowpoly_hull_envelope';
+const LOWPOLY_TURRET_ENVELOPE_ID = 'lowpoly_turret_envelope';
+const LOWPOLY_TREADS_ENVELOPE_ID = 'lowpoly_treads_envelope';
+const lowpolyEnvelopeIdList = [LOWPOLY_HULL_ENVELOPE_ID, LOWPOLY_TURRET_ENVELOPE_ID, LOWPOLY_TREADS_ENVELOPE_ID].join(', ');
 const query = new URLSearchParams(window.location.search);
 const isTuneMode = query.get('tune') === '1' || query.get('tune') === 'components' || query.get('tune') === 'envelopes';
 const rootShell = isTuneMode ? ' is-tuning' : '';
@@ -57,9 +61,9 @@ const rootShell = isTuneMode ? ' is-tuning' : '';
 root.innerHTML = '<main class="single-tank-shell' + rootShell + '">' +
   '<div class="single-tank-stage"><canvas aria-label="Hybrid Meshy envelope tank assembly editor"></canvas></div>' +
   '<section class="single-tank-readout" aria-label="Hybrid Meshy envelope tank readout">' +
-    '<p class="single-tank-kicker">hybrid envelope assembly</p>' +
-    '<p class="single-tank-title">Meshy envelopes + authored treads</p>' +
-    '<p class="single-tank-status" data-status>loading textured Meshy envelopes</p>' +
+    '<p class="single-tank-kicker">direct lowpoly envelope assembly</p>' +
+    '<p class="single-tank-title">Meshy lowpoly PBR envelopes + authored treads</p>' +
+    '<p class="single-tank-status" data-status>loading direct lowpoly Meshy PBR envelopes</p>' +
   '</section>' +
   (isTuneMode ? '<section class="tune-parts-panel is-collapsed" aria-label="Assembly envelopes" data-parts-panel>' +
     '<button class="tune-parts-toggle" type="button" data-toggle-parts><span data-selected-label>No envelope</span><span data-parts-caret>Envelopes</span></button>' +
@@ -208,11 +212,11 @@ function tagTunePart(part: AssemblyPart) {
 function onOneAssetLoaded() {
   loadedCount += 1;
   if (loadedCount !== expectedLoads) return;
-  selectedPart = parts.find((part) => part.id === 'turret_kit_envelope') || parts[0] || null;
+  selectedPart = parts.find((part) => part.id === LOWPOLY_TURRET_ENVELOPE_ID) || parts[0] || null;
   initialSnapshot = serializeTuneParts();
   renderTuneUi();
-  statusEl.textContent = 'loaded textured envelope assembly editor: whole Meshy hull and turret envelopes preserve source grouping, UVs, and materials; authored treads remain the visible running gear reference';
-  postVisualBeacon('loaded', { parts: parts.length, selected: selectedPart?.id || 'none', editor: isTuneMode ? 1 : 0 });
+  statusEl.textContent = 'loaded direct lowpoly PBR envelope editor: ' + lowpolyEnvelopeIdList + ' generated with model_type=lowpoly, preserved UVs/materials/PBR textures, and no local decimation';
+  postVisualBeacon('loaded', { parts: parts.length, selected: selectedPart?.id || 'none', editor: isTuneMode ? 1 : 0, envelopes: lowpolyEnvelopeIdList });
 }
 async function boot() {
   manifest = await fetch(envelopeManifestUrl, { cache: 'no-store' }).then((response) => response.json() as Promise<EnvelopeManifest>);
@@ -288,7 +292,7 @@ function bindUi() {
   root.querySelector<HTMLButtonElement>('[data-toggle-lock]')?.addEventListener('click', () => { if (!selectedPart) return; selectedPart.locked = !selectedPart.locked; lockedSelection = selectedPart.locked ? selectedPart : null; renderTuneUi(); applyTuneToUrl(); });
   root.querySelector<HTMLButtonElement>('[data-reset-part]')?.addEventListener('click', resetSelectedPart);
   root.querySelector<HTMLButtonElement>('[data-reset-all]')?.addEventListener('click', () => { if (!initialSnapshot) return; pushUndo(); restoreTuneParts(initialSnapshot); });
-  root.querySelector<HTMLButtonElement>('[data-show-defaults]')?.addEventListener('click', () => { for (const part of parts) { part.visible = part.id !== 'meshy_treads_envelope'; applyPartTransform(part); } renderTuneUi(); });
+  root.querySelector<HTMLButtonElement>('[data-show-defaults]')?.addEventListener('click', () => { for (const part of parts) { part.visible = part.id !== LOWPOLY_TREADS_ENVELOPE_ID; applyPartTransform(part); } renderTuneUi(); });
   root.querySelector<HTMLButtonElement>('[data-focus-part]')?.addEventListener('click', () => selectedPart && focusPart(selectedPart));
   root.querySelector<HTMLButtonElement>('[data-export-tune]')?.addEventListener('click', exportTune);
   root.querySelector<HTMLButtonElement>('[data-undo]')?.addEventListener('click', undoTune);
@@ -406,7 +410,7 @@ function serializeTuneParts() {
     version: 1,
     build: visualBuild,
     coordinateSpace: 'meshy-envelope-assembly-editor-runtime-root',
-    editable: 'meshy_sherman_envelope_assembly_v1',
+    editable: 'meshy_sherman_lowpoly_envelope_v1',
     fixedReference: 'authored_sherman_treads_v1_parade_truth',
     sourcePolicy: manifest?.source_policy || '',
     runtimeContract: manifest?.runtime_contract || {},
@@ -437,7 +441,7 @@ function restoreTuneParts(snapshot: string) {
 function exportTune() { const json = serializeTuneParts(); localStorage.setItem('tftm.meshyEnvelopeAssemblyTune.v1', json); if (exportPanel && exportOutput) { exportPanel.hidden = false; exportOutput.value = json; } applyTuneToUrl(); postVisualBeacon('tune-export', { parts: parts.length }); }
 function applyTuneToUrl() { if (!isTuneMode || !initialSnapshot) return; const encoded = btoa(unescape(encodeURIComponent(serializeTuneParts()))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); window.history.replaceState(null, '', window.location.pathname + '?tune=envelopes#componentAssemblyTune=' + encoded); }
 function snapCamera(view: string) { const focus = selectedPart ? (selectedPart.object?.getWorldPosition(new THREE.Vector3()) || new THREE.Vector3(selectedPart.position[0], selectedPart.position[1], selectedPart.position[2])) : new THREE.Vector3(0, 0.22, 0); const distance = Math.max(4.2, camera.position.distanceTo(controls.target)); const offsets: Record<string, THREE.Vector3> = { front: new THREE.Vector3(0, 1.15, -distance), back: new THREE.Vector3(0, 1.15, distance), left: new THREE.Vector3(-distance, 1.15, 0), right: new THREE.Vector3(distance, 1.15, 0), top: new THREE.Vector3(0.01, distance, 0.01) }; controls.target.copy(focus); camera.position.copy(focus).add(offsets[view] || offsets.front); controls.update(); postVisualBeacon('camera-snap', { view }); }
-function postVisualBeacon(stage: string, extra: Record<string, string | number> = {}) { const params = new URLSearchParams({ stage, build: visualBuild, actor: 'meshy_sherman_envelope_assembly_v1', clip: isTuneMode ? 'envelope assembly manual editor' : 'envelope assembly review', clipKey: 'assembled-tank-envelope-editor', sourceName: 'tanks-for-the-memories', tuneMode: isTuneMode ? 'envelopes' : '0', ...Object.fromEntries(Object.entries(extra).map(([key, value]) => [key, String(value)])) }); fetch('/__visual_qa_smoke?' + params.toString(), { method: 'POST', cache: 'no-store' }).catch(() => {}); }
+function postVisualBeacon(stage: string, extra: Record<string, string | number> = {}) { const params = new URLSearchParams({ stage, build: visualBuild, actor: 'meshy_sherman_lowpoly_envelope_v1', clip: isTuneMode ? 'envelope assembly manual editor' : 'envelope assembly review', clipKey: 'assembled-tank-envelope-editor', sourceName: 'tanks-for-the-memories', tuneMode: isTuneMode ? 'envelopes' : '0', ...Object.fromEntries(Object.entries(extra).map(([key, value]) => [key, String(value)])) }); fetch('/__visual_qa_smoke?' + params.toString(), { method: 'POST', cache: 'no-store' }).catch(() => {}); }
 function resize() { const width = Math.max(1, canvas.clientWidth); const height = Math.max(1, canvas.clientHeight); const pixelRatio = renderer.getPixelRatio(); if (canvas.width !== Math.floor(width * pixelRatio) || canvas.height !== Math.floor(height * pixelRatio)) { renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix(); } }
 function animate() { resize(); controls.update(); if (selectionBox) selectionBox.update(); renderer.render(scene, camera); requestAnimationFrame(animate); }
 

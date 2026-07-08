@@ -1,0 +1,101 @@
+{
+  "asset_class": "ai_generated_3d_asset",
+  "created_at": "2026-07-08T15:32:09+00:00",
+  "dry_run_payload": {
+    "ai_model": "latest",
+    "enable_pbr": true,
+    "hd_texture": true,
+    "image_url": "<data-uri>",
+    "model_type": "lowpoly",
+    "should_remesh": true,
+    "should_texture": true,
+    "target_formats": [
+      "glb",
+      "fbx"
+    ],
+    "target_polycount": 2200,
+    "texture_prompt": "Strict low-poly game-ready Sherman VVSS tread and running gear envelope, target around 2200 generated polygons, closed track belts and readable wheels/sprockets/idlers/bogie masses with tread shoe and wheel detail in PBR texture/normal maps, not dense geometry. Generate lowpoly directly; no high-poly mesh; no decimation artifacts; no black rubber blob, plaid texture, hull, turret, or text.",
+    "topology": "quad"
+  },
+  "files": [
+    {
+      "bytes": 26028748,
+      "kind": "fbx",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_lowpoly_treads_envelope_v2/fbx.fbx"
+    },
+    {
+      "bytes": 25520784,
+      "kind": "glb",
+      "path": "/storage/emulated/0/Documents/GodotProjects/tanks-for-the-memories/assets/generated/meshy/sherman_lowpoly_treads_envelope_v2/glb.glb"
+    }
+  ],
+  "last_image_to_3d_task": {
+    "art_style": "",
+    "consumed_credits": 30,
+    "created_at": 1783524752495,
+    "expires_at": 1783784277616,
+    "finished_at": 1783525077616,
+    "hd_texture": true,
+    "id": "019f425b-f348-76ff-ae1b-23a268290c0e",
+    "image_style_url": "",
+    "model_url": "<expiring-url-redacted>",
+    "model_urls": {
+      "fbx": "<expiring-url-redacted>",
+      "glb": "<expiring-url-redacted>"
+    },
+    "name": "",
+    "negative_prompt": "",
+    "object_prompt": "",
+    "progress": 100,
+    "remove_lighting": true,
+    "started_at": 1783524752562,
+    "status": "SUCCEEDED",
+    "style_prompt": "",
+    "task_error": null,
+    "text_style_prompt": "",
+    "texture_image_url": "",
+    "texture_prompt": "Strict low-poly game-ready Sherman VVSS tread and running gear envelope, target around 2200 generated polygons, closed track belts and readable wheels/sprockets/idlers/bogie masses with tread shoe and wheel detail in PBR texture/normal maps, not dense geometry. Generate lowpoly directly; no high-poly mesh; no decimation artifacts; no black rubber blob, plaid texture, hull, turret, or text.",
+    "texture_urls": [
+      {
+        "base_color": "<expiring-url-redacted>",
+        "emission": "<expiring-url-redacted>",
+        "metallic": "<expiring-url-redacted>",
+        "normal": "<expiring-url-redacted>",
+        "roughness": "<expiring-url-redacted>"
+      }
+    ],
+    "thumbnail_url": "<expiring-url-redacted>",
+    "type": "image-to-3d"
+  },
+  "name": "sherman_lowpoly_treads_envelope_v2",
+  "project": "tanks-for-the-memories",
+  "provenance": [
+    {
+      "created_at": "2026-07-08T15:32:32+00:00",
+      "payload": {
+        "ai_model": "latest",
+        "enable_pbr": true,
+        "hd_texture": true,
+        "image_url": "<data-uri>",
+        "model_type": "lowpoly",
+        "should_remesh": true,
+        "should_texture": true,
+        "target_formats": [
+          "glb",
+          "fbx"
+        ],
+        "target_polycount": 2200,
+        "texture_prompt": "Strict low-poly game-ready Sherman VVSS tread and running gear envelope, target around 2200 generated polygons, closed track belts and readable wheels/sprockets/idlers/bogie masses with tread shoe and wheel detail in PBR texture/normal maps, not dense geometry. Generate lowpoly directly; no high-poly mesh; no decimation artifacts; no black rubber blob, plaid texture, hull, turret, or text.",
+        "topology": "quad"
+      },
+      "provider": "meshy",
+      "step": "image_to_3d",
+      "task_id": "019f425b-f348-76ff-ae1b-23a268290c0e"
+    }
+  ],
+  "tasks": {
+    "image_to_3d": "019f425b-f348-76ff-ae1b-23a268290c0e"
+  },
+  "updated_at": "2026-07-08T15:38:06+00:00",
+  "workspace": "/storage/emulated/0/Documents/GodotProjects"
+}
