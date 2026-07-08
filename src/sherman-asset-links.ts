@@ -74,6 +74,10 @@ export const AUTHORED_SHERMAN_TREADS_GLB_URL = './tftm/models/authored_sherman_t
 
 export const AUTHORED_SHERMAN_CHASSIS_GLB_URL = './tftm/models/authored_sherman_chassis_v1/authored_sherman_chassis_v1.glb?v=v1-4-hd-surface-detail-material-ids';
 
+export const AUTHORED_SHERMAN_GUIDED_HULL_GLB_URL = './tftm/models/authored_sherman_guided_hull_v1/authored_sherman_guided_hull_v1.glb?v=v1-1-guided-hard-surface-hull-only-20260708';
+export const AUTHORED_SHERMAN_GUIDED_HULL_MANIFEST_URL = './tftm/models/authored_sherman_guided_hull_v1/model_manifest.json?v=v1-1-guided-hard-surface-hull-only-20260708';
+export const MESHY_SHERMAN_LOWPOLY_HULL_ENVELOPE_GLB_URL = './tftm/models/meshy_sherman_lowpoly_envelope_v1/lowpoly_hull_envelope.glb?v=v1-direct-lowpoly-pbr-20260708';
+
 export const AUTHORED_SHERMAN_TURRET_GLB_URL = './tftm/models/authored_sherman_turret_v1/authored_sherman_turret_v1.glb?v=v1-13-hd-surface-detail-material-ids';
 
 export const MESHY_SHERMAN_TURRET_KIT_BASE_URL = './tftm/models/meshy_sherman_turret_kit_v2/';

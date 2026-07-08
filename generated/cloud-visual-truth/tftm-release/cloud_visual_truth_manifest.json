@@ -333,6 +333,42 @@
     "asset_policy": "recovered original-style ngon/smooth Blender chassis component; existing Meshy and failed scratch/subdiv/hardsurface branches are red evidence only; frozen authored_sherman_treads_v1 v1-9 is loaded beside it only for fit review and is not modified; chassisfirst-chassis.html?tune=1 provides the old static-prop style gesture controls for moving, rotating, scaling, resetting, hiding, and exporting the chassis transform against fixed treads; current pass hides rejected fence-like raised chassis detail in runtime and relies on projected smart-material texture maps for armor paint, edge wear, grime, and dust",
     "acceptance": "Sense Simulation must confirm the recovered original-style chassis shell with projected armor paint, edge wear, grime, dust, and no fence-like hood geometry is one watertight mesh fitted to frozen authored_sherman_treads_v1 v1-9 without swallowing or overflowing the tread side; treads remain visibly outside the chassis side envelope, no pasted panels or blockers, no turret, barrel, coaxial MG, wheels, or tread edits, preserved OrbitControls camera and orientation widget, and local capture was not used."
   },
+  "guided_hull_review": {
+    "route": "guided-hull.html",
+    "expected_build": "tftm-authored-sherman-guided-hull-v1-20260708",
+    "asset_id": "authored_sherman_guided_hull_v1",
+    "silhouette_revision": "v1-1-guided-hard-surface-hull-only",
+    "output_glb": "public/tftm/models/authored_sherman_guided_hull_v1/authored_sherman_guided_hull_v1.glb",
+    "source_blend": "assets/authored/authored_sherman_guided_hull_v1/authored_sherman_guided_hull_v1.blend",
+    "source_policy": "Guided hard-surface reconstruction from simple authored planes. No Meshy topology, no shrinkwrap, no high-to-low decimation, no arbitrary mesh wrapping.",
+    "geometry_budget": {
+      "target_triangles_min": 800,
+      "target_triangles_max": 1800,
+      "hard_cap_triangles": 2500
+    },
+    "source_face_policy": {
+      "max_source_face_vertices": 4,
+      "front_rear_caps_split": true,
+      "no_giant_cap_ngons": true,
+      "cap_faces": "triangles around authored cap centers, not one ngon per end"
+    },
+    "face_plate_ids": [
+      "guided_glacis",
+      "guided_hull_left",
+      "guided_hull_right",
+      "guided_rear",
+      "guided_engine_deck",
+      "guided_sponson_left",
+      "guided_sponson_right",
+      "guided_turret_ring_pad",
+      "guided_belly_shadow",
+      "guided_plate_lip",
+      "guided_weld_shadow",
+      "guided_edge_wear_marker"
+    ],
+    "asset_policy": "Hull-only guided hard-surface reconstruction: Meshy lowpoly hull is visible reference/ghost only, authored_sherman_treads_v1 is fixed fit reference, and exported hull geometry is simple authored armor planes with split front/rear cap facets. No Meshy topology, shrinkwrap, decimation, arbitrary wrapping, treads, wheels, turret, mantlet, barrel, coax, or hatch articulation in this asset.",
+    "acceptance": "Sense Simulation must confirm guided-hull.html shows the authored guided hull as clean simple hard-surface armor planes that broadly match the transparent Meshy hull reference silhouette while improving readability: fixed authored_sherman_treads_v1 remain visible and separate, hull does not swallow the treads, front/rear caps do not read as giant ngons, the hull is not a decimated or shrinkwrapped Meshy blob, the Meshy ghost remains only a transparent reference, OrbitControls and orientation widget are preserved, and local capture was not used."
+  },
   "authored_parade_review": {
     "route": "authored-parade.html",
     "expected_build": "tftm-authored-sherman-parade-v1-20260706",
@@ -779,8 +815,8 @@
     "asset_policy": "fully authored hard-surface chassis and turret; no Meshy chassis or turret imports; split face PNG plates for DALL-E paintability",
     "acceptance": "Sense Simulation must confirm close-up chassis and turret read as usable hard-surface armor, barrel belongs to mantlet, split face texture plates map sanely, and local capture was not used."
   },
-  "generated_at": "2026-07-08T16:00:25.003Z",
-  "source_commit": "3ef0303",
+  "generated_at": "2026-07-08T16:35:58.901Z",
+  "source_commit": "227927b",
   "dirty_status": [],
   "dist": "generated/cloud-visual-truth/tftm-release/dist",
   "tank_asset": "m4a3_75_vvss_sherman_alpha_mobile",
@@ -956,6 +992,7 @@
     "hybrid-hull-treads.html?tune=1 cloud interaction evidence showing the Meshy hull itself can be dragged, pinched to scale, and twisted to rotate while the authored treads remain fixed reference geometry and OrbitControls camera orbit/dolly/pan remains usable; no local capture",
     "hybrid-hull-treads.html?tune=wheels phone portrait showing the gesture-only runtime wheel editor with Wheel editor selected, per-wheel rows, Move/Rotate/Scale controls, explicit All/X/Y/Z scale axis buttons, undo/redo/reset/hide, Hide behaving as manual delete without resurrecting hidden wheels on row selection, exportable URL/JSON state under hybridWheelTune, fixed Meshy hull plus authored tread reference, sideSign/sourceWheelNode metadata for later symmetry, camera orientation widget, no 3D transform gizmo, and build token tftm-hybrid-wheel-editor-v2-baked-manual-wheels-20260707",
     "hybrid-hull-treads.html?tune=wheels cloud interaction evidence showing an individual runtime wheel can be selected and dragged while the treads and Meshy hull remain fixed reference geometry, hidden/deleted wheel rows stay hidden until Show is pressed, and OrbitControls camera orbit/dolly/pan remains usable; no local capture",
+    "guided-hull phone portrait showing authored_sherman_guided_hull_v1 build token tftm-authored-sherman-guided-hull-v1-20260708: clean hull-only hard-surface reconstruction made from simple authored armor planes, transparent Meshy lowpoly hull reference ghost visible, fixed authored_sherman_treads_v1 visible and separate, no Meshy topology, no shrinkwrap, no decimation, no arbitrary mesh wrapping, no turret, no wheels/tread edits, and no local capture",
     "assembled-tank phone portrait showing direct Meshy lowpoly PBR envelope assembly and build token tftm-meshy-direct-lowpoly-pbr-envelope-editor-v1-20260708, with lowpoly_hull_envelope, lowpoly_turret_envelope, and lowpoly_treads_envelope generated directly by Meshy model_type=lowpoly from concept images, source Meshy UVs/materials/PBR textures preserved, authored_sherman_treads_v1 visible as fixed running-gear reference, no high-to-low pipeline, no local decimation, no stripped solid-fill plastic materials, no component-chaff filtered accepted result, and no local capture",
     "assembled-tank phone landscape/oblique review showing the direct Meshy lowpoly envelope editor at assembled-tank.html?tune=envelopes with selectable hull, turret, and treads areas, lowpoly_turret_envelope selected by default, lowpoly_hull_envelope and lowpoly_turret_envelope visible against authored_sherman_treads_v1 reference, lowpoly_treads_envelope available but hidden by defaults until reviewed, direct lowpoly Meshy provenance and embedded PBR textures intact, no decimated high-poly mesh, no old authored chassis/turret assembly claim, preserved OrbitControls camera/orientation widget, and no local capture",
     "authored-parade phone portrait showing authored_sherman_parade_v1 build token tftm-authored-sherman-parade-v1-20260706 with 24 independently animated authored Sherman tanks using projected authored_sherman_smart_material_v1 texture plates with armor_base, edge_wear, cavity_grime, dust_mud, tread_wear, wheel_wear, and gun_finish maps, per-instance color/dirt variation, no per-tank texture copies, projected paint, metal wear, grime, dust, tread, wheel, and gun finish read as texture detail while rejected fence-like hood geometry is hidden, no 24 cloned GLB object trees, offline LUT wheel texture prevents black crushed wheel discs, tread link phase is reversed while manually baked wheel spin remains correct, wheel Z follows accepted manual mirrored placement, no top rollers are added, duplicate/under-floor workaround wheels are deleted, and accepted sprocket/idler/roadwheel placements are mirrored, sealed inboard/back sidewall behind the wheel assembly fills the hollow between tank side and wheel backs, not an outer tread slab, and no local capture",
@@ -996,6 +1033,7 @@
     "Does hybrid-hull-treads.html use UV-bound hull material v1 generated from embedded Meshy reference textures on the Meshy hull, plus one reusable offline LUT wheel texture for wheels/sprockets/idlers/rollers/bogies/connectors, plus downloaded tread shoe albedo/normal/roughness maps for armored steel tread shoe faces, so the running gear matches the Meshy hull, the tread belt is not pure black rubber tread, connected loop tread segments travel around the belt so the tread is not texture-only tread proof, the side-facing tread reads as ordered armored track plates, not plaid, not flannel, not a diagonal crosshatch sidewall, not a flat grey sidewall slab, and wheels and profile opening remain visible with road wheels kissing the lower tread run, the forward material-phase tread scroll reads over time, the runtime downloaded PBR tread-shoe pass uses face-aware UVs, accepted albedo/normal/roughness maps plus a mostly black painted-metal metalness map with edge-only exposed metal capped at tank-average metalness 0.16, high roughness, stronger normal response, and no emissive so the tread shoes are not shinier than the hull while running gear remains color-matched to Meshy hull, the tread shoes use downloaded PBR albedo/normal/roughness plus painted-metal metalness with edge-only exposed metal capped at tank-average metalness, the wheels are offline LUT wheels that are not black crushed wheel discs and visibly contact the lower run, and under-hull contact grime helps the pieces mesh?",
     "On hybrid-hull-treads.html?tune=1, does the route provide the old static-prop style gesture controls for the Meshy hull itself: selected meshy-hull-chassis, Move/Rotate/Scale, explicit All/X/Y/Z scale axes, undo/redo/reset/hide, exportable URL/JSON state, fixed authored tread reference, preserved OrbitControls camera and orientation widget, no authored boxmodel chassis, and no 3D transform gizmo?",
     "On hybrid-hull-treads.html?tune=wheels, does the route provide the manual runtime wheel editor: Wheel editor selected, individual wheel rows, direct drag Move/Rotate/Scale controls, Hide as delete, exportable hybridWheelTune URL/JSON, sideSign/sourceWheelNode metadata for later mirroring, fixed Meshy hull and authored tread reference, preserved OrbitControls camera and orientation widget, and no 3D transform gizmo?",
+    "Does guided-hull.html show authored_sherman_guided_hull_v1 as a hull-only guided hard-surface reconstruction: simple readable armor planes matching the transparent Meshy hull ghost reference broadly, fixed authored_sherman_treads_v1 visible and separate, no tread swallowing, no giant front/rear ngon read, no Meshy topology, no shrinkwrap, no decimation, no arbitrary mesh wrapping, and preserved OrbitControls camera/orientation widget?",
     "Does assembled-tank.html show the direct Meshy lowpoly PBR envelope package with build token tftm-meshy-direct-lowpoly-pbr-envelope-editor-v1-20260708, lowpoly_hull_envelope, lowpoly_turret_envelope, and lowpoly_treads_envelope generated directly with model_type=lowpoly, source Meshy UVs/materials/PBR textures preserved, authored_sherman_treads_v1 visible as fixed running-gear reference, no high-to-low decimation artifacts, no stripped solid-fill plastic material read, no component-chaff filtered kit as the accepted result, and preserved OrbitControls camera/orientation widget?",
     "Does authored-parade.html show 24 independently animated authored Sherman tanks with projected authored_sherman_smart_material_v1 texture plates with armor_base, edge_wear, cavity_grime, dust_mud, tread_wear, wheel_wear, and gun_finish maps, no per-tank texture copies, projected paint, metal wear, grime, dust, tread, wheel, and gun finish read as texture detail while rejected fence-like hood geometry is hidden, per-instance color variation, independent tread phase, visible turret yaw and barrel pitch, and no 24 cloned GLB object trees?",
     "Does the chassis sponson/track-interface armor read as joined metal wrapping the golden tread assembly from front, rear, side, and oblique views while preserving the accepted tread geometry?",

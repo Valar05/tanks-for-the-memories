@@ -51,6 +51,7 @@ function localFsResolver() {
       build.onResolve({ filter: /^three\/examples\/jsm\/loaders\/GLTFLoader\.js$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'examples', 'jsm', 'loaders', 'GLTFLoader.js') }));
       build.onResolve({ filter: /^three\/examples\/jsm\/controls\/OrbitControls\.js$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'examples', 'jsm', 'controls', 'OrbitControls.js') }));
       build.onResolve({ filter: /^three\/examples\/jsm\/geometries\/DecalGeometry\.js$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'examples', 'jsm', 'geometries', 'DecalGeometry.js') }));
+      build.onResolve({ filter: /^three\/(?:examples\/jsm|addons)\/geometries\/RoundedBoxGeometry\.js$/ }, () => ({ path: path.join(root, 'node_modules', 'three', 'examples', 'jsm', 'geometries', 'RoundedBoxGeometry.js') }));
       build.onResolve({ filter: /^\.|^\// }, (args) => {
         const resolved = resolveImport(args.path, args.resolveDir);
         if (!resolved) {
@@ -103,6 +104,11 @@ await buildEntry('boxmodel-tank.ts', 'boxmodel-tank');
 await buildEntry('textureable-tank.ts', 'textureable-tank');
 await buildEntry('treadfirst-treads.ts', 'treadfirst-treads');
 await buildEntry('chassisfirst-chassis.ts', 'chassisfirst-chassis');
+await buildEntry('guided-hull.ts', 'guided-hull');
+await buildEntry('turretfirst-turret.ts', 'turretfirst-turret');
+await buildEntry('assembled-tank.ts', 'assembled-tank');
+await buildEntry('authored-parade.ts', 'authored-parade');
+await buildEntry('hybrid-hull-treads.ts', 'hybrid-hull-treads');
 await buildEntry('asset-intake.ts', 'asset-intake');
 
 writeBundledHtml('index.html', 'index.html', 'index');
@@ -114,6 +120,11 @@ writeBundledHtml('boxmodel-tank.html', 'boxmodel-tank.html', 'boxmodel-tank');
 writeBundledHtml('textureable-tank.html', 'textureable-tank.html', 'textureable-tank');
 writeBundledHtml('treadfirst-treads.html', 'treadfirst-treads.html', 'treadfirst-treads');
 writeBundledHtml('chassisfirst-chassis.html', 'chassisfirst-chassis.html', 'chassisfirst-chassis');
+writeBundledHtml('guided-hull.html', 'guided-hull.html', 'guided-hull');
+writeBundledHtml('turretfirst-turret.html', 'turretfirst-turret.html', 'turretfirst-turret');
+writeBundledHtml('assembled-tank.html', 'assembled-tank.html', 'assembled-tank');
+writeBundledHtml('authored-parade.html', 'authored-parade.html', 'authored-parade');
+writeBundledHtml('hybrid-hull-treads.html', 'hybrid-hull-treads.html', 'hybrid-hull-treads');
 writeBundledHtml('asset-intake.html', 'asset-intake.html', 'asset-intake');
 copyRecursive(publicDir, distDir);
 copyRecursive(
@@ -168,4 +179,5 @@ copyRecursive(
   path.join(root, 'generated', 'asset-intake'),
   path.join(distDir, 'asset-intake')
 );
+
 console.log('Built dist using esbuild-wasm.');
