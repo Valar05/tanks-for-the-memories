@@ -1,0 +1,109 @@
+{
+  "asset_id": "authored_sherman_runtime_tread_shoe_v1",
+  "revision": "v3-matte-detail-roughness-20260707",
+  "source_class": "user-provided downloaded albedo with deterministic regenerated runtime data maps",
+  "target_use": "runtime connected-loop Sherman tread segments; one reusable tread shoe PBR set shared by every segment mesh",
+  "uv_policy": "main outward shoe face samples full 0-1 image; bottom/contact face samples independent full 0-1 image; sides/ends/bevels sample narrow edge strips",
+  "metalness_policy": "painted-metal metalness map: mostly black painted faces remain dull; narrow exposed edge wear only, still capped by runtime metalness 0.16 so treads do not become shinier than the tank average",
+  "color_space_policy": "albedo sRGB; normal, roughness, and metalness linear/no color space",
+  "files": {
+    "tread_shoe_albedo.png": {
+      "source": "/storage/emulated/0/Download/file_00000000bb7c71fdbf59eaa161d4f57e.png",
+      "original": {
+        "width": 1024,
+        "height": 1024,
+        "mode": "RGBA"
+      },
+      "runtime": {
+        "width": 1024,
+        "height": 1024,
+        "mode": "RGBA"
+      },
+      "processing": "resized to 1024x1024 with Pillow LANCZOS when needed; albedo stored RGBA, data maps stored RGB"
+    },
+    "tread_shoe_normal.png": {
+      "source": "/storage/emulated/0/Download/file_000000008a4071f887e10f415381b490.png",
+      "original": {
+        "width": 1254,
+        "height": 1254,
+        "mode": "RGB"
+      },
+      "runtime": {
+        "width": 1024,
+        "height": 1024,
+        "mode": "RGB"
+      },
+      "processing": "regenerated from tread albedo high-frequency plate/edge height; RGB tangent-style normal data map"
+    },
+    "tread_shoe_roughness.png": {
+      "source": "/storage/emulated/0/Download/file_00000000d52871f8b8cb372e580bc4f8.png",
+      "original": {
+        "width": 1254,
+        "height": 1254,
+        "mode": "RGB"
+      },
+      "runtime": {
+        "width": 1024,
+        "height": 1024,
+        "mode": "RGB"
+      },
+      "processing": "regenerated as high-value matte roughness data map; prevents glossy white reflection planes under final lighting"
+    },
+    "tread_shoe_metalness.png": {
+      "source": "/storage/emulated/0/Pictures/file_00000000f49c71fd931c3fd5e4b7bb17.png",
+      "original": {
+        "width": 1254,
+        "height": 1254,
+        "mode": "RGB"
+      },
+      "runtime": {
+        "width": 1024,
+        "height": 1024,
+        "mode": "RGB"
+      },
+      "processing": "regenerated as mostly black edge-only painted-metal data map; runtime scalar caps exposed metal at 0.16"
+    }
+  },
+  "texture_set_id": "authored_sherman_runtime_tread_shoe_v3_matte_detail_roughness_20260707",
+  "roughness_policy": "high matte painted-steel roughness map; mostly white data map with localized lower roughness only on worn shoe edges so Three.js roughnessMap no longer multiplies the scalar into a glossy surface",
+  "normal_policy": "deterministic regenerated normal map from albedo high-frequency shoe plates and edge wear, stronger than the downloaded source normal so highlights break up across each tread shoe",
+  "generator": "scripts/generate_sherman_runtime_pbr_materials.py",
+  "stats": {
+    "albedo": {
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "mean_luma": 62.116,
+      "stddev_luma": 32.402,
+      "min_luma": 0,
+      "max_luma": 255
+    },
+    "normal": {
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGB",
+      "mean_luma": 139.484,
+      "stddev_luma": 30.841,
+      "min_luma": 53,
+      "max_luma": 210
+    },
+    "roughness": {
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGB",
+      "mean_luma": 216.652,
+      "stddev_luma": 20.214,
+      "min_luma": 178,
+      "max_luma": 249
+    },
+    "metalness": {
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGB",
+      "mean_luma": 17.51,
+      "stddev_luma": 9.222,
+      "min_luma": 0,
+      "max_luma": 48
+    }
+  }
+}
