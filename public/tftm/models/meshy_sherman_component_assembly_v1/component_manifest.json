@@ -1,0 +1,735 @@
+{
+  "asset_id": "meshy_sherman_component_assembly_v1",
+  "revision": "v1-welded-component-editor-kit-20260708",
+  "generated_at": "2026-07-08T02:06:10.309Z",
+  "generator": "scripts/extract_meshy_component_assembly.mjs",
+  "source_policy": "Exact-position welded components extracted from newest Downloads GLBs; no retopo, no decimation, no chaff deletion except selecting named useful components for manual assembly.",
+  "source_images": {
+    "hull": {
+      "source": "/storage/emulated/0/Pictures/file_00000000e68871f89b503a6afb63782f.png",
+      "runtime": "public/tftm/models/meshy_sherman_component_assembly_v1/source_images/file_00000000e68871f89b503a6afb63782f.png"
+    },
+    "turret": {
+      "source": "/storage/emulated/0/Pictures/file_00000000407c71fd8087828e55eb7cc0.png",
+      "runtime": "public/tftm/models/meshy_sherman_component_assembly_v1/source_images/file_00000000407c71fd8087828e55eb7cc0.png"
+    },
+    "treads": {
+      "source": "/storage/emulated/0/Pictures/file_00000000cd0471fdafbe2cfc4e794220.png",
+      "runtime": "public/tftm/models/meshy_sherman_component_assembly_v1/source_images/file_00000000cd0471fdafbe2cfc4e794220.png"
+    }
+  },
+  "source_models": {
+    "hull": "/storage/emulated/0/Download/Meshy_AI_Iron_Sentinel_0708005243_texture.glb",
+    "turret": "/storage/emulated/0/Download/Meshy_AI_Disassembled_Tank_Tur_0708005235_texture.glb",
+    "treads": "/storage/emulated/0/Download/Meshy_AI_Exploded_View_of_a_Tr_0708005253_texture.glb"
+  },
+  "areas": [
+    "hull",
+    "treads",
+    "turret"
+  ],
+  "runtime_contract": {
+    "hull": "model swap whole welded Meshy hull shell",
+    "treads": "authored animated tread/wheel system remains parade truth; Meshy tread parts are optional reference/model-swap candidates only",
+    "turret": "manual editor selects shell, two hatch covers, barrel, coax/MG, optional cap; no separate mantlet because shell already has fused mantlet/socket",
+    "parade": "use shared geometry/instancing for 24 tanks, not cloned GLB object trees"
+  },
+  "parts": {
+    "hull_shell": {
+      "id": "hull_shell",
+      "label": "Whole Meshy hull shell",
+      "area": "hull",
+      "runtime_role": "hull_shell",
+      "source_model": "hull",
+      "source_component_rank": 0,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000e68871f89b503a6afb63782f.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Iron_Sentinel_0708005243_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/hull_shell.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/hull_shell.glb",
+      "default_visible": true,
+      "default_transform": {
+        "position": [
+          0,
+          0.25,
+          0
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1.67,
+          2.23,
+          2.42
+        ]
+      },
+      "welded_source_islands": 1995,
+      "source_triangles": 6621,
+      "source_vertices": 10356,
+      "triangles": 6621,
+      "vertices": 10356,
+      "byteLength": 372448,
+      "bbox": {
+        "min": [
+          -0.9590880274772644,
+          -0.2627800405025482,
+          -0.4791969954967499
+        ],
+        "max": [
+          0.9528020024299622,
+          0.27049195766448975,
+          0.4713810086250305
+        ],
+        "size": [
+          1.91189,
+          0.53327,
+          0.95058
+        ],
+        "center": [
+          -0.00314,
+          0.00386,
+          -0.00391
+        ]
+      }
+    },
+    "turret_shell": {
+      "id": "turret_shell",
+      "label": "Turret shell with fused mantlet and two holes",
+      "area": "turret",
+      "runtime_role": "turret_shell",
+      "source_model": "turret",
+      "source_component_rank": 0,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000407c71fd8087828e55eb7cc0.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Disassembled_Tank_Tur_0708005235_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/turret_shell.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/turret_shell.glb",
+      "default_visible": true,
+      "default_transform": {
+        "position": [
+          0.04,
+          0.86,
+          0
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.72,
+          0.72,
+          0.72
+        ]
+      },
+      "welded_source_islands": 748,
+      "source_triangles": 4162,
+      "source_vertices": 5284,
+      "triangles": 4162,
+      "vertices": 5284,
+      "byteLength": 195388,
+      "bbox": {
+        "min": [
+          -0.9585800170898438,
+          -0.08578799664974213,
+          -0.876196026802063
+        ],
+        "max": [
+          0.17614200711250305,
+          0.3767389953136444,
+          0.4633350074291229
+        ],
+        "size": [
+          1.13472,
+          0.46253,
+          1.33953
+        ],
+        "center": [
+          -0.39122,
+          0.14548,
+          -0.20643
+        ]
+      }
+    },
+    "commander_hatch": {
+      "id": "commander_hatch",
+      "label": "Commander hatch candidate",
+      "area": "turret",
+      "runtime_role": "commander_hatch",
+      "source_model": "turret",
+      "source_component_rank": 1,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000407c71fd8087828e55eb7cc0.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Disassembled_Tank_Tur_0708005235_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/commander_hatch.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/commander_hatch.glb",
+      "default_visible": true,
+      "default_transform": {
+        "position": [
+          -0.18,
+          1.08,
+          -0.24
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.58,
+          0.58,
+          0.58
+        ]
+      },
+      "welded_source_islands": 174,
+      "source_triangles": 889,
+      "source_vertices": 1139,
+      "triangles": 889,
+      "vertices": 1139,
+      "byteLength": 43116,
+      "bbox": {
+        "min": [
+          0.34315600991249084,
+          0.22891798615455627,
+          -0.9232630133628845
+        ],
+        "max": [
+          0.8090929985046387,
+          0.3414779603481293,
+          -0.2685120403766632
+        ],
+        "size": [
+          0.46594,
+          0.11256,
+          0.65475
+        ],
+        "center": [
+          0.57612,
+          0.2852,
+          -0.59589
+        ]
+      }
+    },
+    "loader_hatch": {
+      "id": "loader_hatch",
+      "label": "Loader hatch candidate",
+      "area": "turret",
+      "runtime_role": "loader_hatch",
+      "source_model": "turret",
+      "source_component_rank": 2,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000407c71fd8087828e55eb7cc0.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Disassembled_Tank_Tur_0708005235_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/loader_hatch.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/loader_hatch.glb",
+      "default_visible": true,
+      "default_transform": {
+        "position": [
+          0.34,
+          1.08,
+          0.2
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.58,
+          0.58,
+          0.58
+        ]
+      },
+      "welded_source_islands": 103,
+      "source_triangles": 712,
+      "source_vertices": 833,
+      "triangles": 712,
+      "vertices": 833,
+      "byteLength": 32240,
+      "bbox": {
+        "min": [
+          0.32344600558280945,
+          -0.011133997701108456,
+          -0.4978939890861511
+        ],
+        "max": [
+          0.805791974067688,
+          0.10543397814035416,
+          0.0383169986307621
+        ],
+        "size": [
+          0.48235,
+          0.11657,
+          0.53621
+        ],
+        "center": [
+          0.56462,
+          0.04715,
+          -0.22979
+        ]
+      }
+    },
+    "main_barrel": {
+      "id": "main_barrel",
+      "label": "Main barrel candidate",
+      "area": "turret",
+      "runtime_role": "main_barrel",
+      "source_model": "turret",
+      "source_component_rank": 4,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000407c71fd8087828e55eb7cc0.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Disassembled_Tank_Tur_0708005235_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/main_barrel.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/main_barrel.glb",
+      "default_visible": true,
+      "default_transform": {
+        "position": [
+          0.44,
+          0.86,
+          0
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.72,
+          0.72,
+          0.72
+        ]
+      },
+      "welded_source_islands": 34,
+      "source_triangles": 306,
+      "source_vertices": 324,
+      "triangles": 306,
+      "vertices": 324,
+      "byteLength": 13512,
+      "bbox": {
+        "min": [
+          -0.0700559988617897,
+          -0.2075909525156021,
+          0.41766101121902466
+        ],
+        "max": [
+          0.9590870141983032,
+          -0.03221196308732033,
+          0.5853130221366882
+        ],
+        "size": [
+          1.02914,
+          0.17538,
+          0.16765
+        ],
+        "center": [
+          0.44452,
+          -0.1199,
+          0.50149
+        ]
+      }
+    },
+    "coax_mg": {
+      "id": "coax_mg",
+      "label": "Coax / MG candidate",
+      "area": "turret",
+      "runtime_role": "coax_mg",
+      "source_model": "turret",
+      "source_component_rank": 5,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000407c71fd8087828e55eb7cc0.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Disassembled_Tank_Tur_0708005235_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/coax_mg.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/coax_mg.glb",
+      "default_visible": true,
+      "default_transform": {
+        "position": [
+          0.45,
+          0.82,
+          0.18
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.72,
+          0.72,
+          0.72
+        ]
+      },
+      "welded_source_islands": 24,
+      "source_triangles": 160,
+      "source_vertices": 196,
+      "triangles": 160,
+      "vertices": 196,
+      "byteLength": 8520,
+      "bbox": {
+        "min": [
+          0.012745999731123447,
+          -0.3134259283542633,
+          0.7103099822998047
+        ],
+        "max": [
+          0.7898619771003723,
+          -0.20185893774032593,
+          0.790427029132843
+        ],
+        "size": [
+          0.77712,
+          0.11157,
+          0.08012
+        ],
+        "center": [
+          0.4013,
+          -0.25764,
+          0.75037
+        ]
+      }
+    },
+    "roof_cap": {
+      "id": "roof_cap",
+      "label": "Small roof cap optional",
+      "area": "turret",
+      "runtime_role": "roof_cap",
+      "source_model": "turret",
+      "source_component_rank": 6,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000407c71fd8087828e55eb7cc0.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Disassembled_Tank_Tur_0708005235_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/roof_cap.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/roof_cap.glb",
+      "default_visible": false,
+      "default_transform": {
+        "position": [
+          0.1,
+          1.1,
+          0.02
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.72,
+          0.72,
+          0.72
+        ]
+      },
+      "welded_source_islands": 9,
+      "source_triangles": 46,
+      "source_vertices": 60,
+      "triangles": 46,
+      "vertices": 60,
+      "byteLength": 3476,
+      "bbox": {
+        "min": [
+          0.45684900879859924,
+          0.05595400184392929,
+          -0.04646100476384163
+        ],
+        "max": [
+          0.5972170233726501,
+          0.10547900199890137,
+          0.018389992415905
+        ],
+        "size": [
+          0.14037,
+          0.04953,
+          0.06485
+        ],
+        "center": [
+          0.52703,
+          0.08072,
+          -0.01404
+        ]
+      }
+    },
+    "tread_foot": {
+      "id": "tread_foot",
+      "label": "Meshy tread foot reference",
+      "area": "treads",
+      "runtime_role": "tread_foot_reference",
+      "source_model": "treads",
+      "source_component_rank": 1,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000cd0471fdafbe2cfc4e794220.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Exploded_View_of_a_Tr_0708005253_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/tread_foot.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/tread_foot.glb",
+      "default_visible": false,
+      "default_transform": {
+        "position": [
+          -1.1,
+          -0.18,
+          -0.82
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.55,
+          0.55,
+          0.55
+        ]
+      },
+      "welded_source_islands": 152,
+      "source_triangles": 765,
+      "source_vertices": 1011,
+      "triangles": 765,
+      "vertices": 1011,
+      "byteLength": 38256,
+      "bbox": {
+        "min": [
+          -0.9547280073165894,
+          0.36265799403190613,
+          -0.5694690346717834
+        ],
+        "max": [
+          -0.4455769956111908,
+          0.506659984588623,
+          0.3922329843044281
+        ],
+        "size": [
+          0.50915,
+          0.144,
+          0.9617
+        ],
+        "center": [
+          -0.70015,
+          0.43466,
+          -0.08862
+        ]
+      }
+    },
+    "road_wheel": {
+      "id": "road_wheel",
+      "label": "Meshy road wheel reference",
+      "area": "treads",
+      "runtime_role": "road_wheel_reference",
+      "source_model": "treads",
+      "source_component_rank": 2,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000cd0471fdafbe2cfc4e794220.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Exploded_View_of_a_Tr_0708005253_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/road_wheel.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/road_wheel.glb",
+      "default_visible": false,
+      "default_transform": {
+        "position": [
+          -0.48,
+          -0.25,
+          -0.82
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.62,
+          0.62,
+          0.62
+        ]
+      },
+      "welded_source_islands": 107,
+      "source_triangles": 518,
+      "source_vertices": 705,
+      "triangles": 518,
+      "vertices": 705,
+      "byteLength": 26976,
+      "bbox": {
+        "min": [
+          -0.28216201066970825,
+          -0.1012210100889206,
+          -0.28230100870132446
+        ],
+        "max": [
+          0.02626200020313263,
+          0.20731797814369202,
+          -0.028214002028107643
+        ],
+        "size": [
+          0.30842,
+          0.30854,
+          0.25409
+        ],
+        "center": [
+          -0.12795,
+          0.05305,
+          -0.15526
+        ]
+      }
+    },
+    "small_runner": {
+      "id": "small_runner",
+      "label": "Small runner reference",
+      "area": "treads",
+      "runtime_role": "small_runner_reference",
+      "source_model": "treads",
+      "source_component_rank": 7,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000cd0471fdafbe2cfc4e794220.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Exploded_View_of_a_Tr_0708005253_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/small_runner.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/small_runner.glb",
+      "default_visible": false,
+      "default_transform": {
+        "position": [
+          0.18,
+          -0.19,
+          -0.82
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.62,
+          0.62,
+          0.62
+        ]
+      },
+      "welded_source_islands": 50,
+      "source_triangles": 196,
+      "source_vertices": 284,
+      "triangles": 196,
+      "vertices": 284,
+      "byteLength": 11576,
+      "bbox": {
+        "min": [
+          -0.6836289763450623,
+          0.012387019582092762,
+          0.19774100184440613
+        ],
+        "max": [
+          -0.5750740170478821,
+          0.1603880077600479,
+          0.34558799862861633
+        ],
+        "size": [
+          0.10855,
+          0.148,
+          0.14785
+        ],
+        "center": [
+          -0.62935,
+          0.08639,
+          0.27166
+        ]
+      }
+    },
+    "running_gear_rail": {
+      "id": "running_gear_rail",
+      "label": "Meshy rail reference",
+      "area": "treads",
+      "runtime_role": "rail_reference",
+      "source_model": "treads",
+      "source_component_rank": 0,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000cd0471fdafbe2cfc4e794220.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Exploded_View_of_a_Tr_0708005253_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/running_gear_rail.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/running_gear_rail.glb",
+      "default_visible": false,
+      "default_transform": {
+        "position": [
+          0.1,
+          -0.04,
+          -0.82
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.55,
+          0.55,
+          0.55
+        ]
+      },
+      "welded_source_islands": 587,
+      "source_triangles": 2471,
+      "source_vertices": 3490,
+      "triangles": 2471,
+      "vertices": 3490,
+      "byteLength": 127852,
+      "bbox": {
+        "min": [
+          -0.30991700291633606,
+          0.2721859812736511,
+          -0.5376550555229187
+        ],
+        "max": [
+          0.880357027053833,
+          0.6122660040855408,
+          -0.2767620384693146
+        ],
+        "size": [
+          1.19027,
+          0.34008,
+          0.26089
+        ],
+        "center": [
+          0.28522,
+          0.44223,
+          -0.40721
+        ]
+      }
+    },
+    "sprocket_like": {
+      "id": "sprocket_like",
+      "label": "Sprocket-like reference",
+      "area": "treads",
+      "runtime_role": "sprocket_reference",
+      "source_model": "treads",
+      "source_component_rank": 3,
+      "source_image": "/storage/emulated/0/Pictures/file_00000000cd0471fdafbe2cfc4e794220.png",
+      "source_glb": "/storage/emulated/0/Download/Meshy_AI_Exploded_View_of_a_Tr_0708005253_texture.glb",
+      "runtime_glb": "public/tftm/models/meshy_sherman_component_assembly_v1/sprocket_like.glb",
+      "runtime_url": "./tftm/models/meshy_sherman_component_assembly_v1/sprocket_like.glb",
+      "default_visible": false,
+      "default_transform": {
+        "position": [
+          1.05,
+          -0.18,
+          -0.82
+        ],
+        "rotationDeg": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.62,
+          0.62,
+          0.62
+        ]
+      },
+      "welded_source_islands": 88,
+      "source_triangles": 352,
+      "source_vertices": 510,
+      "triangles": 352,
+      "vertices": 510,
+      "byteLength": 19752,
+      "bbox": {
+        "min": [
+          -0.7347530126571655,
+          -0.05424197018146515,
+          0.37837499380111694
+        ],
+        "max": [
+          -0.43369099497795105,
+          0.24717003107070923,
+          0.4671890139579773
+        ],
+        "size": [
+          0.30106,
+          0.30141,
+          0.08881
+        ],
+        "center": [
+          -0.58422,
+          0.09646,
+          0.42278
+        ]
+      }
+    }
+  }
+}

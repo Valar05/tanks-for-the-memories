@@ -86,6 +86,11 @@ export const MESHY_SHERMAN_COAX_GLB_URL = MESHY_SHERMAN_TURRET_KIT_BASE_URL + 'c
 export const MESHY_SHERMAN_HATCH_GLB_URL = MESHY_SHERMAN_TURRET_KIT_BASE_URL + 'hatch.glb' + MESHY_SHERMAN_TURRET_KIT_CACHE;
 export const MESHY_SHERMAN_BLACK_INTERIOR_GLB_URL = MESHY_SHERMAN_TURRET_KIT_BASE_URL + 'black_interior.glb' + MESHY_SHERMAN_TURRET_KIT_CACHE;
 
+
+export const MESHY_SHERMAN_COMPONENT_ASSEMBLY_BASE_URL = './tftm/models/meshy_sherman_component_assembly_v1/';
+const MESHY_SHERMAN_COMPONENT_ASSEMBLY_CACHE = '?v=v1-welded-component-editor-kit-20260708';
+export const MESHY_SHERMAN_COMPONENT_ASSEMBLY_MANIFEST_URL = MESHY_SHERMAN_COMPONENT_ASSEMBLY_BASE_URL + 'component_manifest.json' + MESHY_SHERMAN_COMPONENT_ASSEMBLY_CACHE;
+
 export const AUTHORED_SHERMAN_SHARED_TEXTURE_BASE_URL = './tftm/textures/authored_sherman_smart_material_v1/';
 export const AUTHORED_SHERMAN_SHARED_TEXTURE_SET_ID = 'authored_sherman_smart_material_v1_armored_tread_plate_mapping_20260706';
 const AUTHORED_SHERMAN_SHARED_TEXTURE_CACHE = '?v=armored-tread-plates-pbr-edge-grime-v8-20260707';
