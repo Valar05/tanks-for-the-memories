@@ -42,7 +42,9 @@
     "authored-chassis-smoke": "node scripts/validate_authored_chassis_asset.mjs",
     "authored-chassis-silhouette-smoke": "node scripts/validate_authored_chassis_silhouette.mjs",
     "visual-qa:chassisfirst-chassis": "node scripts/validate_chassisfirst_chassis_cloud_gate.mjs",
-    "prompt-contract-smoke": "node scripts/validate_prompt_contract_guard.mjs"
+    "prompt-contract-smoke": "node scripts/validate_prompt_contract_guard.mjs",
+    "asset-intake": "node scripts/inspect_candidate_assets.mjs --pictures-newest 3 --downloads-newest 3",
+    "asset-intake:smoke": "node scripts/validate_asset_intake_report.mjs"
   },
   "dependencies": {
     "three": "^0.166.1"

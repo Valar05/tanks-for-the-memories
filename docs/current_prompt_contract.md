@@ -1,9 +1,9 @@
 # Current Prompt Contract
 
-latest_user_command: Continue from the renderer analysis by fixing the exposed tread PBR map problem.
-controlling_user_correction: Cloud pixel debug proved tread PBR maps are bound, and analysis showed the issue is material-map quality rather than missing renderer debug or geometry.
-forbidden_stale_premise: Do not keep adding renderer-only proof, changing tank geometry, moving wheels, editing Meshy assets, or touching turret work; the current defect is the low-value tread roughness and weak tread data maps exposed by the renderer gate.
-allowed_mutation_type: tread_pbr_map_tuning; renderer_debug_plumbing; playwright_cloud_capture_script; cloud_pixel_capture_workflow; package_script_dependency_update; cloud_visual_release; prompt_contract_update
-allowed_target_artifact: authored_sherman_runtime_tread_shoe_v1 normal, roughness, and metalness maps; tread texture manifest/cache token; runtime material map bindings and validators; hybrid-hull-treads cloud release and cloud-pixel evidence.
-required_evidence_lane: Image-stat validators and build/project guardrails are readiness checks; accepted evidence is the cloud-hosted hybrid-hull-treads route captured by GitHub Actions cloud pixels for final, treadNormal, treadRoughness, treadMetalness, and lightingNeutral variants.
+latest_user_command: Implement the durable asset-intake inspection workflow for the three new Pictures images and three new Download Meshy models.
+controlling_user_correction: User stopped ad hoc inspection and requested building the tools needed to inspect future image/model batches.
+forbidden_stale_premise: Do not import the downloaded GLBs as accepted production assets, edit tank geometry, deploy or wake a browser for acceptance, or treat local/report diagnostics as visual acceptance.
+allowed_mutation_type: asset_intake_cli; diagnostic_review_page; build_route_wiring; package_script_update; prompt_contract_update; generated_asset_intake_report
+allowed_target_artifact: scripts/inspect_candidate_assets.mjs, asset-intake.html, src/asset-intake.ts, src/asset-intake.css, build/package wiring, and generated/asset-intake diagnostic reports.
+required_evidence_lane: CLI report generation, TypeScript/build guardrails, and static report checks are diagnostics; any visual acceptance of a candidate model still requires the cloud visual truth lane plus Sense Simulation review.
 updated_at: 2026-07-07

@@ -103,6 +103,7 @@ await buildEntry('boxmodel-tank.ts', 'boxmodel-tank');
 await buildEntry('textureable-tank.ts', 'textureable-tank');
 await buildEntry('treadfirst-treads.ts', 'treadfirst-treads');
 await buildEntry('chassisfirst-chassis.ts', 'chassisfirst-chassis');
+await buildEntry('asset-intake.ts', 'asset-intake');
 
 writeBundledHtml('index.html', 'index.html', 'index');
 writeBundledHtml('model-assay.html', 'model-assay.html', 'model-assay');
@@ -113,6 +114,7 @@ writeBundledHtml('boxmodel-tank.html', 'boxmodel-tank.html', 'boxmodel-tank');
 writeBundledHtml('textureable-tank.html', 'textureable-tank.html', 'textureable-tank');
 writeBundledHtml('treadfirst-treads.html', 'treadfirst-treads.html', 'treadfirst-treads');
 writeBundledHtml('chassisfirst-chassis.html', 'chassisfirst-chassis.html', 'chassisfirst-chassis');
+writeBundledHtml('asset-intake.html', 'asset-intake.html', 'asset-intake');
 copyRecursive(publicDir, distDir);
 copyRecursive(
   path.join(root, 'assets', 'generated', 'meshy', 'minimal_animatable_tank_v1'),
@@ -161,5 +163,9 @@ copyRecursive(
 copyRecursive(
   path.join(root, 'assets', 'authored'),
   path.join(distDir, 'authored')
+);
+copyRecursive(
+  path.join(root, 'generated', 'asset-intake'),
+  path.join(distDir, 'asset-intake')
 );
 console.log('Built dist using esbuild-wasm.');
