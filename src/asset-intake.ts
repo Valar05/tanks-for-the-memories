@@ -9,10 +9,11 @@ type IntakePair = {
   verdict: string;
   reasons: string[];
   image?: { fileName: string; stagedUrl?: string; width?: number; height?: number; bytes?: number } | null;
-  model?: { fileName: string; stagedUrl?: string; triangles?: number; vertices?: number; meshCount?: number; primitiveCount?: number; materialCount?: number; imageCount?: number; bbox?: { size: number[] }; geometryIslands?: { islandCount: number; majorIslandCount: number; majorTriangleShare: number; largestIslandTriangleShare: number; roleHintCounts: Record<string, number>; majorRoleHintCounts: Record<string, number>; topIslands: Array<{ index: number; triangles: number; vertices: number; roleHint: string; bbox: { size: number[]; center: number[] } }>; majorIslands: Array<{ index: number; triangles: number; vertices: number; roleHint: string; bbox: { size: number[]; center: number[] } }> }; images?: Array<{ width?: number; height?: number; byteLength?: number; mimeType?: string | null }> } | null;
-  filteredModel?: { fileName: string; stagedUrl?: string; triangles?: number; vertices?: number; selectedIslandCount?: number; bytes?: number } | null;
-  partSelection?: { majorIslandCount: number; majorTriangleShare: number; picks: Array<{ target: string; note: string; candidates: Array<{ index: number; triangles: number; vertices: number; roleHint: string; bbox: { size: number[]; center: number[] } }> }> } | null;
+  model?: { fileName: string; stagedUrl?: string; triangles?: number; vertices?: number; meshCount?: number; primitiveCount?: number; materialCount?: number; imageCount?: number; bbox?: { size: number[] }; geometryIslands?: { islandCount: number; majorIslandCount: number; majorTriangleShare: number; largestIslandTriangleShare: number; roleHintCounts: Record<string, number>; majorRoleHintCounts: Record<string, number>; envelopeSummary?: { envelopeCount: number; policy: string; topGroups: EnvelopeGroup[] }; envelopeGroups?: EnvelopeGroup[]; topIslands: Array<{ index: number; triangles: number; vertices: number; roleHint: string; bbox: { size: number[]; center: number[] } }>; majorIslands: Array<{ index: number; triangles: number; vertices: number; roleHint: string; bbox: { size: number[]; center: number[] } }> }; images?: Array<{ width?: number; height?: number; byteLength?: number; mimeType?: string | null }> } | null;
+  envelopeReview?: { envelopeCount: number; policy: string; topGroups: EnvelopeGroup[] } | null;
 };
+
+type EnvelopeGroup = { id: string; label: string; islandCount: number; triangles: number; bbox: { size: number[]; center: number[] }; roleHintCounts: Record<string, number>; topIslands?: Array<{ index: number; triangles: number; roleHint: string; bbox: { size: number[]; center: number[] } }>; topIslandIndices?: number[] };
 
 type IntakeReport = {
   schema: string;
@@ -150,11 +151,11 @@ function renderReport(report: IntakeReport, baseUrl: string) {
   const side = document.querySelector<HTMLElement>('#side-panel')!;
   side.innerHTML = '<section><h2>Summary</h2><dl>' +
     Object.entries(report.summary || {}).map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('') +
-    '</dl></section><section><h2>Policy</h2><ul><li>Cloud/Sense review is still required for visual acceptance.</li><li>Generated staged files are diagnostic copies only.</li><li>The viewer loads filtered real Meshy triangles with tiny chaff islands removed.</li></ul></section>';
+    '</dl></section><section><h2>Policy</h2><ul><li>Cloud/Sense review is still required for visual acceptance.</li><li>Generated staged files are diagnostic copies only.</li><li>The viewer loads the original staged GLB; all Meshy islands are retained.</li><li>Envelope groups are bbox/proximity identification aids, not deletion or retopo.</li></ul></section>';
 
   for (const pair of report.pairs) {
     const imageUrl = resolveUrl(baseUrl, pair.image?.stagedUrl);
-    const modelUrl = resolveUrl(baseUrl, pair.filteredModel?.stagedUrl || pair.model?.stagedUrl);
+    const modelUrl = resolveUrl(baseUrl, pair.model?.stagedUrl);
     const card = document.createElement('article');
     card.className = 'asset-card';
     card.innerHTML = '<div class="image-pane"></div><div class="model-pane"><canvas></canvas><div class="card-footer"></div></div>';
@@ -171,16 +172,16 @@ function renderReport(report: IntakeReport, baseUrl: string) {
     const mapBytes = pair.model?.images?.reduce((s, i) => s + (i.byteLength || 0), 0);
     footer.innerHTML = `<h2>${pair.label} <span class="${pair.verdict}">${pair.verdict}</span></h2>` +
       '<div class="meta">' +
-      `<span class="badge">${pair.filteredModel?.triangles ?? pair.model?.triangles ?? 0} shown tris</span>` +
-      `<span class="badge">${pair.filteredModel?.vertices ?? pair.model?.vertices ?? 0} shown verts</span>` +
+      `<span class="badge">${pair.model?.triangles ?? 0} original tris</span>` +
+      `<span class="badge">${pair.model?.vertices ?? 0} original verts</span>` +
       `<span class="badge">${pair.model?.meshCount ?? 0} meshes</span>` +
       `<span class="badge">${pair.model?.geometryIslands?.islandCount ?? 0} islands</span>` +
-      `<span class="badge">${pair.filteredModel?.selectedIslandCount ?? pair.model?.geometryIslands?.majorIslandCount ?? 0} kept</span>` +
+      `<span class="badge">${pair.model?.geometryIslands?.envelopeSummary?.envelopeCount ?? 0} envelopes</span>` +
       `<span class="badge">${pair.model?.imageCount ?? 0} maps</span>` +
       `<span class="badge">${fmtBytes(mapBytes)} maps</span>` +
       '</div>' +
       '<ul>' + pair.reasons.map((reason) => `<li>${reason}</li>`).join('') + '</ul>' +
-      '<ul>' + (pair.partSelection?.picks || []).flatMap((pick) => pick.candidates.slice(0, 4).map((island) => `<li>${pick.target}: island ${island.index}, ${island.triangles} tris, ${island.roleHint}, size ${island.bbox.size.map((v) => v.toFixed ? v.toFixed(2) : v).join(' x ')}</li>`)).join('') + '</ul>' +
+      '<ul class="envelope-list">' + (pair.model?.geometryIslands?.envelopeGroups || []).slice(0, 10).map((group) => `<li><strong>${group.label}</strong>: ${group.triangles} tris, ${group.islandCount} islands, size ${group.bbox.size.map((v) => v.toFixed ? v.toFixed(2) : v).join(' x ')}, top ${((group.topIslands || []).map((island) => island.index).join(', ') || (group.topIslandIndices || []).join(', '))}</li>`).join('') + '</ul>' +
       '<div class="controls"><button type="button" class="wire">Wire</button><button type="button" class="texture" aria-pressed="true">Texture</button></div>';
     const canvas = card.querySelector<HTMLCanvasElement>('canvas')!;
     if (modelUrl) {

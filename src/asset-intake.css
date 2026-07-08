@@ -23,7 +23,7 @@ body { background: #101315; }
 .meta { display: flex; flex-wrap: wrap; gap: 6px; color: #aebbb6; font-size: 12px; }
 .badge { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 8px; border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.06); }
 .usable_lowpoly { color: #91e8a7; }
-.usable_real_mesh_filtered { color: #8ee0d1; }
+.usable_real_mesh_grouped { color: #8ee0d1; }
 .usable_reference_only { color: #ffd27a; }
 .needs_retopo { color: #ffad70; }
 .reject { color: #ff7868; }
@@ -38,6 +38,7 @@ dl div { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 8px; p
 dt { color: #98a7a0; font-size: 11px; text-transform: uppercase; }
 dd { margin: 0; font-size: 13px; overflow-wrap: anywhere; }
 ul { margin: 0; padding-left: 18px; color: #dce3df; font-size: 13px; line-height: 1.45; }
+.envelope-list strong { color: #f0d58a; font-weight: 650; }
 .error { padding: 24px; color: #ff9688; }
 @media (max-width: 980px) {
   .asset-main { grid-template-columns: 1fr; }

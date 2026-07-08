@@ -236,7 +236,7 @@ function buildPartSelection(role, geometryIslands) {
   const shell = (island) => island.roleHint === 'large_shell_or_plate' || (island.roleHint === 'compact_detail' && islandMaxSize(island) >= 0.75);
   const thin = (island) => island.roleHint === 'thin_plate_or_panel';
   const selection = {
-    policy: 'keep real mesh islands only; ignore chaff by default, with role-aware exceptions for readable wheels, hatches, barrel, and coax candidates',
+    policy: 'all real mesh islands retained; role-aware picks are advisory only',
     majorIslandCount: major.length,
     candidateIslandCount: pool.length,
     majorTriangles: major.reduce((sum, island) => sum + island.triangles, 0),
@@ -264,7 +264,155 @@ function buildPartSelection(role, geometryIslands) {
   return selection;
 }
 
-function inspectGeometryIslands(data, binStart, json) {
+function expandedBbox(bbox, margin) {
+  return {
+    min: bbox.min.map((v) => v - margin),
+    max: bbox.max.map((v) => v + margin)
+  };
+}
+
+function bboxIntersects(a, b) {
+  return a.min.every((v, axis) => v <= b.max[axis] && a.max[axis] >= b.min[axis]);
+}
+
+function centerDistance(a, b) {
+  return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+}
+
+function mergeEnvelopeBBox(group, island) {
+  for (let axis = 0; axis < 3; axis += 1) {
+    group.min[axis] = Math.min(group.min[axis], island.bbox.min[axis]);
+    group.max[axis] = Math.max(group.max[axis], island.bbox.max[axis]);
+  }
+  group.size = group.max.map((v, axis) => Number((v - group.min[axis]).toFixed(5)));
+  group.center = group.max.map((v, axis) => Number(((v + group.min[axis]) / 2).toFixed(5)));
+}
+
+function labelEnvelope(role, group) {
+  const hints = group.roleHintCounts || {};
+  const maxDim = Math.max(...group.size);
+  const [x, y, z] = group.size;
+  if (role === 'treads') {
+    if ((hints.wheel_hatch_or_round_plate || 0) >= Math.max(1, group.islandCount * 0.35)) return 'road_wheel_candidate_envelope';
+    if ((hints.thin_plate_or_panel || 0) >= 1 && (x > z * 1.4 || z > x * 1.4)) return 'tread_shoe_or_track_plate_envelope';
+    if ((hints.barrel_or_long_pin || 0) >= 1) return 'pin_bogie_or_connector_envelope';
+    return maxDim > 0.6 ? 'running_gear_mass_envelope' : 'small_tread_detail_envelope';
+  }
+  if (role === 'turret') {
+    if ((hints.barrel_or_long_pin || 0) >= 1 && maxDim > 0.45) return x >= Math.max(y, z) ? 'barrel_candidate_envelope' : 'coax_or_pin_candidate_envelope';
+    if ((hints.wheel_hatch_or_round_plate || 0) >= 1 && maxDim < 0.7) return 'hatch_or_round_detail_envelope';
+    if ((hints.large_shell_or_plate || 0) >= 1 || maxDim > 0.8) return 'turret_mantlet_body_candidate_envelope';
+    return 'small_turret_detail_envelope';
+  }
+  if (role === 'hull') {
+    if ((hints.large_shell_or_plate || 0) >= 1 || maxDim > 1.0) return 'hull_shell_candidate_envelope';
+    if ((hints.thin_plate_or_panel || 0) >= 1) return 'armor_panel_candidate_envelope';
+    return 'surface_detail_envelope';
+  }
+  if ((hints.large_shell_or_plate || 0) >= 1 || maxDim > 1.0) return 'major_shape_envelope';
+  if ((hints.thin_plate_or_panel || 0) >= 1) return 'panel_envelope';
+  return 'detail_envelope';
+}
+
+function buildEnvelopeGroups(role, islands) {
+  const sorted = [...islands].sort((a, b) => (b.triangles - a.triangles) || (islandMaxSize(b) - islandMaxSize(a)));
+  const groups = [];
+  for (const island of sorted) {
+    const islandMax = islandMaxSize(island);
+    let best = null;
+    let bestDistance = Infinity;
+    for (const group of groups) {
+      if (group.primaryRoleHint !== island.roleHint) continue;
+      const groupMax = Math.max(...group.size) || 1;
+      const margin = Math.max(0.015, Math.min(0.09, islandMax * 0.42, groupMax * 0.08));
+      const expanded = expandedBbox({ min: group.min, max: group.max }, margin);
+      const intersects = bboxIntersects(expanded, island.bbox);
+      const distance = centerDistance(group.center, island.bbox.center);
+      const baseThreshold = role === 'treads' ? 0.24 : role === 'turret' ? 0.22 : 0.2;
+      const threshold = Math.max(baseThreshold, Math.min(0.42, groupMax * 0.28 + islandMax * 0.72));
+      const tinyDetail = islandMax < 0.07 && distance < Math.max(0.16, threshold * 0.75);
+      if ((intersects || distance <= threshold || tinyDetail) && distance < bestDistance) {
+        best = group;
+        bestDistance = distance;
+      }
+    }
+    if (!best) {
+      best = {
+        id: '',
+        label: '',
+        primaryRoleHint: island.roleHint,
+        islandIndices: [],
+        islandCount: 0,
+        triangles: 0,
+        vertices: 0,
+        roleHintCounts: {},
+        min: [...island.bbox.min],
+        max: [...island.bbox.max],
+        size: [...island.bbox.size],
+        center: [...island.bbox.center],
+        topIslands: []
+      };
+      groups.push(best);
+    } else {
+      mergeEnvelopeBBox(best, island);
+    }
+    best.islandIndices.push(island.index);
+    best.islandCount += 1;
+    best.triangles += island.triangles;
+    best.vertices += island.vertices;
+    best.roleHintCounts[island.roleHint] = (best.roleHintCounts[island.roleHint] || 0) + 1;
+    best.topIslands.push({
+      index: island.index,
+      triangles: island.triangles,
+      vertices: island.vertices,
+      roleHint: island.roleHint,
+      bbox: island.bbox
+    });
+    best.topIslands.sort(sortByTrianglesThenSize);
+    best.topIslands = best.topIslands.slice(0, 8);
+  }
+  return groups
+    .sort((a, b) => (b.triangles - a.triangles) || (Math.max(...b.size) - Math.max(...a.size)))
+    .map((group, index) => {
+      const label = labelEnvelope(role, group);
+      return {
+        id: `${label.replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '').toLowerCase()}_${String(index + 1).padStart(2, '0')}`,
+        label,
+        islandCount: group.islandCount,
+        triangles: group.triangles,
+        vertices: group.vertices,
+        bbox: {
+          min: group.min.map((v) => Number(v.toFixed(5))),
+          max: group.max.map((v) => Number(v.toFixed(5))),
+          size: group.size.map((v) => Number(v.toFixed(5))),
+          center: group.center.map((v) => Number(v.toFixed(5)))
+        },
+        roleHintCounts: group.roleHintCounts,
+        islandIndices: group.islandIndices.sort((a, b) => a - b),
+        topIslands: group.topIslands
+      };
+    });
+}
+
+function buildEnvelopeSummary(envelopeGroups) {
+  const totalEnvelopeTriangles = envelopeGroups.reduce((sum, group) => sum + group.triangles, 0);
+  return {
+    policy: 'all connected islands retained; envelopes are bbox/proximity identification groups only and do not delete geometry',
+    envelopeCount: envelopeGroups.length,
+    totalEnvelopeTriangles,
+    topGroups: envelopeGroups.slice(0, 18).map((group) => ({
+      id: group.id,
+      label: group.label,
+      islandCount: group.islandCount,
+      triangles: group.triangles,
+      bbox: group.bbox,
+      roleHintCounts: group.roleHintCounts,
+      topIslandIndices: group.topIslands.map((island) => island.index)
+    }))
+  };
+}
+
+function inspectGeometryIslands(data, binStart, json, role = "") {
   const islands = [];
   for (let meshIndex = 0; meshIndex < (json.meshes || []).length; meshIndex += 1) {
     const mesh = json.meshes[meshIndex];
@@ -339,12 +487,12 @@ function inspectGeometryIslands(data, binStart, json) {
   const indexed = islands.map((island, index) => ({ index, ...island }));
   const totalIslandTriangles = indexed.reduce((sum, island) => sum + island.triangles, 0);
   const majorIslands = indexed.filter((island) => isMajorIsland(island, totalIslandTriangles));
-  return {
+  const summary = {
     islandCount: indexed.length,
     totalIslandTriangles,
     largestIslandTriangles: indexed[0]?.triangles || 0,
     largestIslandTriangleShare: indexed.length && indexed[0]?.triangles ? Number((indexed[0].triangles / Math.max(1, totalIslandTriangles)).toFixed(4)) : 0,
-    majorIslandPolicy: 'triangles >= 50 or >= 0.6% of asset triangles or bbox max dimension >= 0.55; ignores tiny mesh garbage by default',
+    majorIslandPolicy: 'major islands are reported for orientation only; no islands are removed by the active intake path',
     majorIslandCount: majorIslands.length,
     majorTriangleShare: Number((majorIslands.reduce((sum, island) => sum + island.triangles, 0) / Math.max(1, totalIslandTriangles)).toFixed(4)),
     roleHintCounts: indexed.reduce((acc, island) => { acc[island.roleHint] = (acc[island.roleHint] || 0) + 1; return acc; }, {}),
@@ -352,6 +500,12 @@ function inspectGeometryIslands(data, binStart, json) {
     topIslands: indexed.slice(0, 80),
     majorIslands: majorIslands.slice(0, 80),
     allIslands: indexed
+  };
+  const envelopeGroups = buildEnvelopeGroups(role, indexed);
+  return {
+    ...summary,
+    envelopeGroups,
+    envelopeSummary: buildEnvelopeSummary(envelopeGroups)
   };
 }
 
@@ -438,7 +592,7 @@ function inspectGlb(file) {
   });
   const bufferViewBytes = bufferViews.reduce((sum, view) => sum + (view.byteLength || 0), 0);
   const estimatedAccessorBytes = accessors.reduce((sum, accessor) => sum + ((accessor.count || 0) * accessorTypeSize(accessor.type) * componentBytes(accessor.componentType)), 0);
-  const geometryIslands = inspectGeometryIslands(data, binStart, json);
+  const geometryIslands = inspectGeometryIslands(data, binStart, json, inferRoleFromModel(file));
   return {
     path: file,
     fileName: path.basename(file),
@@ -490,24 +644,24 @@ function chooseVerdict(role, modelReport) {
   if (!modelReport.supported) return { verdict: 'reject', reasons: [modelReport.reason || 'unsupported model format'] };
   const islandCount = modelReport.geometryIslands?.islandCount || 0;
   if (modelReport.meshCount <= 1 && islandCount <= 1) reasons.push('single fused mesh with one connected geometry island; no separable runtime parts');
-  else if (modelReport.meshCount <= 1) reasons.push(`single GLB mesh, but ${islandCount} disconnected geometry islands were found; ${modelReport.geometryIslands?.majorIslandCount || 0} are major-shape candidates after ignoring tiny debris`);
+  else if (modelReport.meshCount <= 1) reasons.push(`single GLB mesh, but ${islandCount} disconnected geometry islands were found; ${modelReport.geometryIslands?.envelopeSummary?.envelopeCount || 0} bbox envelopes identify likely part clusters while retaining every island`);
   if (modelReport.materialCount <= 1) reasons.push('single material; material-region editing will need UV or texture work');
   if (modelReport.imageCount >= 3) reasons.push('embedded PBR-ish texture payload present');
   if (modelReport.triangles > 25000) reasons.push('triangle count above phone-friendly intake budget');
   else if (modelReport.triangles > 15000) reasons.push('triangle count is usable only if this replaces a major static shell');
   else reasons.push('triangle count is within choosy low-poly candidate range');
   if (role === 'treads') {
-    if (islandCount > 1) return { verdict: 'usable_real_mesh_filtered', reasons: [...reasons, 'filtered real Meshy islands can provide one tread foot, one wheel candidate, and a small subset of running-gear pieces; animation ownership still must be assigned manually'] };
+    if (islandCount > 1) return { verdict: 'usable_real_mesh_grouped', reasons: [...reasons, 'all Meshy islands are retained; bbox envelopes identify tread-foot, wheel, and running-gear clusters for manual selection'] };
     if (modelReport.meshCount <= 1) return { verdict: 'usable_reference_only', reasons: [...reasons, 'tread and wheel systems must animate separately; fused Meshy sculpture is not animation-ready'] };
     if (modelReport.triangles > 15000) return { verdict: 'needs_retopo', reasons: [...reasons, 'tread assembly exceeds preferred animated-running-gear budget'] };
   }
   if (role === 'turret' && modelReport.meshCount <= 1) {
-    if (islandCount >= 4) return { verdict: 'usable_real_mesh_filtered', reasons: [...reasons, 'filtered real Meshy islands can provide combined turret/mantlet, barrel, hatch, and coax candidates; choose final ownership visually'] };
-    return { verdict: 'usable_real_mesh_filtered', reasons: [...reasons, 'use real mesh if major islands visually identify turret shell, hatch, mantlet, barrel, and coax'] };
+    if (islandCount >= 4) return { verdict: 'usable_real_mesh_grouped', reasons: [...reasons, 'all Meshy islands are retained; bbox envelopes identify combined turret/mantlet, barrel, hatch, and coax candidates for visual choice'] };
+    return { verdict: 'usable_real_mesh_grouped', reasons: [...reasons, 'use real mesh if envelopes visually identify turret shell, hatch, mantlet, barrel, and coax'] };
   }
   if (role === 'hull') {
     if (modelReport.triangles > 25000) return { verdict: 'needs_retopo', reasons };
-    if (modelReport.meshCount <= 1) return { verdict: islandCount > 1 ? 'usable_real_mesh_filtered' : 'usable_reference_only', reasons: [...reasons, islandCount > 1 ? 'filtered real hull islands can provide one hull shell plus broad armor panels after chaff removal' : 'could be judged as a static hull reference, but cannot expose hatches/sockets without cutting'] };
+    if (modelReport.meshCount <= 1) return { verdict: islandCount > 1 ? 'usable_real_mesh_grouped' : 'usable_reference_only', reasons: [...reasons, islandCount > 1 ? 'all Meshy hull islands are retained; bbox envelopes identify hull shell, armor panel, and surface-detail clusters' : 'could be judged as a static hull reference, but cannot expose hatches/sockets without cutting'] };
   }
   if (modelReport.triangles <= 15000 && modelReport.meshCount > 1) return { verdict: 'usable_lowpoly', reasons };
   return { verdict: 'needs_retopo', reasons };
@@ -727,7 +881,7 @@ function createMajorIslandGlb(sourceFile, outputFile, role = "") {
     samplers: JSON.parse(JSON.stringify(json.samplers || [])),
     extras: {
       sourceFile: path.basename(sourceFile),
-      policy: 'real Meshy mesh triangles retained; tiny disconnected chaff islands removed by major-island filter',
+      policy: 'legacy disabled helper; active envelope workflow retains all Meshy islands',
       selectedIslandCount: selected.length,
       selectedTriangles: outIndices.length / 3,
       selectedVertices: outPositions.length
@@ -821,27 +975,20 @@ function main() {
         copyFileSync(pair.model.path, stagedModel);
       }
     }
-    let filteredModel = null;
-    if (args.stage && pair.model && modelReport?.supported) {
-      const filteredPath = path.join(pairDir, safeName(label + '_major_islands_real_mesh.glb'));
-      filteredModel = createMajorIslandGlb(pair.model.path, filteredPath, label);
-      if (filteredModel) filteredModel.stagedUrl = slashRelative(outDir, filteredPath);
-    }
     const verdict = modelReport ? chooseVerdict(label, modelReport) : { verdict: 'reject', reasons: ['missing model'] };
     return {
       id: `${String(index + 1).padStart(2, '0')}-${safeName(label)}`,
       label,
       image: imageReport ? { ...imageReport, stagedUrl: stagedImage ? slashRelative(outDir, stagedImage) : null } : null,
       model: modelReport ? { ...modelReport, stagedUrl: stagedModel ? slashRelative(outDir, stagedModel) : null } : null,
-      filteredModel,
-      partSelection: modelReport?.supported ? buildPartSelection(label, modelReport.geometryIslands) : null,
+      envelopeReview: modelReport?.supported ? modelReport.geometryIslands.envelopeSummary : null,
       verdict: verdict.verdict,
       reasons: verdict.reasons
     };
   });
   const summary = {
     usable_lowpoly: reportPairs.filter((p) => p.verdict === 'usable_lowpoly').length,
-    usable_real_mesh_filtered: reportPairs.filter((p) => p.verdict === 'usable_real_mesh_filtered').length,
+    usable_real_mesh_grouped: reportPairs.filter((p) => p.verdict === 'usable_real_mesh_grouped').length,
     usable_reference_only: reportPairs.filter((p) => p.verdict === 'usable_reference_only').length,
     needs_retopo: reportPairs.filter((p) => p.verdict === 'needs_retopo').length,
     reject: reportPairs.filter((p) => p.verdict === 'reject').length
@@ -850,11 +997,11 @@ function main() {
     schema: 'tftm.asset-intake-report.v1',
     generatedAt: new Date().toISOString(),
     runId: path.basename(outDir),
-    sourcePolicy: 'diagnostic intake only; staged copies and filtered major-island GLBs preserve real Meshy triangles but are not accepted production imports',
+    sourcePolicy: 'diagnostic intake only; staged original GLBs retain all Meshy geometry; envelope groups identify clusters but do not delete islands or create accepted production imports',
     lowPolyPolicy: {
       lowPolyCandidateMaxTriangles: 15000,
       phoneFriendlyMajorStaticShellMaxTriangles: 25000,
-      fusedMovingPartsPolicy: 'single GLB mesh may contain many disconnected real mesh islands; use filtered major-island GLBs to remove chaff before any runtime decision'
+      fusedMovingPartsPolicy: 'single GLB mesh may contain many disconnected real mesh islands; group by bbox envelopes first, then let the user choose pieces without deleting geometry'
     },
     outputDir: slashRelative(root, outDir),
     reviewPage: 'asset-intake.html?report=asset-intake/' + path.basename(outDir) + '/report.json',

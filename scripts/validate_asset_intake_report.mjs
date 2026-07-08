@@ -14,7 +14,7 @@ if (!report.sourcePolicy || !report.sourcePolicy.includes('diagnostic intake onl
 for (const pair of report.pairs || []) {
   if (!pair.id) failures.push('pair missing id');
   if (!pair.label) failures.push((pair.id || 'pair') + ' missing label');
-  if (!['usable_lowpoly', 'usable_real_mesh_filtered', 'usable_reference_only', 'needs_retopo', 'reject'].includes(pair.verdict)) failures.push((pair.id || 'pair') + ' invalid verdict ' + pair.verdict);
+  if (!['usable_lowpoly', 'usable_real_mesh_grouped', 'usable_reference_only', 'needs_retopo', 'reject'].includes(pair.verdict)) failures.push((pair.id || 'pair') + ' invalid verdict ' + pair.verdict);
   if (!Array.isArray(pair.reasons) || pair.reasons.length < 2) failures.push((pair.id || 'pair') + ' needs practical verdict reasons');
   if (!pair.image?.stagedUrl) failures.push((pair.id || 'pair') + ' missing staged image URL');
   if (!pair.model?.stagedUrl) failures.push((pair.id || 'pair') + ' missing staged model URL');
@@ -25,15 +25,15 @@ for (const pair of report.pairs || []) {
   if (!Number.isFinite(pair.model?.geometryIslands?.islandCount) || pair.model.geometryIslands.islandCount <= 0) failures.push((pair.id || 'pair') + ' missing geometry island count');
   if (!Array.isArray(pair.model?.geometryIslands?.topIslands) || pair.model.geometryIslands.topIslands.length === 0) failures.push((pair.id || 'pair') + ' missing top geometry islands');
   if (!Number.isFinite(pair.model?.geometryIslands?.majorIslandCount)) failures.push((pair.id || 'pair') + ' missing major island count');
-  if (!pair.partSelection || !Array.isArray(pair.partSelection.picks) || pair.partSelection.picks.length === 0) failures.push((pair.id || 'pair') + ' missing major part selection picks');
-  if (!pair.filteredModel?.stagedUrl) failures.push((pair.id || 'pair') + ' missing filtered real-mesh no-chaff GLB');
-  if (!Number.isFinite(pair.filteredModel?.triangles) || pair.filteredModel.triangles <= 0) failures.push((pair.id || 'pair') + ' filtered GLB missing triangle count');
+  if (!Array.isArray(pair.model?.geometryIslands?.envelopeGroups) || pair.model.geometryIslands.envelopeGroups.length === 0) failures.push((pair.id || 'pair') + ' missing envelope groups');
+  if (!pair.model?.geometryIslands?.envelopeSummary || !Number.isFinite(pair.model.geometryIslands.envelopeSummary.envelopeCount)) failures.push((pair.id || 'pair') + ' missing envelope summary');
 }
 const labels = new Set((report.pairs || []).map((pair) => pair.label));
 for (const expected of ['hull', 'turret', 'treads']) {
   if (!labels.has(expected)) failures.push('missing expected label ' + expected);
 }
 if (!report.summary || Object.values(report.summary).reduce((a, b) => a + Number(b || 0), 0) !== report.pairs.length) failures.push('summary counts do not match pair count');
+if (!report.sourcePolicy.includes('retain all Meshy geometry')) failures.push('source policy must state all geometry is retained');
 if (failures.length) {
   console.error('asset intake report failed validation:');
   for (const failure of failures) console.error('- ' + failure);
