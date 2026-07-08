@@ -2,7 +2,7 @@ import './single-tank.css';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { AUTHORED_SHERMAN_TREADS_GLB_URL, MESHY_SHERMAN_COMPONENT_ASSEMBLY_MANIFEST_URL } from './sherman-asset-links';
+import { AUTHORED_SHERMAN_TREADS_GLB_URL, MESHY_SHERMAN_ENVELOPE_ASSEMBLY_MANIFEST_URL } from './sherman-asset-links';
 import { applyAuthoredShermanSharedTextures } from './authored-sherman-shared-materials';
 
 type AssemblyArea = 'hull' | 'treads' | 'turret';
@@ -21,7 +21,7 @@ type ManifestPart = {
   default_visible: boolean;
   default_transform: { position: [number, number, number]; rotationDeg: [number, number, number]; scale: [number, number, number] };
 };
-type ComponentManifest = {
+type EnvelopeManifest = {
   asset_id: string;
   revision: string;
   source_policy: string;
@@ -48,21 +48,21 @@ type AssemblyPart = {
 const root = document.querySelector<HTMLDivElement>('#assembled-tank-root');
 if (!root) throw new Error('missing #assembled-tank-root');
 
-const componentManifestUrl = MESHY_SHERMAN_COMPONENT_ASSEMBLY_MANIFEST_URL;
-const visualBuild = 'tftm-meshy-component-assembly-editor-v1-20260708';
+const envelopeManifestUrl = MESHY_SHERMAN_ENVELOPE_ASSEMBLY_MANIFEST_URL;
+const visualBuild = 'tftm-meshy-envelope-assembly-editor-v1-20260708';
 const query = new URLSearchParams(window.location.search);
-const isTuneMode = query.get('tune') === '1' || query.get('tune') === 'components';
+const isTuneMode = query.get('tune') === '1' || query.get('tune') === 'components' || query.get('tune') === 'envelopes';
 const rootShell = isTuneMode ? ' is-tuning' : '';
 
 root.innerHTML = '<main class="single-tank-shell' + rootShell + '">' +
-  '<div class="single-tank-stage"><canvas aria-label="Hybrid Meshy component tank assembly editor"></canvas></div>' +
-  '<section class="single-tank-readout" aria-label="Hybrid Meshy component tank readout">' +
-    '<p class="single-tank-kicker">hybrid component assembly</p>' +
-    '<p class="single-tank-title">Meshy hull + authored treads + selectable turret kit</p>' +
-    '<p class="single-tank-status" data-status>loading welded Meshy component kit</p>' +
+  '<div class="single-tank-stage"><canvas aria-label="Hybrid Meshy envelope tank assembly editor"></canvas></div>' +
+  '<section class="single-tank-readout" aria-label="Hybrid Meshy envelope tank readout">' +
+    '<p class="single-tank-kicker">hybrid envelope assembly</p>' +
+    '<p class="single-tank-title">Meshy envelopes + authored treads</p>' +
+    '<p class="single-tank-status" data-status>loading textured Meshy envelopes</p>' +
   '</section>' +
-  (isTuneMode ? '<section class="tune-parts-panel is-collapsed" aria-label="Assembly components" data-parts-panel>' +
-    '<button class="tune-parts-toggle" type="button" data-toggle-parts><span data-selected-label>No part</span><span data-parts-caret>Parts</span></button>' +
+  (isTuneMode ? '<section class="tune-parts-panel is-collapsed" aria-label="Assembly envelopes" data-parts-panel>' +
+    '<button class="tune-parts-toggle" type="button" data-toggle-parts><span data-selected-label>No envelope</span><span data-parts-caret>Envelopes</span></button>' +
     '<div class="tune-row tune-mode-row" data-area-row><button type="button" data-area="hull">Hull</button><button type="button" data-area="treads">Treads</button><button type="button" data-area="turret">Turret</button></div>' +
     '<div class="tune-parts-list" data-parts-list></div>' +
   '</section>' +
@@ -93,7 +93,7 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPrefere
 renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.04;
+renderer.toneMappingExposure = 1.02;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x151711);
@@ -101,7 +101,7 @@ scene.fog = new THREE.Fog(0x151711, 10, 26);
 const camera = new THREE.PerspectiveCamera(34, 1, 0.05, 100);
 camera.position.set(0.15, 2.45, -6.1);
 const controls = new OrbitControls(camera, canvas);
-controls.target.set(0, 0.22, 0);
+controls.target.set(0, 0.24, 0);
 controls.enableDamping = true;
 controls.dampingFactor = 0.08;
 controls.rotateSpeed = 0.8;
@@ -112,11 +112,11 @@ controls.maxDistance = 11.0;
 controls.touches.ONE = THREE.TOUCH.ROTATE;
 controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
 
-scene.add(new THREE.HemisphereLight(0xf2ead6, 0x252a20, 2.0));
-const key = new THREE.DirectionalLight(0xffefd1, 3.0);
+scene.add(new THREE.HemisphereLight(0xf2ead6, 0x252a20, 1.65));
+const key = new THREE.DirectionalLight(0xffefd1, 2.3);
 key.position.set(3.8, 4.8, 3.0);
 scene.add(key);
-const rim = new THREE.DirectionalLight(0x9bb4ff, 1.1);
+const rim = new THREE.DirectionalLight(0x9bb4ff, 0.75);
 rim.position.set(-3.5, 2.4, -4.0);
 scene.add(rim);
 const floor = new THREE.Mesh(new THREE.PlaneGeometry(9, 5.5), new THREE.MeshStandardMaterial({ color: 0x302d22, roughness: 0.96, metalness: 0.0 }));
@@ -125,38 +125,30 @@ floor.position.y = -0.47;
 scene.add(floor);
 
 const reviewGroup = new THREE.Group();
-reviewGroup.name = 'meshy_sherman_component_assembly_v1_editor_root';
+reviewGroup.name = 'meshy_sherman_envelope_assembly_v1_editor_root';
 scene.add(reviewGroup);
 const authoredTreadsGroup = new THREE.Group();
 authoredTreadsGroup.name = 'authored_treads_parade_truth_reference';
 reviewGroup.add(authoredTreadsGroup);
 const hullGroup = new THREE.Group();
-hullGroup.name = 'hull_area_model_swap_group';
+hullGroup.name = 'hull_envelope_model_swap_group';
 reviewGroup.add(hullGroup);
 const turretTraversePivot = new THREE.Group();
-turretTraversePivot.name = 'turret_traverse_pivot_manual_editor';
+turretTraversePivot.name = 'turret_envelope_traverse_pivot_manual_editor';
 reviewGroup.add(turretTraversePivot);
-const cannonElevationPivot = new THREE.Group();
-cannonElevationPivot.name = 'cannon_elevation_pivot_manual_editor';
-turretTraversePivot.add(cannonElevationPivot);
 const treadCandidateGroup = new THREE.Group();
-treadCandidateGroup.name = 'optional_meshy_tread_component_candidates';
+treadCandidateGroup.name = 'optional_meshy_tread_envelope_reference';
 reviewGroup.add(treadCandidateGroup);
 
-const materials = {
-  hull: new THREE.MeshStandardMaterial({ color: 0x58613f, roughness: 0.86, metalness: 0.08 }),
-  turret: new THREE.MeshStandardMaterial({ color: 0x59623f, roughness: 0.88, metalness: 0.08 }),
-  gun: new THREE.MeshStandardMaterial({ color: 0x30362a, roughness: 0.72, metalness: 0.16 }),
-  treadCandidate: new THREE.MeshStandardMaterial({ color: 0x45483a, roughness: 0.84, metalness: 0.12 })
-};
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const tuneMeshes: THREE.Object3D[] = [];
 const parts: AssemblyPart[] = [];
-let manifest: ComponentManifest | null = null;
+let manifest: EnvelopeManifest | null = null;
 let selectedArea: AssemblyArea = 'turret';
 let selectedPart: AssemblyPart | null = null;
 let lockedSelection: AssemblyPart | null = null;
+let selectionBox: THREE.BoxHelper | null = null;
 let currentMode: TuneMode = 'move';
 let currentAxis: TuneAxis = 'screen';
 let partsOpen = false;
@@ -170,52 +162,20 @@ let lastTwistAngle = 0;
 const undoStack: string[] = [];
 const redoStack: string[] = [];
 
-function sharedMaterialFor(part: AssemblyPart) {
-  if (part.area === 'hull') return materials.hull;
-  if (part.runtimeRole.includes('barrel') || part.runtimeRole.includes('coax')) return materials.gun;
-  if (part.area === 'treads') return materials.treadCandidate;
-  return materials.turret;
-}
-function normalizeObjectToBboxCenter(object: THREE.Object3D) {
-  object.updateWorldMatrix(true, true);
-  const box = new THREE.Box3().setFromObject(object);
-  const center = new THREE.Vector3();
-  box.getCenter(center);
-  object.traverse((child) => {
-    const mesh = child as THREE.Mesh;
-    if (!mesh.isMesh) return;
-    mesh.geometry = mesh.geometry.clone();
-    mesh.geometry.translate(-center.x, -center.y, -center.z);
-  });
-}
-function applySharedPartMaterial(part: AssemblyPart) {
-  const partMaterial = sharedMaterialFor(part).clone();
-  partMaterial.name = 'assembly_' + part.id + '_runtime_material';
-  part.object?.traverse((child) => {
-    const mesh = child as THREE.Mesh;
-    if (!mesh.isMesh) return;
-    mesh.material = partMaterial;
-    mesh.castShadow = false;
-    mesh.receiveShadow = true;
-    mesh.userData.tunePartId = part.id;
-  });
-}
 function parentFor(part: AssemblyPart) {
   if (part.area === 'hull') return hullGroup;
   if (part.area === 'treads') return treadCandidateGroup;
-  if (part.runtimeRole.includes('barrel') || part.runtimeRole.includes('coax')) return cannonElevationPivot;
   return turretTraversePivot;
 }
-function bestFitTransform(part: ManifestPart): AssemblyPart {
-  const base = part.default_transform;
-  const transform = {
+function makePart(part: ManifestPart): AssemblyPart {
+  return {
     id: part.id,
     label: part.label,
     area: part.area,
     runtimeRole: part.runtime_role,
-    position: [...base.position] as [number, number, number],
-    rotationDeg: [...base.rotationDeg] as [number, number, number],
-    scale: [...base.scale] as [number, number, number],
+    position: [...part.default_transform.position],
+    rotationDeg: [...part.default_transform.rotationDeg],
+    scale: [...part.default_transform.scale],
     visible: part.default_visible,
     locked: false,
     triangles: part.triangles,
@@ -223,14 +183,6 @@ function bestFitTransform(part: ManifestPart): AssemblyPart {
     sourceImage: part.source_image,
     sourceGlb: part.source_glb
   };
-  if (part.id === 'hull_shell') Object.assign(transform, { position: [-0.04, 0.20, 0.00] as [number, number, number], scale: [1.65, 1.82, 2.18] as [number, number, number] });
-  if (part.id === 'turret_shell') Object.assign(transform, { position: [0.04, 0.84, 0.00] as [number, number, number], scale: [0.78, 0.78, 0.78] as [number, number, number] });
-  if (part.id === 'commander_hatch') Object.assign(transform, { position: [-0.18, 1.06, -0.24] as [number, number, number], scale: [0.64, 0.64, 0.64] as [number, number, number] });
-  if (part.id === 'loader_hatch') Object.assign(transform, { position: [0.28, 1.06, 0.23] as [number, number, number], scale: [0.64, 0.64, 0.64] as [number, number, number] });
-  if (part.id === 'main_barrel') Object.assign(transform, { position: [0.86, 0.86, -0.03] as [number, number, number], rotationDeg: [0, 0, 0] as [number, number, number], scale: [0.82, 0.82, 0.82] as [number, number, number] });
-  if (part.id === 'coax_mg') Object.assign(transform, { position: [0.78, 0.80, 0.18] as [number, number, number], rotationDeg: [0, 0, 0] as [number, number, number], scale: [0.62, 0.62, 0.62] as [number, number, number] });
-  if (part.id === 'roof_cap') Object.assign(transform, { position: [0.05, 1.08, 0.02] as [number, number, number], scale: [0.52, 0.52, 0.52] as [number, number, number] });
-  return transform;
 }
 function applyPartTransform(part: AssemblyPart) {
   const object = part.object;
@@ -240,17 +192,30 @@ function applyPartTransform(part: AssemblyPart) {
   object.scale.set(part.scale[0], part.scale[1], part.scale[2]);
   object.visible = part.visible;
 }
+function tagTunePart(part: AssemblyPart) {
+  // Preserve source Meshy materials/textures. Selection is shown with a helper box, not a material override.
+  part.object?.traverse((child) => {
+    const mesh = child as THREE.Mesh;
+    if (!mesh.isMesh) return;
+    mesh.castShadow = false;
+    mesh.receiveShadow = true;
+    mesh.userData.tunePartId = part.id;
+    if (Array.isArray(mesh.material)) for (const material of mesh.material) material.needsUpdate = true;
+    else if (mesh.material) mesh.material.needsUpdate = true;
+  });
+  if (part.object) part.object.userData.tunePartId = part.id;
+}
 function onOneAssetLoaded() {
   loadedCount += 1;
   if (loadedCount !== expectedLoads) return;
-  selectedPart = parts.find((part) => part.id === 'turret_shell') || parts[0] || null;
+  selectedPart = parts.find((part) => part.id === 'turret_kit_envelope') || parts[0] || null;
   initialSnapshot = serializeTuneParts();
   renderTuneUi();
-  statusEl.textContent = 'loaded welded component assembly editor: hull shell swap, authored animated treads as parade truth, selectable turret shell/hatches/barrel/coax; barrel and coax start forward in the fused socket area';
+  statusEl.textContent = 'loaded textured envelope assembly editor: whole Meshy hull and turret envelopes preserve source grouping, UVs, and materials; authored treads remain the visible running gear reference';
   postVisualBeacon('loaded', { parts: parts.length, selected: selectedPart?.id || 'none', editor: isTuneMode ? 1 : 0 });
 }
 async function boot() {
-  manifest = await fetch(componentManifestUrl, { cache: 'no-store' }).then((r) => r.json() as Promise<ComponentManifest>);
+  manifest = await fetch(envelopeManifestUrl, { cache: 'no-store' }).then((response) => response.json() as Promise<EnvelopeManifest>);
   const loader = new GLTFLoader();
   const manifestParts = Object.values(manifest.parts).sort((a, b) => a.area.localeCompare(b.area) || a.id.localeCompare(b.id));
   expectedLoads = manifestParts.length + 1;
@@ -262,13 +227,12 @@ async function boot() {
     onOneAssetLoaded();
   }, undefined, (error) => failLoad('authored_treads', error));
   for (const partSpec of manifestParts) {
-    const part = bestFitTransform(partSpec);
+    const part = makePart(partSpec);
     parts.push(part);
     loader.load(partSpec.runtime_url + '?v=' + manifest.revision, (gltf) => {
       part.object = gltf.scene;
-      part.object.name = 'assembly_component_' + part.id;
-      normalizeObjectToBboxCenter(part.object);
-      applySharedPartMaterial(part);
+      part.object.name = 'assembly_envelope_' + part.id;
+      tagTunePart(part);
       parentFor(part).add(part.object);
       tuneMeshes.push(part.object);
       applyPartTransform(part);
@@ -277,10 +241,9 @@ async function boot() {
   }
 }
 function failLoad(asset: string, error: unknown) {
-  statusEl.textContent = 'assembly component load failed: ' + asset;
+  statusEl.textContent = 'assembly envelope load failed: ' + asset;
   postVisualBeacon('load-failed', { asset, message: error instanceof Error ? error.message : String(error) });
 }
-
 function renderTuneUi() {
   if (partsListEl) {
     partsListEl.innerHTML = '';
@@ -302,7 +265,7 @@ function renderTuneUi() {
     button.classList.toggle('is-selected', axis === currentAxis);
     button.hidden = currentMode !== 'scale' && axis === 'all';
   });
-  if (selectedLabelEl) selectedLabelEl.textContent = selectedPart ? selectedPart.label : 'No part';
+  if (selectedLabelEl) selectedLabelEl.textContent = selectedPart ? selectedPart.label : 'No envelope';
   if (modeLabelEl) modeLabelEl.textContent = modeLabel();
   const visibleButton = root.querySelector<HTMLButtonElement>('[data-toggle-visible]');
   if (visibleButton) visibleButton.textContent = selectedPart?.visible ? 'Hide' : 'Show';
@@ -325,7 +288,7 @@ function bindUi() {
   root.querySelector<HTMLButtonElement>('[data-toggle-lock]')?.addEventListener('click', () => { if (!selectedPart) return; selectedPart.locked = !selectedPart.locked; lockedSelection = selectedPart.locked ? selectedPart : null; renderTuneUi(); applyTuneToUrl(); });
   root.querySelector<HTMLButtonElement>('[data-reset-part]')?.addEventListener('click', resetSelectedPart);
   root.querySelector<HTMLButtonElement>('[data-reset-all]')?.addEventListener('click', () => { if (!initialSnapshot) return; pushUndo(); restoreTuneParts(initialSnapshot); });
-  root.querySelector<HTMLButtonElement>('[data-show-defaults]')?.addEventListener('click', () => { for (const part of parts) { part.visible = part.area !== 'treads'; applyPartTransform(part); } renderTuneUi(); });
+  root.querySelector<HTMLButtonElement>('[data-show-defaults]')?.addEventListener('click', () => { for (const part of parts) { part.visible = part.id !== 'meshy_treads_envelope'; applyPartTransform(part); } renderTuneUi(); });
   root.querySelector<HTMLButtonElement>('[data-focus-part]')?.addEventListener('click', () => selectedPart && focusPart(selectedPart));
   root.querySelector<HTMLButtonElement>('[data-export-tune]')?.addEventListener('click', exportTune);
   root.querySelector<HTMLButtonElement>('[data-undo]')?.addEventListener('click', undoTune);
@@ -421,7 +384,13 @@ function rotatePart(part: AssemblyPart, degrees: number) { if (currentAxis === '
 function scalePart(part: AssemblyPart, delta: number) { if (currentAxis === 'all' || currentAxis === 'screen') { part.scale[0] = Math.max(0.03, part.scale[0] + delta); part.scale[1] = Math.max(0.03, part.scale[1] + delta); part.scale[2] = Math.max(0.03, part.scale[2] + delta); } if (currentAxis === 'x') part.scale[0] = Math.max(0.03, part.scale[0] + delta); if (currentAxis === 'y') part.scale[1] = Math.max(0.03, part.scale[1] + delta); if (currentAxis === 'z') part.scale[2] = Math.max(0.03, part.scale[2] + delta); }
 function selectPart(part: AssemblyPart, userPicked: boolean) { selectedPart = part; selectedArea = part.area; focusPart(part); renderTuneUi(); if (userPicked) postVisualBeacon('select-part', { part: part.id, area: part.area }); }
 function focusPart(part: AssemblyPart) { const world = part.object?.getWorldPosition(new THREE.Vector3()) || new THREE.Vector3(part.position[0], part.position[1], part.position[2]); controls.target.set(world.x, world.y + 0.08, world.z); controls.update(); }
-function updateSelectionEmphasis() { for (const part of parts) part.object?.traverse((child) => { const mesh = child as THREE.Mesh; if (!mesh.isMesh || !(mesh.material instanceof THREE.MeshStandardMaterial)) return; mesh.material.emissive.set(part === selectedPart ? 0x443809 : 0x000000); }); }
+function updateSelectionEmphasis() {
+  if (selectionBox) { reviewGroup.remove(selectionBox); selectionBox.geometry.dispose(); selectionBox = null; }
+  if (!selectedPart?.object || !selectedPart.visible) return;
+  selectionBox = new THREE.BoxHelper(selectedPart.object, 0xd9bd68);
+  selectionBox.name = 'selected_envelope_bbox_helper';
+  reviewGroup.add(selectionBox);
+}
 function cycleMode() { currentMode = currentMode === 'move' ? 'rotate' : currentMode === 'rotate' ? 'scale' : 'move'; currentAxis = currentMode === 'scale' ? 'all' : 'screen'; renderTuneUi(); }
 function resetSelectedPart() { if (!selectedPart || !initialSnapshot) return; const initial = JSON.parse(initialSnapshot).parts.find((part: AssemblyPart) => part.id === selectedPart?.id); if (!initial) return; pushUndo(); selectedPart.position = [...initial.position] as [number, number, number]; selectedPart.rotationDeg = [...initial.rotationDeg] as [number, number, number]; selectedPart.scale = [...initial.scale] as [number, number, number]; selectedPart.visible = initial.visible; selectedPart.locked = initial.locked; applyPartTransform(selectedPart); renderTuneUi(); applyTuneToUrl(); }
 function getPointerDistance() { const pts = [...pointerPositions.values()]; return pts.length < 2 ? 0 : Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y); }
@@ -436,8 +405,8 @@ function serializeTuneParts() {
   return JSON.stringify({
     version: 1,
     build: visualBuild,
-    coordinateSpace: 'meshy-component-assembly-editor-runtime-root',
-    editable: 'meshy_sherman_component_assembly_v1',
+    coordinateSpace: 'meshy-envelope-assembly-editor-runtime-root',
+    editable: 'meshy_sherman_envelope_assembly_v1',
     fixedReference: 'authored_sherman_treads_v1_parade_truth',
     sourcePolicy: manifest?.source_policy || '',
     runtimeContract: manifest?.runtime_contract || {},
@@ -465,12 +434,12 @@ function restoreTuneParts(snapshot: string) {
   renderTuneUi();
   applyTuneToUrl();
 }
-function exportTune() { const json = serializeTuneParts(); localStorage.setItem('tftm.meshyComponentAssemblyTune.v1', json); if (exportPanel && exportOutput) { exportPanel.hidden = false; exportOutput.value = json; } applyTuneToUrl(); postVisualBeacon('tune-export', { parts: parts.length }); }
-function applyTuneToUrl() { if (!isTuneMode || !initialSnapshot) return; const encoded = btoa(unescape(encodeURIComponent(serializeTuneParts()))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); window.history.replaceState(null, '', window.location.pathname + '?tune=components#componentAssemblyTune=' + encoded); }
+function exportTune() { const json = serializeTuneParts(); localStorage.setItem('tftm.meshyEnvelopeAssemblyTune.v1', json); if (exportPanel && exportOutput) { exportPanel.hidden = false; exportOutput.value = json; } applyTuneToUrl(); postVisualBeacon('tune-export', { parts: parts.length }); }
+function applyTuneToUrl() { if (!isTuneMode || !initialSnapshot) return; const encoded = btoa(unescape(encodeURIComponent(serializeTuneParts()))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); window.history.replaceState(null, '', window.location.pathname + '?tune=envelopes#componentAssemblyTune=' + encoded); }
 function snapCamera(view: string) { const focus = selectedPart ? (selectedPart.object?.getWorldPosition(new THREE.Vector3()) || new THREE.Vector3(selectedPart.position[0], selectedPart.position[1], selectedPart.position[2])) : new THREE.Vector3(0, 0.22, 0); const distance = Math.max(4.2, camera.position.distanceTo(controls.target)); const offsets: Record<string, THREE.Vector3> = { front: new THREE.Vector3(0, 1.15, -distance), back: new THREE.Vector3(0, 1.15, distance), left: new THREE.Vector3(-distance, 1.15, 0), right: new THREE.Vector3(distance, 1.15, 0), top: new THREE.Vector3(0.01, distance, 0.01) }; controls.target.copy(focus); camera.position.copy(focus).add(offsets[view] || offsets.front); controls.update(); postVisualBeacon('camera-snap', { view }); }
-function postVisualBeacon(stage: string, extra: Record<string, string | number> = {}) { const params = new URLSearchParams({ stage, build: visualBuild, actor: 'meshy_sherman_component_assembly_v1', clip: isTuneMode ? 'component assembly manual editor' : 'component assembly review', clipKey: 'assembled-tank-component-editor', sourceName: 'tanks-for-the-memories', tuneMode: isTuneMode ? 'components' : '0', ...Object.fromEntries(Object.entries(extra).map(([key, value]) => [key, String(value)])) }); fetch('/__visual_qa_smoke?' + params.toString(), { method: 'POST', cache: 'no-store' }).catch(() => {}); }
+function postVisualBeacon(stage: string, extra: Record<string, string | number> = {}) { const params = new URLSearchParams({ stage, build: visualBuild, actor: 'meshy_sherman_envelope_assembly_v1', clip: isTuneMode ? 'envelope assembly manual editor' : 'envelope assembly review', clipKey: 'assembled-tank-envelope-editor', sourceName: 'tanks-for-the-memories', tuneMode: isTuneMode ? 'envelopes' : '0', ...Object.fromEntries(Object.entries(extra).map(([key, value]) => [key, String(value)])) }); fetch('/__visual_qa_smoke?' + params.toString(), { method: 'POST', cache: 'no-store' }).catch(() => {}); }
 function resize() { const width = Math.max(1, canvas.clientWidth); const height = Math.max(1, canvas.clientHeight); const pixelRatio = renderer.getPixelRatio(); if (canvas.width !== Math.floor(width * pixelRatio) || canvas.height !== Math.floor(height * pixelRatio)) { renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix(); } }
-function animate() { resize(); controls.update(); renderer.render(scene, camera); requestAnimationFrame(animate); }
+function animate() { resize(); controls.update(); if (selectionBox) selectionBox.update(); renderer.render(scene, camera); requestAnimationFrame(animate); }
 
 if (isTuneMode) { bindUi(); bindGestures(); }
 postVisualBeacon('boot');
