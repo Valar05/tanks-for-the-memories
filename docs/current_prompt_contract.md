@@ -1,9 +1,9 @@
 # Current Prompt Contract
 
-latest_user_command: Implement the durable asset-intake inspection workflow for the three new Pictures images and three new Download Meshy models.
-controlling_user_correction: User stopped ad hoc inspection and requested building the tools needed to inspect future image/model batches.
-forbidden_stale_premise: Do not import the downloaded GLBs as accepted production assets, edit tank geometry, deploy or wake a browser for acceptance, or treat local/report diagnostics as visual acceptance.
-allowed_mutation_type: asset_intake_cli; diagnostic_review_page; build_route_wiring; package_script_update; prompt_contract_update; generated_asset_intake_report
-allowed_target_artifact: scripts/inspect_candidate_assets.mjs, asset-intake.html, src/asset-intake.ts, src/asset-intake.css, build/package wiring, and generated/asset-intake diagnostic reports.
-required_evidence_lane: CLI report generation, TypeScript/build guardrails, and static report checks are diagnostics; any visual acceptance of a candidate model still requires the cloud visual truth lane plus Sense Simulation review.
+latest_user_command: Use the real Meshy mesh islands directly, but remove tiny chaff; no retopo premise.
+controlling_user_correction: User clarified that the desired path is to keep real mesh geometry and exclude chaff, not retopologize or only report candidate islands.
+forbidden_stale_premise: Do not say the only path is retopo, do not treat one GLB mesh as one fused part, do not include tiny bolts/chips/debris as useful pieces, and do not import candidate GLBs as accepted production assets.
+allowed_mutation_type: asset_intake_cli; major_island_filtering; filtered_real_mesh_glb_generation; diagnostic_review_page; report_validation; generated_asset_intake_report; prompt_contract_update
+allowed_target_artifact: scripts/inspect_candidate_assets.mjs, scripts/validate_asset_intake_report.mjs, src/asset-intake.ts, generated/asset-intake diagnostic reports, and docs/current_prompt_contract.md.
+required_evidence_lane: Filtered-major-island GLB generation, validator checks, and build checks are diagnostic; any visual acceptance of a candidate part still requires cloud visual truth plus Sense Simulation review.
 updated_at: 2026-07-07

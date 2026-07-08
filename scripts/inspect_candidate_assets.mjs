@@ -192,6 +192,78 @@ function classifyIsland(size) {
   return 'compact_detail';
 }
 
+
+function islandMaxSize(island) {
+  return Math.max(...island.bbox.size);
+}
+
+function isMajorIsland(island, totalTriangles) {
+  const maxSize = islandMaxSize(island);
+  return island.triangles >= 50 || island.triangles / Math.max(1, totalTriangles) >= 0.006 || maxSize >= 0.55;
+}
+
+function sortByTrianglesThenSize(a, b) {
+  return (b.triangles - a.triangles) || (islandMaxSize(b) - islandMaxSize(a));
+}
+
+function findIslandCandidates(islands, predicate, limit = 6) {
+  return islands.filter(predicate).sort(sortByTrianglesThenSize).slice(0, limit).map((island) => ({
+    index: island.index,
+    triangles: island.triangles,
+    vertices: island.vertices,
+    roleHint: island.roleHint,
+    bbox: island.bbox
+  }));
+}
+
+function islandPoolForRole(role, all, major) {
+  if (role === 'treads') {
+    return all.filter((island) => isMajorIsland(island, all.reduce((sum, x) => sum + x.triangles, 0)) || (island.roleHint === 'wheel_hatch_or_round_plate' && island.triangles >= 20) || (island.roleHint === 'thin_plate_or_panel' && island.triangles >= 30));
+  }
+  if (role === 'turret') {
+    return all.filter((island) => isMajorIsland(island, all.reduce((sum, x) => sum + x.triangles, 0)) || (island.roleHint === 'wheel_hatch_or_round_plate' && island.triangles >= 25) || (island.roleHint === 'barrel_or_long_pin' && island.triangles >= 25));
+  }
+  return major;
+}
+
+function buildPartSelection(role, geometryIslands) {
+  const totalTriangles = geometryIslands.totalIslandTriangles || 0;
+  const all = geometryIslands.allIslands || geometryIslands.topIslands || [];
+  const major = all.filter((island) => isMajorIsland(island, totalTriangles));
+  const pool = islandPoolForRole(role, all, major);
+  const long = (island) => island.roleHint === 'barrel_or_long_pin';
+  const round = (island) => island.roleHint === 'wheel_hatch_or_round_plate';
+  const shell = (island) => island.roleHint === 'large_shell_or_plate' || (island.roleHint === 'compact_detail' && islandMaxSize(island) >= 0.75);
+  const thin = (island) => island.roleHint === 'thin_plate_or_panel';
+  const selection = {
+    policy: 'keep real mesh islands only; ignore chaff by default, with role-aware exceptions for readable wheels, hatches, barrel, and coax candidates',
+    majorIslandCount: major.length,
+    candidateIslandCount: pool.length,
+    majorTriangles: major.reduce((sum, island) => sum + island.triangles, 0),
+    candidateTriangles: pool.reduce((sum, island) => sum + island.triangles, 0),
+    majorTriangleShare: Number((major.reduce((sum, island) => sum + island.triangles, 0) / Math.max(1, totalTriangles)).toFixed(4)),
+    candidateTriangleShare: Number((pool.reduce((sum, island) => sum + island.triangles, 0) / Math.max(1, totalTriangles)).toFixed(4)),
+    picks: []
+  };
+  const add = (target, candidates, note) => selection.picks.push({ target, note, candidates });
+  if (role === 'hull') {
+    add('one_hull_shell', findIslandCandidates(pool, shell, 5), 'Prefer the largest shell/plate islands as the real hull mesh candidate, not every disconnected detail.');
+    add('large_hull_panels_or_sponsons', findIslandCandidates(pool, (island) => shell(island) || thin(island), 8), 'Secondary broad armor planes only.');
+  } else if (role === 'turret') {
+    add('combined_turret_mantlet', findIslandCandidates(pool, (island) => shell(island) || round(island), 6), 'Use the real combined turret/mantlet islands if they read as one assembly.');
+    add('barrel', findIslandCandidates(pool, (island) => long(island) && islandMaxSize(island) >= 0.55, 6), 'Long islands are barrel candidates; choose the cleanest visible gun barrel.');
+    add('two_hatches', findIslandCandidates(pool, round, 8), 'Round flat islands are hatch candidates; choose two readable ones, ignore extra disks.');
+    add('coax', findIslandCandidates(pool, (island) => long(island) && islandMaxSize(island) < 0.9, 6), 'Small long-pin islands are coax candidates; visual review decides ownership.');
+  } else if (role === 'treads') {
+    add('one_tread_foot', findIslandCandidates(pool, (island) => thin(island) || island.roleHint === 'barrel_or_long_pin', 8), 'Pick one clean shoe/foot island as tread-foot mesh.');
+    add('one_road_wheel', findIslandCandidates(pool, round, 8), 'Pick one readable round wheel island; ignore duplicate small washers.');
+    add('four_supporting_running_gear_pieces', findIslandCandidates(pool, (island) => !round(island), 12), 'Choose up to four additional sprocket/idler/bogie/pin shapes by visual read.');
+  } else {
+    add('major_shapes', findIslandCandidates(pool, () => true, 12), 'Generic major island picks.');
+  }
+  return selection;
+}
+
 function inspectGeometryIslands(data, binStart, json) {
   const islands = [];
   for (let meshIndex = 0; meshIndex < (json.meshes || []).length; meshIndex += 1) {
@@ -264,12 +336,22 @@ function inspectGeometryIslands(data, binStart, json) {
     }
   }
   islands.sort((a, b) => b.triangles - a.triangles);
+  const indexed = islands.map((island, index) => ({ index, ...island }));
+  const totalIslandTriangles = indexed.reduce((sum, island) => sum + island.triangles, 0);
+  const majorIslands = indexed.filter((island) => isMajorIsland(island, totalIslandTriangles));
   return {
-    islandCount: islands.length,
-    largestIslandTriangles: islands[0]?.triangles || 0,
-    largestIslandTriangleShare: islands.length && islands[0]?.triangles ? Number((islands[0].triangles / Math.max(1, islands.reduce((sum, island) => sum + island.triangles, 0))).toFixed(4)) : 0,
-    roleHintCounts: islands.reduce((acc, island) => { acc[island.roleHint] = (acc[island.roleHint] || 0) + 1; return acc; }, {}),
-    topIslands: islands.slice(0, 80).map((island, index) => ({ index, ...island }))
+    islandCount: indexed.length,
+    totalIslandTriangles,
+    largestIslandTriangles: indexed[0]?.triangles || 0,
+    largestIslandTriangleShare: indexed.length && indexed[0]?.triangles ? Number((indexed[0].triangles / Math.max(1, totalIslandTriangles)).toFixed(4)) : 0,
+    majorIslandPolicy: 'triangles >= 50 or >= 0.6% of asset triangles or bbox max dimension >= 0.55; ignores tiny mesh garbage by default',
+    majorIslandCount: majorIslands.length,
+    majorTriangleShare: Number((majorIslands.reduce((sum, island) => sum + island.triangles, 0) / Math.max(1, totalIslandTriangles)).toFixed(4)),
+    roleHintCounts: indexed.reduce((acc, island) => { acc[island.roleHint] = (acc[island.roleHint] || 0) + 1; return acc; }, {}),
+    majorRoleHintCounts: majorIslands.reduce((acc, island) => { acc[island.roleHint] = (acc[island.roleHint] || 0) + 1; return acc; }, {}),
+    topIslands: indexed.slice(0, 80),
+    majorIslands: majorIslands.slice(0, 80),
+    allIslands: indexed
   };
 }
 
@@ -408,27 +490,266 @@ function chooseVerdict(role, modelReport) {
   if (!modelReport.supported) return { verdict: 'reject', reasons: [modelReport.reason || 'unsupported model format'] };
   const islandCount = modelReport.geometryIslands?.islandCount || 0;
   if (modelReport.meshCount <= 1 && islandCount <= 1) reasons.push('single fused mesh with one connected geometry island; no separable runtime parts');
-  else if (modelReport.meshCount <= 1) reasons.push(`single GLB mesh, but ${islandCount} disconnected geometry islands were found for extraction/retopo`);
+  else if (modelReport.meshCount <= 1) reasons.push(`single GLB mesh, but ${islandCount} disconnected geometry islands were found; ${modelReport.geometryIslands?.majorIslandCount || 0} are major-shape candidates after ignoring tiny debris`);
   if (modelReport.materialCount <= 1) reasons.push('single material; material-region editing will need UV or texture work');
   if (modelReport.imageCount >= 3) reasons.push('embedded PBR-ish texture payload present');
   if (modelReport.triangles > 25000) reasons.push('triangle count above phone-friendly intake budget');
   else if (modelReport.triangles > 15000) reasons.push('triangle count is usable only if this replaces a major static shell');
   else reasons.push('triangle count is within choosy low-poly candidate range');
   if (role === 'treads') {
-    if (islandCount > 1) return { verdict: 'usable_reference_only', reasons: [...reasons, 'many islands may identify tread/wheel pieces, but tread and wheel systems still need authored pivots/animation ownership'] };
+    if (islandCount > 1) return { verdict: 'usable_real_mesh_filtered', reasons: [...reasons, 'filtered real Meshy islands can provide one tread foot, one wheel candidate, and a small subset of running-gear pieces; animation ownership still must be assigned manually'] };
     if (modelReport.meshCount <= 1) return { verdict: 'usable_reference_only', reasons: [...reasons, 'tread and wheel systems must animate separately; fused Meshy sculpture is not animation-ready'] };
     if (modelReport.triangles > 15000) return { verdict: 'needs_retopo', reasons: [...reasons, 'tread assembly exceeds preferred animated-running-gear budget'] };
   }
   if (role === 'turret' && modelReport.meshCount <= 1) {
-    if (islandCount >= 4) return { verdict: 'needs_retopo', reasons: [...reasons, 'islands are promising source cuts, but turret shell, hatch, mantlet, barrel, and coax still need named nodes and pivots'] };
-    return { verdict: 'needs_retopo', reasons: [...reasons, 'turret shell, hatch, mantlet, barrel, and coax need separate pivots/nodes'] };
+    if (islandCount >= 4) return { verdict: 'usable_real_mesh_filtered', reasons: [...reasons, 'filtered real Meshy islands can provide combined turret/mantlet, barrel, hatch, and coax candidates; choose final ownership visually'] };
+    return { verdict: 'usable_real_mesh_filtered', reasons: [...reasons, 'use real mesh if major islands visually identify turret shell, hatch, mantlet, barrel, and coax'] };
   }
   if (role === 'hull') {
     if (modelReport.triangles > 25000) return { verdict: 'needs_retopo', reasons };
-    if (modelReport.meshCount <= 1) return { verdict: 'usable_reference_only', reasons: [...reasons, islandCount > 1 ? 'hull has disconnected detail islands that can guide retopo, but hatches/sockets are not named runtime parts' : 'could be judged as a static hull reference, but cannot expose hatches/sockets without cutting'] };
+    if (modelReport.meshCount <= 1) return { verdict: islandCount > 1 ? 'usable_real_mesh_filtered' : 'usable_reference_only', reasons: [...reasons, islandCount > 1 ? 'filtered real hull islands can provide one hull shell plus broad armor panels after chaff removal' : 'could be judged as a static hull reference, but cannot expose hatches/sockets without cutting'] };
   }
   if (modelReport.triangles <= 15000 && modelReport.meshCount > 1) return { verdict: 'usable_lowpoly', reasons };
   return { verdict: 'needs_retopo', reasons };
+}
+
+
+function align4(value) {
+  return (value + 3) & ~3;
+}
+
+function pushPadded(chunks, buffer) {
+  const offset = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+  chunks.push(buffer);
+  const padded = align4(buffer.length) - buffer.length;
+  if (padded > 0) chunks.push(Buffer.alloc(padded));
+  return offset;
+}
+
+function floatBuffer(values, tupleSize) {
+  const buffer = Buffer.alloc(values.length * tupleSize * 4);
+  let o = 0;
+  for (const tuple of values) {
+    for (let i = 0; i < tupleSize; i += 1) {
+      buffer.writeFloatLE(tuple[i] || 0, o);
+      o += 4;
+    }
+  }
+  return buffer;
+}
+
+function indexBuffer(indices, componentType) {
+  const bytes = componentType === 5123 ? 2 : 4;
+  const buffer = Buffer.alloc(indices.length * bytes);
+  for (let i = 0; i < indices.length; i += 1) {
+    if (componentType === 5123) buffer.writeUInt16LE(indices[i], i * 2);
+    else buffer.writeUInt32LE(indices[i], i * 4);
+  }
+  return buffer;
+}
+
+function collectMajorIslandTriangles(data, binStart, json, role = "") {
+  const selected = [];
+  for (let meshIndex = 0; meshIndex < (json.meshes || []).length; meshIndex += 1) {
+    const mesh = json.meshes[meshIndex];
+    for (let primitiveIndex = 0; primitiveIndex < (mesh.primitives || []).length; primitiveIndex += 1) {
+      const primitive = mesh.primitives[primitiveIndex];
+      const posAccessor = primitive.attributes?.POSITION;
+      if (typeof posAccessor !== 'number') continue;
+      const positions = readAccessorValues(data, binStart, json, posAccessor);
+      const triangles = makeTriangleIndices(data, binStart, json, primitive);
+      const parent = new Map();
+      const used = new Set();
+      const find = (v) => {
+        let p = parent.get(v);
+        if (p === undefined) { parent.set(v, v); return v; }
+        while (p !== parent.get(p)) p = parent.get(p);
+        let cur = v;
+        while (parent.get(cur) !== p) { const next = parent.get(cur); parent.set(cur, p); cur = next; }
+        return p;
+      };
+      const unite = (a, b) => {
+        const ra = find(a);
+        const rb = find(b);
+        if (ra !== rb) parent.set(rb, ra);
+      };
+      for (const tri of triangles) {
+        used.add(tri[0]); used.add(tri[1]); used.add(tri[2]);
+        unite(tri[0], tri[1]); unite(tri[1], tri[2]);
+      }
+      const groups = new Map();
+      for (const index of used) {
+        const rootIndex = find(index);
+        let group = groups.get(rootIndex);
+        if (!group) {
+          group = { vertexSet: new Set(), triangles: [], min: [Infinity, Infinity, Infinity], max: [-Infinity, -Infinity, -Infinity] };
+          groups.set(rootIndex, group);
+        }
+        group.vertexSet.add(index);
+      }
+      for (const tri of triangles) {
+        const group = groups.get(find(tri[0]));
+        if (group) group.triangles.push(tri);
+      }
+      const totalTriangles = triangles.length;
+      for (const group of groups.values()) {
+        for (const index of group.vertexSet) {
+          const pos = positions[index];
+          if (!Array.isArray(pos)) continue;
+          for (let axis = 0; axis < 3; axis += 1) {
+            group.min[axis] = Math.min(group.min[axis], pos[axis]);
+            group.max[axis] = Math.max(group.max[axis], pos[axis]);
+          }
+        }
+        const size = group.max.map((v, axis) => Number((v - group.min[axis]).toFixed(5)));
+        const island = {
+          meshIndex,
+          primitiveIndex,
+          material: primitive.material ?? 0,
+          vertices: group.vertexSet.size,
+          triangles: group.triangles.length,
+          triangleIndices: group.triangles,
+          bbox: { size },
+          roleHint: classifyIsland(size)
+        };
+        const keep = isMajorIsland(island, totalTriangles) || (role === 'treads' && ((island.roleHint === 'wheel_hatch_or_round_plate' && island.triangles >= 20) || (island.roleHint === 'thin_plate_or_panel' && island.triangles >= 30))) || (role === 'turret' && ((island.roleHint === 'wheel_hatch_or_round_plate' && island.triangles >= 25) || (island.roleHint === 'barrel_or_long_pin' && island.triangles >= 25)));
+        if (keep) selected.push({ primitive, island });
+      }
+    }
+  }
+  return selected;
+}
+
+function createMajorIslandGlb(sourceFile, outputFile, role = "") {
+  const data = readFileSync(sourceFile);
+  if (data.length < 20 || data.toString('utf8', 0, 4) !== 'glTF') return null;
+  const length = data.readUInt32LE(8);
+  let offset = 12;
+  let json = null;
+  let binStart = 0;
+  while (offset + 8 <= Math.min(length, data.length)) {
+    const chunkLength = data.readUInt32LE(offset);
+    const chunkType = data.toString('utf8', offset + 4, offset + 8);
+    const start = offset + 8;
+    const end = start + chunkLength;
+    if (end > data.length) break;
+    if (chunkType === 'JSON') json = JSON.parse(data.toString('utf8', start, end).trim());
+    if (chunkType === 'BIN\u0000') binStart = start;
+    offset = end;
+  }
+  if (!json || !binStart) return null;
+  const selected = collectMajorIslandTriangles(data, binStart, json, role);
+  if (!selected.length) return null;
+  const firstPrimitive = selected[0].primitive;
+  const positionAccessor = firstPrimitive.attributes?.POSITION;
+  if (typeof positionAccessor !== 'number') return null;
+  const sourcePositions = readAccessorValues(data, binStart, json, positionAccessor);
+  const sourceNormals = typeof firstPrimitive.attributes?.NORMAL === 'number' ? readAccessorValues(data, binStart, json, firstPrimitive.attributes.NORMAL) : null;
+  const sourceUvs = typeof firstPrimitive.attributes?.TEXCOORD_0 === 'number' ? readAccessorValues(data, binStart, json, firstPrimitive.attributes.TEXCOORD_0) : null;
+  const remap = new Map();
+  const outPositions = [];
+  const outNormals = [];
+  const outUvs = [];
+  const outIndices = [];
+  const addVertex = (sourceIndex) => {
+    if (remap.has(sourceIndex)) return remap.get(sourceIndex);
+    const next = remap.size;
+    remap.set(sourceIndex, next);
+    outPositions.push(sourcePositions[sourceIndex] || [0, 0, 0]);
+    if (sourceNormals) outNormals.push(sourceNormals[sourceIndex] || [0, 1, 0]);
+    if (sourceUvs) outUvs.push(sourceUvs[sourceIndex] || [0, 0]);
+    return next;
+  };
+  for (const entry of selected) {
+    for (const tri of entry.island.triangleIndices) {
+      outIndices.push(addVertex(tri[0]), addVertex(tri[1]), addVertex(tri[2]));
+    }
+  }
+  const min = [Infinity, Infinity, Infinity];
+  const max = [-Infinity, -Infinity, -Infinity];
+  for (const pos of outPositions) {
+    for (let axis = 0; axis < 3; axis += 1) {
+      min[axis] = Math.min(min[axis], pos[axis]);
+      max[axis] = Math.max(max[axis], pos[axis]);
+    }
+  }
+  const chunks = [];
+  const bufferViews = [];
+  const accessors = [];
+  const addBufferView = (buffer, target) => {
+    const byteOffset = pushPadded(chunks, buffer);
+    const view = { buffer: 0, byteOffset, byteLength: buffer.length };
+    if (target) view.target = target;
+    bufferViews.push(view);
+    return bufferViews.length - 1;
+  };
+  const posView = addBufferView(floatBuffer(outPositions, 3), 34962);
+  accessors.push({ bufferView: posView, componentType: 5126, count: outPositions.length, type: 'VEC3', min, max });
+  const attributes = { POSITION: 0 };
+  if (sourceNormals) {
+    const normalView = addBufferView(floatBuffer(outNormals, 3), 34962);
+    accessors.push({ bufferView: normalView, componentType: 5126, count: outNormals.length, type: 'VEC3' });
+    attributes.NORMAL = accessors.length - 1;
+  }
+  if (sourceUvs) {
+    const uvView = addBufferView(floatBuffer(outUvs, 2), 34962);
+    accessors.push({ bufferView: uvView, componentType: 5126, count: outUvs.length, type: 'VEC2' });
+    attributes.TEXCOORD_0 = accessors.length - 1;
+  }
+  const indexComponentType = outPositions.length <= 65535 ? 5123 : 5125;
+  const idxView = addBufferView(indexBuffer(outIndices, indexComponentType), 34963);
+  accessors.push({ bufferView: idxView, componentType: indexComponentType, count: outIndices.length, type: 'SCALAR', min: [0], max: [outPositions.length - 1] });
+  const indexAccessor = accessors.length - 1;
+  const images = [];
+  for (const image of json.images || []) {
+    if (typeof image.bufferView === 'number') {
+      const sourceView = json.bufferViews[image.bufferView];
+      const imageBytes = data.subarray(binStart + (sourceView.byteOffset || 0), binStart + (sourceView.byteOffset || 0) + sourceView.byteLength);
+      const viewIndex = addBufferView(Buffer.from(imageBytes));
+      images.push({ ...image, bufferView: viewIndex });
+    } else {
+      images.push({ ...image });
+    }
+  }
+  const binary = Buffer.concat(chunks);
+  const outJson = {
+    asset: { version: '2.0', generator: 'tftm asset intake major-island filter; source ' + path.basename(sourceFile) },
+    scene: 0,
+    scenes: [{ nodes: [0] }],
+    nodes: [{ name: 'major_islands_real_mesh_no_chaff', mesh: 0 }],
+    meshes: [{ name: 'major_islands_real_mesh_no_chaff', primitives: [{ attributes, indices: indexAccessor, material: firstPrimitive.material ?? 0, mode: 4 }] }],
+    buffers: [{ byteLength: binary.length }],
+    bufferViews,
+    accessors,
+    materials: JSON.parse(JSON.stringify(json.materials || [{}])),
+    textures: JSON.parse(JSON.stringify(json.textures || [])),
+    images,
+    samplers: JSON.parse(JSON.stringify(json.samplers || [])),
+    extras: {
+      sourceFile: path.basename(sourceFile),
+      policy: 'real Meshy mesh triangles retained; tiny disconnected chaff islands removed by major-island filter',
+      selectedIslandCount: selected.length,
+      selectedTriangles: outIndices.length / 3,
+      selectedVertices: outPositions.length
+    }
+  };
+  const jsonBufferRaw = Buffer.from(JSON.stringify(outJson), 'utf8');
+  const jsonBuffer = Buffer.concat([jsonBufferRaw, Buffer.alloc(align4(jsonBufferRaw.length) - jsonBufferRaw.length, 0x20)]);
+  const binBuffer = Buffer.concat([binary, Buffer.alloc(align4(binary.length) - binary.length)]);
+  const totalLength = 12 + 8 + jsonBuffer.length + 8 + binBuffer.length;
+  const header = Buffer.alloc(12);
+  header.write('glTF', 0, 'ascii');
+  header.writeUInt32LE(2, 4);
+  header.writeUInt32LE(totalLength, 8);
+  const jsonHeader = Buffer.alloc(8);
+  jsonHeader.writeUInt32LE(jsonBuffer.length, 0);
+  jsonHeader.write('JSON', 4, 'ascii');
+  const binHeader = Buffer.alloc(8);
+  binHeader.writeUInt32LE(binBuffer.length, 0);
+  binHeader.write('BIN\u0000', 4, 'ascii');
+  mkdirSync(path.dirname(outputFile), { recursive: true });
+  writeFileSync(outputFile, Buffer.concat([header, jsonHeader, jsonBuffer, binHeader, binBuffer]));
+  return { path: outputFile, fileName: path.basename(outputFile), bytes: statSync(outputFile).size, selectedIslandCount: selected.length, triangles: outIndices.length / 3, vertices: outPositions.length };
 }
 
 function safeName(name) {
@@ -500,18 +821,27 @@ function main() {
         copyFileSync(pair.model.path, stagedModel);
       }
     }
+    let filteredModel = null;
+    if (args.stage && pair.model && modelReport?.supported) {
+      const filteredPath = path.join(pairDir, safeName(label + '_major_islands_real_mesh.glb'));
+      filteredModel = createMajorIslandGlb(pair.model.path, filteredPath, label);
+      if (filteredModel) filteredModel.stagedUrl = slashRelative(outDir, filteredPath);
+    }
     const verdict = modelReport ? chooseVerdict(label, modelReport) : { verdict: 'reject', reasons: ['missing model'] };
     return {
       id: `${String(index + 1).padStart(2, '0')}-${safeName(label)}`,
       label,
       image: imageReport ? { ...imageReport, stagedUrl: stagedImage ? slashRelative(outDir, stagedImage) : null } : null,
       model: modelReport ? { ...modelReport, stagedUrl: stagedModel ? slashRelative(outDir, stagedModel) : null } : null,
+      filteredModel,
+      partSelection: modelReport?.supported ? buildPartSelection(label, modelReport.geometryIslands) : null,
       verdict: verdict.verdict,
       reasons: verdict.reasons
     };
   });
   const summary = {
     usable_lowpoly: reportPairs.filter((p) => p.verdict === 'usable_lowpoly').length,
+    usable_real_mesh_filtered: reportPairs.filter((p) => p.verdict === 'usable_real_mesh_filtered').length,
     usable_reference_only: reportPairs.filter((p) => p.verdict === 'usable_reference_only').length,
     needs_retopo: reportPairs.filter((p) => p.verdict === 'needs_retopo').length,
     reject: reportPairs.filter((p) => p.verdict === 'reject').length
@@ -520,11 +850,11 @@ function main() {
     schema: 'tftm.asset-intake-report.v1',
     generatedAt: new Date().toISOString(),
     runId: path.basename(outDir),
-    sourcePolicy: 'diagnostic intake only; staged copies are not production imports and do not imply visual acceptance',
+    sourcePolicy: 'diagnostic intake only; staged copies and filtered major-island GLBs preserve real Meshy triangles but are not accepted production imports',
     lowPolyPolicy: {
       lowPolyCandidateMaxTriangles: 15000,
       phoneFriendlyMajorStaticShellMaxTriangles: 25000,
-      fusedMovingPartsPolicy: 'single fused tread/turret meshes are reference or retopo candidates, not animation-ready runtime parts'
+      fusedMovingPartsPolicy: 'single GLB mesh may contain many disconnected real mesh islands; use filtered major-island GLBs to remove chaff before any runtime decision'
     },
     outputDir: slashRelative(root, outDir),
     reviewPage: 'asset-intake.html?report=asset-intake/' + path.basename(outDir) + '/report.json',

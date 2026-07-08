@@ -23,6 +23,7 @@ body { background: #101315; }
 .meta { display: flex; flex-wrap: wrap; gap: 6px; color: #aebbb6; font-size: 12px; }
 .badge { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 8px; border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.06); }
 .usable_lowpoly { color: #91e8a7; }
+.usable_real_mesh_filtered { color: #8ee0d1; }
 .usable_reference_only { color: #ffd27a; }
 .needs_retopo { color: #ffad70; }
 .reject { color: #ff7868; }

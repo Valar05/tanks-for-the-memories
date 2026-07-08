@@ -14,7 +14,7 @@ if (!report.sourcePolicy || !report.sourcePolicy.includes('diagnostic intake onl
 for (const pair of report.pairs || []) {
   if (!pair.id) failures.push('pair missing id');
   if (!pair.label) failures.push((pair.id || 'pair') + ' missing label');
-  if (!['usable_lowpoly', 'usable_reference_only', 'needs_retopo', 'reject'].includes(pair.verdict)) failures.push((pair.id || 'pair') + ' invalid verdict ' + pair.verdict);
+  if (!['usable_lowpoly', 'usable_real_mesh_filtered', 'usable_reference_only', 'needs_retopo', 'reject'].includes(pair.verdict)) failures.push((pair.id || 'pair') + ' invalid verdict ' + pair.verdict);
   if (!Array.isArray(pair.reasons) || pair.reasons.length < 2) failures.push((pair.id || 'pair') + ' needs practical verdict reasons');
   if (!pair.image?.stagedUrl) failures.push((pair.id || 'pair') + ' missing staged image URL');
   if (!pair.model?.stagedUrl) failures.push((pair.id || 'pair') + ' missing staged model URL');
@@ -24,6 +24,10 @@ for (const pair of report.pairs || []) {
   if (!pair.model?.bbox?.size || pair.model.bbox.size.length !== 3) failures.push((pair.id || 'pair') + ' missing bbox size');
   if (!Number.isFinite(pair.model?.geometryIslands?.islandCount) || pair.model.geometryIslands.islandCount <= 0) failures.push((pair.id || 'pair') + ' missing geometry island count');
   if (!Array.isArray(pair.model?.geometryIslands?.topIslands) || pair.model.geometryIslands.topIslands.length === 0) failures.push((pair.id || 'pair') + ' missing top geometry islands');
+  if (!Number.isFinite(pair.model?.geometryIslands?.majorIslandCount)) failures.push((pair.id || 'pair') + ' missing major island count');
+  if (!pair.partSelection || !Array.isArray(pair.partSelection.picks) || pair.partSelection.picks.length === 0) failures.push((pair.id || 'pair') + ' missing major part selection picks');
+  if (!pair.filteredModel?.stagedUrl) failures.push((pair.id || 'pair') + ' missing filtered real-mesh no-chaff GLB');
+  if (!Number.isFinite(pair.filteredModel?.triangles) || pair.filteredModel.triangles <= 0) failures.push((pair.id || 'pair') + ' filtered GLB missing triangle count');
 }
 const labels = new Set((report.pairs || []).map((pair) => pair.label));
 for (const expected of ['hull', 'turret', 'treads']) {
