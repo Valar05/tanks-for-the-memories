@@ -22,6 +22,8 @@ for (const pair of report.pairs || []) {
   if (!Number.isFinite(pair.model?.vertices) || pair.model.vertices <= 0) failures.push((pair.id || 'pair') + ' missing vertex count');
   if (!Number.isFinite(pair.model?.meshCount) || pair.model.meshCount <= 0) failures.push((pair.id || 'pair') + ' missing mesh count');
   if (!pair.model?.bbox?.size || pair.model.bbox.size.length !== 3) failures.push((pair.id || 'pair') + ' missing bbox size');
+  if (!Number.isFinite(pair.model?.geometryIslands?.islandCount) || pair.model.geometryIslands.islandCount <= 0) failures.push((pair.id || 'pair') + ' missing geometry island count');
+  if (!Array.isArray(pair.model?.geometryIslands?.topIslands) || pair.model.geometryIslands.topIslands.length === 0) failures.push((pair.id || 'pair') + ' missing top geometry islands');
 }
 const labels = new Set((report.pairs || []).map((pair) => pair.label));
 for (const expected of ['hull', 'turret', 'treads']) {

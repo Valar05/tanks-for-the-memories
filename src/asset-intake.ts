@@ -9,7 +9,7 @@ type IntakePair = {
   verdict: string;
   reasons: string[];
   image?: { fileName: string; stagedUrl?: string; width?: number; height?: number; bytes?: number } | null;
-  model?: { fileName: string; stagedUrl?: string; triangles?: number; vertices?: number; meshCount?: number; primitiveCount?: number; materialCount?: number; imageCount?: number; bbox?: { size: number[] }; images?: Array<{ width?: number; height?: number; byteLength?: number; mimeType?: string | null }> } | null;
+  model?: { fileName: string; stagedUrl?: string; triangles?: number; vertices?: number; meshCount?: number; primitiveCount?: number; materialCount?: number; imageCount?: number; bbox?: { size: number[] }; geometryIslands?: { islandCount: number; largestIslandTriangleShare: number; roleHintCounts: Record<string, number>; topIslands: Array<{ index: number; triangles: number; vertices: number; roleHint: string; bbox: { size: number[]; center: number[] } }> }; images?: Array<{ width?: number; height?: number; byteLength?: number; mimeType?: string | null }> } | null;
 };
 
 type IntakeReport = {
@@ -172,10 +172,12 @@ function renderReport(report: IntakeReport, baseUrl: string) {
       `<span class="badge">${pair.model?.triangles ?? 0} tris</span>` +
       `<span class="badge">${pair.model?.vertices ?? 0} verts</span>` +
       `<span class="badge">${pair.model?.meshCount ?? 0} meshes</span>` +
+      `<span class="badge">${pair.model?.geometryIslands?.islandCount ?? 0} islands</span>` +
       `<span class="badge">${pair.model?.imageCount ?? 0} maps</span>` +
       `<span class="badge">${fmtBytes(mapBytes)} maps</span>` +
       '</div>' +
       '<ul>' + pair.reasons.map((reason) => `<li>${reason}</li>`).join('') + '</ul>' +
+      '<ul>' + (pair.model?.geometryIslands?.topIslands || []).slice(0, 8).map((island) => `<li>island ${island.index}: ${island.triangles} tris, ${island.vertices} verts, ${island.roleHint}, size ${island.bbox.size.map((v) => v.toFixed ? v.toFixed(2) : v).join(' x ')}</li>`).join('') + '</ul>' +
       '<div class="controls"><button type="button" class="wire">Wire</button><button type="button" class="texture" aria-pressed="true">Texture</button></div>';
     const canvas = card.querySelector<HTMLCanvasElement>('canvas')!;
     if (modelUrl) {

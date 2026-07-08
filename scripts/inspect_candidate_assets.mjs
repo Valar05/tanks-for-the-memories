@@ -125,6 +125,154 @@ function componentBytes(componentType) {
   return ({ 5120: 1, 5121: 1, 5122: 2, 5123: 2, 5125: 4, 5126: 4 })[componentType] || 0;
 }
 
+
+function componentReader(componentType) {
+  if (componentType === 5120) return (data, offset) => data.readInt8(offset);
+  if (componentType === 5121) return (data, offset) => data.readUInt8(offset);
+  if (componentType === 5122) return (data, offset) => data.readInt16LE(offset);
+  if (componentType === 5123) return (data, offset) => data.readUInt16LE(offset);
+  if (componentType === 5125) return (data, offset) => data.readUInt32LE(offset);
+  if (componentType === 5126) return (data, offset) => data.readFloatLE(offset);
+  throw new Error('unsupported accessor componentType ' + componentType);
+}
+
+function readAccessorValues(data, binStart, json, accessorIndex) {
+  const accessor = json.accessors?.[accessorIndex];
+  if (!accessor) throw new Error('missing accessor ' + accessorIndex);
+  const view = json.bufferViews?.[accessor.bufferView];
+  if (!view) throw new Error('missing bufferView for accessor ' + accessorIndex);
+  const components = accessorTypeSize(accessor.type);
+  const bytes = componentBytes(accessor.componentType);
+  const stride = view.byteStride || components * bytes;
+  const base = binStart + (view.byteOffset || 0) + (accessor.byteOffset || 0);
+  const read = componentReader(accessor.componentType);
+  const values = [];
+  for (let i = 0; i < (accessor.count || 0); i += 1) {
+    if (components === 1) values.push(read(data, base + i * stride));
+    else {
+      const tuple = [];
+      for (let c = 0; c < components; c += 1) tuple.push(read(data, base + i * stride + c * bytes));
+      values.push(tuple);
+    }
+  }
+  return values;
+}
+
+function makeTriangleIndices(data, binStart, json, primitive) {
+  const mode = primitive.mode ?? 4;
+  const posAccessor = primitive.attributes?.POSITION;
+  if (typeof posAccessor !== 'number') return [];
+  let elements = [];
+  if (typeof primitive.indices === 'number') elements = readAccessorValues(data, binStart, json, primitive.indices);
+  else elements = Array.from({ length: json.accessors[posAccessor].count || 0 }, (_, i) => i);
+  const triangles = [];
+  if (mode === 4) {
+    for (let i = 0; i + 2 < elements.length; i += 3) triangles.push([elements[i], elements[i + 1], elements[i + 2]]);
+  } else if (mode === 5) {
+    for (let i = 0; i + 2 < elements.length; i += 1) {
+      const tri = i % 2 === 0 ? [elements[i], elements[i + 1], elements[i + 2]] : [elements[i + 1], elements[i], elements[i + 2]];
+      triangles.push(tri);
+    }
+  } else if (mode === 6) {
+    for (let i = 1; i + 1 < elements.length; i += 1) triangles.push([elements[0], elements[i], elements[i + 1]]);
+  }
+  return triangles.filter((tri) => tri[0] !== tri[1] && tri[0] !== tri[2] && tri[1] !== tri[2]);
+}
+
+function classifyIsland(size) {
+  const [x, y, z] = size;
+  const maxDim = Math.max(x, y, z) || 1;
+  const sorted = [...size].sort((a, b) => b - a);
+  const thinness = sorted[2] / maxDim;
+  if (x > y * 2.4 && x > z * 2.4 && thinness < 0.28) return 'barrel_or_long_pin';
+  if (y > x * 1.8 && y > z * 1.8) return 'vertical_detail_or_handle';
+  if (Math.abs(x - z) / maxDim < 0.25 && y < maxDim * 0.45) return 'wheel_hatch_or_round_plate';
+  if (maxDim > 1.4 && thinness < 0.35) return 'large_shell_or_plate';
+  if (thinness < 0.18) return 'thin_plate_or_panel';
+  return 'compact_detail';
+}
+
+function inspectGeometryIslands(data, binStart, json) {
+  const islands = [];
+  for (let meshIndex = 0; meshIndex < (json.meshes || []).length; meshIndex += 1) {
+    const mesh = json.meshes[meshIndex];
+    for (let primitiveIndex = 0; primitiveIndex < (mesh.primitives || []).length; primitiveIndex += 1) {
+      const primitive = mesh.primitives[primitiveIndex];
+      const posAccessor = primitive.attributes?.POSITION;
+      if (typeof posAccessor !== 'number') continue;
+      const positions = readAccessorValues(data, binStart, json, posAccessor);
+      const triangles = makeTriangleIndices(data, binStart, json, primitive);
+      const parent = new Map();
+      const used = new Set();
+      const find = (v) => {
+        let p = parent.get(v);
+        if (p === undefined) { parent.set(v, v); return v; }
+        while (p !== parent.get(p)) p = parent.get(p);
+        let cur = v;
+        while (parent.get(cur) !== p) { const next = parent.get(cur); parent.set(cur, p); cur = next; }
+        return p;
+      };
+      const unite = (a, b) => {
+        const ra = find(a);
+        const rb = find(b);
+        if (ra !== rb) parent.set(rb, ra);
+      };
+      for (const tri of triangles) {
+        used.add(tri[0]); used.add(tri[1]); used.add(tri[2]);
+        unite(tri[0], tri[1]); unite(tri[1], tri[2]);
+      }
+      const groups = new Map();
+      for (const index of used) {
+        const rootIndex = find(index);
+        let group = groups.get(rootIndex);
+        if (!group) {
+          group = { vertexSet: new Set(), triangles: 0, min: [Infinity, Infinity, Infinity], max: [-Infinity, -Infinity, -Infinity] };
+          groups.set(rootIndex, group);
+        }
+        group.vertexSet.add(index);
+      }
+      for (const tri of triangles) {
+        const group = groups.get(find(tri[0]));
+        if (group) group.triangles += 1;
+      }
+      for (const group of groups.values()) {
+        for (const index of group.vertexSet) {
+          const pos = positions[index];
+          if (!Array.isArray(pos)) continue;
+          for (let axis = 0; axis < 3; axis += 1) {
+            group.min[axis] = Math.min(group.min[axis], pos[axis]);
+            group.max[axis] = Math.max(group.max[axis], pos[axis]);
+          }
+        }
+        const size = group.max.map((v, axis) => Number((v - group.min[axis]).toFixed(5)));
+        const center = group.max.map((v, axis) => Number(((v + group.min[axis]) / 2).toFixed(5)));
+        islands.push({
+          meshIndex,
+          meshName: mesh.name || `mesh_${meshIndex}`,
+          primitiveIndex,
+          vertices: group.vertexSet.size,
+          triangles: group.triangles,
+          bbox: {
+            min: group.min.map((v) => Number(v.toFixed(5))),
+            max: group.max.map((v) => Number(v.toFixed(5))),
+            size,
+            center
+          },
+          roleHint: classifyIsland(size)
+        });
+      }
+    }
+  }
+  islands.sort((a, b) => b.triangles - a.triangles);
+  return {
+    islandCount: islands.length,
+    largestIslandTriangles: islands[0]?.triangles || 0,
+    largestIslandTriangleShare: islands.length && islands[0]?.triangles ? Number((islands[0].triangles / Math.max(1, islands.reduce((sum, island) => sum + island.triangles, 0))).toFixed(4)) : 0,
+    roleHintCounts: islands.reduce((acc, island) => { acc[island.roleHint] = (acc[island.roleHint] || 0) + 1; return acc; }, {}),
+    topIslands: islands.slice(0, 80).map((island, index) => ({ index, ...island }))
+  };
+}
+
 function inspectGlb(file) {
   const data = readFileSync(file);
   if (data.length < 20 || data.toString('utf8', 0, 4) !== 'glTF') return { path: file, fileName: path.basename(file), supported: false, reason: 'not a GLB file', bytes: data.length };
@@ -208,6 +356,7 @@ function inspectGlb(file) {
   });
   const bufferViewBytes = bufferViews.reduce((sum, view) => sum + (view.byteLength || 0), 0);
   const estimatedAccessorBytes = accessors.reduce((sum, accessor) => sum + ((accessor.count || 0) * accessorTypeSize(accessor.type) * componentBytes(accessor.componentType)), 0);
+  const geometryIslands = inspectGeometryIslands(data, binStart, json);
   return {
     path: file,
     fileName: path.basename(file),
@@ -231,6 +380,7 @@ function inspectGlb(file) {
     bufferViewBytes,
     estimatedAccessorBytes,
     meshes: meshReports.sort((a, b) => b.triangles - a.triangles),
+    geometryIslands,
     nodes: nodes.slice(0, 80).map((node, index) => ({ index, name: node.name || `node_${index}`, mesh: node.mesh ?? null, childCount: (node.children || []).length })),
     materials: materials.map((material, index) => ({ index, name: material.name || `material_${index}`, hasPbr: Boolean(material.pbrMetallicRoughness), doubleSided: Boolean(material.doubleSided) })),
     images: imageReports,
@@ -256,20 +406,26 @@ function inferRoleFromImage(file, index) {
 function chooseVerdict(role, modelReport) {
   const reasons = [];
   if (!modelReport.supported) return { verdict: 'reject', reasons: [modelReport.reason || 'unsupported model format'] };
-  if (modelReport.meshCount <= 1) reasons.push('single fused mesh; no separable runtime parts');
+  const islandCount = modelReport.geometryIslands?.islandCount || 0;
+  if (modelReport.meshCount <= 1 && islandCount <= 1) reasons.push('single fused mesh with one connected geometry island; no separable runtime parts');
+  else if (modelReport.meshCount <= 1) reasons.push(`single GLB mesh, but ${islandCount} disconnected geometry islands were found for extraction/retopo`);
   if (modelReport.materialCount <= 1) reasons.push('single material; material-region editing will need UV or texture work');
   if (modelReport.imageCount >= 3) reasons.push('embedded PBR-ish texture payload present');
   if (modelReport.triangles > 25000) reasons.push('triangle count above phone-friendly intake budget');
   else if (modelReport.triangles > 15000) reasons.push('triangle count is usable only if this replaces a major static shell');
   else reasons.push('triangle count is within choosy low-poly candidate range');
   if (role === 'treads') {
+    if (islandCount > 1) return { verdict: 'usable_reference_only', reasons: [...reasons, 'many islands may identify tread/wheel pieces, but tread and wheel systems still need authored pivots/animation ownership'] };
     if (modelReport.meshCount <= 1) return { verdict: 'usable_reference_only', reasons: [...reasons, 'tread and wheel systems must animate separately; fused Meshy sculpture is not animation-ready'] };
     if (modelReport.triangles > 15000) return { verdict: 'needs_retopo', reasons: [...reasons, 'tread assembly exceeds preferred animated-running-gear budget'] };
   }
-  if (role === 'turret' && modelReport.meshCount <= 1) return { verdict: 'needs_retopo', reasons: [...reasons, 'turret shell, hatch, mantlet, barrel, and coax need separate pivots/nodes'] };
+  if (role === 'turret' && modelReport.meshCount <= 1) {
+    if (islandCount >= 4) return { verdict: 'needs_retopo', reasons: [...reasons, 'islands are promising source cuts, but turret shell, hatch, mantlet, barrel, and coax still need named nodes and pivots'] };
+    return { verdict: 'needs_retopo', reasons: [...reasons, 'turret shell, hatch, mantlet, barrel, and coax need separate pivots/nodes'] };
+  }
   if (role === 'hull') {
     if (modelReport.triangles > 25000) return { verdict: 'needs_retopo', reasons };
-    if (modelReport.meshCount <= 1) return { verdict: 'usable_reference_only', reasons: [...reasons, 'could be judged as a static hull reference, but cannot expose hatches/sockets without cutting'] };
+    if (modelReport.meshCount <= 1) return { verdict: 'usable_reference_only', reasons: [...reasons, islandCount > 1 ? 'hull has disconnected detail islands that can guide retopo, but hatches/sockets are not named runtime parts' : 'could be judged as a static hull reference, but cannot expose hatches/sockets without cutting'] };
   }
   if (modelReport.triangles <= 15000 && modelReport.meshCount > 1) return { verdict: 'usable_lowpoly', reasons };
   return { verdict: 'needs_retopo', reasons };
