@@ -1,0 +1,12 @@
+{
+  "asset_id": "real_sherman_upper_glacis_f05_revamp_scratch_f16",
+  "key_plane_status": "red_silhouette_or_key_plane_loss",
+  "method": "source shell preserves f05/source hard-surface key planes; explicit multi-plane rebuild deferred if topology fails",
+  "deck_normal": [
+    -0.0010850061662495136,
+    -0.002270151162520051,
+    0.9999967813491821
+  ],
+  "silhouette_iou_gate": 0.93,
+  "silhouette_iou": 0.44281236005373936
+}

@@ -1,0 +1,15 @@
+{
+  "asset_id": "real_sherman_upper_glacis_f05_revamp_scratch_f16",
+  "shell": {
+    "method": "source shell limited dissolve + solidify + boolean cylinder cut",
+    "thickness": 0.035
+  },
+  "ring": {
+    "major_radius": 0.2,
+    "minor_radius": 0.012,
+    "segments": 96
+  },
+  "hatch": {
+    "omitted": true
+  }
+}

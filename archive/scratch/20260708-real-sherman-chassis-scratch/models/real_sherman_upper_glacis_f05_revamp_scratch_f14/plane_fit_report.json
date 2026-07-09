@@ -1,0 +1,34 @@
+{
+  "asset_id": "real_sherman_upper_glacis_f05_revamp_scratch_f14",
+  "plane_status": "pass",
+  "plane_point": [
+    0.17479896545410156,
+    -0.0012997701996937394,
+    0.2642965614795685
+  ],
+  "plane_normal": [
+    0.011172935366630554,
+    0.022542333230376244,
+    0.9996834993362427
+  ],
+  "plane_u": [
+    0.9999376535415649,
+    -0.00025187977007590234,
+    -0.011170096695423126
+  ],
+  "plane_v": [
+    0.0,
+    0.9997458457946777,
+    -0.022543739527463913
+  ],
+  "seed_face_count": 7629,
+  "cluster_face_count": 4644,
+  "rejected_face_count": 20160,
+  "source_plane_residual_mean": 0.02162376634725074,
+  "source_plane_residual_max": 0.07300122454762459,
+  "plane_pass": true,
+  "broad_plate_residual_mean": 1.0363997281330936e-08,
+  "broad_plate_residual_max": 3.2754614950891714e-08,
+  "ring_offset_residual_max": 4.024375230282651e-08,
+  "tolerance": 1e-05
+}

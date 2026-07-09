@@ -1,0 +1,35 @@
+{
+  "asset_id": "real_sherman_upper_glacis_f05_revamp_scratch_f14",
+  "plate": {
+    "face_tags": [
+      "cylindrical_socket_wall",
+      "outer_plate_wall",
+      "plate_bottom_closure",
+      "solid_top_armor_plate_planar"
+    ],
+    "segments": 96,
+    "thickness": 0.045,
+    "socket_radius": 0.185,
+    "ring_center_uv": [
+      0.02860215002253984,
+      -0.009765962352982376
+    ]
+  },
+  "ring": {
+    "face_tags": [
+      "raised_ring_contact_closure",
+      "raised_ring_inner_wall",
+      "raised_ring_outer_wall",
+      "raised_ring_top"
+    ],
+    "segments": 96,
+    "inner_radius": 0.189,
+    "outer_radius": 0.219,
+    "height": 0.02
+  },
+  "hatch": {
+    "omitted": true,
+    "reason": "do not continue hatch-cap modeling in this pass"
+  },
+  "source_feature_policy": "source samples solve boundary/landmarks only; broad armor vertices are projected to fitted deck plane, not raycast back onto source noise."
+}
