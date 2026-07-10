@@ -1,81 +1,76 @@
 {
   "metrics": {
     "aggregate": {
-      "silhouette_iou": 0.7513738462359281,
-      "source_pixels": 17841,
-      "candidate_pixels": 14985
+      "silhouette_iou": 0.7402539541100468,
+      "source_pixels": 16768,
+      "candidate_pixels": 14480
     },
     "left_silhouette": {
-      "silhouette_iou": 0.7649862776253069,
-      "source_pixels": 6756,
-      "candidate_pixels": 5463
+      "silhouette_iou": 0.7153881071266455,
+      "source_pixels": 6297,
+      "candidate_pixels": 5040
     },
     "right_silhouette": {
-      "silhouette_iou": 0.734046769718589,
-      "source_pixels": 6933,
-      "candidate_pixels": 6192
+      "silhouette_iou": 0.7375324497882224,
+      "source_pixels": 6453,
+      "candidate_pixels": 6264
     },
     "front_silhouette": {
-      "silhouette_iou": 0.9222804239249605,
-      "source_pixels": 7823,
-      "candidate_pixels": 7957
+      "silhouette_iou": 0.8947965226155978,
+      "source_pixels": 7315,
+      "candidate_pixels": 7724
     },
     "deck_region": {
-      "silhouette_iou": 0.5337112531660837,
-      "source_pixels": 7850,
-      "candidate_pixels": 4866
+      "silhouette_iou": 0.5474303247251342,
+      "source_pixels": 7349,
+      "candidate_pixels": 4755
     }
   },
   "region_depth_errors": {
-    "main_upper_glacis": {
-      "mean_abs_depth_error": 0.05811442581908978,
-      "p95_abs_depth_error": 0.10565805435180664,
-      "shared_pixels": 3626
+    "lower_front": {
+      "mean_abs_depth_error": 0.02433604448175705,
+      "p95_abs_depth_error": 0.049439430236816406,
+      "shared_pixels": 6252
     },
-    "left_shoulder_cheek": {
-      "mean_abs_depth_error": 0.07651395818114408,
-      "p95_abs_depth_error": 0.2518329620361328,
-      "shared_pixels": 2807
+    "upper_glacis": {
+      "mean_abs_depth_error": 0.05458907309722191,
+      "p95_abs_depth_error": 0.0955204963684082,
+      "shared_pixels": 3227
     },
-    "right_shoulder_cheek": {
-      "mean_abs_depth_error": 0.12414232806155556,
-      "p95_abs_depth_error": 0.3447728157043457,
-      "shared_pixels": 2280
+    "left_cheek": {
+      "mean_abs_depth_error": 0.09236429185004161,
+      "p95_abs_depth_error": 0.1538233757019043,
+      "shared_pixels": 2265
     },
-    "front_lower_transition": {
-      "mean_abs_depth_error": 0.13124867687686123,
-      "p95_abs_depth_error": 0.19125986099243164,
-      "shared_pixels": 7989
+    "right_cheek": {
+      "mean_abs_depth_error": 0.08160381876156182,
+      "p95_abs_depth_error": 0.17000293731689453,
+      "shared_pixels": 1996
     },
-    "rear_deck_transition": {
-      "mean_abs_depth_error": 0.2522346647731363,
-      "p95_abs_depth_error": 0.38971853256225586,
-      "shared_pixels": 3792
+    "left_side": {
+      "mean_abs_depth_error": 0.02983797794323789,
+      "p95_abs_depth_error": 0.04899454116821289,
+      "shared_pixels": 418
     },
-    "left_side_return": {
-      "mean_abs_depth_error": 0.05816272083593874,
-      "p95_abs_depth_error": 0.09636783599853516,
-      "shared_pixels": 784
+    "right_side": {
+      "mean_abs_depth_error": 0.18251229467846097,
+      "p95_abs_depth_error": 0.33835554122924805,
+      "shared_pixels": 168
     },
-    "right_side_return": {
-      "mean_abs_depth_error": 0.2158232257313972,
-      "p95_abs_depth_error": 0.4640622138977051,
-      "shared_pixels": 548
+    "rear_deck": {
+      "mean_abs_depth_error": 0.104219874572908,
+      "p95_abs_depth_error": 0.32929134368896484,
+      "shared_pixels": 4951
     },
-    "socket_well": {
-      "mean_abs_depth_error": 0.11070728956810102,
-      "p95_abs_depth_error": 0.19748830795288086,
-      "shared_pixels": 4879
-    },
-    "socket_ring_assembly": {
-      "mean_abs_depth_error": 0.09102249016108312,
-      "p95_abs_depth_error": 0.3543992042541504,
-      "shared_pixels": 2211
+    "turret_ring_support": {
+      "mean_abs_depth_error": 0.08646950819481868,
+      "p95_abs_depth_error": 0.31269264221191406,
+      "shared_pixels": 1366
     }
   },
   "seam_metrics": {
     "maximum_seam_gap": 0.0,
     "maximum_unintended_overlap": 0.0,
-    "method": "canonical shared uv coordinates; overlap audit is report-level and visual inspection required"
+    "method": "template coordinates and closed authored solids"
   }
 }

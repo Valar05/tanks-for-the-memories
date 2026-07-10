@@ -3,118 +3,89 @@
   "topology_pass": true,
   "boundary_edges_total": 0,
   "nonmanifold_edges_total": 0,
-  "failure_reasons": [],
+  "duplicate_coincident_faces": 0,
+  "loose_debris_count": 0,
+  "all_named_solids_closed": true,
   "object_reports": [
     {
-      "object": "real_sherman_upper_hull_manufactured_scratch_v07_main_upper_gla",
-      "role": "main_glacis",
+      "object": "real_sherman_upper_hull_manufactured_scratch_v07_lower_front",
+      "role": "lower_front",
       "vertices": 8,
       "polygons": 6,
       "triangles": 12,
       "boundary_edges": 0,
       "nonmanifold_edges": 0,
-      "uv_layers": [
-        "uv_manufactured_v07"
-      ]
+      "template_owned_topology": true
     },
     {
-      "object": "real_sherman_upper_hull_manufactured_scratch_v07_left_shoulder_",
-      "role": "left_shoulder",
+      "object": "real_sherman_upper_hull_manufactured_scratch_v07_upper_glacis",
+      "role": "upper_glacis",
       "vertices": 8,
       "polygons": 6,
       "triangles": 12,
       "boundary_edges": 0,
       "nonmanifold_edges": 0,
-      "uv_layers": [
-        "uv_manufactured_v07"
-      ]
+      "template_owned_topology": true
     },
     {
-      "object": "real_sherman_upper_hull_manufactured_scratch_v07_right_shoulder",
-      "role": "right_shoulder",
+      "object": "real_sherman_upper_hull_manufactured_scratch_v07_left_cheek",
+      "role": "left_cheek",
       "vertices": 8,
       "polygons": 6,
       "triangles": 12,
       "boundary_edges": 0,
       "nonmanifold_edges": 0,
-      "uv_layers": [
-        "uv_manufactured_v07"
-      ]
+      "template_owned_topology": true
     },
     {
-      "object": "real_sherman_upper_hull_manufactured_scratch_v07_front_lower_tr",
-      "role": "front_face",
+      "object": "real_sherman_upper_hull_manufactured_scratch_v07_right_cheek",
+      "role": "right_cheek",
       "vertices": 8,
       "polygons": 6,
       "triangles": 12,
       "boundary_edges": 0,
       "nonmanifold_edges": 0,
-      "uv_layers": [
-        "uv_manufactured_v07"
-      ]
+      "template_owned_topology": true
     },
     {
-      "object": "real_sherman_upper_hull_manufactured_scratch_v07_rear_deck_tran",
-      "role": "deck_transition",
+      "object": "real_sherman_upper_hull_manufactured_scratch_v07_left_side",
+      "role": "left_side",
       "vertices": 8,
       "polygons": 6,
       "triangles": 12,
       "boundary_edges": 0,
       "nonmanifold_edges": 0,
-      "uv_layers": [
-        "uv_manufactured_v07"
-      ]
+      "template_owned_topology": true
     },
     {
-      "object": "real_sherman_upper_hull_manufactured_scratch_v07_left_side_retu",
-      "role": "left_return",
+      "object": "real_sherman_upper_hull_manufactured_scratch_v07_right_side",
+      "role": "right_side",
       "vertices": 8,
       "polygons": 6,
       "triangles": 12,
       "boundary_edges": 0,
       "nonmanifold_edges": 0,
-      "uv_layers": [
-        "uv_manufactured_v07"
-      ]
+      "template_owned_topology": true
     },
     {
-      "object": "real_sherman_upper_hull_manufactured_scratch_v07_right_side_ret",
-      "role": "right_return",
-      "vertices": 8,
-      "polygons": 6,
-      "triangles": 12,
+      "object": "real_sherman_upper_hull_manufactured_scratch_v07_rear_deck",
+      "role": "rear_deck",
+      "vertices": 16,
+      "polygons": 10,
+      "triangles": 28,
       "boundary_edges": 0,
       "nonmanifold_edges": 0,
-      "uv_layers": [
-        "uv_manufactured_v07"
-      ]
+      "template_owned_topology": true
     },
     {
-      "object": "real_sherman_upper_hull_manufactured_scratch_v07_socket_well_cl",
-      "role": "socket",
-      "vertices": 144,
-      "polygons": 74,
-      "triangles": 284,
-      "boundary_edges": 0,
-      "nonmanifold_edges": 0,
-      "uv_layers": [
-        "uv_manufactured_v07"
-      ]
-    },
-    {
-      "object": "real_sherman_upper_hull_manufactured_scratch_v07_socket_ring_cl",
-      "role": "ring",
+      "object": "real_sherman_upper_hull_manufactured_scratch_v07_turret_ring_su",
+      "role": "turret_ring_support",
       "vertices": 288,
       "polygons": 288,
       "triangles": 576,
       "boundary_edges": 0,
       "nonmanifold_edges": 0,
-      "uv_layers": [
-        "uv_manufactured_v07"
-      ]
+      "template_owned_topology": true
     }
-  ],
-  "all_named_solids_closed": true,
-  "loose_debris_count": 0,
-  "duplicate_coincident_faces": 0
+  ]
 }

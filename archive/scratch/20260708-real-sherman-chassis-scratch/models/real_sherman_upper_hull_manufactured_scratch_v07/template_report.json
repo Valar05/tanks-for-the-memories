@@ -1,0 +1,16 @@
+{
+  "asset_id": "real_sherman_upper_hull_manufactured_scratch_v07",
+  "template_name": "parametric_m4a3_upper_hull_v1",
+  "template_solids": [
+    "lower_front",
+    "upper_glacis",
+    "left_cheek",
+    "right_cheek",
+    "left_side",
+    "right_side",
+    "rear_deck",
+    "turret_ring_support"
+  ],
+  "topology_owner": "generator",
+  "source_vertex_influence": "dimensions_only"
+}
