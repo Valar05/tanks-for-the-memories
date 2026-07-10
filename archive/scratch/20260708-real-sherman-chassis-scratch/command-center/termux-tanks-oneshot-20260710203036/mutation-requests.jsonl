@@ -1,0 +1,6 @@
+{"action":"push","status":"not_requested","reason":"Mutation policy requires confirmation for push; no commit or push was made."}
+{"action":"deployPreview","status":"not_requested","reason":"Mutation policy requires confirmation for deploy; no model-review or cloud deploy was made."}
+{"action":"deployProduction","status":"not_requested","reason":"Mutation policy requires confirmation for deploy; no production deploy was made."}
+{"action":"merge","status":"not_requested","reason":"Mutation policy requires confirmation for merge; no merge was attempted."}
+{"action":"externalProviderWrite","status":"not_requested","reason":"Mutation policy requires confirmation for external writes; no PR comment, GitHub Pages write, issue, or provider write was made."}
+{"action":"destructive","status":"denied","reason":"Mutation policy denies destructive operations; none were attempted."}

@@ -1,0 +1,67 @@
+{
+  "status": "blocked",
+  "visualAcceptanceClaimed": false,
+  "cloudSenseEvidence": "not run; no geometry mutation was made and cloud/Sense acceptance was not claimed",
+  "checks": [
+    {
+      "name": "branch",
+      "command": "git branch --show-current",
+      "status": "pass",
+      "observed": "codex/upper-glacis-recovery-tools"
+    },
+    {
+      "name": "head",
+      "command": "git rev-parse --short HEAD",
+      "status": "pass",
+      "observed": "31dc201"
+    },
+    {
+      "name": "scratch_mode_doctrine",
+      "command": "sed -n '1,240p' docs/doctrine/scratch-mode.md",
+      "status": "fail",
+      "observed": "No such file or directory"
+    },
+    {
+      "name": "v08_exporter_py_compile",
+      "command": "python3 -m py_compile archive/scratch/20260708-real-sherman-chassis-scratch/exporters/export_upper_glacis_shared_interfaces_v08.py",
+      "status": "pass",
+      "observed": "no syntax errors"
+    },
+    {
+      "name": "v08_report_reproduction",
+      "command": "python3 report reader over v08 model_manifest/depth/shared/assembly reports",
+      "status": "pass",
+      "observed": {
+        "candidate": false,
+        "topology_status": "pass",
+        "shared_interface_status": "pass",
+        "assembly_interface_status": "red",
+        "silhouette_iou": 0.6312073067771894,
+        "mean_abs_depth_error": 0.07681155175782363,
+        "p95_abs_depth_error": 0.21370792388916016,
+        "failure_reasons": [
+          "iou_below_v07_tolerance",
+          "p95_above_v07_tolerance"
+        ]
+      }
+    },
+    {
+      "name": "debian_blender",
+      "command": "proot-distro login debian -- blender --background --version",
+      "status": "pass",
+      "observed": "Blender 4.3.2"
+    },
+    {
+      "name": "npm_build",
+      "command": "npm run build",
+      "status": "fail",
+      "observed": "Cannot find module 'esbuild-wasm'"
+    },
+    {
+      "name": "npm_test",
+      "command": "npm test",
+      "status": "fail",
+      "observed": "Missing script: test"
+    }
+  ]
+}

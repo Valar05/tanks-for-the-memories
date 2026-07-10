@@ -1,0 +1,5 @@
+No exporter, geometry, generated model, model-review page, PR state, deploy state, or cloud artifact was changed.
+
+This run intentionally produced only the one-shot Command Center artifact set because the required canon file `docs/doctrine/scratch-mode.md` is absent.
+
+Classification: blocked.

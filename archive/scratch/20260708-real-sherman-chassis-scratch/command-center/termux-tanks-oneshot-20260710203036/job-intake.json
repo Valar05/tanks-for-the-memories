@@ -1,0 +1,35 @@
+{
+  "projectId": "tanks-for-the-memories",
+  "workerId": "termux-tanks-oneshot-20260710203036",
+  "repository": "https://github.com/Valar05/tanks-for-the-memories",
+  "branch": "codex/upper-glacis-recovery-tools",
+  "head": "31dc201",
+  "pullRequest": "https://github.com/Valar05/tanks-for-the-memories/pull/1",
+  "currentUserCommand": "Use CODEX_STARTS_HERE.md as the controlling prompt for a one-shot Codex worker on a clean prepared base. Continue PR #1 on branch codex/upper-glacis-recovery-tools. Produce the next scratch upper-glacis experiment only if it materially tests a true multi-region shared-vertex visible skin. Preserve silhouette and manifold assembly. Do not claim visual acceptance without cloud/Sense evidence.",
+  "forbiddenStalePremise": "Do not treat a simulated worker, a tool-list smoke, or a local-only check as completed implementation.",
+  "intendedMutation": "Write the required one-shot Command Center artifacts only; do not mutate exporters, geometry, generated models, review anchors, PR state, or cloud state.",
+  "whyThisSatisfiesCommand": "The controlling prompt requires reading docs/doctrine/scratch-mode.md before mutation. That file is missing in this checkout, so model/exporter mutation would violate the intake gate. The compliant result is a blocked artifact set with evidence preserved.",
+  "status": "blocked",
+  "blockers": [
+    {
+      "id": "missing_scratch_mode_doctrine",
+      "severity": "hard",
+      "detail": "CODEX_STARTS_HERE.md and docs/prospector/upper-glacis-failure-quarantine-20260710.md both list docs/doctrine/scratch-mode.md as required canon, but the file does not exist in this checkout."
+    },
+    {
+      "id": "npm_dependencies_absent",
+      "severity": "verification",
+      "detail": "npm run build failed because esbuild-wasm is not installed in node_modules."
+    },
+    {
+      "id": "npm_test_missing",
+      "severity": "verification",
+      "detail": "npm test failed because package.json does not define a test script."
+    }
+  ],
+  "geometryMutation": false,
+  "externalWrites": false,
+  "pushAttempted": false,
+  "deployAttempted": false,
+  "visualAcceptanceClaimed": false
+}

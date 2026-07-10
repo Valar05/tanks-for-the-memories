@@ -1,0 +1,15 @@
+{"command":"pwd && git branch --show-current && git rev-parse --short HEAD && git log --oneline -5","status":"pass","summary":"Verified workspace path, branch codex/upper-glacis-recovery-tools, head 31dc201, and recent PR handoff commits."}
+{"command":"sed -n '1,260p' CODEX_STARTS_HERE.md","status":"pass","summary":"Read controlling prompt and prompt authority gate."}
+{"command":"sed -n '1,260p' PROJECT_ORIENTATION.md","status":"pass","summary":"Read project orientation, cloud visual truth requirements, and prompt authority gate."}
+{"command":"sed -n '1,240p' docs/doctrine/cloud-visual-truth.md","status":"pass","summary":"Read cloud/Sense-only visual acceptance doctrine."}
+{"command":"sed -n '1,240p' docs/doctrine/scratch-mode.md","status":"fail","summary":"Required canon file is missing: No such file or directory."}
+{"command":"sed -n '1,260p' docs/prospector/upper-glacis-failure-quarantine-20260710.md","status":"pass","summary":"Read quarantine map; confirms v07 baseline, v08 rejected, and scratch-mode doctrine requirement."}
+{"command":"sed -n '1,220p' archive/scratch/20260708-real-sherman-chassis-scratch/notes/real_sherman_upper_glacis_silhouette_edges_v07_lessons.md","status":"pass","summary":"Read v07 lessons: best silhouette/depth baseline but red independent-prism assembly."}
+{"command":"sed -n '1,240p' archive/scratch/20260708-real-sherman-chassis-scratch/notes/real_sherman_upper_glacis_shared_interfaces_scratch_v08.md","status":"pass","summary":"Read v08 lessons: shared-interface bookkeeping useful, but single envelope slab/ring red."}
+{"command":"python3 -m py_compile archive/scratch/20260708-real-sherman-chassis-scratch/exporters/export_upper_glacis_shared_interfaces_v08.py","status":"pass","summary":"v08 exporter compiles under Python as a guardrail only; Blender execution not implied."}
+{"command":"python3 report reader over v08 model_manifest/depth/shared/assembly reports","status":"pass","summary":"Reproduced v08 reports: candidate false, topology pass, shared-interface pass, assembly red, IoU 0.6312073067771894, mean depth 0.07681155175782363, p95 0.21370792388916016."}
+{"command":"git --version && gh --version && node --version && python3 --version","status":"pass","summary":"git 2.54.0, gh 2.95.0, node v26.3.1, Python 3.13.13."}
+{"command":"proot-distro list","status":"pass","summary":"Debian proot container is installed."}
+{"command":"proot-distro login debian -- blender --background --version","status":"pass","summary":"Blender 4.3.2 is available through Debian proot."}
+{"command":"npm run build","status":"fail","summary":"Build failed before bundling because esbuild-wasm is not installed."}
+{"command":"npm test","status":"fail","summary":"package.json does not define a test script."}

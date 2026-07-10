@@ -1,0 +1,18 @@
+{
+  "classification": "blocked",
+  "geometryChanged": false,
+  "exporterChanged": false,
+  "generatedModelChanged": false,
+  "cloudReviewChanged": false,
+  "artifactFiles": [
+    "archive/scratch/20260708-real-sherman-chassis-scratch/command-center/termux-tanks-oneshot-20260710203036/job-intake.json",
+    "archive/scratch/20260708-real-sherman-chassis-scratch/command-center/termux-tanks-oneshot-20260710203036/orientation.md",
+    "archive/scratch/20260708-real-sherman-chassis-scratch/command-center/termux-tanks-oneshot-20260710203036/reasoning-summary.md",
+    "archive/scratch/20260708-real-sherman-chassis-scratch/command-center/termux-tanks-oneshot-20260710203036/command-log.jsonl",
+    "archive/scratch/20260708-real-sherman-chassis-scratch/command-center/termux-tanks-oneshot-20260710203036/implementation.patch",
+    "archive/scratch/20260708-real-sherman-chassis-scratch/command-center/termux-tanks-oneshot-20260710203036/changed-files.json",
+    "archive/scratch/20260708-real-sherman-chassis-scratch/command-center/termux-tanks-oneshot-20260710203036/verification.json",
+    "archive/scratch/20260708-real-sherman-chassis-scratch/command-center/termux-tanks-oneshot-20260710203036/final-report.md",
+    "archive/scratch/20260708-real-sherman-chassis-scratch/command-center/termux-tanks-oneshot-20260710203036/mutation-requests.jsonl"
+  ]
+}
