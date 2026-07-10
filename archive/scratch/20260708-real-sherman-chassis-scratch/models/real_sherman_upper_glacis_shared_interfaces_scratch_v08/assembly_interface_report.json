@@ -1,0 +1,152 @@
+{
+  "asset_id": "real_sherman_upper_glacis_shared_interfaces_scratch_v08",
+  "status": "red",
+  "failure_reasons": [
+    "iou_below_v07_tolerance",
+    "p95_above_v07_tolerance"
+  ],
+  "required_shared_interfaces_present": true,
+  "missing_interfaces": [],
+  "maximum_post_snap_interface_separation": 0.0,
+  "interface_gap_limit": 1e-05,
+  "duplicate_interface_wall_pairs": 0,
+  "visible_coplanar_overlap_area_above_tolerance": 0.0,
+  "rectangular_socket_void": false,
+  "primary_visible_skin": {
+    "raw_boundary_uv": [
+      [
+        -0.33872756,
+        0.1369463
+      ],
+      [
+        -0.33842169,
+        -0.1613136
+      ],
+      [
+        -0.33811703,
+        -0.24896201
+      ],
+      [
+        -0.31648757,
+        -0.25768548
+      ],
+      [
+        0.25998162,
+        -0.3691114
+      ],
+      [
+        0.31692203,
+        -0.28138579
+      ],
+      [
+        0.35305325,
+        -0.14761588
+      ],
+      [
+        0.35371843,
+        -0.10935906
+      ],
+      [
+        0.35345095,
+        0.08250638
+      ],
+      [
+        0.34304501,
+        0.16530797
+      ],
+      [
+        0.28003864,
+        0.28843137
+      ],
+      [
+        0.25717019,
+        0.32254694
+      ],
+      [
+        -0.28553827,
+        0.32395221
+      ],
+      [
+        -0.33785897,
+        0.31028748
+      ],
+      [
+        -0.33858321,
+        0.22482907
+      ]
+    ],
+    "boundary_uv": [
+      [
+        -0.37777208333333334,
+        0.1512456995
+      ],
+      [
+        -0.37710050033333337,
+        -0.2732534415000001
+      ],
+      [
+        -0.3533080943333334,
+        -0.28284925850000003
+      ],
+      [
+        0.2808080146666667,
+        -0.4054177705
+      ],
+      [
+        0.3434424656666667,
+        -0.30891959950000003
+      ],
+      [
+        0.3831868076666667,
+        -0.1617726985
+      ],
+      [
+        0.3839185056666667,
+        -0.1196901965
+      ],
+      [
+        0.3836242776666667,
+        0.09136178750000001
+      ],
+      [
+        0.37217774366666667,
+        0.1824435365
+      ],
+      [
+        0.2777154416666667,
+        0.3554064035
+      ],
+      [
+        -0.31926386433333337,
+        0.35695220050000004
+      ],
+      [
+        -0.37681663433333334,
+        0.34192099750000005
+      ]
+    ],
+    "corner_preservation_flags": {
+      "left_extreme_preserved": true,
+      "right_extreme_preserved": true,
+      "front_extreme_preserved": true,
+      "deck_extreme_preserved": true
+    },
+    "source_chain_count": null,
+    "source_chain_decisions": [],
+    "selected_exterior_chain_length": 2.7526289884566504,
+    "selected_exterior_chain_area": 0.5166492799605472,
+    "used_convex_hull_fallback": false,
+    "footprint_source": "outer envelope of v07 measured feature edge-chain world corners reprojected onto the main manufactured plane, expanded by a small authored skin margin; not source cluster centroids or raw source triangles",
+    "outline_expand_scale": 1.1,
+    "status": "pass",
+    "final_point_count": 12,
+    "final_polygon_area": 0.5166492799605472,
+    "final_polygon_self_intersects": false,
+    "thickness": 0.075,
+    "socket_opening": {
+      "implemented": false,
+      "policy": "continuous skin under ring for v08 to avoid rectangular void; socket/ring are provisional surface diagnostics"
+    }
+  },
+  "note": "v08 renders one continuous primary visible armor skin, so internal duplicate top boundaries and duplicate interface walls are removed rather than snapped between visible prisms."
+}
