@@ -7,7 +7,7 @@ This is the cold-start handoff for a blank cloud worker picking up `Valar05/tank
 - Repository: `https://github.com/Valar05/tanks-for-the-memories`
 - Working branch: `codex/upper-glacis-recovery-tools`
 - Pull request: `https://github.com/Valar05/tanks-for-the-memories/pull/1`
-- Latest pushed handoff commit at time of writing: `243a3eb` (`Add upper glacis shared-interface scratch pass`)
+- Latest pushed handoff commit before this doc update: `5847538` (`Add Codex start-here handoff`). Verify current head because this document may have been updated after that commit.
 - Current investigation root: `archive/scratch/20260708-real-sherman-chassis-scratch/`
 - Active component: `source_component_0_upper_front_glacis`
 - Current artifact is scratch/red, not production geometry.
@@ -70,14 +70,34 @@ git lfs push --all origin codex/upper-glacis-recovery-tools
 git push origin codex/upper-glacis-recovery-tools
 ```
 
-Official model viewer:
+Official model viewer and durable cloud anchor:
 
-- Mesh artifacts must provide a model-viewer link through the sibling repo `../model-viewer-lab`.
-- Link helper:
+- Mesh artifacts must provide two review handles:
+  - a local `model-viewer-lab` link for immediate scratch inspection
+  - a durable GitHub Pages-readable review anchor for cloud workers and PR review
+- The desired durable artifact is a GitHub Pages page shaped like:
+
+```text
+https://valar05.github.io/tanks-for-the-memories/model-review/<asset_id>/
+```
+
+- That page should load the committed GLB/GLTF plus `model_manifest.json`, identify the asset id and commit, and remain readable without Android localhost, Termux, or sibling-repo filesystem access.
+- The durable page is a review anchor, not visual acceptance. Cloud/Sense review is still required before claiming visual success.
+- Local link helper, useful for scratch inspection only:
 
 ```sh
 node ../model-viewer-lab/tools/make_model_viewer_link.mjs --src /tanks-for-the-memories/path/to/model.glb --manifest /tanks-for-the-memories/path/to/model_manifest.json --title asset_id --port 8804
 ```
+
+- Current tooling truth: `../model-viewer-lab/tools/make_model_viewer_link.mjs` emits localhost URLs. If a blank worker cannot publish the GitHub Pages anchor from existing repo tools, report a Pages/hosting/tooling blocker. Do not treat that as ambiguity in this document.
+
+Viewer UX requirements for both local and durable anchors:
+
+- Preserve orbit camera, fit/front/side/top camera controls, and portrait-first full-camera view.
+- Preserve object visibility, object selection, transform/tweak, reset, and export capability.
+- Keep object and tool panels hidden by default; the first view should be the model, not a UI jungle.
+- Keep edit capability locked by default; unlocking must be an explicit reviewer action.
+- Do not remove object adjustment tools to simplify the page. Hide them until toggled.
 
 ## Visual Evidence Rule
 
@@ -90,6 +110,7 @@ Allowed as diagnostics:
 - bbox/topology checks
 - depth/silhouette panels
 - local viewer links
+- durable GitHub Pages model-review anchors
 - source-string and route checks
 
 Required for acceptance of visual work:
@@ -241,7 +262,7 @@ Current red state: v07 preserved more silhouette but produced independent manifo
 
 Goal: produce the next scratch experiment only if it materially tests a true multi-region shared-vertex visible skin for the Sherman upper glacis. Preserve silhouette and manifold assembly. Do not copy source triangles, use convex hulls as final boundaries, export independent stacked prisms, or create one envelope slab. Shared interfaces must become actual mesh topology.
 
-Before mutation, state the current command, forbidden stale premise, intended mutation, and why it satisfies the command. Keep artifacts in archive/scratch, write a lessons note, provide the official model-viewer link, and classify the result honestly as red/candidate based on reports and visual diagnostics. Do not claim visual acceptance without the cloud/Sense lane.
+Before mutation, state the current command, forbidden stale premise, intended mutation, and why it satisfies the command. Keep artifacts in archive/scratch, write a lessons note, provide the official local model-viewer link plus the desired GitHub Pages model-review anchor, and classify the result honestly as red/candidate based on reports and visual diagnostics. The cloud anchor must preserve camera and hidden-by-default object adjustment tools. Do not claim visual acceptance without the cloud/Sense lane.
 ```
 
 ## PR Comment Discipline
@@ -249,7 +270,7 @@ Before mutation, state the current command, forbidden stale premise, intended mu
 When updating PR #1, include:
 
 - commit SHA
-- viewer URL
+- local viewer URL and durable GitHub Pages model-review anchor, or the exact Pages/tooling blocker
 - exact status: red/candidate/promote/abandon
 - topology results
 - silhouette/depth metrics
