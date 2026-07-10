@@ -1,0 +1,235 @@
+{
+  "asset_id": "real_sherman_upper_hull_manufactured_scratch_v07",
+  "final_boundary_source": "manufactured_line_intersections",
+  "no_cluster_hull_as_final_boundary": true,
+  "regions": [
+    {
+      "name": "main_upper_glacis",
+      "kind": "major_hull_solid",
+      "role": "main_glacis",
+      "interfaces": [
+        "front_lower_edge",
+        "left_shoulder_break",
+        "right_shoulder_break",
+        "socket_front_tangent"
+      ],
+      "uv_polygon": [
+        [
+          -0.19784244219830835,
+          -0.31756775121379177
+        ],
+        [
+          0.1909564212338918,
+          -0.31756775121379177
+        ],
+        [
+          0.1909564212338918,
+          -0.18224008583602413
+        ],
+        [
+          -0.19784244219830835,
+          -0.18224008583602413
+        ]
+      ],
+      "thickness": 0.06
+    },
+    {
+      "name": "left_shoulder_cheek",
+      "kind": "major_hull_solid",
+      "role": "left_shoulder",
+      "interfaces": [
+        "left_outer_silhouette",
+        "left_shoulder_break",
+        "front_lower_edge",
+        "deck_break"
+      ],
+      "uv_polygon": [
+        [
+          -0.3386144444754843,
+          -0.31756775121379177
+        ],
+        [
+          -0.19784244219830835,
+          -0.31756775121379177
+        ],
+        [
+          -0.19784244219830835,
+          0.3208628292134963
+        ],
+        [
+          -0.3386144444754843,
+          0.3208628292134963
+        ]
+      ],
+      "thickness": 0.075
+    },
+    {
+      "name": "right_shoulder_cheek",
+      "kind": "major_hull_solid",
+      "role": "right_shoulder",
+      "interfaces": [
+        "right_outer_silhouette",
+        "right_shoulder_break",
+        "front_lower_edge",
+        "deck_break"
+      ],
+      "uv_polygon": [
+        [
+          0.1909564212338918,
+          -0.31756775121379177
+        ],
+        [
+          0.30091993631105296,
+          -0.31756775121379177
+        ],
+        [
+          0.30091993631105296,
+          0.3208628292134963
+        ],
+        [
+          0.1909564212338918,
+          0.3208628292134963
+        ]
+      ],
+      "thickness": 0.075
+    },
+    {
+      "name": "front_lower_transition",
+      "kind": "major_hull_solid",
+      "role": "front_face",
+      "interfaces": [
+        "front_lower_edge",
+        "left_outer_silhouette",
+        "right_outer_silhouette"
+      ],
+      "uv_polygon": [
+        [
+          -0.3386144444754843,
+          -0.41756775121379175
+        ],
+        [
+          0.30091993631105296,
+          -0.41756775121379175
+        ],
+        [
+          0.30091993631105296,
+          -0.31756775121379177
+        ],
+        [
+          -0.3386144444754843,
+          -0.31756775121379177
+        ]
+      ],
+      "thickness": 0.095
+    },
+    {
+      "name": "rear_deck_transition",
+      "kind": "major_hull_solid",
+      "role": "deck_transition",
+      "interfaces": [
+        "socket_rear_tangent",
+        "deck_break",
+        "left_shoulder_break",
+        "right_shoulder_break"
+      ],
+      "uv_polygon": [
+        [
+          -0.19784244219830835,
+          0.1523199141639759
+        ],
+        [
+          0.1909564212338918,
+          0.1523199141639759
+        ],
+        [
+          0.1909564212338918,
+          0.3208628292134963
+        ],
+        [
+          -0.19784244219830835,
+          0.3208628292134963
+        ]
+      ],
+      "thickness": 0.06
+    },
+    {
+      "name": "left_side_return",
+      "kind": "major_hull_solid",
+      "role": "left_return",
+      "interfaces": [
+        "left_outer_silhouette",
+        "front_lower_edge",
+        "deck_break"
+      ],
+      "uv_polygon": [
+        [
+          -0.3606144444754843,
+          -0.31756775121379177
+        ],
+        [
+          -0.3386144444754843,
+          -0.31756775121379177
+        ],
+        [
+          -0.3386144444754843,
+          0.3208628292134963
+        ],
+        [
+          -0.3606144444754843,
+          0.3208628292134963
+        ]
+      ],
+      "thickness": 0.07
+    },
+    {
+      "name": "right_side_return",
+      "kind": "major_hull_solid",
+      "role": "right_return",
+      "interfaces": [
+        "right_outer_silhouette",
+        "front_lower_edge",
+        "deck_break"
+      ],
+      "uv_polygon": [
+        [
+          0.30091993631105296,
+          -0.31756775121379177
+        ],
+        [
+          0.322919936311053,
+          -0.31756775121379177
+        ],
+        [
+          0.322919936311053,
+          0.3208628292134963
+        ],
+        [
+          0.30091993631105296,
+          0.3208628292134963
+        ]
+      ],
+      "thickness": 0.07
+    },
+    {
+      "name": "socket_well",
+      "kind": "minor_socket_support",
+      "role": "socket",
+      "interfaces": [
+        "socket_front_tangent",
+        "socket_rear_tangent"
+      ],
+      "radius": 0.164
+    },
+    {
+      "name": "socket_ring_assembly",
+      "kind": "socket_ring_assembly",
+      "role": "ring",
+      "interfaces": [
+        "socket_front_tangent",
+        "socket_rear_tangent"
+      ],
+      "inner_radius": 0.16646,
+      "outer_radius": 0.20246
+    }
+  ]
+}

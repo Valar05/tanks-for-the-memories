@@ -1,0 +1,81 @@
+{
+  "metrics": {
+    "aggregate": {
+      "silhouette_iou": 0.7513738462359281,
+      "source_pixels": 17841,
+      "candidate_pixels": 14985
+    },
+    "left_silhouette": {
+      "silhouette_iou": 0.7649862776253069,
+      "source_pixels": 6756,
+      "candidate_pixels": 5463
+    },
+    "right_silhouette": {
+      "silhouette_iou": 0.734046769718589,
+      "source_pixels": 6933,
+      "candidate_pixels": 6192
+    },
+    "front_silhouette": {
+      "silhouette_iou": 0.9222804239249605,
+      "source_pixels": 7823,
+      "candidate_pixels": 7957
+    },
+    "deck_region": {
+      "silhouette_iou": 0.5337112531660837,
+      "source_pixels": 7850,
+      "candidate_pixels": 4866
+    }
+  },
+  "region_depth_errors": {
+    "main_upper_glacis": {
+      "mean_abs_depth_error": 0.05811442581908978,
+      "p95_abs_depth_error": 0.10565805435180664,
+      "shared_pixels": 3626
+    },
+    "left_shoulder_cheek": {
+      "mean_abs_depth_error": 0.07651395818114408,
+      "p95_abs_depth_error": 0.2518329620361328,
+      "shared_pixels": 2807
+    },
+    "right_shoulder_cheek": {
+      "mean_abs_depth_error": 0.12414232806155556,
+      "p95_abs_depth_error": 0.3447728157043457,
+      "shared_pixels": 2280
+    },
+    "front_lower_transition": {
+      "mean_abs_depth_error": 0.13124867687686123,
+      "p95_abs_depth_error": 0.19125986099243164,
+      "shared_pixels": 7989
+    },
+    "rear_deck_transition": {
+      "mean_abs_depth_error": 0.2522346647731363,
+      "p95_abs_depth_error": 0.38971853256225586,
+      "shared_pixels": 3792
+    },
+    "left_side_return": {
+      "mean_abs_depth_error": 0.05816272083593874,
+      "p95_abs_depth_error": 0.09636783599853516,
+      "shared_pixels": 784
+    },
+    "right_side_return": {
+      "mean_abs_depth_error": 0.2158232257313972,
+      "p95_abs_depth_error": 0.4640622138977051,
+      "shared_pixels": 548
+    },
+    "socket_well": {
+      "mean_abs_depth_error": 0.11070728956810102,
+      "p95_abs_depth_error": 0.19748830795288086,
+      "shared_pixels": 4879
+    },
+    "socket_ring_assembly": {
+      "mean_abs_depth_error": 0.09102249016108312,
+      "p95_abs_depth_error": 0.3543992042541504,
+      "shared_pixels": 2211
+    }
+  },
+  "seam_metrics": {
+    "maximum_seam_gap": 0.0,
+    "maximum_unintended_overlap": 0.0,
+    "method": "canonical shared uv coordinates; overlap audit is report-level and visual inspection required"
+  }
+}

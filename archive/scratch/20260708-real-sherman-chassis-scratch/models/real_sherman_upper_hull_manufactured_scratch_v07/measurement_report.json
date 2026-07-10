@@ -1,0 +1,110 @@
+{
+  "asset_id": "real_sherman_upper_hull_manufactured_scratch_v07",
+  "source_component": "source_component_0_upper_front_glacis",
+  "dominant_glacis_plane": {
+    "point": [
+      0.1920502930879593,
+      0.0014386111870408058,
+      0.2628975212574005
+    ],
+    "normal": [
+      0.0186446625739336,
+      0.019669825211167336,
+      0.9996326565742493
+    ],
+    "u": [
+      0.9998261332511902,
+      -0.0003668009885586798,
+      -0.018641052767634392
+    ],
+    "v": [
+      0.0,
+      0.9998065233230591,
+      -0.019673246890306473
+    ]
+  },
+  "raw_measurements": {
+    "u_min": -0.3657905066911553,
+    "u_max": 0.29642196172790136,
+    "v_front": -0.3275677512137918,
+    "v_deck": 0.3268628292134963,
+    "front_visible_height": 0.12741319835186005,
+    "side_return_depth": 0.05,
+    "centerline": -0.034684272481626977,
+    "socket_center_u": 0.008706369184232343,
+    "socket_center_v": -0.014960085836024128,
+    "socket_radius": 0.2529671413999479,
+    "socket_sample_count": 8758
+  },
+  "measured_stations": {
+    "front_lower_edge": {
+      "raw_value": -0.3275677512137918,
+      "final_constrained_value": -0.31756775121379177,
+      "owner": "front_lower_transition",
+      "canonical_representation": "line_v_constant"
+    },
+    "left_outer_silhouette": {
+      "raw_value": -0.3657905066911553,
+      "final_constrained_value": -0.3386144444754843,
+      "owner": "left_side_return",
+      "canonical_representation": "line_u_constant"
+    },
+    "right_outer_silhouette": {
+      "raw_value": 0.29642196172790136,
+      "final_constrained_value": 0.30091993631105296,
+      "owner": "right_side_return",
+      "canonical_representation": "line_u_constant"
+    },
+    "left_shoulder_break": {
+      "raw_value": -0.22908370419772706,
+      "final_constrained_value": -0.19784244219830835,
+      "owner": "left_shoulder_cheek",
+      "canonical_representation": "line_u_constant"
+    },
+    "right_shoulder_break": {
+      "raw_value": 0.1597151592344731,
+      "final_constrained_value": 0.1909564212338918,
+      "owner": "right_shoulder_cheek",
+      "canonical_representation": "line_u_constant"
+    },
+    "deck_break": {
+      "raw_value": 0.3268628292134963,
+      "final_constrained_value": 0.3208628292134963,
+      "owner": "rear_deck_transition",
+      "canonical_representation": "line_v_constant"
+    },
+    "socket_front_tangent": {
+      "raw_value": -0.26792722723597207,
+      "final_constrained_value": -0.18224008583602413,
+      "owner": "socket_ring_assembly",
+      "canonical_representation": "line_v_constant_tangent_to_socket"
+    },
+    "socket_rear_tangent": {
+      "raw_value": 0.2380070555639238,
+      "final_constrained_value": 0.1523199141639759,
+      "owner": "socket_ring_assembly",
+      "canonical_representation": "line_v_constant_tangent_to_socket"
+    }
+  },
+  "mirror_policy": {
+    "baseline": "cleaner_side_mirrored",
+    "centerline_raw": -0.034684272481626977,
+    "centerline_final": -0.003443010482208267,
+    "large_asymmetry_veto_applied": true,
+    "right_outer_asymmetry_correction": -0.030808487200014834,
+    "note": "Socket-centered structural baseline is mirrored for shoulders; right outer silhouette receives one large measured correction because source right span is materially smaller than mirrored left span."
+  },
+  "representative_depth_quantiles": {
+    "u_min": -0.3657905066911553,
+    "u_max": 0.29642196172790136,
+    "v_front": -0.3275677512137918,
+    "v_deck": 0.3268628292134963,
+    "front_visible_height": 0.12741319835186005,
+    "side_return_depth": 0.05,
+    "centerline": -0.034684272481626977,
+    "socket_center_u": 0.008706369184232343,
+    "socket_center_v": -0.014960085836024128,
+    "socket_radius": 0.2529671413999479,
+    "socket_sample_count": 8758
+  }
+}

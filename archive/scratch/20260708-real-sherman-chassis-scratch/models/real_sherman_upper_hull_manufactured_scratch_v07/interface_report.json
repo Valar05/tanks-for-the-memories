@@ -1,0 +1,97 @@
+{
+  "asset_id": "real_sherman_upper_hull_manufactured_scratch_v07",
+  "interfaces": {
+    "front_lower_edge": {
+      "owner": "front_lower_transition",
+      "axis": "v",
+      "canonical_value": -0.31756775121379177,
+      "canonical_representation": "line_v_constant",
+      "consumers": [
+        "main_upper_glacis",
+        "left_shoulder_cheek",
+        "right_shoulder_cheek",
+        "front_lower_transition"
+      ]
+    },
+    "left_outer_silhouette": {
+      "owner": "left_side_return",
+      "axis": "u",
+      "canonical_value": -0.3386144444754843,
+      "canonical_representation": "line_u_constant",
+      "consumers": [
+        "left_shoulder_cheek",
+        "front_lower_transition",
+        "rear_deck_transition",
+        "left_side_return"
+      ]
+    },
+    "right_outer_silhouette": {
+      "owner": "right_side_return",
+      "axis": "u",
+      "canonical_value": 0.30091993631105296,
+      "canonical_representation": "line_u_constant",
+      "consumers": [
+        "right_shoulder_cheek",
+        "front_lower_transition",
+        "rear_deck_transition",
+        "right_side_return"
+      ]
+    },
+    "left_shoulder_break": {
+      "owner": "left_shoulder_cheek",
+      "axis": "u",
+      "canonical_value": -0.19784244219830835,
+      "canonical_representation": "line_u_constant",
+      "consumers": [
+        "main_upper_glacis",
+        "left_shoulder_cheek",
+        "rear_deck_transition"
+      ]
+    },
+    "right_shoulder_break": {
+      "owner": "right_shoulder_cheek",
+      "axis": "u",
+      "canonical_value": 0.1909564212338918,
+      "canonical_representation": "line_u_constant",
+      "consumers": [
+        "main_upper_glacis",
+        "right_shoulder_cheek",
+        "rear_deck_transition"
+      ]
+    },
+    "deck_break": {
+      "owner": "rear_deck_transition",
+      "axis": "v",
+      "canonical_value": 0.3208628292134963,
+      "canonical_representation": "line_v_constant",
+      "consumers": [
+        "rear_deck_transition",
+        "left_shoulder_cheek",
+        "right_shoulder_cheek",
+        "left_side_return",
+        "right_side_return"
+      ]
+    },
+    "socket_front_tangent": {
+      "owner": "socket_ring_assembly",
+      "axis": "v",
+      "canonical_value": -0.18224008583602413,
+      "canonical_representation": "line_v_constant_tangent_to_socket",
+      "consumers": [
+        "main_upper_glacis",
+        "socket_ring_assembly"
+      ]
+    },
+    "socket_rear_tangent": {
+      "owner": "socket_ring_assembly",
+      "axis": "v",
+      "canonical_value": 0.1523199141639759,
+      "canonical_representation": "line_v_constant_tangent_to_socket",
+      "consumers": [
+        "rear_deck_transition",
+        "socket_ring_assembly"
+      ]
+    }
+  },
+  "source_policy": "interfaces are canonical manufactured lines; source clusters cannot own final plate boundaries"
+}

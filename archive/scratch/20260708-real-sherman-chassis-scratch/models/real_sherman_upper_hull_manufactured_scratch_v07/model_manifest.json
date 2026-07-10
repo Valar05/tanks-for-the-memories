@@ -1,0 +1,88 @@
+{
+  "asset_id": "real_sherman_upper_hull_manufactured_scratch_v07",
+  "scratch_mode": true,
+  "artifact_type": "manufactured_interface_upper_hull",
+  "revision": "v07-manufactured-interface-upper-hull",
+  "candidate": true,
+  "classification": "80_percent_local_diagnostic",
+  "construction_strategy": "manufactured_interface_model",
+  "source_glb": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_chassis_reference_kit_scratch_v1/real_sherman_chassis_reference_kit_scratch_v1.glb",
+  "source_component": "source_component_0_upper_front_glacis",
+  "statistics": {
+    "vertices": 488,
+    "polygons": 404,
+    "triangles": 944
+  },
+  "contract_assertions": {
+    "canonical_shared_interface_ownership": true,
+    "no_cluster_hull_final_boundary": true,
+    "left_right_mirrored_structural_baseline": true,
+    "per_region_metrics_present": true
+  },
+  "hard_gates": {
+    "topology": true,
+    "major_hull_solids_6_to_8": true,
+    "canonical_shared_interface_ownership": true,
+    "no_cluster_hull_final_boundary": true,
+    "per_region_metrics_present": true
+  },
+  "quantitative_gates": {
+    "aggregate_iou_target": true,
+    "mean_depth_target": true,
+    "p95_depth_target": true,
+    "no_major_side_region_below_0_70_iou": true
+  },
+  "topology_status": "pass",
+  "shape_review_status": "local_diagnostic_pass_needs_cloud_sense",
+  "depth_parity": {
+    "path": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_hull_manufactured_scratch_v07/depth_error_report.json",
+    "depth_resolution": [
+      220,
+      154
+    ],
+    "shared_pixels": 14083,
+    "source_pixels": 17841,
+    "retopo_pixels": 14985,
+    "silhouette_iou": 0.7513738462359281,
+    "mean_abs_depth_error": 0.11109634239057549,
+    "p50_abs_depth_error": 0.10742855072021484,
+    "p95_abs_depth_error": 0.20801353454589844,
+    "max_abs_depth_error": 0.37915658950805664
+  },
+  "region_area_report": {
+    "status": "pass",
+    "total_projected_area": 0.4803947314635136,
+    "non_ring_projected_area": 0.36340520864957854,
+    "ring_socket_projected_area": 0.11698952281393504,
+    "ring_socket_fraction": 0.24352790559864937,
+    "regions": {
+      "main_glacis": 0.057883578577205566,
+      "left_shoulder": 0.046279606170680915,
+      "right_shoulder": 0.037849151694097534,
+      "front_face": 0.13457423775741986,
+      "deck_transition": 0.06073205368630403,
+      "left_return": 0.013043285249456738,
+      "right_return": 0.013043295514413833,
+      "socket": 0.07790953506589106,
+      "ring": 0.039079987748043984
+    }
+  },
+  "interface_report": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_hull_manufactured_scratch_v07/interface_report.json",
+  "measurement_report": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_hull_manufactured_scratch_v07/measurement_report.json",
+  "authored_solids": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_hull_manufactured_scratch_v07/authored_solids.json",
+  "topology_report": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_hull_manufactured_scratch_v07/topology_report.json",
+  "per_region_error_report": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_hull_manufactured_scratch_v07/per_region_error_report.json",
+  "outputs": {
+    "blend": "archive/scratch/20260708-real-sherman-chassis-scratch/source_blends/real_sherman_upper_hull_manufactured_scratch_v07/real_sherman_upper_hull_manufactured_scratch_v07.blend",
+    "glb": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_hull_manufactured_scratch_v07/real_sherman_upper_hull_manufactured_scratch_v07.glb",
+    "source_depth": "archive/scratch/20260708-real-sherman-chassis-scratch/renders/real_sherman_upper_hull_manufactured_scratch_v07/source_depth.png",
+    "candidate_depth": "archive/scratch/20260708-real-sherman-chassis-scratch/renders/real_sherman_upper_hull_manufactured_scratch_v07/retopo_depth.png",
+    "raw_depth_render": "archive/scratch/20260708-real-sherman-chassis-scratch/renders/real_sherman_upper_hull_manufactured_scratch_v07/depth_abs_error.png",
+    "shaded_render": "archive/scratch/20260708-real-sherman-chassis-scratch/renders/real_sherman_upper_hull_manufactured_scratch_v07/retopo_shaded_same_angle.png",
+    "source_shaded_render": "archive/scratch/20260708-real-sherman-chassis-scratch/renders/real_sherman_upper_hull_manufactured_scratch_v07/source_shaded_same_angle.png",
+    "source_candidate_side_by_side": "archive/scratch/20260708-real-sherman-chassis-scratch/renders/real_sherman_upper_hull_manufactured_scratch_v07/source_candidate_side_by_side.png",
+    "silhouette_overlay": "archive/scratch/20260708-real-sherman-chassis-scratch/renders/real_sherman_upper_hull_manufactured_scratch_v07/silhouette_overlay.png",
+    "interface_overlay": "archive/scratch/20260708-real-sherman-chassis-scratch/renders/real_sherman_upper_hull_manufactured_scratch_v07/interface_overlay.png"
+  },
+  "authoring_policy": "source mesh measures dominant plane and stations only; final solids are low-complexity authored armor plates from canonical manufactured interfaces"
+}
