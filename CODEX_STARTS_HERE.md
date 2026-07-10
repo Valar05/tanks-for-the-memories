@@ -7,10 +7,10 @@ This is the cold-start handoff for a blank cloud worker picking up `Valar05/tank
 - Repository: `https://github.com/Valar05/tanks-for-the-memories`
 - Working branch: `codex/upper-glacis-recovery-tools`
 - Pull request: `https://github.com/Valar05/tanks-for-the-memories/pull/1`
-- Latest pushed handoff commit before this doc update: `5847538` (`Add Codex start-here handoff`). Verify current head because this document may have been updated after that commit.
+- Latest pushed handoff commit before this quarantine update: `21fd1c1` (`Document durable cloud model review anchor`). Verify current head because this document may have been updated after that commit.
 - Current investigation root: `archive/scratch/20260708-real-sherman-chassis-scratch/`
 - Active component: `source_component_0_upper_front_glacis`
-- Current artifact is scratch/red, not production geometry.
+- Current artifact is scratch/red, not production geometry. Non-canon scratch clutter is quarantined in `docs/prospector/upper-glacis-failure-quarantine-20260710.md`.
 
 Before editing, always verify branch and head because this file may be stale:
 
@@ -120,6 +120,19 @@ Required for acceptance of visual work:
 - explicit statement of expected visible relationship, actual visible relationship, what changed, and what did not change
 
 Scratch mode can skip cloud acceptance only when the newest user command explicitly keeps the work in scratch mode. Scratch artifacts remain experimental until deliberately promoted.
+
+## Canon And Quarantine Before Modeling
+
+Read `docs/prospector/upper-glacis-failure-quarantine-20260710.md` before creating or editing another upper-glacis exporter. That note is the current non-canon quarantine map. It exists because several archived scratch manifests still look active or even say `candidate: true`, but human review has rejected them.
+
+For this PR handoff, canon means:
+
+- `CODEX_STARTS_HERE.md` plus the newest user prompt
+- v07 as the best silhouette/depth baseline, not accepted geometry
+- v08 as the latest rejected shared-interface experiment
+- the next target: true multi-region shared-vertex visible skin
+
+Non-canon junk means old scratch meshes, old candidate flags, stale prompt contracts, source-faithful retopo loops, cluster/envelope loops, one-piece slab/ring loops, and ignored runtime residue like `__pycache__` or `.blend1`. Preserve the lessons; do not continue from the geometry.
 
 ## Current Upper-Glacis Investigation State
 
