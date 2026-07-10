@@ -1,0 +1,30 @@
+{
+  "reviewStatus": "accepted_with_corrections",
+  "preservesOriginalEvidence": true,
+  "primaryBlocker": {
+    "classification": "blocked_repository_contract",
+    "path": "docs/doctrine/scratch-mode.md",
+    "status": "missing",
+    "workerStopWasCorrect": true
+  },
+  "reclassifications": [
+    {
+      "check": "npm_test",
+      "originalStatus": "fail",
+      "reviewedStatus": "not_applicable",
+      "reason": "script_not_defined"
+    },
+    {
+      "check": "npm_build",
+      "originalStatus": "fail",
+      "reviewedStatus": "not_run_prerequisite_missing",
+      "prerequisite": "npm ci",
+      "reason": "workspace_dependencies_not_installed"
+    }
+  ],
+  "nextAction": [
+    "restore or explicitly supersede docs/doctrine/scratch-mode.md",
+    "run npm ci before Node build or smoke checks",
+    "retain the original command log, verification, and final report as immutable run evidence"
+  ]
+}
