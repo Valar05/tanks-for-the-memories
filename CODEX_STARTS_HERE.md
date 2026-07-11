@@ -48,9 +48,9 @@ Required but external credentials/tools:
 - Firebase/GCP access only when running the existing cloud visual review deploy lane.
 - Sense Simulation or an equivalent accepted cloud visual review tool for visual acceptance.
 
-Known current tooling blocker:
+Known current external review tooling:
 
-- Durable GitHub Pages model-review anchors are required as review handles, but this repo currently documents the desired shape rather than owning a complete Pages generator. If the worker cannot publish `https://valar05.github.io/tanks-for-the-memories/model-review/<asset_id>/` from tracked tools, it must report that exact blocker and still provide the tracked GLB/report/depth links.
+- Durable model-review anchors are owned by `https://github.com/Valar05/model-viewer-lab`. Use its GitHub Pages viewer and `tools/make_github_pages_model_review_link.mjs` to produce cloud-readable URLs for committed GLB/GLTF assets. If Pages is not enabled yet, the source repo is private, or the model asset URL is not browser-readable, report that exact blocker and still provide the tracked GLB/report/depth links.
 
 ## Installed / Expected Dependencies
 
@@ -94,15 +94,15 @@ git push origin codex/upper-glacis-recovery-tools
 Official model viewer and durable cloud anchor:
 
 - Mesh artifacts must provide two review handles:
-  - a local `model-viewer-lab` link for immediate scratch inspection
+  - a local `model-viewer-lab` link for immediate scratch inspection when working in the Android workspace
   - a durable GitHub Pages-readable review anchor for cloud workers and PR review
-- The desired durable artifact is a GitHub Pages page shaped like:
+- The durable viewer is the sibling cloud repo `https://github.com/Valar05/model-viewer-lab`, expected at:
 
 ```text
-https://valar05.github.io/tanks-for-the-memories/model-review/<asset_id>/
+https://valar05.github.io/model-viewer-lab/model-viewer.html
 ```
 
-- That page should load the committed GLB/GLTF plus `model_manifest.json`, identify the asset id and commit, and remain readable without Android localhost, Termux, or sibling-repo filesystem access.
+- Generate a durable URL with model-viewer-lab's `tools/make_github_pages_model_review_link.mjs`; it should load the committed GLB/GLTF plus `model_manifest.json`, identify the asset id and commit/branch, and remain readable without Android localhost, Termux, or sibling-repo filesystem access.
 - The durable page is a review anchor, not visual acceptance. Cloud/Sense review is still required before claiming visual success.
 - Local link helper, useful for scratch inspection only:
 
@@ -110,7 +110,7 @@ https://valar05.github.io/tanks-for-the-memories/model-review/<asset_id>/
 node ../model-viewer-lab/tools/make_model_viewer_link.mjs --src /tanks-for-the-memories/path/to/model.glb --manifest /tanks-for-the-memories/path/to/model_manifest.json --title asset_id --port 8804
 ```
 
-- Current tooling truth: `../model-viewer-lab/tools/make_model_viewer_link.mjs` emits localhost URLs. If a blank worker cannot publish the GitHub Pages anchor from existing repo tools, report a Pages/hosting/tooling blocker. Do not treat that as ambiguity in this document.
+- Current tooling truth: `../model-viewer-lab/tools/make_model_viewer_link.mjs` emits localhost URLs; `../model-viewer-lab/tools/make_github_pages_model_review_link.mjs` emits cloud Pages URLs backed by raw GitHub asset URLs. If the cloud URL cannot load because Pages or artifact hosting is unavailable, report that blocker explicitly.
 
 Viewer UX requirements for both local and durable anchors:
 
