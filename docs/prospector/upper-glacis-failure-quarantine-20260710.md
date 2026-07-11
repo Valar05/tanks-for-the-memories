@@ -7,6 +7,7 @@ Purpose: keep the next PR #1 agent from mistaking old scratch ore for current ca
 Use these as the current handoff truth:
 
 - `CODEX_STARTS_HERE.md`
+- `docs/prospector/upper-glacis-attempt-index.md`
 - `PROJECT_ORIENTATION.md`
 - `docs/doctrine/cloud-visual-truth.md`
 - `docs/doctrine/scratch-mode.md`

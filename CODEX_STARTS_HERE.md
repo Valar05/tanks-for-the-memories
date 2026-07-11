@@ -10,7 +10,7 @@ This is the cold-start handoff for a blank cloud worker picking up `Valar05/tank
 - Latest pushed handoff commit before this quarantine update: `21fd1c1` (`Document durable cloud model review anchor`). Verify current head because this document may have been updated after that commit.
 - Current investigation root: `archive/scratch/20260708-real-sherman-chassis-scratch/`
 - Active component: `source_component_0_upper_front_glacis`
-- Current artifact is scratch/red, not production geometry. Non-canon scratch clutter is quarantined in `docs/prospector/upper-glacis-failure-quarantine-20260710.md`.
+- Current artifact is scratch/red, not production geometry. Non-canon scratch clutter is quarantined in `docs/prospector/upper-glacis-failure-quarantine-20260710.md` and indexed in `docs/prospector/upper-glacis-attempt-index.md`.
 
 Before editing, always verify branch and head because this file may be stale:
 
@@ -19,6 +19,12 @@ git branch --show-current
 git rev-parse --short HEAD
 git log --oneline -5
 ```
+
+## Cloud Worker Authority
+
+A blank cloud worker must be able to continue this PR from GitHub-tracked repository content alone. Local Codex memories, local filesystem notes outside this repo, linked skills, sibling repositories, Android localhost tools, Termux-only state, and prior chat history are supplemental convenience only; they are not required authority.
+
+If a required fact, rule, artifact, or review link is only available through local memory or local filesystem state, move the durable version into this repository before asking a cloud worker to rely on it. If the worker cannot perform a required step from repo docs and tracked artifacts, it must report the exact cloud/tooling blocker rather than infer from hidden local context.
 
 ## Prompt Authority Gate
 
@@ -123,7 +129,7 @@ Scratch mode can skip cloud acceptance only when the newest user command explici
 
 ## Canon And Quarantine Before Modeling
 
-Read `docs/prospector/upper-glacis-failure-quarantine-20260710.md` before creating or editing another upper-glacis exporter. That note is the current non-canon quarantine map. It exists because several archived scratch manifests still look active or even say `candidate: true`, but human review has rejected them.
+Read `docs/prospector/upper-glacis-failure-quarantine-20260710.md` and `docs/prospector/upper-glacis-attempt-index.md` before creating or editing another upper-glacis exporter. The quarantine note is the current non-canon map; the attempt index pairs approach code with reports and depth/visual comparison panels. They exist because several archived scratch manifests still look active or even say `candidate: true`, but human review has rejected them.
 
 For this PR handoff, canon means:
 
