@@ -7,7 +7,7 @@ This is the cold-start handoff for a blank cloud worker picking up `Valar05/tank
 - Repository: `https://github.com/Valar05/tanks-for-the-memories`
 - Working branch: `codex/upper-glacis-recovery-tools`
 - Pull request: `https://github.com/Valar05/tanks-for-the-memories/pull/1`
-- Latest pushed handoff commit before this quarantine update: `21fd1c1` (`Document durable cloud model review anchor`). Verify current head because this document may have been updated after that commit.
+- Do not trust remembered commit ids; verify current branch/head before editing because this document is updated during handoffs.
 - Current investigation root: `archive/scratch/20260708-real-sherman-chassis-scratch/`
 - Active component: `source_component_0_upper_front_glacis`
 - Current artifact is scratch/red, not production geometry. Non-canon scratch clutter is quarantined in `docs/prospector/upper-glacis-failure-quarantine-20260710.md` and indexed in `docs/prospector/upper-glacis-attempt-index.md`.
@@ -36,6 +36,21 @@ Before any mutation, state these four facts in plain text:
 4. why that mutation satisfies the current command
 
 If those four facts do not line up, do not edit, export, validate, deploy, commit, or wake a browser. New user corrections override old plans, old PR comments, old diagnostics, and this document.
+
+## Cloud Prerequisites And Known Blockers
+
+A cloud worker needs repository checkout plus normal Node/npm dependencies from `package-lock.json`. For mesh exporters it also needs Blender available in the execution image; the Termux-specific Debian proot command below is the local Android route, not a universal cloud requirement.
+
+Required but external credentials/tools:
+
+- GitHub push access for `Valar05/tanks-for-the-memories`.
+- Git LFS support for tracked GLB/Blend/PNG scratch evidence.
+- Firebase/GCP access only when running the existing cloud visual review deploy lane.
+- Sense Simulation or an equivalent accepted cloud visual review tool for visual acceptance.
+
+Known current tooling blocker:
+
+- Durable GitHub Pages model-review anchors are required as review handles, but this repo currently documents the desired shape rather than owning a complete Pages generator. If the worker cannot publish `https://valar05.github.io/tanks-for-the-memories/model-review/<asset_id>/` from tracked tools, it must report that exact blocker and still provide the tracked GLB/report/depth links.
 
 ## Installed / Expected Dependencies
 
