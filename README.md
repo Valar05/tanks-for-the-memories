@@ -1,73 +1,48 @@
-# Tanks For The Memories
+# Tanks for the Memories
 
-A small WW2 tank-command information simulation.
+Static first playable: a text and Cartesia-read audio game about conducting a Churchill AVRE breach through other people's hands.
 
-The player is a platoon commander, not a driver. The loop is:
+## Current Slice
 
-Information -> Order -> Consequence -> Memory
+The playable surface is one Royal Engineers operation in a Churchill AVRE. The player is not the driver, gunner, radio operator, or a detached tactical cursor. The player speaks or types operational intent, and the bounded radio command organ routes valid commands to the capable recipient.
 
-## Current Vision
+Incomprehensible input is radio silence: no action, no acknowledgement, no invented correction, and no relationship mutation.
 
-Tanks For The Memories is a tank commander operation game about managing uncertainty from inside a crewed machine.
+## Run
 
-The player succeeds by becoming less wrong faster than the battlefield changes around them.
-
-Current promoted doctrine:
-
-- [Repo Doctrine](./REPO_DOCTRINE.md) - durable working doctrine extracted from the corpus
-- [Verne-Wells Doctrine](./docs/doctrine/verne-wells-doctrine.md) - discovery and consequence as the project's creative engine
-- [Repo Crucible Report](./docs/doctrine/repo-crucible-report.md) - gold, ore, and dross classification for current direction
-- [Archival Memory Visual Doctrine](./docs/doctrine/archival-memory-visual-doctrine.md) - historical memory under pressure, not a black-and-white filter
-
-## Current slice
-
-- One Normandy bocage lane
-- Player Sherman
-- Wingman Sherman
-- One hidden enemy AT gun
-- Farmhouse and church landmarks
-- Hedgerow cover and muddy road
-
-## What works
-
-- Typed command input
-- Voice input when the browser supports SpeechRecognition
-- Information ledger with report data
-- Hatch, buttoned-up, gunner scope, and map/report views
-- Wingman scout, advance, hold, and attack behavior
-- Failure report plus checkpoint restart
+```sh
+npm install
+npm run smoke
+npm run dev
+```
 
 ## Commands
 
-- report
-- scout left
-- scout right
-- advance
-- halt
-- reverse
-- hold
-- attack contact
-- hatch open
-- button up
-- gunner scope
-- map
+- `report`
+- `driver advance`
+- `driver halt`
+- `square us to the wall`
+- `infantry hold`
+- `gunner fire petard at the seam`
+- `sappers inspect the breach`
+- `engineers mark the lane`
 
-Invalid commands do nothing and produce no correction message.
+Typed commands and browser speech recognition use the same compiler. Runtime does not use an LLM or autonomous agent.
 
-## Local setup
+## Audio
 
-- npm install
-- npm run smoke
-- npm run build
-- sh scripts/bootstrap.sh
+Authored text is canonical and visible. Cartesia audio is generated during development and served as static WAV files from `public/audio/`.
 
-## Notes
+```sh
+CARTESIA_API_KEY='...' CARTESIA_VOICE_ID='...' npm run audio:generate
+```
 
-- No live AI or LLM calls are used at runtime.
-- The prototype uses Three.js primitives instead of finished art assets.
-- Reports can be partial, stale, or unconfirmed.
-- The map/report view shows uncertainty, not omniscience.
+If `CARTESIA_VOICE_ID` is omitted, the generator uses the temporary repo-default British voice `ef191366-f52f-447a-a398-ed8c0f2943a1`. Never commit credentials.
 
-## Repo Doctrine
+## Deployment
 
-See [REPO_DOCTRINE.md](./REPO_DOCTRINE.md) for the durable working doctrine extracted from the corpus.
+GitHub Pages is configured through `.github/workflows/pages.yml`. Repository Pages settings must use GitHub Actions as the source. Do not merge or treat production Pages as authorized until Drew approves.
+
+## Doctrine
+
+See [REPO_DOCTRINE.md](./REPO_DOCTRINE.md) and [AVRE Radio Command Organ](./docs/doctrine/avre-radio-command-organ.md).
