@@ -1,0 +1,99 @@
+{
+  "asset_id": "real_sherman_upper_glacis_f05_backing_closure",
+  "scratch_mode": true,
+  "artifact_type": "protected_f05_topology_package",
+  "revision": "f05-protected-visible-surface-backing-boundary-closure",
+  "source_asset_id": "real_sherman_upper_glacis_dissolve_retopo_scratch_f05",
+  "source_glb": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_glacis_dissolve_retopo_scratch_f05/real_sherman_upper_glacis_dissolve_retopo_scratch_f05.glb",
+  "closure_strategy": "face_prism_fallback_after_component_closure_failed",
+  "component_closure_attempt": {
+    "split_strategy": "edge_connected_component_closure",
+    "component_count": 1979,
+    "component_face_counts_top10": [
+      1351,
+      322,
+      211,
+      206,
+      189,
+      171,
+      120,
+      104,
+      102,
+      98
+    ],
+    "topology": {
+      "vertex_count": 26862,
+      "face_count": 32654,
+      "edge_count": 55646,
+      "edge_face_count_histogram": {
+        "2": 55592,
+        "4": 54
+      },
+      "boundary_edge_count": 0,
+      "overfull_nonmanifold_edge_count": 54,
+      "degenerate_face_count": 0,
+      "component_count": 1979,
+      "component_face_counts_top10": [
+        4013,
+        958,
+        635,
+        618,
+        569,
+        515,
+        358,
+        312,
+        302,
+        292
+      ],
+      "bbox_min": [
+        -0.17812557518482208,
+        -0.3644956946372986,
+        0.11764916777610779
+      ],
+      "bbox_max": [
+        0.5162563920021057,
+        0.349443256855011,
+        0.28719934821128845
+      ]
+    }
+  },
+  "backing_direction": [
+    0.0791807547211647,
+    0.9897594451904297,
+    -0.11877112835645676
+  ],
+  "backing_thickness": 0.0025,
+  "protected_surface_manifest": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_glacis_dissolve_retopo_scratch_f05/protected_surface_manifest.json",
+  "source_topology_pathology": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_glacis_dissolve_retopo_scratch_f05/f05_topology_pathology_report.json",
+  "preservation_report": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_glacis_f05_backing_closure/protected_surface_preservation_report.json",
+  "packaged_topology_report": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_glacis_f05_backing_closure/packaged_topology_report.json",
+  "fixed_camera_depth_preservation": {
+    "path": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_glacis_f05_backing_closure/fixed_camera_depth_preservation_report.json",
+    "depth_resolution": [
+      160,
+      112
+    ],
+    "shared_pixels": 9479,
+    "original_pixels": 9479,
+    "packaged_pixels": 9479,
+    "only_original_pixels": 0,
+    "only_packaged_pixels": 0,
+    "silhouette_iou": 1.0,
+    "mean_abs_depth_error": 0.0,
+    "p50_abs_depth_error": 0.0,
+    "p95_abs_depth_error": 0.0,
+    "max_abs_depth_error": 0.0
+  },
+  "outputs": {
+    "blend": "archive/scratch/20260708-real-sherman-chassis-scratch/source_blends/real_sherman_upper_glacis_f05_backing_closure/real_sherman_upper_glacis_f05_backing_closure.blend",
+    "glb": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_glacis_f05_backing_closure/real_sherman_upper_glacis_f05_backing_closure.glb"
+  },
+  "diagnostic_status": {
+    "protected_surface_unchanged": true,
+    "boundary_edges_closed": true,
+    "overfull_nonmanifold_edges": 0,
+    "fixed_camera_silhouette_iou": 1.0,
+    "local_visual_acceptance": false,
+    "acceptance_note": "Local Blender topology/depth diagnostics only. Cloud/Sense visual acceptance remains required before promotion."
+  }
+}

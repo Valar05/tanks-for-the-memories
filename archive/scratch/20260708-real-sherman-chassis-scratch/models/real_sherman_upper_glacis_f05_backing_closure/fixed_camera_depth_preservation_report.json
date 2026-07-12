@@ -1,0 +1,16 @@
+{
+  "depth_resolution": [
+    160,
+    112
+  ],
+  "shared_pixels": 9479,
+  "original_pixels": 9479,
+  "packaged_pixels": 9479,
+  "only_original_pixels": 0,
+  "only_packaged_pixels": 0,
+  "silhouette_iou": 1.0,
+  "mean_abs_depth_error": 0.0,
+  "p50_abs_depth_error": 0.0,
+  "p95_abs_depth_error": 0.0,
+  "max_abs_depth_error": 0.0
+}

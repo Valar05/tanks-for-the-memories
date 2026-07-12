@@ -1,0 +1,35 @@
+{
+  "vertex_count": 12810,
+  "face_count": 9608,
+  "edge_count": 21131,
+  "edge_face_count_histogram": {
+    "1": 13438,
+    "2": 7693
+  },
+  "boundary_edge_count": 13438,
+  "overfull_nonmanifold_edge_count": 0,
+  "degenerate_face_count": 0,
+  "component_count": 1438,
+  "component_face_counts_top10": [
+    1755,
+    592,
+    337,
+    218,
+    211,
+    184,
+    171,
+    157,
+    119,
+    107
+  ],
+  "bbox_min": [
+    -0.17812557518482208,
+    -0.3644956946372986,
+    0.117946095764637
+  ],
+  "bbox_max": [
+    0.5160584449768066,
+    0.3469688594341278,
+    0.28719934821128845
+  ]
+}

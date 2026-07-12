@@ -1,0 +1,15 @@
+{
+  "protected_scope": "all f05 imported visible faces; every face corner has exact output correspondence",
+  "protected_source_vertex_count": 12810,
+  "protected_source_face_count": 9608,
+  "protected_output_face_count": 9608,
+  "packaged_vertex_count": 57648,
+  "packaged_face_count": 48040,
+  "max_protected_corner_displacement": 0.0,
+  "mismatched_protected_corners": [],
+  "mismatched_protected_corner_count": 0,
+  "protected_faces_deleted": 0,
+  "protected_visible_faces_added_over_original_surface": 0,
+  "allowed_added_geometry": "hidden backing faces plus closure side walls; final split strategy recorded in model manifest",
+  "protected_face_corner_map_path": "archive/scratch/20260708-real-sherman-chassis-scratch/models/real_sherman_upper_glacis_f05_backing_closure/protected_face_corner_map.json"
+}
