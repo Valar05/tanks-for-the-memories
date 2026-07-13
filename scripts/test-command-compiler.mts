@@ -3,6 +3,12 @@ import {compileCommand} from '../src/command-compiler';
 
 const validCases = [
   ['report', 'report', 'wireless-operator', 'intercom'],
+  ['open periscope, look outside', 'report', 'wireless-operator', 'intercom'],
+  ['OPEN PERISCOPE, LOOK OUTSIDE!', 'report', 'wireless-operator', 'intercom'],
+  ['look outside', 'report', 'wireless-operator', 'intercom'],
+  ['Look outside?', 'report', 'wireless-operator', 'intercom'],
+  ['what do I see', 'report', 'wireless-operator', 'intercom'],
+  ['WHAT DO I SEE?', 'report', 'wireless-operator', 'intercom'],
   ['driver advance', 'advance', 'driver', 'intercom'],
   ['halt', 'halt', 'driver', 'intercom'],
   ['square us to the wall', 'align', 'driver', 'intercom'],

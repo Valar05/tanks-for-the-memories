@@ -203,7 +203,7 @@ function addEntry(speaker: string, audioId: string) {
 function fallbackText(id: string): string {
   return {
     'avre-opening': 'Wall ahead. Petard is useless unless the hull is square. Infantry are waiting for the lane.',
-    'report-current': 'Driver short of the wall. Infantry still loose. Breach not made.',
+    'report-current': 'Driver short of the damaged wall seam; hull not yet square. Infantry waiting for the lane. Breach not made.',
     'driver-advance': 'Advancing. Slow over broken stone. We are short of the seam.',
     'driver-halt': 'Stopped.',
     'driver-align': 'Hull square to the seam. Hold us here.',

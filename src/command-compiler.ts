@@ -28,7 +28,7 @@ const REGISTRY: RegistryEntry[] = [
     recipient: 'wireless-operator',
     route: 'intercom',
     canonical: 'wireless operator report',
-    patterns: [/\breport\b/, /\bstatus\b/, /\bwhat reaches (us|you)\b/],
+    patterns: [/\breport\b/, /\bstatus\b/, /\bwhat reaches (us|you)\b/, /\blook outside\b/, /\bwhat do i see\b/],
   },
   {
     action: 'advance',

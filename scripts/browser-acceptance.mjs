@@ -54,6 +54,19 @@ try {
   const afterInvalid = await transcriptCount();
   if (afterInvalid !== beforeInvalid) throw new Error('Invalid command produced transcript output');
 
+  for (const observation of ['open periscope, look outside', 'look outside', 'what do I see']) {
+    const positionBefore = await page.locator('[data-position]').textContent();
+    const obstacleBefore = await page.locator('[data-obstacle]').textContent();
+    const infantryBefore = await page.locator('[data-infantry]').textContent();
+    const transcriptBefore = await transcriptCount();
+    await send(observation);
+    await page.getByText('Driver short of the damaged wall seam; hull not yet square. Infantry waiting for the lane. Breach not made.').last().waitFor();
+    if (await transcriptCount() !== transcriptBefore + 1) throw new Error(`${observation} did not produce exactly one observation`);
+    if (await page.locator('[data-position]').textContent() !== positionBefore) throw new Error(`${observation} moved the vehicle`);
+    if (await page.locator('[data-obstacle]').textContent() !== obstacleBefore) throw new Error(`${observation} changed the obstacle`);
+    if (await page.locator('[data-infantry]').textContent() !== infantryBefore) throw new Error(`${observation} changed the infantry state`);
+  }
+
   for (const command of [
     'report',
     'driver advance',
