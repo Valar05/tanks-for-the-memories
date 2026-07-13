@@ -1,0 +1,92 @@
+[
+  {
+    "id": "avre-opening",
+    "file": "avre-opening.wav",
+    "speaker": "Opening brief",
+    "text": "Wall ahead. Petard is useless unless the hull is square. Infantry are waiting for the lane."
+  },
+  {
+    "id": "report-current",
+    "file": "report-current.wav",
+    "speaker": "Wireless operator",
+    "text": "Driver short of the wall. Infantry still loose. Breach not made."
+  },
+  {
+    "id": "driver-advance",
+    "file": "driver-advance.wav",
+    "speaker": "Driver",
+    "text": "Advancing. Slow over broken stone. We are short of the seam."
+  },
+  {
+    "id": "driver-halt",
+    "file": "driver-halt.wav",
+    "speaker": "Driver",
+    "text": "Stopped."
+  },
+  {
+    "id": "driver-align",
+    "file": "driver-align.wav",
+    "speaker": "Driver",
+    "text": "Hull square to the seam. Hold us here."
+  },
+  {
+    "id": "infantry-hold",
+    "file": "infantry-hold.wav",
+    "speaker": "Infantry liaison",
+    "text": "Infantry held. They will not enter the smoke until released."
+  },
+  {
+    "id": "gunner-fire",
+    "file": "gunner-fire.wav",
+    "speaker": "Gunner",
+    "text": "Petard away. Wall broken. Dust and brick across the front."
+  },
+  {
+    "id": "sappers-inspect",
+    "file": "sappers-inspect.wav",
+    "speaker": "Sapper team",
+    "text": "Sappers moving. Breach is passable on the left edge."
+  },
+  {
+    "id": "sappers-mark",
+    "file": "sappers-mark.wav",
+    "speaker": "Sapper team",
+    "text": "Lane marked. Infantry can pass through the tape."
+  },
+  {
+    "id": "after-action-road",
+    "file": "after-action-road.wav",
+    "speaker": "After-action memory",
+    "text": "After-action memory: the road remains because other hands made it usable."
+  },
+  {
+    "id": "blocked-align-before-advance",
+    "file": "blocked-align-before-advance.wav",
+    "speaker": "Driver",
+    "text": "Driver cannot square the hull from here."
+  },
+  {
+    "id": "blocked-fire-before-align",
+    "file": "blocked-fire-before-align.wav",
+    "speaker": "Gunner",
+    "text": "Gunner has no square shot at the seam."
+  },
+  {
+    "id": "blocked-fire-before-hold",
+    "file": "blocked-fire-before-hold.wav",
+    "speaker": "Infantry liaison",
+    "text": "Infantry are too close to fire."
+  },
+  {
+    "id": "blocked-inspect-before-breach",
+    "file": "blocked-inspect-before-breach.wav",
+    "speaker": "Sapper team",
+    "text": "Sappers have no breach to inspect."
+  },
+  {
+    "id": "blocked-mark-before-inspect",
+    "file": "blocked-mark-before-inspect.wav",
+    "speaker": "Sapper team",
+    "text": "Sappers will not mark an uninspected lane."
+  }
+]

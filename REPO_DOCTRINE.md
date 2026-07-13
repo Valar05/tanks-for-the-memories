@@ -13,6 +13,8 @@ Model information flow, delay, distortion, trust, and consequence.
 
 Tanks For The Memories is a tank commander operation game about managing uncertainty from inside a crewed machine.
 
+The current first playable is narrower: a Royal Engineers Churchill AVRE breach operation. It proves command through other people's hands before the broader campaign layer exists. Lexen continuity and the older Sherman probe remain evidence, not ownership of the title or current protagonist.
+
 The player is not the driver.
 The player is not a free camera.
 The player is not an omniscient tactician.
